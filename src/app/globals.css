@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@theme {
+  /* ─── Background & Surfaces ─── */
+  --color-background: #081830;
+  --color-surface: #0C1C34;
+  --color-surface-elevated: #14243A;
+  --color-surface-subtle: #1A2A40;
+
+  /* ─── Text Hierarchy ─── */
+  --color-ink: #F5F7FA;
+  --color-muted: #A8B3C2;
+  --color-faint: #68788B;
+
+  /* ─── Brand Palette ─── */
+  --color-brand: #148F79;
+  --color-brand-dark: #075F55;
+  --color-brand-light: #BFE3DB;
+  --color-brand-bright: #22A886;
+  --color-cruze-green: #43D69A;
+
+  /* ─── Status System ─── */
+  --color-improving: #22924A;
+  --color-improving-soft: #143E32;
+  --color-caution: #F4A01B;
+  --color-caution-soft: #44351A;
+  --color-congested: #F47722;
+  --color-congested-soft: #482A1A;
+  --color-critical: #E33332;
+  --color-critical-soft: #421D26;
+  --color-info: #2E9DD6;
+  --color-info-soft: #152F43;
+
+  /* ─── Borders ─── */
+  --color-border: #26374B;
+  --color-border-subtle: #1D2D42;
+  --color-border-strong: #3A4A5D;
+
+  /* ─── Map Canvas ─── */
+  --color-map-background: #08182D;
+  --color-map-road: #263A50;
+  --color-map-boundary: #31595B;
+  --color-map-route: #24A8E0;
+
+  /* ─── Navigation Dimensions ─── */
+  --nav-header-height: 68px;
+  --nav-header-compact-height: 56px;
+  --nav-bottom-height: 72px;
+
+  /* ─── Navigation Spacing ─── */
+  --nav-header-padding-x: 20px;
+  --nav-bottom-padding-x: 20px;
+  --nav-bottom-padding-y: 8px;
+
+  /* ─── Navigation Controls ─── */
+  --nav-control-size: 44px;
+  --nav-icon-size: 20px;
+
+  /* ─── Radii ─── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 10px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  /* ─── Spacing Scale ─── */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+  --spacing-4xl: 80px;
+
+  /* ─── Z-Layers ─── */
+  --z-header: 40;
+  --z-bottom: 40;
+  --z-overlay: 100;
+}
+
+/* ─── Base Layer ─── */
+html {
+  background-color: var(--color-background);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+/* ─── Tabular Numerics ─── */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Safe Area ─── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
