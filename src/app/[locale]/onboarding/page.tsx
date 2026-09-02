@@ -1,16 +1,16 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useLocale } from "@/hooks/use-locale";
 import { useEffect } from "react";
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const pathname = usePathname();
+  const locale = useLocale();
 
   useEffect(() => {
-    const locale = pathname.split("/")[1] || "es";
     router.replace(`/${locale}/onboarding/destination`);
-  }, [router, pathname]);
+  }, [router, locale]);
 
   return (
     <div className="min-h-dvh bg-background flex items-center justify-center">

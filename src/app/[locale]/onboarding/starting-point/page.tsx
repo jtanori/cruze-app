@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useLocale } from "@/hooks/use-locale";
 import { StartingPoint } from "@/components/onboarding/StartingPoint";
 
 export default function StartingPointPage() {
   const router = useRouter();
-  const pathname = usePathname();
   const t = useTranslations();
-  const locale = pathname.split("/")[1] || "es";
+  const locale = useLocale();
 
   return (
     <div className="space-y-6">

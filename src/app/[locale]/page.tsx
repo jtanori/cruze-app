@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useLocale } from "@/hooks/use-locale";
 import { useTripStore } from "@/stores/trip";
 import { MOCK_CROSSINGS, getMockRecommendation } from "@/lib/mock-data";
 import { getDisplayName } from "@/lib/display";
@@ -17,14 +18,13 @@ export default function HomePage() {
   const destination = useTripStore((s) => s.destination);
   const recommendedCrossing = useTripStore((s) => s.recommendedCrossing);
   const router = useRouter();
-  const pathname = usePathname();
+  const locale = useLocale();
 
   useEffect(() => {
     if (!completed) {
-      const locale = pathname.split("/")[1] || "es";
       router.replace(`/${locale}/onboarding`);
     }
-  }, [completed, router, pathname]);
+  }, [completed, router, locale]);
 
   if (!completed) {
     return (
@@ -193,7 +193,6 @@ export default function HomePage() {
         </div>
       </main>
       <BottomNavigation active="crossings" onSelect={(d) => {
-        const locale = pathname.split("/")[1] || "es";
         router.push(`/${locale}/${d}`);
       }} />
     </div>
