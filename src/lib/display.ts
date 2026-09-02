@@ -21,3 +21,52 @@ export function formatDuration(minutes: number): string {
   return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
 }
 
+/**
+ * Get Tailwind background class for crossing status.
+ * Consolidates status color mappings from 5+ files.
+ */
+export function getStatusColor(status: string): string {
+  switch (status) {
+    case "OPEN":
+      return "bg-improving";
+    case "LIMITED":
+      return "bg-caution";
+    case "CLOSED":
+      return "bg-critical";
+    default:
+      return "bg-faint";
+  }
+}
+
+/**
+ * Get Tailwind text class for crossing status.
+ */
+export function getStatusTextColor(status: string): string {
+  switch (status) {
+    case "OPEN":
+      return "text-improving";
+    case "LIMITED":
+      return "text-caution";
+    case "CLOSED":
+      return "text-critical";
+    default:
+      return "text-faint";
+  }
+}
+
+/**
+ * Get status dot color for crossing status.
+ */
+export function getStatusDotColor(status: string): string {
+  switch (status) {
+    case "OPEN":
+      return "bg-cruze-mint";
+    case "LIMITED":
+      return "bg-cruze-amber";
+    case "CLOSED":
+      return "bg-alert-red";
+    default:
+      return "bg-muted";
+  }
+}
+

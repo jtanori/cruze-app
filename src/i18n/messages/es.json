@@ -100,7 +100,12 @@
     "open": "Abierto",
     "closed": "Cerrado",
     "limited": "Limitado",
-    "moreLanes": "carriles más"
+    "moreLanes": "carriles más",
+    "viewDetails": "Ver detalles",
+    "vsRecommended": "vs. recomendado",
+    "selectCrossing": "Seleccionar cruce",
+    "expandLanes": "Expandir carriles",
+    "collapseLanes": "Colapsar carriles"
   },
   "favorites": {
     "title": "Favoritos",
@@ -175,8 +180,20 @@
   },
   "viaje": {
     "title": "Mi Viaje",
+    "yourTrip": "TU VIAJE",
     "currentTrip": "Viaje actual",
-    "recommendedCrossing": "Cruce recomendado",
+    "recommendedCrossing": "RECOMENDADO",
+    "whyThisOne": "POR QUÉ ESTE",
+    "liveConditions": "CONDICIONES EN VIVO",
+    "alternatives": "ALTERNATIVAS",
+    "bestOverall": "MEJOR OPCIÓN",
+    "navigate": "Navegar",
+    "changeCrossing": "Cambiar cruce",
+    "endTrip": "Finalizar viaje",
+    "configure": "Configurar",
+    "noActiveTrip": "Sin viaje activo",
+    "planNextCrossing": "Planifica tu próximo cruce fronterizo cuando estés listo.",
+    "planCrossing": "Planificar cruce",
     "travelerProfile": "Perfil del viajero",
     "viewCrossing": "Ver cruce",
     "newTrip": "Configurar nuevo viaje",
@@ -206,6 +223,7 @@
       "stillCurrent": "Sí, sigue vigente",
       "startNew": "Iniciar nuevo viaje"
     },
+    "seeMoreRecommendations": "Ver más recomendaciones",
     "visa": {
       "b1b2": "B1/B2 Turista/Negocios",
       "h1b": "H1B Trabajo",

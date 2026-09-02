@@ -100,7 +100,12 @@
     "open": "Open",
     "closed": "Closed",
     "limited": "Limited",
-    "moreLanes": "more lanes"
+    "moreLanes": "more lanes",
+    "viewDetails": "View details",
+    "vsRecommended": "vs. recommended",
+    "selectCrossing": "Select crossing",
+    "expandLanes": "Expand lanes",
+    "collapseLanes": "Collapse lanes"
   },
   "favorites": {
     "title": "Favorites",
@@ -175,8 +180,20 @@
   },
   "viaje": {
     "title": "My Trip",
+    "yourTrip": "YOUR TRIP",
     "currentTrip": "Current Trip",
-    "recommendedCrossing": "Recommended crossing",
+    "recommendedCrossing": "RECOMMENDED",
+    "whyThisOne": "WHY THIS ONE",
+    "liveConditions": "LIVE CONDITIONS",
+    "alternatives": "ALTERNATIVES",
+    "bestOverall": "BEST OVERALL",
+    "navigate": "Navigate",
+    "changeCrossing": "Change crossing",
+    "endTrip": "End trip",
+    "configure": "Configure",
+    "noActiveTrip": "No active trip",
+    "planNextCrossing": "Plan your next border crossing when you're ready.",
+    "planCrossing": "Plan a crossing",
     "travelerProfile": "Traveler profile",
     "viewCrossing": "View crossing",
     "newTrip": "Configure new trip",
@@ -206,6 +223,7 @@
       "stillCurrent": "Yes, still current",
       "startNew": "Start new trip"
     },
+    "seeMoreRecommendations": "See more recommendations",
     "visa": {
       "b1b2": "B1/B2 Tourist/Business",
       "h1b": "H1B Work",
