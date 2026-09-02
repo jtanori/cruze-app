@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useLocale } from "@/hooks/use-locale";
 import { ArrowLeft } from "lucide-react";
 import { DestinationSearch } from "@/components/onboarding/DestinationSearch";
 import { StartingPoint } from "@/components/onboarding/StartingPoint";
@@ -18,8 +19,7 @@ type ConfigureStep = "destination" | "starting-point" | "profile" | "complete";
 export default function ConfigurePage() {
   const t = useTranslations();
   const router = useRouter();
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "es";
+  const locale = useLocale();
 
   const { direction, destination, start, setRecommendedCrossing, complete } = useTripStore();
   const { setProfile } = useTravelerStore();

@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Background & Surfaces ─── */
-  --color-background: #081830;
-  --color-surface: #0C1C34;
-  --color-surface-elevated: #14243A;
-  --color-surface-subtle: #1A2A40;
+  /* ─── CRUZE Dark Theme (v2 baseline) ─── */
+  --color-midnight: #071A31;
+  --color-background: #071A31;
+  --color-surface: #0E223F;
+  --color-surface-elevated: #132B4A;
+  --color-border: #1F3A5A;
+  --color-text-primary: #F5F7FA;
+  --color-text-secondary: #A7B3CC;
+  --color-cruze-mint: #00E0A0;
+  --color-amber: #FFB020;
+  --color-alert-red: #FF4D4F;
+  --color-info-blue: #3BA7FF;
 
-  /* ─── Text Hierarchy ─── */
+  /* ─── Semantic Aliases ─── */
   --color-ink: #F5F7FA;
-  --color-muted: #A8B3C2;
-  --color-faint: #68788B;
-
-  /* ─── Brand Palette ─── */
-  --color-brand: #148F79;
-  --color-brand-dark: #075F55;
-  --color-brand-light: #BFE3DB;
-  --color-brand-bright: #22A886;
-  --color-cruze-green: #43D69A;
+  --color-faint: #A7B3CC;
+  --color-muted: #6B7D99;
 
   /* ─── Status System ─── */
   --color-improving: #22924A;
@@ -32,7 +32,6 @@
   --color-info-soft: #152F43;
 
   /* ─── Borders ─── */
-  --color-border: #26374B;
   --color-border-subtle: #1D2D42;
   --color-border-strong: #3A4A5D;
 
@@ -82,8 +81,8 @@
 
 /* ─── Base Layer ─── */
 html {
-  background-color: var(--color-background);
-  color: var(--color-ink);
+  background-color: var(--color-midnight);
+  color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

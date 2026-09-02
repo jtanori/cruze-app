@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useLocale } from "@/hooks/use-locale";
 import { ArrowRight, CheckCircle2, Clock, TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
 import { useTripStore } from "@/stores/trip";
 import { detectTripType, deriveDirection } from "@/lib/border-data";
@@ -11,16 +12,14 @@ import { useTranslations } from "next-intl";
 import type { CrossingRecommendation } from "@/types";
 
 interface RecommendationViewProps {
-  onStartTrip: () => void;
   onSeeAllCrossings: () => void;
 }
 
 export function RecommendationView({
-  onStartTrip,
   onSeeAllCrossings,
 }: RecommendationViewProps) {
   const router = useRouter();
-  const pathname = usePathname();
+  const locale = useLocale();
   const t = useTranslations();
   const start = useTripStore((s) => s.start);
   const destination = useTripStore((s) => s.destination);
@@ -68,11 +67,7 @@ export function RecommendationView({
 
   const handleStartTrip = () => {
     complete();
-    if (recommendation) {
-      router.push(`/crossing/${recommendation.crossingId}`);
-    } else {
-      onStartTrip();
-    }
+    router.push(`/${locale}/viaje`);
   };
 
   const handleSeeAll = () => {

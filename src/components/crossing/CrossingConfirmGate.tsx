@@ -24,7 +24,7 @@ export function CrossingConfirmGate() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-dark/80 backdrop-blur-sm">
-      <div className="w-full max-w-sm mx-4 bg-surface rounded-[var(--radius-xl)] border border-border shadow-xl overflow-hidden">
+      <div className="w-full mx-4 bg-surface rounded-[var(--radius-xl)] border border-border shadow-xl overflow-hidden">
         {/* Header */}
         <div className="px-6 pt-6 pb-4 text-center">
           <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-cruze-green/10">

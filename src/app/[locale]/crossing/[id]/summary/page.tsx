@@ -1,7 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useLocale } from "@/hooks/use-locale";
 import { Star, Share2, ArrowRight, CheckCircle } from "lucide-react";
 import { useCrossingDetectionStore } from "@/stores/crossing-detection";
 import { useFavoritesStore } from "@/stores/favorites";
@@ -10,8 +11,7 @@ import { formatCrossingTime, getCrossingTimeComparison } from "@/lib/crossing-es
 export default function CrossingSummaryPage() {
   const t = useTranslations();
   const router = useRouter();
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "es";
+  const locale = useLocale();
 
   const {
     crossingId,

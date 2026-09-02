@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useLocale } from "@/hooks/use-locale";
 import { ArrowLeft, Bookmark, BookmarkCheck, Share2 } from "lucide-react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -86,8 +87,7 @@ export function CrossingIntelligenceView({
   crossingName,
 }: CrossingIntelligenceViewProps) {
   const t = useTranslations();
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1] || "es";
+  const locale = useLocale();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [showAllLanes, setShowAllLanes] = useState(false);
@@ -331,18 +331,22 @@ export function CrossingIntelligenceView({
     };
 
     map.current.on("load", () => {
-      // Add markers first
+      // Add markers with labels attached
       if (origin) {
         const originEl = document.createElement("div");
         originEl.innerHTML = `
-          <div style="position: relative; width: 24px; height: 32px;">
-            <svg viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div style="position: relative; display: flex; flex-direction: column; align-items: flex-start;">
+            <div style="display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(7, 26, 49, 0.85); backdrop-filter: blur(8px); border-radius: 9999px; border: 1px solid rgba(31, 58, 90, 0.5); white-space: nowrap;">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: #FFFFFF;"></div>
+              <span style="color: #FFFFFF; font-size: 11px; font-weight: 500; font-family: Inter, sans-serif;">${getDisplayName(origin)}</span>
+            </div>
+            <svg style="margin-left: 12px;" viewBox="0 0 24 32" width="24" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="#FFFFFF"/>
               <circle cx="12" cy="12" r="5" fill="#081830"/>
             </svg>
           </div>
         `;
-        new mapboxgl.Marker({ element: originEl, anchor: "bottom" })
+        new mapboxgl.Marker({ element: originEl, anchor: "bottom-left" })
           .setLngLat([origin.longitude, origin.latitude])
           .addTo(map.current!);
       }
@@ -350,14 +354,18 @@ export function CrossingIntelligenceView({
       if (destination) {
         const destEl = document.createElement("div");
         destEl.innerHTML = `
-          <div style="position: relative; width: 24px; height: 32px;">
-            <svg viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div style="position: relative; display: flex; flex-direction: column; align-items: flex-end;">
+            <div style="display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(7, 26, 49, 0.85); backdrop-filter: blur(8px); border-radius: 9999px; border: 1px solid rgba(31, 58, 90, 0.5); white-space: nowrap;">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: #43D69A;"></div>
+              <span style="color: #FFFFFF; font-size: 11px; font-weight: 500; font-family: Inter, sans-serif;">${getDisplayName(destination)}</span>
+            </div>
+            <svg style="margin-right: 12px;" viewBox="0 0 24 32" width="24" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="#43D69A"/>
               <circle cx="12" cy="12" r="5" fill="#081830"/>
             </svg>
           </div>
         `;
-        new mapboxgl.Marker({ element: destEl, anchor: "bottom" })
+        new mapboxgl.Marker({ element: destEl, anchor: "bottom-right" })
           .setLngLat([destination.longitude, destination.latitude])
           .addTo(map.current!);
       }
@@ -464,24 +472,6 @@ export function CrossingIntelligenceView({
             ref={mapContainer}
             className="w-full h-[300px] bg-surface"
           />
-          
-          {/* Floating Labels */}
-          {hasJourneyContext && origin && destination && (
-            <>
-              <div className="absolute top-3 left-3 z-10">
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-background/80 backdrop-blur-sm rounded-full border border-border-subtle">
-                  <div className="w-2 h-2 rounded-full bg-white" />
-                  <span className="text-white text-xs font-medium">{getDisplayName(origin)}</span>
-                </div>
-              </div>
-              <div className="absolute top-3 right-3 z-10">
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-background/80 backdrop-blur-sm rounded-full border border-border-subtle">
-                  <div className="w-2 h-2 rounded-full bg-cruze-green" />
-                  <span className="text-white text-xs font-medium">{getDisplayName(destination)}</span>
-                </div>
-              </div>
-            </>
-          )}
         </div>
 
         {/* Best Crossing Section */}
