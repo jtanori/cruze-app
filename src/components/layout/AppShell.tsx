@@ -4,6 +4,14 @@ import { TopAppBar } from "./TopAppBar";
 import { BottomNavigation } from "./BottomNavigation";
 import type { BottomNavDestination, HeaderVariant } from "@/types";
 import { usePathname, useRouter } from "next/navigation";
+import { useLocale } from "@/hooks/use-locale";
+
+interface TripActions {
+  onEndTrip: () => void;
+  onConfigure: () => void;
+  onNavigate: () => void;
+  onViewCrossing: () => void;
+}
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -14,10 +22,12 @@ interface AppShellProps {
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
   hasSearch?: boolean;
+  tripActions?: TripActions;
+  bottomCompanion?: React.ReactNode;
+  headerCompanion?: React.ReactNode;
 }
 
 function pathToDestination(pathname: string): BottomNavDestination {
-  // Strip locale prefix (e.g., /es/agent → /agent)
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
   if (path.startsWith("/viaje")) return "viaje";
   if (path.startsWith("/favorites")) return "favorites";
@@ -35,13 +45,14 @@ export function AppShell({
   onSearchChange,
   searchPlaceholder,
   hasSearch = false,
+  tripActions,
+  bottomCompanion,
+  headerCompanion,
 }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const active = pathToDestination(pathname);
-
-  // Extract locale from pathname (e.g., /es/crossings → es)
-  const locale = pathname.split("/")[1] || "es";
+  const locale = useLocale();
 
   const handleNavigate = (dest: BottomNavDestination) => {
     if (dest === "viaje") router.push(`/${locale}/viaje`);
@@ -59,21 +70,34 @@ export function AppShell({
         searchValue={searchValue}
         onSearchChange={onSearchChange}
         searchPlaceholder={searchPlaceholder}
+        tripActions={tripActions}
       />
+
+      {headerCompanion && (
+        <div className="fixed top-[var(--nav-header-height)] left-0 right-0 z-[var(--z-header)] bg-background border-b border-border-subtle">
+          {headerCompanion}
+        </div>
+      )}
 
       <main
         className="pt-[var(--nav-header-height)]"
         style={{
           paddingTop: hasSearch
             ? "calc(var(--nav-header-height) + 80px)"
+            : headerCompanion
+            ? "calc(var(--nav-header-height) + 48px)"
             : "var(--nav-header-height)",
-          paddingBottom: hideBottomNav
-            ? "0"
-            : "calc(var(--nav-bottom-height) + env(safe-area-inset-bottom) + 24px)",
+          paddingBottom: "calc(var(--nav-bottom-height) + env(safe-area-inset-bottom) + 24px)",
         }}
       >
         {children}
       </main>
+
+      {bottomCompanion && (
+        <div className="fixed bottom-[var(--nav-bottom-height)] left-0 right-0 z-[var(--z-overlay)]">
+          {bottomCompanion}
+        </div>
+      )}
 
       {!hideBottomNav && (
         <BottomNavigation active={active} onSelect={handleNavigate} />

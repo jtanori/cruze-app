@@ -21,5 +21,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <html lang="en" className="dark">
+      <body suppressHydrationWarning className="min-h-dvh bg-background text-ink antialiased">
+        {children}
+      </body>
+    </html>
+  );
 }

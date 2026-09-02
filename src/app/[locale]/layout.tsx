@@ -1,7 +1,8 @@
-import { NextIntlClientProvider, useMessages } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { LangSetter } from "@/components/shared/LangSetter";
 
 export default async function LocaleLayout({
   children,
@@ -19,12 +20,9 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className="dark">
-      <body className="min-h-dvh bg-background text-ink antialiased">
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider messages={messages}>
+      <LangSetter locale={locale} />
+      {children}
+    </NextIntlClientProvider>
   );
 }
