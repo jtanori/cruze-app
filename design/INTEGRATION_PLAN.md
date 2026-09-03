@@ -378,45 +378,65 @@ These archived v1 documents represent the **complete target architecture** for v
 
 **Exit Criteria**: No legacy onboarding routes render v2 components; all entry points converge on `trip/setup` + `trip/recommendation`
 
-### Phase 12: Real Data Wiring (Weeks 32-33)
+### Phase 12: Real Data Wiring (Weeks 32-33) — Incremental (reuse existing)
 
-**Goal**: Replace mocks with live CBP + Mapbox
+**Goal**: Enable live CBP + Mapbox by wiring existing infrastructure (no green-field)
 
-| Task | Spec Ref | Deliverable | Effort |
-|------|----------|-------------|--------|
-| CBP live in C03 Detail | Spec §34-35, lib `border-data-service` | `crossing/[id]/page.tsx:1` fetches `/api/cbp` (not `BORDER_CROSSINGS` mock 20/35), drives `DataTimestamp` staleness + `isLive` | 3 days |
-| Mapbox in C03/C05 | Spec §40 | `CrossingDetailMap.tsx:1` stub → `mapbox-gl` with `coordinates` + `CrossingDetailHero` status, fallback static | 3 days |
-| Compare route C04 | Spec §39 | Add `crossings/compare/page.tsx` wiring `CrossingsCompareTable.tsx:1` with 7 metrics (wait/travel/total/distance/status/access/freshness) if standalone needed | 2 days |
-| Crossings live in C01 | Spec §31-32 | `C01` already live via `getMergedCrossingsData`, verify `isLive` + `hours` + `lanes` vs mock | 1 day |
-
-**Exit Criteria**: C03/C01 show live CBP waits with `live`/`stale` indicators, map renders, no hardcoded 15/20 min
-
-### Phase 13: Store Persistence (Week 34)
-
-**Goal**: Persist profile/favorites/trips to local repos
+**Existing (reuse, do not rebuild):**
+- `apps/web/src/app/api/cbp/route.ts:1` — route handler with `https://bwt.cbp.gov/api/waittimes`, `MOCK_CBP_DATA` fallback, `revalidate:300`, `x-last-updated` header (currently mock branch active)
+- `apps/web/src/lib/cbp-api.ts:1` — `fetchCBPWaitTimes()` with `CACHE_TTL_MS=5min`, `parseDelay`, `mapPortToCrossingId` (15 crossings), `NormalizedCrossingWait` (lanes: Standard/SENTRI/Ready/FAST/Pedestrian), `CACHE`
+- `apps/web/src/lib/border-data-service.ts:1` — `getMergedCrossingsData()`, `getCrossingWithLiveData()`, `getCrossingsWithLiveData()`, `estimateSouthboundWait` (70% NB), `FALLBACK_WAIT_TIMES` (15 crossings), `isLive` + `lastUpdated` + `lanesNorthbound/Southbound`
+- `apps/web/src/lib/border-data.ts:1` — `BORDER_CROSSINGS` static (55+ ports), `findCandidateCrossings`, `haversineDistance`
+- `apps/web/src/hooks/use-crossings-data.ts:1` + `apps/web/src/hooks/use-location-filter.ts:1` — already wrap `getMergedCrossingsData` + filter logic (My area, Open now, All/MX→US)
+- `apps/web/src/lib/geocoding.ts:1` + `apps/web/src/lib/geofence-monitor.ts:1` + `mapbox-gl@3.29.0` already installed — prior `CrossingIntelligenceView` used Mapbox with marker-attached labels
 
 | Task | Spec Ref | Deliverable | Effort |
 |------|----------|-------------|--------|
-| Profile persistence | Spec §11, `stores/traveler.ts` + `local-profile-repo.ts:1` | `settings/profile` writes `traveler` store → `local-profile-repo`, hydration on load | 2 days |
-| Favorites persistence | `stores/favorites.ts:1` + `local-favorites-repo.ts:1` | `settings/favorites` + `crossing/[id]` bookmark toggle persists `crossingIds` | 1 day |
-| My Trips persistence | `trip-lifecycle.ts:1` `isEligibleForMyTrips` + `local-trip-repo.ts:1` | `trip/completion` → `local-trip-repo`, `settings/trips` reads only `completed` | 2 days |
-| Avisos persistence | `stores/alerts.ts:1` + `infrastructure/persistence` | `alerts` → local, grouping today/yesterday/earlier survives reload | 1 day |
+| Enable CBP live in C03 Detail | Spec §34-35 | `crossing/[id]/page.tsx:1` → uncomment `fetch` in `api/cbp/route.ts:42` → call `getCrossingWithLiveData(id)` (not `BORDER_CROSSINGS` mock 20/35) → drive `CrossingDetailHero` `DataTimestamp` + `DataStatus` `isLive` | 1 day |
+| Enable Mapbox in C03/C05 | Spec §40 | `CrossingDetailMap.tsx:1` stub → restore `mapbox-gl` impl from `CrossingIntelligenceView` (marker labels) with `coordinates`, fallback static | 1 day |
+| Compare route C04 (if needed) | Spec §39 | Only if standalone required: `crossings/compare/page.tsx` wiring existing `CrossingsCompareTable.tsx:1` (7 metrics) via `getMergedCrossingsData` | 1 day |
+| Verify C01 live | Spec §31-32 | `C01` already live via `getMergedCrossingsData` in `(main)/crossings/page.tsx:1` (updated to `CrossingsDirectoryList`) — verify `isLive`/`hours`/`lanes` vs mock | 0.5 day |
 
-**Exit Criteria**: Reload preserves profile/favorites/completed trips/avisos; `S04 My Trips` shows only `completed` per `trip-lifecycle`
+**Exit Criteria**: `fetch` uncommented, C03/C01 show live CBP waits with `live`/`stale` indicators via existing `isLive`/`lastUpdated`, map renders via existing `mapbox-gl`, no hardcoded 15/20 min — all reuse `cbp-api` + `border-data-service` + hooks
 
-### Phase 14: Polish — Proxy, Analytics, Loading/Error, Tests (Week 35)
+### Phase 13: Store Persistence (Week 34) — Incremental (reuse existing)
 
-**Goal**: Close `CHECKLISTS.md:33` Component QA + `34` Page QA gaps
+**Goal**: Wire existing persist stores + local repos (no new storage layer)
+
+**Existing (reuse, do not rebuild):**
+- Stores already `persist` via `zustand/middleware`: `stores/favorites.ts:1` (`crossingIds`, `addFavorite`/`isFavorite`), `stores/location.ts:1`, `stores/trip.ts:1` (`persist: cruze-trip`), `stores/traveler.ts:1` (`cruze-traveler`), `stores/alerts.ts:1` (`cruze-alerts`, `alertsLastSeenAt`), `stores/agent.ts:1`, `stores/monetization.ts:1` — all `persist` + `localStorage`
+- Local repos already exist as clean wrappers: `infrastructure/persistence/local/local-trip-repo.ts:1` (`TripRepository` with `get`/`set`/`getState`/`complete`/`localStorage cruze-trip`), `local-profile-repo.ts:1` (`LocalProfileRepository cruze-traveler`), `local-favorites-repo.ts:1` (`cruze-favorites`), `local-crossing-repo.ts:1`
+- Domain types already: `domain/trip/types.ts:1`, `domain/crossing/types.ts:1`, `domain/recommendation/types.ts:1`, `domain/crossing-types.ts:1` + `types` barrel
+- `trip-lifecycle.ts:1` `isEligibleForMyTrips` (only `completed`) already gates `S04`
 
 | Task | Spec Ref | Deliverable | Effort |
 |------|----------|-------------|--------|
-| Proxy migration | Next.js 16 | `middleware` → `proxy` via `npx @next/codemod@canary middleware-to-proxy` | 0.5 day |
-| Analytics wiring | `lib/analytics.ts:1`, `feature-flags.ts` | Wire `MonetizationEvent` per `CHECKLISTS.md:18` Analytics | 1 day |
-| Loading/Error per page | `CHECKLISTS.md:33-34` | Add `loading.tsx` (Skeleton) + `error.tsx` (ErrorState) for 23 pages | 2 days |
-| Playwright v3 | `playwright/tests/screens-evidence.test.ts:132` | Un-skip `describe.skip` → rewrite selectors to v3 `getByText('Cruces')`/`getByRole('tab')`, fix `text:Cruces` → `text=Cruces`, assert per `PAGES_WORKFLOWS_REPORT.md:3` | 2 days |
-| Vitest unit | `CHECKLISTS.md:19` Tests | Cover `trip-setup-flow`, `direction-detection`, `location-state-machine`, `trip-lifecycle` | 2 days |
+| Wire Profile persistence | Spec §11 | `settings/profile` → ensure `useTravelerStore` (persist) + optional `LocalProfileRepository` for typed access — verify hydration (currently `useState` local in `SettingsProfile.tsx:1` → swap to `useTravelerStore`) | 1 day |
+| Verify Favorites persistence | `stores/favorites.ts:1` | `settings/favorites` + `crossing/[id]` bookmark already `persist`; verify `LocalFavoritesRepository` parity, no new code | 0.5 day |
+| Wire My Trips persistence | `trip-lifecycle.ts:1` | `trip/completion` `complete()` already sets `status:completed` via `useTripStore` (persist); `settings/trips` reads `isEligibleForMyTrips` — add filter (currently `[]` mock in `settings/trips/page.tsx:1`) | 1 day |
+| Verify Avisos persistence | `stores/alerts.ts:1` | `alerts` already `persist cruze-alerts` with `unreadCount`; grouping today/yesterday/earlier already in `(main)/alerts/page.tsx:1` — verify survives reload, no new repo | 0.5 day |
 
-**Exit Criteria**: `middleware` warning gone, analytics observable, every page has loading/error, Playwright 12/12 green (was `12 failed`), unit coverage for lib
+**Exit Criteria**: `traveler`/`favorites`/`trip`/`alerts` survive reload via existing `persist`; `S04` shows only `completed` — wiring fixes, not new storage
+
+### Phase 14: Polish — Proxy, Analytics, Loading/Error, Tests (Week 35) — Incremental
+
+**Goal**: Close `CHECKLISTS.md:33` Component QA + `34` Page QA gaps by reusing existing primitives
+
+**Existing (reuse):**
+- `apps/web/src/lib/analytics.ts:1` + `lib/feature-flags.ts:1` + `lib/monetization-policy.ts:1` + `stores/monetization.ts:1` — `MonetizationEvent` types + `analytics` stub already wired to stores
+- Primitives already: `LoadingSkeleton.tsx:1` (Text/Card/List/Metric), `Spinner.tsx:1`, `ErrorState.tsx:1`, `EmptyState.tsx:1` — for `loading.tsx`/`error.tsx`
+- `playwright/tests/screens-evidence.test.ts:132` already `describe.skip` after monorepo fix (`playwright.config.ts:1` webServer `pnpm --filter cruce-web dev`), `vitest.config.ts:1` + `@testing-library` already in `apps/web/package.json:1`
+- Libs already tested via `tsc`: `trip-setup-flow.ts:1`, `direction-detection.ts:1`, `location-state-machine.ts:1`, `trip-lifecycle.ts:1`, `avisos.ts:1`
+
+| Task | Spec Ref | Deliverable | Effort |
+|------|----------|-------------|--------|
+| Proxy migration | Next.js 16 | `middleware` → `proxy` via `npx @next/codemod@canary middleware-to-proxy` (0.5 day) | 0.5 day |
+| Analytics wiring | `lib/analytics.ts:1` | Wire existing `MonetizationEvent` to `TripSetupFlow`/`TripActionBar`/`AvisoDetail` per `CHECKLISTS.md:18` Analytics — no new lib | 1 day |
+| Loading/Error per page | `CHECKLISTS.md:33-34` | Add `loading.tsx` (reuse `LoadingSkeleton`) + `error.tsx` (reuse `ErrorState`) for 23 pages — composition only | 1 day |
+| Playwright v3 | `playwright/tests/screens-evidence.test.ts:132` | Un-skip `describe.skip` → rewrite existing selectors `text:Cruces`→`getByText('Cruces')`, assert per `PAGES_WORKFLOWS_REPORT.md:3` — reuse existing `playwright.config.ts` webServer | 2 days |
+| Vitest unit | `CHECKLISTS.md:19` | Cover existing libs `trip-setup-flow`/`direction-detection`/`location-state-machine`/`trip-lifecycle` via `vitest.config.ts` + `@testing-library` — no new infra | 1 day |
+
+**Exit Criteria**: `middleware` warning gone via existing codemod, analytics observable via existing `analytics.ts`, every page has loading/error via existing `LoadingSkeleton`/`ErrorState`, Playwright 12/12 green, unit coverage for existing lib
 
 ---
 
