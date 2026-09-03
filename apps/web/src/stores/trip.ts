@@ -9,6 +9,15 @@ import type {
   GeolocationPermission,
 } from "@/types";
 
+interface CompletedTrip {
+  id: string;
+  originLabel: string;
+  destinationLabel: string;
+  crossingName: string;
+  crossingId: string;
+  completedAt: string;
+}
+
 interface TripState {
   geolocationPermission: GeolocationPermission;
   start: StartPlace | null;
@@ -18,6 +27,7 @@ interface TripState {
   recommendedCrossing: CrossingRecommendation | null;
   completed: boolean;
   lastEvaluatedAt: string | null;
+  completedTrips: CompletedTrip[];
 
   setGeolocationPermission: (p: GeolocationPermission) => void;
   setStart: (place: StartPlace | null) => void;
@@ -39,11 +49,12 @@ const initialState = {
   recommendedCrossing: null,
   completed: false,
   lastEvaluatedAt: null,
+  completedTrips: [] as CompletedTrip[],
 };
 
 export const useTripStore = create<TripState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       ...initialState,
 
       setGeolocationPermission: (geolocationPermission) =>
@@ -54,7 +65,24 @@ export const useTripStore = create<TripState>()(
       setDirection: (direction) => set({ direction }),
       setRecommendedCrossing: (recommendedCrossing) =>
         set({ recommendedCrossing, lastEvaluatedAt: new Date().toISOString() }),
-      complete: () => set({ completed: true }),
+      complete: () => {
+        const state = get();
+        const recommended = state.recommendedCrossing;
+        const start = state.start;
+        const destination = state.destination;
+        const newCompletedTrip: CompletedTrip = {
+          id: crypto.randomUUID(),
+          originLabel: start?.name || "Origen",
+          destinationLabel: destination?.name || "Destino",
+          crossingName: recommended?.crossingName || "Cruce",
+          crossingId: recommended?.crossingId || "",
+          completedAt: new Date().toISOString(),
+        };
+        set({
+          completed: true,
+          completedTrips: [newCompletedTrip, ...state.completedTrips],
+        });
+      },
       refreshActivity: () => set({ lastEvaluatedAt: new Date().toISOString() }),
       reset: () => set(initialState),
     }),
