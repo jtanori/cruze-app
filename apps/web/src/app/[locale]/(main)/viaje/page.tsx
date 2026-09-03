@@ -4,106 +4,57 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/use-locale";
-import { TripSummary } from "@/components/viaje/TripSummary";
 import { useTripStore } from "@/stores/trip";
+import { TripStatusHeader } from "@/components/trip/TripStatusHeader";
+import { TripRouteSummary } from "@/components/trip/TripRouteSummary";
+import { TripActionBar } from "@/components/trip/TripActionBar";
+import { TripChecklistSection } from "@/components/trip/TripChecklistSection";
+import { getDisplayName } from "@/lib/display";
 import { AlertTriangle } from "lucide-react";
 
-const STALENESS_THRESHOLD_MS = 12 * 60 * 60 * 1000; // 12 hours
+const STALENESS_THRESHOLD_MS = 12 * 60 * 60 * 1000;
 
 export default function ViajePage() {
   const t = useTranslations();
   const router = useRouter();
   const locale = useLocale();
-
-  const { start, destination, completed, lastEvaluatedAt, refreshActivity, reset } = useTripStore();
-
+  const { start, destination, completed, lastEvaluatedAt, refreshActivity, reset, recommendedCrossing } = useTripStore();
   const [isStale, setIsStale] = useState(false);
   const [showStalePrompt, setShowStalePrompt] = useState(false);
   const [ready, setReady] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  // A trip exists if we have both start and destination (regardless of completed flag)
-  // The completed flag might not be set if user refreshed or came from SSR
   const hasTrip = start !== null && destination !== null;
 
-  // Wait for store hydration
   useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  // Redirect to configure if no trip (must be in useEffect to avoid render-time setState)
-  useEffect(() => {
-    if (!hasTrip) {
-      router.push(`/${locale}/viaje/configure`);
-    } else {
-      setReady(true);
-    }
+    if (!hasTrip) router.push(`/${locale}/viaje/configure`);
+    else setReady(true);
   }, [hasTrip, router, locale]);
 
   const checkStaleness = useCallback(() => {
     if (!destination || completed || !lastEvaluatedAt) return;
-
     const elapsed = Date.now() - new Date(lastEvaluatedAt).getTime();
-    if (elapsed > STALENESS_THRESHOLD_MS) {
-      setIsStale(true);
-      setShowStalePrompt(true);
-    }
+    if (elapsed > STALENESS_THRESHOLD_MS) { setIsStale(true); setShowStalePrompt(true); }
   }, [destination, completed, lastEvaluatedAt]);
 
-  // Check staleness on mount and visibility change
   useEffect(() => {
     checkStaleness();
-
-    const handleVisibility = () => {
-      if (document.visibilityState === "visible") {
-        checkStaleness();
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => document.removeEventListener("visibilitychange", handleVisibility);
+    const h = () => { if (document.visibilityState === "visible") checkStaleness(); };
+    document.addEventListener("visibilitychange", h);
+    return () => document.removeEventListener("visibilitychange", h);
   }, [checkStaleness]);
 
-  // Refresh activity on mount (user interacted by navigating here)
-  useEffect(() => {
-    if (destination && !completed) {
-      refreshActivity();
-    }
-  }, [destination, completed, refreshActivity]);
+  useEffect(() => { if (destination && !completed) refreshActivity(); }, [destination, completed, refreshActivity]);
 
-  const handleStillCurrent = () => {
-    refreshActivity();
-    setIsStale(false);
-    setShowStalePrompt(false);
-  };
-
-  const handleStartNew = () => {
-    reset();
-    router.push(`/${locale}/viaje/configure`);
-  };
-
-  const handleViewCrossing = () => {
-    const rec = useTripStore.getState().recommendedCrossing;
-    if (rec) {
-      router.push(`/${locale}/crossing/${rec.crossingId}`);
-    }
-  };
-
+  const handleStillCurrent = () => { refreshActivity(); setIsStale(false); setShowStalePrompt(false); };
+  const handleStartNew = () => { reset(); router.push(`/${locale}/trip/setup`); };
+  const handleViewCrossing = () => { if (recommendedCrossing) router.push(`/${locale}/crossing/${recommendedCrossing.crossingId}`); };
   const handleNavigate = () => {
-    const rec = useTripStore.getState().recommendedCrossing;
-    if (rec) {
-      window.open(
-        `https://www.google.com/maps/dir/?api=1&destination=${rec.coordinates.lat},${rec.coordinates.lng}`,
-        "_blank"
-      );
-    }
+    if (recommendedCrossing) window.open(`https://www.google.com/maps/dir/?api=1&destination=${recommendedCrossing.coordinates.lat},${recommendedCrossing.coordinates.lng}`, "_blank");
   };
 
   if (!ready) return null;
 
   return (
     <div className="px-5 py-6 space-y-6">
-      {/* Staleness Prompt */}
       {showStalePrompt && isStale && (
         <div className="bg-caution/10 border border-caution/30 rounded-[var(--radius-lg)] p-4 space-y-3">
           <div className="flex items-start gap-3">
@@ -114,30 +65,29 @@ export default function ViajePage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <button
-              onClick={handleStillCurrent}
-              className="flex-1 h-9 flex items-center justify-center bg-cruze-green text-dark text-sm font-medium rounded-[var(--radius-md)] active:bg-cruze-green/90 transition-colors"
-            >
-              {t("viaje.stale.stillCurrent")}
-            </button>
-            <button
-              onClick={handleStartNew}
-              className="flex-1 h-9 flex items-center justify-center bg-surface border border-border text-ink text-sm font-medium rounded-[var(--radius-md)] active:bg-surface-subtle transition-colors"
-            >
-              {t("viaje.stale.startNew")}
-            </button>
+            <button onClick={handleStillCurrent} className="flex-1 h-9 bg-cruze-mint text-midnight text-sm font-medium rounded-[var(--radius-md)]">{t("viaje.stale.stillCurrent")}</button>
+            <button onClick={handleStartNew} className="flex-1 h-9 bg-surface border border-border text-ink text-sm font-medium rounded-[var(--radius-md)]">{t("viaje.stale.startNew")}</button>
           </div>
         </div>
       )}
 
-      {/* Trip Summary */}
-      <TripSummary
-        onStartNew={handleStartNew}
-        onEdit={() => router.push(`/${locale}/viaje/configure`)}
-        onNavigate={handleNavigate}
-        onViewCrossing={handleViewCrossing}
-        onEndTrip={handleStartNew}
-      />
+      {hasTrip && destination && start && (
+        <>
+          <TripStatusHeader originLabel={getDisplayName(start)} destinationLabel={getDisplayName(destination)} />
+          {recommendedCrossing && (
+            <TripRouteSummary crossingName={recommendedCrossing.crossingName} waitTime={recommendedCrossing.waitTime} totalTime={recommendedCrossing.totalJourneyTime} />
+          )}
+          <TripActionBar onNavigate={handleNavigate} onViewCrossing={handleViewCrossing} onCompare={() => router.push(`/${locale}/crossings`)} onConfigure={() => router.push(`/${locale}/trip/setup`)} onComplete={() => router.push(`/${locale}/trip/completion`)} />
+          <TripChecklistSection
+            items={[
+              { id: "operational", label: "Cruce abierto", status: "checked" },
+              { id: "freshness", label: "Datos recientes", status: "checked", detail: recommendedCrossing ? `Actualizado hace ${Math.floor((Date.now() - new Date(recommendedCrossing.generatedAt).getTime())/60000)} min` : undefined },
+              { id: "docs", label: "Revisar documentación", status: "unchecked" },
+              { id: "restrictions", label: "Revisar restricciones", status: "unchecked" },
+            ]}
+          />
+        </>
+      )}
     </div>
   );
 }
