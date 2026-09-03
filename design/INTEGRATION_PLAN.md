@@ -5,7 +5,7 @@
 
 ## Executive Summary
 
-This plan defines the development roadmap to achieve the **v3 Target Specification** (documented in `/archive/CRUZE — Product, UX & Design System Specification.v1.md` and `/archive/CRUZE — UI Architecture & Implementation Reference.v1.md`).
+This plan defines the development roadmap to achieve the **v3 Target Specification** (documented in `/docs/CRUZE — Product, UX & Design System Specification.v1.md` and `/docs/CRUZE — UI Architecture & Implementation Reference.v1.md`).
 
 **Current State**: v2.0 implementation (7 atomic commits, unified navigation, fixed Mexico pill, agent input bar fixed, unified layout)
 
@@ -21,8 +21,8 @@ The archived v1 documents define the **complete target architecture**:
 
 | Document | Purpose |
 |----------|---------|
-| `archive/CRUZE — Product, UX & Design System Specification.v1.md` | Complete product specification (3,269 lines) |
-| `archive/CRUZE — UI Architecture & Implementation Reference.v1.md` | Implementation companion with component catalogs, ASCII screens, matrices |
+| `docs/CRUZE — Product, UX & Design System Specification.v1.md` | Complete product specification (3,269 lines) |
+| `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` | Implementation companion with component catalogs, ASCII screens, matrices |
 
 These archived v1 documents represent the **complete target architecture** for v3.
 
@@ -420,4 +420,4 @@ project-root/
 
 ---
 
-*Plan Version: 3.1 | Target: v3.0 Specification | Foundation-First Approach | Based on Archived v1 Documents | Updated: 2026-09-02*
+*Plan Version: 3.2 | Target: v3.0 Specification | Foundation-First Approach | Based on v3 Target Docs in /docs/ | Updated: 2026-09-02*
