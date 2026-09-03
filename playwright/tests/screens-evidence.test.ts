@@ -133,8 +133,8 @@ test.describe('CRUZE - Screen Capture & ASCII Diagram Evidence', () => {
   
   test.beforeEach(async ({ page }) => {
     // Navigate to the app
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/es', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1500);
   });
 
   test('CrossingCard - renders correctly with ASCII diagram', async ({ page }) => {
@@ -160,7 +160,7 @@ test.describe('CRUZE - Screen Capture & ASCII Diagram Evidence', () => {
 
   test('CrossingsList - renders correctly with ASCII diagram', async ({ page }) => {
     // Navigate to crossings tab
-    await page.click('text:Cruces');
+    await page.getByText('Cruces').click();
     await page.waitForLoadState('networkidle');
     
     // Capture screenshot
@@ -183,7 +183,7 @@ test.describe('CRUZE - Screen Capture & ASCII Diagram Evidence', () => {
 
   test('ViajeHome - renders correctly with ASCII diagram', async ({ page }) => {
     // Navigate to viaje tab (if trip exists) or wait for onboarding
-    await page.click('text:Viaje');
+    await page.getByText('Viaje').click();
     await page.waitForLoadState('networkidle');
     
     // Capture screenshot
@@ -206,7 +206,7 @@ test.describe('CRUZE - Screen Capture & ASCII Diagram Evidence', () => {
 
   test('AgentChat - renders correctly with ASCII diagram', async ({ page }) => {
     // Navigate to agent tab
-    await page.click('text:Agent');
+    await page.getByText('Agente').click();
     await page.waitForLoadState('networkidle');
     
     // Capture screenshot

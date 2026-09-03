@@ -34,6 +34,13 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
   },
 
+  webServer: {
+    command: 'pnpm --filter cruce-web dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
+
   // Configure projects different browsers
   projects: [
     {
