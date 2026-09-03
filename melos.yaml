@@ -1,0 +1,10 @@
+name: cruce_melos
+packages:
+  - apps/mobile
+  - packages/**
+
+scripts:
+  analyze: melos exec -- flutter analyze
+  test: melos exec -- flutter test
+  gen: melos exec -- dart run build_runner build --delete-conflicting-outputs
+  format: melos exec -- dart format .
