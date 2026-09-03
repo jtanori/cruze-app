@@ -347,4 +347,42 @@
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0; transform: scale(0.95); }
   }
+
+  /* ===== Iconography System ===== */
+  --icon-size-xs: 16px;
+  --icon-size-sm: 20px;
+  --icon-size-md: 24px;
+  --icon-size-lg: 32px;
+  --icon-size-xl: 40px;
+
+  --icon-stroke-thin: 1.5;
+  --icon-stroke-regular: 2;
+
+  /* Semantic icon mappings */
+  --icon-color-primary: var(--color-cruze-mint);
+  --icon-color-secondary: var(--color-muted);
+  --icon-color-success: var(--color-success);
+  --icon-color-warning: var(--color-warning);
+  --icon-color-danger: var(--color-danger);
+  --icon-color-info: var(--color-info);
+
+  /* ===== Touch Target Standards ===== */
+  --touch-target-sm: 44px;
+  --touch-target-md: 48px;
+  --touch-target-lg: 56px;
+  --touch-target-min: 44px; /* WCAG 2.5.8 minimum */
+
+  /* Interactive element minimums */
+  --interactive-min-height: 44px;
+  --interactive-min-width: 44px;
+  --interactive-padding-x: 16px;
+  --interactive-padding-y: 12px;
+
+  /* Tap area padding for small elements */
+  --tap-padding-sm: 12px;
+  --tap-padding-md: 16px;
+  --tap-padding-lg: 24px;
+
+  /* Focus ring for touch devices */
+  --focus-ring-touch: 0 0 0 3px rgba(0, 224, 160, 0.4);
 }
