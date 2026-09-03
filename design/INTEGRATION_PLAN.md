@@ -315,6 +315,57 @@ These archived v1 documents represent the **complete target architecture** for v
 
 ---
 
+### Phase 8: Screen Compositions — Band 4 (Weeks 24-27)
+
+**Goal**: Compose all 28 v3 pages from primitives → domain components → screen compositions (Spec §53 — 4-layer architecture). Each page is built one-by-one per `UI Architecture Reference` component matrices + ASCII maps.
+
+| Task | Spec Ref | Deliverable | Effort |
+|------|----------|-------------|--------|
+| Location Compositions (3 pages) | Spec §2-3, UI §§4-5 | L01 Permission, L02 Acquisition, L03 Recovery — each composes LocationPermissionGate/Prompt/Acquisition/Recovery/Confidence/Status primitives | 4 days |
+| Trip Setup Compositions (6 pages) | Spec §12-22, UI §§6-7 | T02 Destination, T03 Origin, T04 TravelMode, Direction, Access, DocumentProfile — each wires TripSetup*Step + Progress + direction-detection | 6 days |
+| Trip Recommendation + Active Trip (3 pages) | Spec §23-29, UI §§8-9 | T07 Recommendation (PrimaryCard+ReasonList+Alternatives), T08 Active Trip (StatusHeader+RouteSummary+ActionBar+Checklist), T10 Completion | 6 days |
+| Crossings Compositions (4 pages) | Spec §30-40, UI §§10-11 | C01 Directory (List+FilterBar+Row), C03 Canonical Detail (Hero+Lane+Access+Hours+Requirements+Restrictions+Services+ActionBar), C04 Compare, C05 Map | 6 days |
+| Agent + Avisos Compositions (4 pages) | Spec §41-46, UI §§12-13 | A01 Welcome, A02 Conversation (structured results), N01 Avisos List, N02 Aviso Detail | 5 days |
+| Settings Compositions (6 pages) | Spec §10-11/47-50, UI §§14-15 | S01 Root, S02 Profile, S03 Favorites, S04 My Trips, S05 DataSharing, S06 About | 4 days |
+| Trip Workflow Wiring | Spec §14/16-20 | Wire each page through TripSetupFlow controller + direction-detection + lifecycle (walking/commercial/private branching) | 4 days |
+| Navigation Wiring | Spec §14, UI §17 | Wire all pages through AppShell headerCompanion/bottomCompanion, 5 tabs, invariants (CHECKLISTS.md §§25-26) | 3 days |
+
+**Exit Criteria**: All 28 pages composed per Reference component matrices, each passes `docs/CHECKLISTS.md:34` Page QA + `CHECKLISTS.md:18` Page Level
+
+### Phase 9: Workflow Integration (Weeks 28-29)
+
+**Goal**: Wire composed pages through distinct workflows and verify end-to-end
+
+| Workflow | Pages Involved | Verify | Effort |
+|----------|---------------|--------|--------|
+| Location Workflow | L01 → L02 → L03 → Viaje (or manual fallback) | StateMachine 9 states, confidence, recovery | 2 days |
+| Trip Setup Walking | T02 → T03 → T04(walking) → T07 | Minimal flow, no docs/access | 2 days |
+| Trip Setup Commercial | T02 → T03 → T04(commercial) → T07 | Filter compatible crossings | 2 days |
+| Trip Setup Private Southbound | T02 → T03 → T04(private) → Direction(south) → T07 | Derived direction, no access/docs | 2 days |
+| Trip Setup Private Northbound | T02 → T03 → T04(private) → Direction(north) → Access → Docs → T07 | Full branching + lifecycle | 3 days |
+| Active Trip + Completion | T07 → T08 → T10 → S04 My Trips | Checklist, ActionBar, isEligibleForMyTrips | 2 days |
+| Crossings Workflow | C01 → C03 → C04 → Trip (Usar este cruce) | Canonical detail, compare metrics | 2 days |
+| Agent Workflow | A01 → A02 (with/without trip/crossing/avisos context) | Structured results AG-RESULT-01..04 | 2 days |
+| Avisos Workflow | N01 → N02 → Trip/Agent | WHAT/WHY/ACTION, grouping today/yesterday/earlier | 2 days |
+| Settings Workflow | S01 → S02/S03/S04/S05/S06 | Profile/Favorites/MyTrips isolation | 2 days |
+
+**Exit Criteria**: Every workflow traverses its pages with correct branching, navigation invariants hold, stale/unknown/zero handled
+
+### Phase 10: Pages × Workflows Integration Report (Week 30)
+
+**Goal**: Present auditable report mapping pages to workflows
+
+| Task | Effort |
+|------|--------|
+| Build Pages × Workflows matrix (28 × 10) — which pages participate in which workflows | 2 days |
+| Component → Primitive trace (per-page: components → primitives) | 2 days |
+| Workflow coverage % + gaps | 1 day |
+| Publish `docs/PAGES_WORKFLOWS_REPORT.md` (source: `docs/CHECKLISTS.md` + Reference matrices) | 1 day |
+
+**Exit Criteria**: Report shows 100% page coverage, all workflows integrated, gaps explicitly listed
+
+---
+
 ## Milestone Summary
 
 | Milestone | Target Week | Key Deliverable |
@@ -329,6 +380,9 @@ These archived v1 documents represent the **complete target architecture** for v
 | **M6: Settings & Profile** | Week 19 | S01-S06 complete |
 | **M7: Design System Complete** | Week 21 | Primitives, components, tokens |
 | **M8: v3.0 Release Candidate** | Week 23 | All invariants, QA passed |
+| **M9: Screen Compositions (Band 4)** | Week 27 | 28 pages composed per Reference matrices |
+| **M10: Workflow Integration** | Week 29 | 10 workflows wired end-to-end |
+| **M11: Pages × Workflows Report** | Week 30 | Auditable matrix 28×10 |
 
 ---
 
@@ -420,4 +474,4 @@ project-root/
 
 ---
 
-*Plan Version: 3.2 | Target: v3.0 Specification | Foundation-First Approach | Based on v3 Target Docs in /docs/ | Updated: 2026-09-02*
+*Plan Version: 3.3 | Target: v3.0 Specification | Foundation-First + Band 4 Compositions + Workflow Integration | Based on v3 Target Docs in /docs/ + CHECKLISTS.md | Updated: 2026-09-03*
