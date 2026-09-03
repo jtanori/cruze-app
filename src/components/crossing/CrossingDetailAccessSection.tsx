@@ -1,0 +1,20 @@
+"use client";
+
+interface CrossingDetailAccessSectionProps {
+  accessTypes: string[];
+  className?: string;
+}
+
+export function CrossingDetailAccessSection({ accessTypes, className = "" }: CrossingDetailAccessSectionProps) {
+  return (
+    <div className={`space-y-2 ${className}`}>
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted">ACCESO</p>
+      <div className="flex flex-wrap gap-2">
+        {accessTypes.map((a) => (
+          <span key={a} className="px-3 py-1.5 rounded-full bg-surface border border-border text-xs font-medium text-ink">{a}</span>
+        ))}
+        {accessTypes.length === 0 && <span className="text-sm text-muted">—</span>}
+      </div>
+    </div>
+  );
+}
