@@ -332,6 +332,42 @@ These archived v1 documents represent the **complete target architecture** for v
 
 ---
 
+## Monorepo Structure (Web + Flutter)
+
+The project will transition to a monorepo structure to support both the existing Next.js web app and the upcoming Flutter mobile app.
+
+```
+project-root/
+├── apps/
+│   ├── web/              # existing Next.js app (moved from root)
+│   └── mobile/           # new Flutter app
+├── packages/
+│   ├── types/            # shared TypeScript/Dart types
+│   └── api-client/       # shared API contracts
+├── package.json          # root workspace (pnpm)
+├── pnpm-workspace.yaml
+├── turbo.json            # Turborepo config (JS side)
+├── melos.yaml            # Melos config (Flutter side)
+└── README.md
+```
+
+### Flutter Stack (Locked)
+
+| Layer | Choice |
+|-------|--------|
+| State management | Riverpod 3.x (riverpod_annotation + riverpod_generator) |
+| Navigation | go_router + go_router_builder (typed routes) |
+| Architecture | Feature-first + Clean Architecture / MVVM |
+| Monorepo tool | Melos (Flutter side) + Turborepo (JS side) |
+
+### Shared Contracts
+
+- API response types shared between Next.js and Flutter
+- Crossing data model defined once, consumed by both apps
+- Design tokens exported from web CSS → Flutter theme
+
+---
+
 ## Risk Mitigation
 
 | Risk | Impact | Mitigation |
