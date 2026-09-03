@@ -1,6 +1,6 @@
 /*── CBP API ROUTE HANDLER ────────────────────────────────────────────────╭
   Purpose: Route handler for CBP wait time data
- ──────────────────────────────────────────────────────────────────────────╯
+  ──────────────────────────────────────────────────────────────────────────╯
 
   IMPLEMENTATION NOTES:
   - Endpoint: https://bwt.cbp.gov/api/waittimes (free, no key required)
@@ -21,11 +21,12 @@
 ──────────────────────────────────────────────────────────────────────────*/
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { fetchCBPWaitTimes, type NormalizedCrossingWait } from "@/lib/cbp-api";
 
 // CBP API endpoint
 const CBP_API = "https://bwt.cbp.gov/api/waittimes";
 
-// Mock data for development (matches CBP response format)
+// Mock data for fallback (matches CBP response format)
 const MOCK_CBP_DATA = {
   waitTimes: [
     { crossingId: "san-ysidro", direction: "MX_TO_US", waitMinutes: 45, laneStatus: "standard" },
@@ -41,14 +42,22 @@ const MOCK_CBP_DATA = {
 // GET /api/cbp/waittimes - CBP wait times data
 export async function GET(request: NextRequest) {
   try {
-    // In production, fetch from CBP API
-    // const response = await fetch(CBP_API, {
-    //   cache: "force-cache",
-    //   next: { revalidate: 300 }, // 5min
-    // });
+    // Fetch live CBP data with 5min cache via cbp-api
+    const cbpData = await fetchCBPWaitTimes();
 
-    // For development, use mock data
-    const data = MOCK_CBP_DATA;
+    // Transform to route response format
+    const waitTimes = cbpData.map((d: NormalizedCrossingWait) => ({
+      crossingId: d.portId,
+      direction: "MX_TO_US", // CBP data is northbound (MX→US)
+      waitMinutes: d.primaryWaitTime,
+      laneStatus: d.status === "OPEN" ? "standard" : d.status === "LIMITED" ? "limited" : "closed",
+    }));
+
+    const data = {
+      waitTimes,
+      lastUpdated: cbpData[0]?.lastUpdated || new Date().toISOString(),
+      totalCrossings: cbpData.length,
+    };
 
     // Add cache headers
     const headers: HeadersInit = {
