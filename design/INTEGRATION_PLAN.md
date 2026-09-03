@@ -366,6 +366,60 @@ These archived v1 documents represent the **complete target architecture** for v
 
 ---
 
+### Phase 11: Legacy → v3 Redirects (Week 31)
+
+**Goal**: Remove v2 onboarding shims, redirect to unified Band 4 compositions
+
+| Task | Spec Ref | Deliverable | Effort |
+|------|----------|-------------|--------|
+| Redirect `onboarding/destination` + `starting-point` → `trip/setup` | Spec §14 | `apps/web/src/app/[locale]/onboarding/destination/page.tsx` + `starting-point` → `redirect('/trip/setup')` | 0.5 day |
+| Consolidate `onboarding/recommendation` → `trip/recommendation` | Spec §23 | Single canonical T07 route, onboarding route becomes redirect | 0.5 day |
+| Viaje configure re-entry | Spec §12 | `(main)/viaje/configure` → `trip/setup` with existing trip hydration | 0.5 day |
+
+**Exit Criteria**: No legacy onboarding routes render v2 components; all entry points converge on `trip/setup` + `trip/recommendation`
+
+### Phase 12: Real Data Wiring (Weeks 32-33)
+
+**Goal**: Replace mocks with live CBP + Mapbox
+
+| Task | Spec Ref | Deliverable | Effort |
+|------|----------|-------------|--------|
+| CBP live in C03 Detail | Spec §34-35, lib `border-data-service` | `crossing/[id]/page.tsx:1` fetches `/api/cbp` (not `BORDER_CROSSINGS` mock 20/35), drives `DataTimestamp` staleness + `isLive` | 3 days |
+| Mapbox in C03/C05 | Spec §40 | `CrossingDetailMap.tsx:1` stub → `mapbox-gl` with `coordinates` + `CrossingDetailHero` status, fallback static | 3 days |
+| Compare route C04 | Spec §39 | Add `crossings/compare/page.tsx` wiring `CrossingsCompareTable.tsx:1` with 7 metrics (wait/travel/total/distance/status/access/freshness) if standalone needed | 2 days |
+| Crossings live in C01 | Spec §31-32 | `C01` already live via `getMergedCrossingsData`, verify `isLive` + `hours` + `lanes` vs mock | 1 day |
+
+**Exit Criteria**: C03/C01 show live CBP waits with `live`/`stale` indicators, map renders, no hardcoded 15/20 min
+
+### Phase 13: Store Persistence (Week 34)
+
+**Goal**: Persist profile/favorites/trips to local repos
+
+| Task | Spec Ref | Deliverable | Effort |
+|------|----------|-------------|--------|
+| Profile persistence | Spec §11, `stores/traveler.ts` + `local-profile-repo.ts:1` | `settings/profile` writes `traveler` store → `local-profile-repo`, hydration on load | 2 days |
+| Favorites persistence | `stores/favorites.ts:1` + `local-favorites-repo.ts:1` | `settings/favorites` + `crossing/[id]` bookmark toggle persists `crossingIds` | 1 day |
+| My Trips persistence | `trip-lifecycle.ts:1` `isEligibleForMyTrips` + `local-trip-repo.ts:1` | `trip/completion` → `local-trip-repo`, `settings/trips` reads only `completed` | 2 days |
+| Avisos persistence | `stores/alerts.ts:1` + `infrastructure/persistence` | `alerts` → local, grouping today/yesterday/earlier survives reload | 1 day |
+
+**Exit Criteria**: Reload preserves profile/favorites/completed trips/avisos; `S04 My Trips` shows only `completed` per `trip-lifecycle`
+
+### Phase 14: Polish — Proxy, Analytics, Loading/Error, Tests (Week 35)
+
+**Goal**: Close `CHECKLISTS.md:33` Component QA + `34` Page QA gaps
+
+| Task | Spec Ref | Deliverable | Effort |
+|------|----------|-------------|--------|
+| Proxy migration | Next.js 16 | `middleware` → `proxy` via `npx @next/codemod@canary middleware-to-proxy` | 0.5 day |
+| Analytics wiring | `lib/analytics.ts:1`, `feature-flags.ts` | Wire `MonetizationEvent` per `CHECKLISTS.md:18` Analytics | 1 day |
+| Loading/Error per page | `CHECKLISTS.md:33-34` | Add `loading.tsx` (Skeleton) + `error.tsx` (ErrorState) for 23 pages | 2 days |
+| Playwright v3 | `playwright/tests/screens-evidence.test.ts:132` | Un-skip `describe.skip` → rewrite selectors to v3 `getByText('Cruces')`/`getByRole('tab')`, fix `text:Cruces` → `text=Cruces`, assert per `PAGES_WORKFLOWS_REPORT.md:3` | 2 days |
+| Vitest unit | `CHECKLISTS.md:19` Tests | Cover `trip-setup-flow`, `direction-detection`, `location-state-machine`, `trip-lifecycle` | 2 days |
+
+**Exit Criteria**: `middleware` warning gone, analytics observable, every page has loading/error, Playwright 12/12 green (was `12 failed`), unit coverage for lib
+
+---
+
 ## Milestone Summary
 
 | Milestone | Target Week | Key Deliverable |
@@ -383,6 +437,10 @@ These archived v1 documents represent the **complete target architecture** for v
 | **M9: Screen Compositions (Band 4)** | Week 27 | 28 pages composed per Reference matrices |
 | **M10: Workflow Integration** | Week 29 | 10 workflows wired end-to-end |
 | **M11: Pages × Workflows Report** | Week 30 | Auditable matrix 28×10 |
+| **M12: Legacy → v3 Redirects** | Week 31 | No v2 onboarding shims |
+| **M13: Real Data Wiring** | Week 33 | Live CBP + Mapbox, no mocks |
+| **M14: Store Persistence** | Week 34 | Profile/favorites/trips persisted |
+| **M15: Polish (Proxy/Analytics/Tests)** | Week 35 | 0 warnings, 12/12 Playwright green |
 
 ---
 
@@ -474,4 +532,4 @@ project-root/
 
 ---
 
-*Plan Version: 3.3 | Target: v3.0 Specification | Foundation-First + Band 4 Compositions + Workflow Integration | Based on v3 Target Docs in /docs/ + CHECKLISTS.md | Updated: 2026-09-03*
+*Plan Version: 3.4 | Target: v3.0 Specification | Foundation-First + Band 4 + Workflows + Follow-up (Redirects/Data/Persistence/Polish) | Based on v3 Target Docs in /docs/ + CHECKLISTS.md + PAGES_WORKFLOWS_REPORT.md | Updated: 2026-09-03*
