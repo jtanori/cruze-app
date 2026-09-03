@@ -59,7 +59,7 @@ const VALID_TRANSITIONS: Record<LocationState, LocationState[]> = {
   requesting_permission: ["permission_denied", "acquiring", "services_disabled"],
   permission_denied: ["requesting_permission", "unavailable"],
   services_disabled: ["requesting_permission", "unavailable"],
-  acquiring: ["low_confidence", "ready", "unavailable"],
+  acquiring: ["low_confidence", "ready", "unavailable", "acquiring"],
   low_confidence: ["acquiring", "ready", "unavailable"],
   ready: ["stale", "unavailable"],
   stale: ["acquiring", "ready", "unavailable"],
@@ -118,6 +118,8 @@ export class LocationStateMachine {
       case "UNAVAILABLE":
         return "unavailable";
       case "RETRY":
+        // From permission_denied, retry goes back to requesting permission
+        if (this.state === "permission_denied") return "requesting_permission";
         return "acquiring";
       case "RESET":
         return "uninitialized";
