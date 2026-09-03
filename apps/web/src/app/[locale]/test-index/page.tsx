@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { useLocale } from "@/hooks/use-locale";
 
@@ -33,11 +33,11 @@ export default function TestIndexPage() {
   const base = `/${locale}`;
 
   return (
-    <div className="min-h-dvh bg-background px-5 py-10 max-w-4xl mx-auto">
-      <header className="mb-10 space-y-2">
-        <h1 className="text-3xl font-bold text-ink">Cruze - Manual Test Index</h1>
+    <div className="min-h-dvh bg-background pt-safe pb-safe px-safe px-4 sm:px-5 py-8 sm:py-10 max-w-4xl mx-auto">
+      <header className="mb-8 sm:mb-10 space-y-3">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-ink">Cruze - Manual Test Index</h1>
         <p className="text-muted">All v3 screens for manual testing. Click to navigate.</p>
-        <div className="flex gap-2 text-sm text-muted">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2 text-xs sm:text-sm text-muted">
           <span>Locale: <strong>{locale}</strong></span>
           <span>|</span>
           <span>{screens.length} screens</span>
@@ -46,7 +46,7 @@ export default function TestIndexPage() {
         </div>
       </header>
 
-      <div className="space-y-6">
+      <div className="space-y-5 sm:space-y-6">
         {[
           { label: "Onboarding / Location", items: screens.slice(0, 4) },
           { label: "Trip Setup (Unified)", items: screens.slice(4, 7) },
@@ -58,20 +58,20 @@ export default function TestIndexPage() {
           { label: "Home", items: screens.slice(22) },
         ].map((section) => (
           <section key={section.label} className="space-y-3">
-            <h2 className="text-lg font-semibold text-ink border-b border-border pb-1">{section.label}</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-ink border-b border-border pb-1">{section.label}</h2>
             <div className="space-y-2">
               {section.items.map((screen) => (
                 <a
                   key={screen.path}
                   href={base + screen.path}
-                  className="block p-4 bg-surface border border-border rounded-[var(--radius-lg)] hover:border-cruze-mint/50 hover:bg-surface-elevated transition-colors"
+                  className="block p-3 sm:p-4 bg-surface border border-border rounded-[var(--radius-lg)] hover:border-cruze-mint/50 hover:bg-surface-elevated transition-colors"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-ink font-semibold text-base">{screen.title}</h3>
-                      <p className="text-muted text-sm mt-0.5 truncate">{screen.desc}</p>
+                      <h3 className="text-ink font-semibold text-sm sm:text-base">{screen.title}</h3>
+                      <p className="text-muted text-xs sm:text-sm mt-1 line-clamp-2">{screen.desc}</p>
                     </div>
-                    <span className="text-xs font-mono text-muted shrink-0">{screen.path}</span>
+                    <span className="text-xs font-mono text-muted shrink-0 sm:block">{screen.path}</span>
                   </div>
                 </a>
               ))}
@@ -80,8 +80,8 @@ export default function TestIndexPage() {
         ))}
       </div>
 
-      <footer className="mt-12 pt-6 border-t border-border text-center text-sm text-muted">
-        <p>v3.0 - All phases complete. <a href="/docs/PAGES_WORKFLOWS_REPORT.md" className="text-cruze-mint hover:underline">Pages x Workflows Report</a></p>
+      <footer className="mt-10 sm:mt-12 pt-5 sm:pt-6 border-t border-border text-center text-sm sm:text-base text-muted">
+        <p className="px-3 py-2 sm:px-4 sm:py-2">v3.0 - All phases complete. <a href="/docs/PAGES_WORKFLOWS_REPORT.md" className="text-cruze-mint hover:underline">Pages x Workflows Report</a></p>
       </footer>
     </div>
   );
