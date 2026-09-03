@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/primitives/Badge";
 import type { Aviso } from "@/lib/avisos";
+import { trackEvent } from "@/lib/analytics";
 
 interface AvisoDetailProps {
   aviso: Aviso;
@@ -23,8 +24,8 @@ export function AvisoDetail({ aviso, onAskAgent, onViewRecommendation, className
       <p className="text-sm text-muted">{aviso.description}</p>
       {aviso.crossingName && <p className="text-sm text-ink">{aviso.crossingName}</p>}
       <div className="flex gap-2">
-        {onViewRecommendation && <button onClick={onViewRecommendation} className="flex-1 h-[40px] rounded-[var(--radius-md)] bg-cruze-mint text-midnight text-sm font-semibold">Ver recomendaci\u00F3n</button>}
-        {onAskAgent && <button onClick={onAskAgent} className="flex-1 h-[40px] rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-sm font-medium">Preguntar al Agente</button>}
+        {onViewRecommendation && <button onClick={() => { trackEvent("aviso_action_view_recommendation", { avisoType: aviso.type }); onViewRecommendation?.(); }} className="flex-1 h-[40px] rounded-[var(--radius-md)] bg-cruze-mint text-midnight text-sm font-semibold">Ver recomendaci\u00F3n</button>}
+        {onAskAgent && <button onClick={() => { trackEvent("aviso_action_ask_agent", { avisoType: aviso.type }); onAskAgent?.(); }} className="flex-1 h-[40px] rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-sm font-medium">Preguntar al Agente</button>}
       </div>
     </div>
   );

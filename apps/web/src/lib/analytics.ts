@@ -6,20 +6,29 @@
 
 import type { MonetizationEvent, MonetizationEventPayload } from "@/types/monetization";
 
+type EventName = MonetizationEvent | string;
+
+interface AnalyticsEventPayload {
+  event: EventName;
+  timestamp: string;
+  sessionId: string;
+  metadata?: Record<string, string | number | boolean>;
+}
+
 const SESSION_ID = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
-const EVENT_QUEUE: MonetizationEventPayload[] = [];
+const EVENT_QUEUE: AnalyticsEventPayload[] = [];
 const MAX_QUEUE_SIZE = 100;
 
 /**
- * Track a monetization event.
+ * Track an event.
  * Day-0: Console log + localStorage queue.
  */
 export function trackEvent(
-  event: MonetizationEvent,
+  event: EventName,
   metadata?: Record<string, string | number | boolean>
 ): void {
-  const payload: MonetizationEventPayload = {
+  const payload: AnalyticsEventPayload = {
     event,
     timestamp: new Date().toISOString(),
     sessionId: SESSION_ID,
@@ -44,14 +53,14 @@ export function trackEvent(
 /**
  * Get all queued events.
  */
-export function getQueuedEvents(): MonetizationEventPayload[] {
+export function getQueuedEvents(): AnalyticsEventPayload[] {
   return [...EVENT_QUEUE];
 }
 
 /**
  * Flush event queue (call when sending to analytics provider).
  */
-export function flushEvents(): MonetizationEventPayload[] {
+export function flushEvents(): AnalyticsEventPayload[] {
   const events = [...EVENT_QUEUE];
   EVENT_QUEUE.length = 0;
   saveEventQueue();
@@ -61,8 +70,8 @@ export function flushEvents(): MonetizationEventPayload[] {
 /**
  * Get event count by type.
  */
-export function getEventCounts(): Record<MonetizationEvent, number> {
-  const counts = {} as Record<MonetizationEvent, number>;
+export function getEventCounts(): Record<string, number> {
+  const counts: Record<string, number> = {};
   for (const event of EVENT_QUEUE) {
     counts[event.event] = (counts[event.event] || 0) + 1;
   }
