@@ -68,7 +68,27 @@
       "otherOptions": "Other options",
       "minTotal": "min total"
     },
-    "viewAllCrossings": "View all crossings"
+    "viewAllCrossings": "View all crossings",
+    "location": {
+      "title": "Where are you?",
+      "explanation": "Cruze uses your location to show you the most relevant crossings, their current wait times and the best options to get there.",
+      "allow": "Allow location",
+      "settings": "Settings",
+      "acquiring": "Getting your location...",
+      "recovery": {
+        "permissionDenied": "Location permission denied",
+        "permissionDeniedDesc": "Cruze needs your location to find the best crossings. Please allow location access in your browser settings.",
+        "servicesDisabled": "Location services disabled",
+        "servicesDisabledDesc": "Location services are turned off. Please enable them in your device settings.",
+        "lowConfidence": "Location needs confirmation",
+        "lowConfidenceDesc": "Your location accuracy is low. Try moving to an open area or retry.",
+        "stale": "Location needs refreshing",
+        "staleDesc": "Your location is outdated. Refresh to get current results.",
+        "unavailable": "Location unavailable",
+        "unavailableDesc": "Could not determine your location. Please try again.",
+        "retry": "Try again"
+      }
+    }
   },
   "home": {
     "updated": "Updated {minutes} min ago",

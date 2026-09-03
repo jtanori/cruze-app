@@ -68,7 +68,27 @@
       "otherOptions": "Otras opciones",
       "minTotal": "min total"
     },
-    "viewAllCrossings": "Ver todos los cruces"
+    "viewAllCrossings": "Ver todos los cruces",
+    "location": {
+      "title": "¿Dónde estás?",
+      "explanation": "Cruze usa tu ubicación para mostrarte los cruces más relevantes, sus tiempos actuales y las mejores opciones para llegar a ellos.",
+      "allow": "Permitir ubicación",
+      "settings": "Configuración",
+      "acquiring": "Obteniendo tu ubicación...",
+      "recovery": {
+        "permissionDenied": "Permiso de ubicación denegado",
+        "permissionDeniedDesc": "Cruze necesita tu ubicación para encontrar los mejores cruces. Permite el acceso en la configuración de tu navegador.",
+        "servicesDisabled": "Servicios de ubicación deshabilitados",
+        "servicesDisabledDesc": "Los servicios de ubicación están desactivados. Actívalos en la configuración de tu dispositivo.",
+        "lowConfidence": "Ubicación necesita confirmación",
+        "lowConfidenceDesc": "La precisión de tu ubicación es baja. Intenta moverte a un área abierta o reintentar.",
+        "stale": "Ubicación necesita actualización",
+        "staleDesc": "Tu ubicación está desactualizada. Actualiza para obtener resultados actuales.",
+        "unavailable": "Ubicación no disponible",
+        "unavailableDesc": "No se pudo determinar tu ubicación. Intenta de nuevo.",
+        "retry": "Reintentar"
+      }
+    }
   },
   "home": {
     "updated": "Actualizado hace {minutes} min",
