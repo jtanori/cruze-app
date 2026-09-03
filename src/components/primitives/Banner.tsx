@@ -69,7 +69,7 @@ export function Banner({
       {dismissible && (
         <button
           onClick={onDismiss}
-          className="shrink-0 p-1 rounded-[var(--radius-md)] hover:bg-white/10 transition-colors"
+          className="shrink-0 p-1 rounded-[var(--radius-md)] hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint/50"
           aria-label="Dismiss"
         >
           <X className="w-4 h-4" />

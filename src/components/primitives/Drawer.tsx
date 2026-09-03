@@ -53,7 +53,7 @@ export function Drawer({
           <h2 className="text-ink font-semibold text-lg">{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-[var(--radius-md)] hover:bg-surface-elevated transition-colors"
+            className="p-2 rounded-[var(--radius-md)] hover:bg-surface-elevated transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint/50"
             aria-label="Close"
           >
             <X className="w-5 h-5 text-muted" />
