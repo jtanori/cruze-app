@@ -118,13 +118,13 @@ export default function CrossingPage({ params }: CrossingPageProps) {
   }
 
   if (error || !crossing) {
-    return <div className="px-5 py-12 text-center text-muted">{error || "Cruce no encontrado"}</div>;
+    return <div className="px-5 py-8 sm:py-12 text-center text-muted">{error || "Cruce no encontrado"}</div>;
   }
 
   return (
     <div className="min-h-dvh bg-background">
       <CruzeBackHeader title="Cruces" onBack={() => router.push(`/${locale}/crossings`)} />
-      <div className="px-5 py-6 space-y-6 max-w-lg mx-auto pb-24">
+      <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4 sm:space-y-6 max-w-sm sm:max-w-lg mx-auto pb-24">
         <CrossingDetailHero
           crossingName={crossing.name}
           status={crossing.status}

@@ -54,7 +54,7 @@ export function CrossingsDirectoryFilterBar({
             <button
               key={s}
               onClick={() => onSortChange(s)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap border transition-colors ${
+              className={`px-4 py-2 min-h-[44px] rounded-full text-xs font-medium whitespace-nowrap border transition-colors ${
                 sort === s ? "bg-cruze-mint text-midnight border-cruze-mint" : "bg-surface border-border text-muted"
               }`}
             >

@@ -103,7 +103,7 @@ export function AgentChat() {
     <div className="flex flex-col h-[calc(100dvh-var(--nav-header-height)-var(--nav-bottom-height))]">
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 pb-24">
         {messages.length === 0 && !isProcessing ? (
-          <div className="flex flex-col items-center justify-center h-full space-y-6">
+          <div className="flex flex-col items-center justify-center h-full space-y-4 sm:space-y-6">
             <div className="w-16 h-16 flex items-center justify-center rounded-full bg-cruze-green/10">
               <Bot className="w-8 h-8 text-cruze-green" />
             </div>

@@ -11,7 +11,7 @@ export function CrossingDetailAccessSection({ accessTypes, className = "" }: Cro
       <p className="text-xs font-semibold uppercase tracking-wider text-muted">ACCESO</p>
       <div className="flex flex-wrap gap-2">
         {accessTypes.map((a) => (
-          <span key={a} className="px-3 py-1.5 rounded-full bg-surface border border-border text-xs font-medium text-ink">{a}</span>
+          <span key={a} className="px-4 py-2 min-h-[44px] rounded-full bg-surface border border-border text-xs font-medium text-ink">{a}</span>
         ))}
         {accessTypes.length === 0 && <span className="text-sm text-muted">—</span>}
       </div>

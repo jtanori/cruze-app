@@ -72,7 +72,7 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
   // Step 1: Crossing Mode
   if (step === "mode") {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
           <h2 className="text-ink text-xl font-semibold">{t("viaje.crossingMode")}</h2>
           <p className="text-faint text-sm">{t("viaje.crossingModeDescription")}</p>
@@ -102,7 +102,7 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
   // Step 2: SENTRI
   if (step === "sentri") {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
           <h2 className="text-ink text-xl font-semibold">{t("viaje.sentri")}</h2>
           <p className="text-faint text-sm">{t("viaje.sentriDescription")}</p>
@@ -150,7 +150,7 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
     const visaTitle = direction === "MX_TO_US" ? t("viaje.usVisa") : t("viaje.mxVisa");
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
           <h2 className="text-ink text-xl font-semibold">{visaTitle}</h2>
           <p className="text-faint text-sm">{t("viaje.visaDescription")}</p>
@@ -195,7 +195,7 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
   // Step 4: Passport Country
   if (step === "passport") {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
           <h2 className="text-ink text-xl font-semibold">{t("viaje.passportCountry")}</h2>
           <p className="text-faint text-sm">{t("viaje.passportDescription")}</p>

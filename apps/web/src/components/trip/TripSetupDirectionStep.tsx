@@ -10,7 +10,7 @@ interface TripSetupDirectionStepProps {
 
 export function TripSetupDirectionStep({ value, onSelect }: TripSetupDirectionStepProps) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <h2 className="text-xl font-bold text-ink">{"\u00BFHacia d\u00F3nde vas?"}</h2>
         <p className="text-sm text-muted mt-1">Selecciona la direcci\u00F3n de tu cruce</p>
@@ -27,7 +27,7 @@ export function TripSetupDirectionStep({ value, onSelect }: TripSetupDirectionSt
             <button
               key={o.dir}
               onClick={() => onSelect(o.dir)}
-              className={`w-full flex items-center gap-4 px-4 py-4 rounded-[var(--radius-lg)] border text-left transition-colors min-h-[64px] ${
+              className={`w-full flex items-center gap-4 sm:gap-6 px-4 py-4 rounded-[var(--radius-lg)] border text-left transition-colors min-h-[64px] ${
                 selected ? "bg-cruze-mint/10 border-cruze-mint/50" : "bg-surface border-border hover:border-cruze-mint/30"
               }`}
             >

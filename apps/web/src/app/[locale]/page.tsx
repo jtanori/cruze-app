@@ -55,7 +55,7 @@ export default function HomePage() {
           paddingBottom: "calc(var(--nav-bottom-height) + env(safe-area-inset-bottom))",
         }}
       >
-        <div className="space-y-8 px-5 py-6">
+        <div className="space-y-8 px-4 sm:px-5 py-4 sm:py-6">
           {/* Direction Context */}
           <div>
             <p className="text-ink text-base sm:text-lg font-semibold">

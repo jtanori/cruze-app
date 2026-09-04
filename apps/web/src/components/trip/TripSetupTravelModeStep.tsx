@@ -16,7 +16,7 @@ export function TripSetupTravelModeStep({ value, onSelect }: TripSetupTravelMode
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <h2 className="text-xl font-bold text-ink">{"\u00BFC\u00F3mo cruzas?"}</h2>
         <p className="text-sm text-muted mt-1">Selecciona tu modo de cruce</p>
@@ -30,7 +30,7 @@ export function TripSetupTravelModeStep({ value, onSelect }: TripSetupTravelMode
             <button
               key={m.mode}
               onClick={() => onSelect(m.mode)}
-              className={`w-full flex items-center gap-4 px-4 py-4 rounded-[var(--radius-lg)] border text-left transition-colors min-h-[64px] ${
+              className={`w-full flex items-center gap-4 sm:gap-6 px-4 py-4 rounded-[var(--radius-lg)] border text-left transition-colors min-h-[64px] ${
                 selected
                   ? "bg-cruze-mint/10 border-cruze-mint/50"
                   : "bg-surface border-border hover:border-cruze-mint/30"

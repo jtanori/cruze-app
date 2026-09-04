@@ -62,7 +62,7 @@ export function TripSetupFlow() {
         <TripSetupProgress current={progress.current} total={progress.total} />
       </div>
 
-      <div className="flex-1 px-5 py-6 max-w-lg mx-auto w-full">
+      <div className="flex-1 px-4 sm:px-5 py-4 sm:py-6 max-w-sm sm:max-w-lg mx-auto w-full">
         {step === "destination" && (
           <TripSetupDestinationStep
             onSelect={(dest) => {
@@ -164,7 +164,7 @@ export function TripSetupFlow() {
       </div>
 
       {step !== "destination" && step !== "documentProfile" && (
-        <div className="px-5 pb-6 max-w-lg mx-auto w-full">
+        <div className="px-5 pb-6 max-w-sm sm:max-w-lg mx-auto w-full">
           <button
             onClick={goBack}
             className="text-sm font-medium text-muted hover:text-ink transition-colors"
@@ -175,7 +175,7 @@ export function TripSetupFlow() {
       )}
 
       {step === "documentProfile" && (
-        <div className="px-5 pb-6 max-w-lg mx-auto w-full">
+        <div className="px-5 pb-6 max-w-sm sm:max-w-lg mx-auto w-full">
           <button onClick={goBack} className="text-sm font-medium text-muted hover:text-ink transition-colors">
             {"\u2190 Atr\u00E1s"}
           </button>

@@ -8,7 +8,7 @@ export default function TripCompletionPage() {
   const router = useRouter();
   const locale = useLocale();
   return (
-    <div className="min-h-dvh bg-background px-5 py-12 max-w-lg mx-auto">
+    <div className="min-h-dvh bg-background px-5 py-8 sm:py-12 max-w-sm sm:max-w-lg mx-auto">
       <TripCompletionPrompt
         originLabel="Tijuana"
         destinationLabel="San Diego"

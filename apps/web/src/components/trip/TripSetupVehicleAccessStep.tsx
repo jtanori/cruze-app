@@ -16,7 +16,7 @@ export function TripSetupVehicleAccessStep({ value, onSelect }: TripSetupVehicle
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <h2 className="text-xl font-bold text-ink">{"\u00BFC\u00F3mo cruzas normalmente?"}</h2>
         <p className="text-sm text-muted mt-1">Filtra recomendaciones por tipo de acceso</p>
@@ -29,7 +29,7 @@ export function TripSetupVehicleAccessStep({ value, onSelect }: TripSetupVehicle
             <button
               key={o.access}
               onClick={() => onSelect(o.access)}
-              className={`w-full flex items-center gap-4 px-4 py-4 rounded-[var(--radius-lg)] border text-left transition-colors min-h-[56px] ${
+              className={`w-full flex items-center gap-4 sm:gap-6 px-4 py-4 rounded-[var(--radius-lg)] border text-left transition-colors min-h-[56px] ${
                 selected ? "bg-cruze-mint/10 border-cruze-mint/50" : "bg-surface border-border hover:border-cruze-mint/30"
               }`}
             >

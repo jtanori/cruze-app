@@ -26,8 +26,8 @@ export function CrossingConfirmGate() {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-dark/80 backdrop-blur-sm">
       <div className="w-full mx-4 bg-surface rounded-[var(--radius-xl)] border border-border shadow-xl overflow-hidden">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-cruze-green/10">
+        <div className="px-4 sm:px-6 pt-6 pb-4 text-center">
+          <div className="w-16 h-16 mx-auto mb-3 sm:mb-4 flex items-center justify-center rounded-full bg-cruze-green/10">
             <Check className="w-8 h-8 text-cruze-green" />
           </div>
           <h2 className="text-ink text-lg font-semibold">
@@ -39,7 +39,7 @@ export function CrossingConfirmGate() {
         </div>
 
         {/* Stats */}
-        <div className="px-6 pb-4">
+        <div className="px-4 sm:px-6 pb-4">
           <div className="bg-surface-elevated rounded-[var(--radius-md)] p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-faint text-sm">
@@ -74,7 +74,7 @@ export function CrossingConfirmGate() {
         </div>
 
         {/* Actions */}
-        <div className="px-6 pb-6 space-y-3">
+        <div className="px-4 sm:px-6 pb-6 space-y-3">
           <button
             onClick={confirmCrossing}
             className="w-full h-12 flex items-center justify-center gap-2 bg-cruze-green text-dark rounded-[var(--radius-md)] font-medium text-sm active:bg-cruze-green/90 transition-colors"

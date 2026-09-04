@@ -610,17 +610,17 @@ export function CrossingIntelligenceView({
                             {travelerProfile && !isSelected && (
                               <>
                                 {eligibility.preferred && (
-                                  <span className="px-1.5 py-0.5 bg-cruze-green/10 text-cruze-green text-xs font-semibold rounded">
+                                  <span className="px-2 py-1 min-h-[20px] bg-cruze-green/10 text-cruze-green text-xs font-semibold rounded">
                                     {t("crossing.preferred")}
                                   </span>
                                 )}
                                 {eligibility.eligible && !eligibility.preferred && (
-                                  <span className="px-1.5 py-0.5 bg-improving/10 text-improving text-xs font-semibold rounded">
+                                  <span className="px-2 py-1 min-h-[20px] bg-improving/10 text-improving text-xs font-semibold rounded">
                                     {t("crossing.eligible")}
                                   </span>
                                 )}
                                 {!eligibility.eligible && eligibility.reason && (
-                                  <span className="px-1.5 py-0.5 bg-faint/10 text-faint text-xs font-semibold rounded">
+                                  <span className="px-2 py-1 min-h-[20px] bg-faint/10 text-faint text-xs font-semibold rounded">
                                     {t(eligibility.reason)}
                                   </span>
                                 )}

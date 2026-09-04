@@ -55,7 +55,7 @@ export function CrossingDetailsModal({ recommendation, onClose }: CrossingDetail
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-6">
+      <div className="flex-1 overflow-y-auto p-5 space-y-4 sm:space-y-6">
         {/* Location */}
         <section className="space-y-3">
           <h2 className="text-muted text-xs font-medium uppercase tracking-wider">

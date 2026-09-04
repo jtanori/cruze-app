@@ -35,7 +35,7 @@ export default function FavoritesPage() {
 
   if (favoriteCrossings.length === 0) {
     return (
-      <div className="min-h-dvh bg-background flex flex-col items-center justify-center gap-4 px-8 py-32">
+      <div className="min-h-dvh bg-background flex flex-col items-center justify-center gap-4 sm:gap-6 px-4 sm:px-8 py-32">
         <div className="w-16 h-16 rounded-full bg-surface-elevated border border-border flex items-center justify-center">
           <Star className="w-7 h-7 text-faint" />
         </div>
@@ -50,7 +50,7 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="space-y-6 px-5 py-6">
+    <div className="space-y-4 sm:space-y-6 px-4 sm:px-5 py-4 sm:py-6">
       <div>
         <p className="text-ink text-sm sm:text-base font-semibold">{t("nav.favorites")}</p>
         <p className="text-faint text-xs mt-1">

@@ -126,7 +126,7 @@ export function RecommendationView({
           </p>
         </div>
 
-        <div className="flex items-center justify-center py-12">
+        <div className="flex items-center justify-center py-8 sm:py-12">
           <div className="w-8 h-8 border-2 border-cruze-green border-t-transparent rounded-full animate-spin" />
         </div>
       </div>
@@ -153,7 +153,7 @@ export function RecommendationView({
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       {/* Route header */}
       <div className="space-y-1">
         <div className="flex items-center gap-2 text-sm">

@@ -36,15 +36,15 @@ export function LocationStatusBanner({
     <div className={`flex items-center gap-3 px-4 py-3 rounded-[var(--radius-lg)] border ${current.bg} border-border ${className}`}>
       <Icon className={`w-4 h-4 ${current.color} shrink-0`} />
       <span className={`text-sm font-medium ${current.color} flex-1`}>{current.label}</span>
-      {current.action && onRetry && (
-        <button
-          onClick={onRetry}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] bg-surface border border-border text-xs font-semibold text-ink hover:bg-surface-elevated transition-colors min-h-[32px]"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          {current.action}
-        </button>
-      )}
+{current.action && onRetry && (
+            <button
+              onClick={onRetry}
+              className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[44px] rounded-[var(--radius-md)] bg-surface border border-border text-xs font-semibold text-ink hover:bg-surface-elevated transition-colors"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              {current.action}
+            </button>
+          )}
     </div>
   );
 }

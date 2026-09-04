@@ -18,7 +18,7 @@ export function TripSetupDocumentProfileStep({ value, onSelect, onSkip }: TripSe
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <h2 className="text-xl font-bold text-ink">{"\u00BFQu\u00E9 documentaci\u00F3n tienes?"}</h2>
         <p className="text-sm text-muted mt-1">Opcional — ayuda a filtrar recomendaciones</p>
@@ -37,7 +37,7 @@ export function TripSetupDocumentProfileStep({ value, onSelect, onSkip }: TripSe
             <button
               key={o.doc}
               onClick={() => onSelect(o.doc)}
-              className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-[var(--radius-lg)] border text-left transition-colors min-h-[48px] ${
+              className={`w-full flex items-center gap-4 sm:gap-6 px-4 py-3.5 rounded-[var(--radius-lg)] border text-left transition-colors min-h-[48px] ${
                 selected ? "bg-cruze-mint/10 border-cruze-mint/50" : "bg-surface border-border hover:border-cruze-mint/30"
               }`}
             >

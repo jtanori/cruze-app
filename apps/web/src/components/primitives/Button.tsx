@@ -45,8 +45,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const sizes = {
       sm: "h-10 px-3 text-sm gap-1.5",
       md: "h-12 px-4 text-sm gap-2",
-      lg: "h-14 px-6 text-base gap-2",
-      xl: "h-16 px-8 text-lg gap-2.5",
+      lg: "h-14 px-4 sm:px-6 text-base gap-2",
+      xl: "h-16 px-4 sm:px-8 text-lg gap-2.5",
     };
 
     const width = fullWidth ? "w-full" : "";

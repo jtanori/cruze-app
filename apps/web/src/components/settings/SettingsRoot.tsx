@@ -26,7 +26,7 @@ export function SettingsRoot({ onProfile, onFavorites, onMyTrips, onDataSharing,
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <h1 className="text-xl font-bold text-ink">CONFIGURACI\u00D3N</h1>
       {sections.map((s) => (
         <div key={s.title} className="space-y-2">

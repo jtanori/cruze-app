@@ -71,7 +71,7 @@ export default function CrossingSummaryPage() {
 
   return (
     <div className="min-h-dvh bg-background">
-      <div className="max-w-sm mx-auto px-5 py-8 space-y-6">
+      <div className="max-w-sm mx-auto px-5 py-8 space-y-4 sm:space-y-6">
         {/* Success Header */}
         <div className="text-center space-y-4">
           <div className="w-20 h-20 mx-auto flex items-center justify-center rounded-full bg-cruze-green/10">
@@ -85,7 +85,7 @@ export default function CrossingSummaryPage() {
 
         {/* Time Stats */}
         <div className="bg-surface rounded-[var(--radius-xl)] border border-border p-5 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
             <div className="text-center">
               <p className="text-faint text-xs mb-1">{t("crossing.confirm.estimated")}</p>
               <p className="text-ink text-2xl font-semibold tabular">

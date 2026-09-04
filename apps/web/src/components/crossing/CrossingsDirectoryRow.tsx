@@ -37,7 +37,7 @@ export function CrossingsDirectoryRow({
           <p className="text-ink text-sm font-semibold truncate">{crossingName}</p>
           <DataStatus status={status} size="sm" />
         </div>
-        <div className="flex items-center gap-4 shrink-0 ml-4">
+        <div className="flex items-center gap-4 sm:gap-6 shrink-0 ml-4">
           <div className="text-right">
             <p className="text-xs text-muted">Norte</p>
             <p className="text-sm font-bold tabular text-ink">{northboundWait !== null ? formatDuration(northboundWait) : "—"}</p>

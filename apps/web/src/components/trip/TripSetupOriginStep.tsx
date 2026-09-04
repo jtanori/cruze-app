@@ -20,7 +20,7 @@ export function TripSetupOriginStep({ onSelect }: TripSetupOriginStepProps) {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <h2 className="text-xl font-bold text-ink">{"\u00BFDesde d\u00F3nde sales?"}</h2>
         <p className="text-sm text-muted mt-1">Tu origen para comparar cruces en tu ruta</p>

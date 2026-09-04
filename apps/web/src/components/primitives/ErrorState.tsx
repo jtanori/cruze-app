@@ -18,13 +18,13 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <div
-      className={`flex flex-col items-center justify-center py-12 px-6 text-center ${className}`}
+      className={`flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6 text-center ${className}`}
     >
-      <div className="w-14 h-14 rounded-full bg-danger/10 flex items-center justify-center mb-4">
+      <div className="w-14 h-14 rounded-full bg-danger/10 flex items-center justify-center mb-3 sm:mb-4">
         {icon || <AlertTriangle className="w-7 h-7 text-danger" />}
       </div>
       <h3 className="text-ink font-semibold text-lg mb-2">{title}</h3>
-      <p className="text-muted text-sm max-w-xs leading-relaxed mb-6">{message}</p>
+      <p className="text-muted text-sm max-w-xs leading-relaxed mb-4 sm:mb-6">{message}</p>
       {action && (
         <button
           onClick={action.onClick}

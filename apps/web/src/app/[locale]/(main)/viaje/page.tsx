@@ -54,7 +54,7 @@ export default function ViajePage() {
   if (!ready) return null;
 
   return (
-    <div className="px-5 py-6 space-y-6">
+    <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4 sm:space-y-6">
       {showStalePrompt && isStale && (
         <div className="bg-caution/10 border border-caution/30 rounded-[var(--radius-lg)] p-4 space-y-3">
           <div className="flex items-start gap-3">

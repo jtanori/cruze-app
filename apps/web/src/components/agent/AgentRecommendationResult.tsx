@@ -15,7 +15,7 @@ export function AgentRecommendationResult({ result, onUse, onCompare }: Props) {
     <div className="bg-surface border border-cruze-mint/30 rounded-[var(--radius-lg)] p-4 space-y-3">
       <p className="text-xs font-semibold uppercase tracking-wider text-muted">Recomendado</p>
       <h4 className="text-ink font-bold">{result.crossingName}</h4>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 sm:gap-6">
         <span className="flex items-center gap-1 text-sm text-ink font-bold tabular"><Clock className="w-4 h-4 text-faint" /> {formatDuration(result.waitTime)}</span>
         <span className="flex items-center gap-1 text-sm text-ink font-bold tabular"><TrendingUp className="w-4 h-4 text-faint" /> {formatDuration(result.totalJourney)}</span>
       </div>

@@ -65,13 +65,13 @@ export function LocationRecoveryPanel({
   const config = reasonConfig[reason];
 
   return (
-    <div className={`flex flex-col items-center justify-center py-12 px-6 text-center ${className}`}>
-      <div className="w-16 h-16 rounded-full bg-warning/10 flex items-center justify-center mb-6">
+    <div className={`flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6 text-center ${className}`}>
+      <div className="w-16 h-16 rounded-full bg-warning/10 flex items-center justify-center mb-4 sm:mb-6">
         <MapPin className="w-8 h-8 text-warning" />
       </div>
 
       <h3 className="text-ink font-semibold text-lg mb-2">{config.title}</h3>
-      <p className="text-muted text-sm leading-relaxed max-w-xs mb-6">{config.description}</p>
+      <p className="text-muted text-sm leading-relaxed max-w-xs mb-4 sm:mb-6">{config.description}</p>
 
       <div className="flex flex-col gap-3 w-full max-w-xs">
         <button

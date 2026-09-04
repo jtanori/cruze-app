@@ -18,7 +18,7 @@ export function AgentWelcomeScreen({ onPrompt, contextPrompts }: AgentWelcomeScr
   const prompts = contextPrompts ?? DEFAULT_PROMPTS;
 
   return (
-    <div className="flex flex-col items-center justify-center py-12 px-6 text-center space-y-6">
+    <div className="flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6 text-center space-y-4 sm:space-y-6">
       <div className="w-16 h-16 rounded-full bg-cruze-mint/10 flex items-center justify-center">
         <Bot className="w-8 h-8 text-cruze-mint" />
       </div>

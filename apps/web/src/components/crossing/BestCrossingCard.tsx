@@ -76,7 +76,7 @@ const BestCrossingCard: FC<BestCrossingCardProps> = ({
             )}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 sm:gap-6">
             <div className="flex items-center gap-1">
               <ClockIcon className="w-4 h-4 text-faint" />
               <span className="text-ink text-xl font-bold tabular">

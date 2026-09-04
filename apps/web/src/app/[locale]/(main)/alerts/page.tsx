@@ -52,7 +52,7 @@ export default function AlertsPage() {
 
   if (!hasAlerts) {
     return (
-      <div className="min-h-dvh bg-background flex flex-col items-center justify-center gap-4 px-8 py-32">
+      <div className="min-h-dvh bg-background flex flex-col items-center justify-center gap-4 sm:gap-6 px-4 sm:px-8 py-32">
         <div className="w-16 h-16 rounded-full bg-surface-elevated border border-border flex items-center justify-center">
           <svg
             className="w-7 h-7 text-faint"
@@ -78,7 +78,7 @@ export default function AlertsPage() {
   }
 
   return (
-    <div className="space-y-6 px-4 sm:px-5 py-4 sm:py-6">
+    <div className="space-y-4 sm:space-y-6 px-4 sm:px-5 py-4 sm:py-6">
       <div>
         <p className="text-ink text-lg sm:text-xl font-semibold">{t("alerts.title")}</p>
         <p className="text-faint text-xs mt-1 tabular">

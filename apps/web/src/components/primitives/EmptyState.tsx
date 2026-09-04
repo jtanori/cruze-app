@@ -26,8 +26,8 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
   ) => {
     const sizes = {
       sm: "px-4 py-8 space-y-3",
-      md: "px-6 py-12 space-y-4",
-      lg: "px-8 py-16 space-y-6",
+      md: "px-4 sm:px-6 py-8 sm:py-12 space-y-4",
+      lg: "px-4 sm:px-8 py-16 space-y-4 sm:space-y-6",
     };
 
     return (

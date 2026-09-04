@@ -164,7 +164,7 @@ export function DestinationSearch({ onComplete }: DestinationSearchProps) {
                 <button
                   key={dest.name}
                   onClick={() => handleSelectPopular(dest.name)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-border rounded-full text-ink text-xs font-medium hover:bg-surface-elevated transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2 min-h-[44px] bg-surface border border-border rounded-full text-ink text-xs font-medium hover:bg-surface-elevated transition-colors"
                 >
                   <MapPin className="w-3 h-3 text-faint" />
                   {dest.name}

@@ -27,8 +27,8 @@ export function LocationPermissionPrompt() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 text-center">
-      <div className="w-20 h-20 rounded-full bg-cruze-mint/10 flex items-center justify-center mb-6">
+    <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 sm:px-6 text-center">
+      <div className="w-20 h-20 rounded-full bg-cruze-mint/10 flex items-center justify-center mb-4 sm:mb-6">
         <MapPin className="w-10 h-10 text-cruze-mint" />
       </div>
 

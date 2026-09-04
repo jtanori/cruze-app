@@ -3,5 +3,5 @@ import { SettingsFavorites } from "@/components/settings/SettingsFavorites";
 import { useFavoritesStore } from "@/stores/favorites";
 export default function SettingsFavoritesPage() {
   const crossingIds = useFavoritesStore((s) => s.crossingIds);
-  return <div className="px-5 py-6 max-w-lg mx-auto"><SettingsFavorites favorites={crossingIds.map((id: string) => ({ id, name: id }))} /></div>;
+  return <div className="px-4 sm:px-5 py-4 sm:py-6 max-w-sm sm:max-w-lg mx-auto"><SettingsFavorites favorites={crossingIds.map((id: string) => ({ id, name: id }))} /></div>;
 }

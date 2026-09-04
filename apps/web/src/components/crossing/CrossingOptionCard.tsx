@@ -250,7 +250,7 @@ export const CrossingOptionCard: FC<CrossingOptionCardProps> = ({
       {isExpanded && (
         <div className="px-4 pb-4 pt-2 border-t border-border space-y-4">
           {/* Status chip + Wait time + Total journey */}
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             {/* Status */}
             <div className="flex items-center gap-2">
               <span

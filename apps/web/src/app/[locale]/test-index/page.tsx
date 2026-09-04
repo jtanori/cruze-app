@@ -46,7 +46,7 @@ export default function TestIndexPage() {
         </div>
       </header>
 
-      <div className="space-y-5 sm:space-y-6">
+      <div className="space-y-4 sm:space-y-5 sm:space-y-4 sm:space-y-6">
         {[
           { label: "Onboarding / Location", items: screens.slice(0, 4) },
           { label: "Trip Setup (Unified)", items: screens.slice(4, 7) },
@@ -66,7 +66,7 @@ export default function TestIndexPage() {
                   href={base + screen.path}
                   className="block p-3 sm:p-4 bg-surface border border-border rounded-[var(--radius-lg)] hover:border-cruze-mint/50 hover:bg-surface-elevated transition-colors"
                 >
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 sm:gap-6">
                     <div className="flex-1 min-w-0">
                       <h3 className="text-ink font-semibold text-sm sm:text-base">{screen.title}</h3>
                       <p className="text-muted text-xs sm:text-sm mt-1 line-clamp-2">{screen.desc}</p>

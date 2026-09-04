@@ -15,7 +15,7 @@ export function TripRouteSummary({ crossingName, waitTime, totalTime, className 
     <div className={`bg-surface border border-border rounded-[var(--radius-lg)] p-4 space-y-3 ${className}`}>
       <p className="text-xs font-semibold uppercase tracking-wider text-muted">CRUCE RECOMENDADO</p>
       <h3 className="text-ink text-lg font-bold">{crossingName}</h3>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 sm:gap-6">
         <span className="flex items-center gap-1.5 text-sm text-muted">
           <Clock className="w-4 h-4" /> {formatDuration(waitTime)}
         </span>

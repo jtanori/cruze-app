@@ -44,7 +44,7 @@ export function SettingsProfile({ className = "" }: SettingsProfileProps) {
   const currentAccess = currentHasSentri ? "sentri" : "standard";
 
   return (
-    <div className={`space-y-5 ${className}`}>
+    <div className={`space-y-4 sm:space-y-5 ${className}`}>
       <h2 className="text-lg font-bold text-ink">{t("viaje.travelerProfile")}</h2>
       <div className="space-y-4">
         <div>

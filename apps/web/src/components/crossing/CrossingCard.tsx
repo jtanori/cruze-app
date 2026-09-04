@@ -147,7 +147,7 @@ export const CrossingCard: FC<{
 /* ─── Header: Country Split ─────────────────────────────────────────────────*/
 
   const countrySplit = showCountrySplit ? (
-    <div className="flex flex-col md:flex-row items-center justify-between mb-4">
+    <div className="flex flex-col md:flex-row items-center justify-between mb-3 sm:mb-4">
       <span className="text-cruze-secondary text-sm">
         {crossing.cityOrigin}, {crossing.direction === "MX_TO_US" ? "MX" : "US"}
       </span>
@@ -182,7 +182,7 @@ export const CrossingCard: FC<{
 /* ─── Lane Pills ───────────────────────────────────────────────────────────*/
 
   const lanePills = showLanes ? (
-    <div className="grid grid-cols-4 gap-2 mb-4">
+    <div className="grid grid-cols-4 gap-2 mb-3 sm:mb-4">
       {["STANDARD", "READY_LANE", "SENTRI", "PEDESTRIAN"].map((program) => {
         const lane = crossing.lanes[program as LaneProgram];
         if (!lane) return null;
@@ -257,7 +257,7 @@ export const CrossingCard: FC<{
       {countrySplit}
 
       {/* Status + Wait Time */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-3 sm:mb-4 flex items-center justify-between">
         {statusBadge}
         {waitTimeDisplay}
       </div>

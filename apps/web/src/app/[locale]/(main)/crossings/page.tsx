@@ -33,11 +33,11 @@ export default function CrossingsPage() {
     });
   }, []);
 
-  if (loading) return <div className="flex items-center justify-center py-12"><div className="w-6 h-6 border-2 border-cruze-mint border-t-transparent rounded-full animate-spin" /></div>;
+  if (loading) return <div className="flex items-center justify-center py-8 sm:py-12"><div className="w-6 h-6 border-2 border-cruze-mint border-t-transparent rounded-full animate-spin" /></div>;
 
   return (
-    <div className="px-5 py-6">
-      <h1 className="text-xl font-bold text-ink mb-4">CRUCES</h1>
+    <div className="px-4 sm:px-5 py-4 sm:py-6">
+      <h1 className="text-xl font-bold text-ink mb-3 sm:mb-4">CRUCES</h1>
       <CrossingsDirectoryList crossings={crossings} onViewDetail={(id) => router.push(`/${locale}/crossing/${id}`)} />
     </div>
   );

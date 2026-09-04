@@ -16,8 +16,8 @@ export function LocationAcquisitionState({
   const displayMessage = message || t("onboarding.location.acquiring");
 
   return (
-    <div className={`flex flex-col items-center justify-center py-12 ${className}`}>
-      <div className="relative mb-6">
+    <div className={`flex flex-col items-center justify-center py-8 sm:py-12 ${className}`}>
+      <div className="relative mb-4 sm:mb-6">
         <div className="w-16 h-16 rounded-full bg-cruze-mint/10 flex items-center justify-center">
           <MapPin className="w-8 h-8 text-cruze-mint" />
         </div>

@@ -18,7 +18,7 @@ export function AvisosList({ avisos, onSelect, className = "" }: AvisosListProps
   const groups = groupAvisosByTime(avisos);
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-4 sm:space-y-6 ${className}`}>
       {groups.map((g) => (
         <div key={g.label} className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">{g.label}</p>

@@ -83,7 +83,7 @@ export const StatusBadge = forwardRef<HTMLSpanElement, StatusBadgeProps>(
     const showLabelValue = showLabelProp !== false;
 
     const sizes = {
-      sm: "px-1.5 py-0.5 text-xs",
+      sm: "px-2 py-1 min-h-[20px] text-xs",
       md: "px-2 py-0.5 text-xs",
       lg: "px-3 py-1 text-sm",
     };
