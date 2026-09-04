@@ -136,7 +136,7 @@ export const CrossingCard: FC<{
         disabled={!lane.isOpen}
       >
         <span className="font-bold capitalize">{program}</span>
-        <span className="text-[2px]">{lane.lanesOpenCount || 0}/{lane.totalLanesCount || 0}</span>
+        <span className="text-xs">{lane.lanesOpenCount || 0}/{lane.totalLanesCount || 0}</span>
         <span className={`ml-2 ${trendClass} capitalize`}>
           {lane.waitTime > 0 ? `${lane.waitTime} min` : "—"}
         </span>
@@ -206,7 +206,7 @@ export const CrossingCard: FC<{
             disabled={!lane.isOpen}
           >
             <span className="font-bold capitalize">{program}</span>
-            <span className="text-[2px]">{lane.lanesOpenCount || 0}/{lane.totalLanesCount || 0}</span>
+            <span className="text-xs">{lane.lanesOpenCount || 0}/{lane.totalLanesCount || 0}</span>
             <span className={`ml-2 ${trendClass} capitalize`}>
               {lane.waitTime > 0 ? `${lane.waitTime} min` : "—"}
             </span>

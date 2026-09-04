@@ -145,7 +145,7 @@ export function DestinationSearch({ onComplete }: DestinationSearchProps) {
                     {place.formattedAddress}
                   </p>
                 </div>
-                <span className="text-faint text-[10px] font-medium shrink-0">
+                <span className="text-faint text-xs font-medium shrink-0">
                   {getCountryLabel(place)}
                 </span>
               </button>

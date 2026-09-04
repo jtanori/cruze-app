@@ -58,7 +58,7 @@ export default function HomePage() {
         <div className="space-y-8 px-5 py-6">
           {/* Direction Context */}
           <div>
-            <p className="text-ink text-[17px] font-semibold">
+            <p className="text-ink text-base sm:text-lg font-semibold">
               {originName} → {destName} ⇄
             </p>
             <p className="text-faint text-xs mt-1 tabular">
@@ -68,11 +68,11 @@ export default function HomePage() {
 
           {/* Primary Intelligence Hero */}
           <div>
-            <span className="text-cruze-green text-[10px] font-semibold uppercase tracking-wider">
+            <span className="text-cruze-green text-xs sm:text-sm font-semibold uppercase tracking-wider">
               ● {t("home.borderMovingNormally")}
             </span>
             <p className="text-muted text-sm mt-1">{t("home.averageBorderWait")}</p>
-            <p className="text-ink text-[48px] font-bold leading-none tabular mt-1">
+            <p className="text-ink text-4xl sm:text-5xl md:text-6xl font-bold leading-none tabular mt-1">
               {waitTime}
               <span className="text-lg text-muted font-medium ml-1">{t("common.min")}</span>
             </p>

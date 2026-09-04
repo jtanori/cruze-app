@@ -23,46 +23,46 @@ describe("trip-setup-flow", () => {
   });
 
   it("returns walking flow steps", () => {
-    const state = { ...baseState, travelMode: "walking" };
+    const state = { ...baseState, travelMode: "walking" as any };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "recommendation"]);
   });
 
   it("returns commercial flow steps", () => {
-    const state = { ...baseState, travelMode: "commercial" };
+    const state = { ...baseState, travelMode: "commercial" as any };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "recommendation"]);
   });
 
   it("returns private vehicle southbound steps", () => {
-    const state = { ...baseState, travelMode: "privateVehicle", direction: "southbound" };
+    const state = { ...baseState, travelMode: "privateVehicle" as any, direction: "southbound" as any };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "recommendation"]);
   });
 
   it("returns private vehicle northbound steps with access + docs", () => {
     // When direction is already set, it's not included in required steps
-    const state = { ...baseState, travelMode: "privateVehicle", direction: "northbound" };
+    const state = { ...baseState, travelMode: "privateVehicle" as any, direction: "northbound" as any };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "accessType", "documentProfile", "recommendation"]);
   });
 
 it("returns private vehicle northbound steps (without pre-set direction)", () => {
     // When direction is NOT set, it should only ask for direction first
-    const state = { ...baseState, travelMode: "privateVehicle" };
+    const state = { ...baseState, travelMode: "privateVehicle" as any };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "direction", "recommendation"]);
   });
 
   it("returns private vehicle northbound steps with access + docs (when direction is northbound)", () => {
     // When direction is northbound, it adds accessType and documentProfile
-    const state = { ...baseState, travelMode: "privateVehicle", direction: "northbound" };
+    const state = { ...baseState, travelMode: "privateVehicle" as any, direction: "northbound" as any };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "accessType", "documentProfile", "recommendation"]);
   });
 
   it("getNextStep returns correct next step", () => {
-    const state = { ...baseState, destination: { lat: 0, lng: 0, label: "test" }, origin: { lat: 0, lng: 0, label: "test" }, travelMode: "privateVehicle" };
+    const state = { ...baseState, destination: { lat: 0, lng: 0, label: "test" }, origin: { lat: 0, lng: 0, label: "test" }, travelMode: "privateVehicle" as any };
     expect(getNextStep(state, "destination")).toBe("origin");
     expect(getNextStep(state, "origin")).toBe("travelMode");
     expect(getNextStep(state, "travelMode")).toBe("direction"); // privateVehicle needs direction

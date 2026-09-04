@@ -93,7 +93,7 @@ export const TripCrossingCard: FC<TripCrossingCardProps> = ({
       {/* Recommendation Badge */}
       {isRecommended && recommendationLabel && (
         <div className="flex items-center gap-1.5 pt-1">
-          <span className="text-cruze-green text-[10px] font-semibold uppercase tracking-wider">
+          <span className="text-cruze-green text-xs font-semibold uppercase tracking-wider">
             ✦ {recommendationLabel}
           </span>
         </div>

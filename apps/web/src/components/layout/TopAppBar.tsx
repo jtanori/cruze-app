@@ -99,7 +99,7 @@ export function TopAppBar({
               <span className="text-ink font-bold text-sm tracking-wider uppercase">
                 {t("common.cruze")}
               </span>
-              <span className="text-[10px] font-medium tabular text-faint">
+              <span className="text-xs font-medium tabular text-faint">
                 {userCountry === "MX" ? "MX" : "USA"}
               </span>
             </div>
@@ -125,13 +125,13 @@ export function TopAppBar({
         {/* Center */}
         <div className="flex-1 flex flex-col items-center justify-center">
           {title && (
-            <span className="text-ink font-semibold text-[11px] uppercase tracking-wider truncate max-w-[200px]">
+            <span className="text-ink font-semibold text-xs sm:text-sm uppercase tracking-wider truncate max-w-[200px]">
               {title}
             </span>
           )}
           {variant === "root" && !title && (
             <div className="flex items-center gap-1.5">
-              <span className="text-cruze-green text-[10px] font-semibold tabular">
+              <span className="text-cruze-green text-xs font-semibold tabular">
                 ● {t("common.live")}
               </span>
             </div>
@@ -187,7 +187,7 @@ export function TopAppBar({
               </div>
             ) : variant === "root" ? (
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-medium tabular text-faint">
+                <span className="text-xs font-medium tabular text-faint">
                   {userCountry === "MX" ? "MX" : "USA"}
                 </span>
               </div>

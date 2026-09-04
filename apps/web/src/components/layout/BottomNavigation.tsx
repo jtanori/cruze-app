@@ -70,7 +70,7 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
                   strokeWidth={isActive ? 2 : 1.5}
                 />
                 {badge && (
-                  <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-critical text-white text-[9px] font-semibold tabular leading-none">
+                  <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-critical text-white text-xs font-semibold tabular leading-none">
                     {badge}
                   </span>
                 )}
@@ -81,7 +81,7 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
 
               {/* Label */}
               <span
-                className={`text-[12px] font-medium transition-colors ${
+                className={`text-xs font-medium transition-colors ${
                   isActive ? "text-cruze-green" : "text-muted"
                 }`}
               >

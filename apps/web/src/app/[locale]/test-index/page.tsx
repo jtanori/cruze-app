@@ -33,7 +33,7 @@ export default function TestIndexPage() {
   const base = `/${locale}`;
 
   return (
-    <div className="min-h-dvh bg-background pt-safe pb-safe px-safe px-4 sm:px-5 py-8 sm:py-10 max-w-4xl mx-auto">
+    <div className="min-h-dvh bg-background pt-safe pb-safe px-safe px-4 sm:px-5 py-8 sm:py-10 mx-auto">
       <header className="mb-8 sm:mb-10 space-y-3">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-ink">Cruze - Manual Test Index</h1>
         <p className="text-muted">All v3 screens for manual testing. Click to navigate.</p>

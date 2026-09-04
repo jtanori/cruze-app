@@ -128,14 +128,14 @@ export function TripSummary({
               <div className="flex items-center gap-3 shrink-0 ml-3">
                 <div className="text-right">
                   <div className="flex items-center gap-1">
-                    <span className="text-faint text-[10px]">↑</span>
+                    <span className="text-faint text-xs">↑</span>
                     <span className="text-ink text-xs font-medium tabular">
                       {firstAlternative.waitTime} min
                     </span>
                   </div>
                   {firstAlternative.totalJourneyTime !== undefined && (
                     <div className="flex items-center gap-1 mt-0.5">
-                      <span className="text-faint text-[10px]">↑</span>
+                      <span className="text-faint text-xs">↑</span>
                       <span className="text-ink text-xs font-medium tabular">
                         {firstAlternative.totalJourneyTime} min
                       </span>

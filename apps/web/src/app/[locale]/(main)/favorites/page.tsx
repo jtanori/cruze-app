@@ -52,7 +52,7 @@ export default function FavoritesPage() {
   return (
     <div className="space-y-6 px-5 py-6">
       <div>
-        <p className="text-ink text-[17px] font-semibold">{t("nav.favorites")}</p>
+        <p className="text-ink text-sm sm:text-base font-semibold">{t("nav.favorites")}</p>
         <p className="text-faint text-xs mt-1">
           {favoriteCrossings.length}{" "}
           {favoriteCrossings.length !== 1
@@ -91,7 +91,7 @@ export default function FavoritesPage() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-ink text-[28px] font-semibold tabular leading-none">
+                <span className="text-ink text-lg sm:text-xl font-semibold tabular leading-none">
                   {crossing.waitTimeNorthbound}
                 </span>
                 <span

@@ -15,7 +15,7 @@ export function CruzeLiveIndicator({
     <span
       className={`
         inline-flex items-center gap-1.5
-        text-[10px] font-semibold tracking-wider uppercase tabular
+        text-xs font-semibold tracking-wider uppercase tabular
         ${active ? "text-success" : "text-muted"}
         ${className}
       `}

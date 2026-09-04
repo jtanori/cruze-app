@@ -122,7 +122,7 @@ export function StartingPoint({ onComplete, onBack }: StartingPointProps) {
         <div className="flex items-center gap-3 bg-surface border border-border rounded-[var(--radius-md)] px-4 py-3">
           <MapPin className="w-4 h-4 text-faint shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-faint text-[10px] font-medium uppercase tracking-wider">
+            <p className="text-faint text-xs font-medium uppercase tracking-wider">
               {t("onboarding.startingPoint.destination")}
             </p>
             <p className="text-ink text-sm font-medium">{destination.name}</p>
@@ -250,7 +250,7 @@ export function StartingPoint({ onComplete, onBack }: StartingPointProps) {
                         {place.formattedAddress}
                       </p>
                     </div>
-                    <span className="text-faint text-[10px] font-medium shrink-0">
+                    <span className="text-faint text-xs font-medium shrink-0">
                       {place.country === "MX"
                         ? t("onboarding.destination.mexico")
                         : t("onboarding.destination.unitedStates")}
@@ -269,7 +269,7 @@ export function StartingPoint({ onComplete, onBack }: StartingPointProps) {
           <div className="flex items-center gap-3 bg-surface border border-border rounded-[var(--radius-md)] px-4 py-3">
             <MapPin className="w-4 h-4 text-cruze-green shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-faint text-[10px] font-medium uppercase tracking-wider">
+              <p className="text-faint text-xs font-medium uppercase tracking-wider">
                 {t("onboarding.startingPoint.startingPoint")}
               </p>
               <p className="text-ink text-sm font-medium">{selected.name}</p>

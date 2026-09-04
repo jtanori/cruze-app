@@ -173,11 +173,11 @@ export function CrossingDetailsModal({ recommendation, onClose }: CrossingDetail
                 <div className="flex items-center gap-3">
                   <span className="text-ink text-sm font-medium">{lane.name}</span>
                   {lane.isOpen ? (
-                    <span className="px-2 py-0.5 bg-improving/10 text-improving text-[10px] font-medium rounded-full">
+                    <span className="px-2 py-0.5 bg-improving/10 text-improving text-xs font-medium rounded-full">
                       {t("crossing.details.open")}
                     </span>
                   ) : (
-                    <span className="px-2 py-0.5 bg-critical/10 text-critical text-[10px] font-medium rounded-full">
+                    <span className="px-2 py-0.5 bg-critical/10 text-critical text-xs font-medium rounded-full">
                       {t("crossing.details.closed")}
                     </span>
                   )}

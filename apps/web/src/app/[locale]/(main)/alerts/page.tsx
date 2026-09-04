@@ -78,9 +78,9 @@ export default function AlertsPage() {
   }
 
   return (
-    <div className="space-y-6 px-5 py-6">
+    <div className="space-y-6 px-4 sm:px-5 py-4 sm:py-6">
       <div>
-        <p className="text-ink text-[17px] font-semibold">{t("alerts.title")}</p>
+        <p className="text-ink text-lg sm:text-xl font-semibold">{t("alerts.title")}</p>
         <p className="text-faint text-xs mt-1 tabular">
           {alerts.length}{" "}
           {alerts.length !== 1 ? t("alerts.alerts") : t("alerts.alert")}
@@ -109,7 +109,7 @@ export default function AlertsPage() {
                         {alert.crossingName}
                       </span>
                       <span
-                        className={`px-1.5 py-0.5 rounded text-[10px] font-semibold ${
+                        className={`px-2 py-1 rounded text-xs sm:text-sm font-semibold ${
                           alert.severity === "CRITICAL"
                             ? "bg-critical-soft text-critical"
                             : alert.severity === "IMPORTANT"

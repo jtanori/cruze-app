@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { SafeAreaWrapper } from "@/components/layout/SafeAreaWrapper";
 
 export const metadata: Metadata = {
   title: "Cruze — Border Crossing Intelligence",
@@ -24,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body suppressHydrationWarning className="min-h-dvh bg-background text-ink antialiased">
-        {children}
+        <SafeAreaWrapper>
+          {children}
+        </SafeAreaWrapper>
       </body>
     </html>
   );

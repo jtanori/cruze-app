@@ -429,7 +429,7 @@ export function CrossingIntelligenceView({
                   <span className="text-ink font-semibold text-xs block">
                     {recommendation.mexicanCity}
                   </span>
-                  <span className="text-faint text-[9px] block">
+                  <span className="text-faint text-xs block">
                     {recommendation.mexicanState}
                   </span>
                 </div>
@@ -438,7 +438,7 @@ export function CrossingIntelligenceView({
                   <span className="text-ink font-semibold text-xs block">
                     {recommendation.usCity}
                   </span>
-                  <span className="text-faint text-[9px] block">
+                  <span className="text-faint text-xs block">
                     {recommendation.usState}
                   </span>
                 </div>
@@ -541,7 +541,7 @@ export function CrossingIntelligenceView({
                     <div className="mt-2">
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-cruze-green/10 border border-cruze-green/20 rounded-full">
                         <CheckCircle2 className="w-3 h-3 text-cruze-green" />
-                        <span className="text-cruze-green text-[10px] font-medium">
+                        <span className="text-cruze-green text-xs font-medium">
                           {activeLane?.name || "Standard"}
                         </span>
                       </span>
@@ -610,17 +610,17 @@ export function CrossingIntelligenceView({
                             {travelerProfile && !isSelected && (
                               <>
                                 {eligibility.preferred && (
-                                  <span className="px-1.5 py-0.5 bg-cruze-green/10 text-cruze-green text-[9px] font-semibold rounded">
+                                  <span className="px-1.5 py-0.5 bg-cruze-green/10 text-cruze-green text-xs font-semibold rounded">
                                     {t("crossing.preferred")}
                                   </span>
                                 )}
                                 {eligibility.eligible && !eligibility.preferred && (
-                                  <span className="px-1.5 py-0.5 bg-improving/10 text-improving text-[9px] font-semibold rounded">
+                                  <span className="px-1.5 py-0.5 bg-improving/10 text-improving text-xs font-semibold rounded">
                                     {t("crossing.eligible")}
                                   </span>
                                 )}
                                 {!eligibility.eligible && eligibility.reason && (
-                                  <span className="px-1.5 py-0.5 bg-faint/10 text-faint text-[9px] font-semibold rounded">
+                                  <span className="px-1.5 py-0.5 bg-faint/10 text-faint text-xs font-semibold rounded">
                                     {t(eligibility.reason)}
                                   </span>
                                 )}
@@ -712,7 +712,7 @@ export function CrossingIntelligenceView({
                         {formatDuration(crossing.waitTimeNorthbound)}
                       </span>
                       {crossing.waitTimeNorthbound !== activeWaitTime && (
-                        <p className={`text-[10px] tabular ${
+                        <p className={`text-xs tabular ${
                           crossing.waitTimeNorthbound < activeWaitTime ? "text-improving" : "text-caution"
                         }`}>
                           {crossing.waitTimeNorthbound > activeWaitTime ? "+" : ""}

@@ -201,7 +201,7 @@ export const CrossingOptionCard: FC<CrossingOptionCardProps> = ({
                 <div className="mt-2">
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-cruze-green/10 border border-cruze-green/20 rounded-full">
                     <CheckCircle2 className="w-3 h-3 text-cruze-green" />
-                    <span className="text-cruze-green text-[10px] font-medium">
+                    <span className="text-cruze-green text-xs font-medium">
                       {selectedLane.name}
                     </span>
                   </span>
@@ -220,7 +220,7 @@ export const CrossingOptionCard: FC<CrossingOptionCardProps> = ({
                 </span>
                 <p className="text-faint text-xs mt-0.5">{t("crossings.totalJourney")}</p>
                 {approachTime > 0 && (
-                  <p className="text-faint text-[10px] mt-0.5">
+                  <p className="text-faint text-xs mt-0.5">
                     ≈ {formatDuration(approachTime)} approach + {formatDuration(waitTime)} border
                   </p>
                 )}

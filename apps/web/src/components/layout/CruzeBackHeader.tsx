@@ -40,7 +40,7 @@ export function CruzeBackHeader({
             <ArrowLeft className="w-5 h-5 text-ink" />
           </button>
           {title && (
-            <span className="text-ink font-semibold text-[11px] uppercase tracking-wider ml-1 truncate max-w-[200px]">
+            <span className="text-ink font-semibold text-xs sm:text-sm uppercase tracking-wider ml-1 truncate max-w-[200px]">
               {title}
             </span>
           )}
