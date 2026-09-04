@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useLocationStore } from "@/stores/location";
 import { checkGeolocationPermission, requestGeolocation } from "@/lib/geolocation";
+import { reverseGeocode } from "@/lib/geocoding";
 import { createLocationData } from "@/lib/location-state-machine";
 import { LocationPermissionPrompt } from "./LocationPermissionPrompt";
 import { LocationAcquisitionState } from "./LocationAcquisitionState";
@@ -62,7 +63,16 @@ export function LocationGate({ children }: LocationGateProps) {
           try {
             const result = await requestGeolocation();
             console.log("[Cruze:LocationGate] GPS acquired:", result.lat.toFixed(4), result.lng.toFixed(4), "accuracy:", result.accuracy);
+            
+            // Reverse geocode to get place name
+            console.log("[Cruze:LocationGate] Reverse geocoding...");
+            const place = await reverseGeocode(result.lat, result.lng);
+            const placeName = place?.name || `${result.lat.toFixed(4)}, ${result.lng.toFixed(4)}`;
+            console.log("[Cruze:LocationGate] Place name:", placeName);
+            
             const locationData = createLocationData(result.lat, result.lng, result.accuracy);
+            // Add placeName to location data (extended)
+            (locationData as any).placeName = placeName;
             useLocationStore.getState().setLocation(locationData);
             setState("ready");
             console.log("[Cruze:LocationGate] State → ready, opening gate");

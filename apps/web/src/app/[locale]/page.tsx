@@ -13,8 +13,8 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!completed) {
-      console.log("[Cruze:Router] Root → /trip/setup (first launch)");
-      router.replace(`/${locale}/trip/setup`);
+      console.log("[Cruze:Router] Root → /trip (first launch - T01 empty)");
+      router.replace(`/${locale}/trip`);
     } else {
       console.log("[Cruze:Router] Root → /trip (returning user)");
       router.replace(`/${locale}/trip`);
