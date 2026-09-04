@@ -40,7 +40,7 @@ export function BottomSheet({
       ref={ref}
       onClose={onClose}
       className={`
-        bottom-0 top-auto w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-2xl
+        bottom-0 top-auto w-full max-w-md lg:max-w-xl xl:max-w-2xl
         bg-surface rounded-t-[var(--radius-xl)] shadow-[var(--shadow-2xl)]
         border border-border overflow-hidden
         backdrop:bg-black/60 backdrop:backdrop-blur-sm

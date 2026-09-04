@@ -71,7 +71,7 @@ export default function CrossingSummaryPage() {
 
   return (
     <div className="min-h-dvh bg-background">
-      <div className="max-w-sm mx-auto px-5 py-8 space-y-4 sm:space-y-6">
+      <div className="max-w-md lg:max-w-xl xl:max-w-2xl mx-auto px-4 sm:px-5 py-8 space-y-4 sm:space-y-6">
         {/* Success Header */}
         <div className="text-center space-y-4">
           <div className="w-20 h-20 mx-auto flex items-center justify-center rounded-full bg-cruze-green/10">
