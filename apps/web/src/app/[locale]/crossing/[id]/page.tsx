@@ -124,7 +124,7 @@ export default function CrossingPage({ params }: CrossingPageProps) {
   return (
     <div className="min-h-dvh bg-background">
       <CruzeBackHeader title="Cruces" onBack={() => router.push(`/${locale}/crossings`)} />
-      <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4 sm:space-y-6 max-w-sm sm:max-w-lg mx-auto pb-24">
+      <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4 sm:space-y-6 max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-2xl mx-auto pb-24">
         <CrossingDetailHero
           crossingName={crossing.name}
           status={crossing.status}
