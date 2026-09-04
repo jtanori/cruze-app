@@ -16,7 +16,7 @@
     "showMore": "Ver más"
   },
   "nav": {
-    "viaje": "Viaje",
+    "trip": "Viaje",
     "crossings": "Cruces",
     "agent": "Agente",
     "favorites": "Favoritos",
@@ -198,7 +198,15 @@
       "checkStatus": "Verificar el estado antes de salir"
     }
   },
-  "viaje": {
+  "trip": {
+    "empty": {
+      "title": "¿A dónde vas?",
+      "subtitle": "Planifica tu cruce fronterizo y obtén la mejor ruta.",
+      "startTrip": "Comenzar un viaje",
+      "nearby": "Cerca de ti",
+      "viewAll": "Ver todos los cruces →",
+      "noNearby": "No hay cruces cercanos disponibles"
+    },
     "title": "Mi Viaje",
     "yourTrip": "TU VIAJE",
     "currentTrip": "Viaje actual",

@@ -784,8 +784,8 @@ export function CrossingIntelligenceView({
 
       {/* Bottom Navigation */}
       <BottomNavigation active="crossings" onSelect={(dest: BottomNavDestination) => {
-        if (dest === "viaje") {
-          window.location.href = `/${locale}/viaje`;
+        if (dest === "trip") {
+          window.location.href = `/${locale}/trip`;
         } else if (dest === "crossings") {
           window.location.href = `/${locale}/crossings`;
         } else if (dest === "agent") {

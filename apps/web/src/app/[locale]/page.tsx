@@ -13,11 +13,11 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!completed) {
-      console.log("[Cruze:Router] Root → onboarding (first launch)");
-      router.replace(`/${locale}/onboarding`);
+      console.log("[Cruze:Router] Root → /trip/setup (first launch)");
+      router.replace(`/${locale}/trip/setup`);
     } else {
-      console.log("[Cruze:Router] Root → viaje (returning user)");
-      router.replace(`/${locale}/viaje`);
+      console.log("[Cruze:Router] Root → /trip (returning user)");
+      router.replace(`/${locale}/trip`);
     }
   }, [completed, router, locale]);
 

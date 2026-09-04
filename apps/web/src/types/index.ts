@@ -110,7 +110,7 @@ export type OnboardingStep =
 export type GeolocationPermission = "pending" | "granted" | "denied";
 
 // ─── Navigation ───
-export type BottomNavDestination = "viaje" | "crossings" | "agent";
+export type BottomNavDestination = "trip" | "crossings" | "agent";
 
 export type HeaderVariant =
   | "root"

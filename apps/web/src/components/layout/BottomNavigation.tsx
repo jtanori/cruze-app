@@ -20,7 +20,7 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
     icon: typeof Compass;
     showDot?: boolean;
   }> = [
-    { id: "viaje", label: t("nav.viaje"), icon: Navigation, showDot: hasTrip },
+    { id: "trip", label: t("nav.trip"), icon: Navigation, showDot: hasTrip },
     { id: "crossings", label: t("nav.crossings"), icon: Compass },
     { id: "agent", label: t("nav.agent"), icon: MessageCircle },
   ];

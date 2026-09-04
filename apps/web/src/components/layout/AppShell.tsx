@@ -29,7 +29,7 @@ interface AppShellProps {
 
 function pathToDestination(pathname: string): BottomNavDestination {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
-  if (path.startsWith("/viaje")) return "viaje";
+  if (path.startsWith("/trip")) return "trip";
   if (path.startsWith("/agent")) return "agent";
   return "crossings";
 }
@@ -53,7 +53,7 @@ export function AppShell({
   const locale = useLocale();
 
   const handleNavigate = (dest: BottomNavDestination) => {
-    if (dest === "viaje") router.push(`/${locale}/viaje`);
+    if (dest === "trip") router.push(`/${locale}/trip`);
     else if (dest === "crossings") router.push(`/${locale}/crossings`);
     else if (dest === "agent") router.push(`/${locale}/agent`);
   };

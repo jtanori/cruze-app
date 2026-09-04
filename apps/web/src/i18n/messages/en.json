@@ -16,7 +16,7 @@
     "showMore": "Show more"
   },
   "nav": {
-    "viaje": "Trip",
+    "trip": "Trip",
     "crossings": "Crossings",
     "agent": "Agent",
     "favorites": "Favorites",
@@ -198,7 +198,15 @@
       "checkStatus": "Check status before departure"
     }
   },
-  "viaje": {
+  "trip": {
+    "empty": {
+      "title": "Where are you going?",
+      "subtitle": "Plan your border crossing and get the best route.",
+      "startTrip": "Start a trip",
+      "nearby": "Nearby",
+      "viewAll": "View all crossings →",
+      "noNearby": "No nearby crossings available"
+    },
     "title": "My Trip",
     "yourTrip": "YOUR TRIP",
     "currentTrip": "Current Trip",

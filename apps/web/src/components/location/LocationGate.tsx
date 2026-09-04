@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useLocationStore } from "@/stores/location";
 import { checkGeolocationPermission, requestGeolocation } from "@/lib/geolocation";
 import { createLocationData } from "@/lib/location-state-machine";
@@ -16,15 +17,31 @@ interface LocationGateProps {
 
 /**
  * Infrastructure-level location gate that renders inline.
- * Blocks viaje/crossings/agent until location is established (GPS or manual).
+ * Blocks protected routes until location is established (GPS or manual).
  * Renders L01/L02/L03 directly — no redirects.
  */
 export function LocationGate({ children }: LocationGateProps) {
+  const pathname = usePathname();
   const { state, location, setState } = useLocationStore();
   const [initialized, setInitialized] = useState(false);
 
+  // Public routes that don't require location
+  const isPublicRoute = pathname
+    ? pathname.startsWith("/settings") ||
+      pathname.startsWith("/crossing/") ||
+      pathname.startsWith("/test-index") ||
+      pathname.startsWith("/onboarding/")
+    : false;
+
   useEffect(() => {
-    console.log("[Cruze:LocationGate] Mount — state:", state, "location:", location ? `${location.lat.toFixed(4)},${location.lng.toFixed(4)}` : "null");
+    console.log("[Cruze:LocationGate] Mount — state:", state, "location:", location ? `${location.lat.toFixed(4)},${location.lng.toFixed(4)}` : "null", "public:", isPublicRoute);
+
+    // Skip gate for public routes
+    if (isPublicRoute) {
+      console.log("[Cruze:LocationGate] Public route → pass through");
+      setInitialized(true);
+      return;
+    }
 
     // If already has location data, skip
     if (location) {

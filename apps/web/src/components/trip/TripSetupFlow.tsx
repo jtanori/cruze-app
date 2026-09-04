@@ -52,7 +52,7 @@ export function TripSetupFlow() {
     const next = getNextStep(state, step);
     if (next === "recommendation") {
       trackEvent("trip_setup_completed", { stepsCompleted: progress.current });
-      router.push(`/${locale}/onboarding/recommendation`);
+      router.push(`/${locale}/trip/recommendation`);
       return;
     }
     if (next) {
@@ -124,7 +124,7 @@ export function TripSetupFlow() {
               trackEvent("trip_setup_travel_mode_selected", { mode });
               const next = getNextStep(newState, "travelMode");
               if (next === "recommendation") {
-                router.push(`/${locale}/onboarding/recommendation`);
+                router.push(`/${locale}/trip/recommendation`);
               } else if (next) {
                 setStep(next);
               }
@@ -141,7 +141,7 @@ export function TripSetupFlow() {
               trackEvent("trip_setup_direction_selected", { direction: dir });
               const next = getNextStep(newState, "direction");
               if (next === "recommendation") {
-                router.push(`/${locale}/onboarding/recommendation`);
+                router.push(`/${locale}/trip/recommendation`);
               } else if (next) {
                 setStep(next);
               }
@@ -171,7 +171,7 @@ export function TripSetupFlow() {
             }}
             onSkip={() => {
               trackEvent("trip_setup_document_skipped");
-              router.push(`/${locale}/onboarding/recommendation`);
+              router.push(`/${locale}/trip/recommendation`);
             }}
           />
         )}
@@ -198,7 +198,7 @@ export function TripSetupFlow() {
       {step === "documentProfile" && state.documentType && (
         <div className="px-4 sm:px-5 pb-6 w-full">
           <button
-            onClick={() => router.push(`/${locale}/onboarding/recommendation`)}
+            onClick={() => router.push(`/${locale}/trip/recommendation`)}
             className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px]"
           >
             Ver recomendación
