@@ -18,7 +18,7 @@ const screens = [
   { path: "/crossing/calexico-west", title: "C03 Crossing Detail (Calexico West)", desc: "Canonical detail page" },
   { path: "/crossing/el-paso-ysleta", title: "C03 Crossing Detail (El Paso Ysleta)", desc: "Canonical detail page" },
   { path: "/agent", title: "A01/A02 Agent", desc: "Welcome screen + Chat with structured results (Crossing/Recommendation/TripAction/Checklist)" },
-  { path: "/alertas", title: "N01/N02 Avisos", desc: "Grouped by Today/Yesterday/Earlier + Detail with Agent action" },
+  { path: "/alerts", title: "N01/N02 Avisos", desc: "Grouped by Today/Yesterday/Earlier + Detail with Agent action" },
   { path: "/settings", title: "S01 Settings Root", desc: "5 sections: Perfil / Guardados / Privacidad / Informacion" },
   { path: "/settings/profile", title: "S02 Profile", desc: "Travel mode, access type, SENTRI, visas, passport country" },
   { path: "/settings/favorites", title: "S03 Favorites", desc: "Saved crossings list + management" },

@@ -44,7 +44,7 @@ function getLaneEligibility(
   if (profile.crossingMode === "walking") {
     if (isPedestrian) return { eligible: true, preferred: true };
     if (isStandard) return { eligible: true, preferred: false };
-    if (isSENTRI && profile.hasSentri) return { eligible: true, preferred: false };
+    if (isSENTRI && profile.trustedTraveler === "sentri") return { eligible: true, preferred: false };
     if (isCommercial) return { eligible: false, preferred: false, reason: "crossing.notEligible.commercialOnly" };
     return { eligible: false, preferred: false, reason: "crossing.notEligible.pedestrianOnly" };
   }
@@ -62,13 +62,13 @@ function getLaneEligibility(
 
   // SENTRI eligibility
   if (isSENTRI) {
-    if (profile.hasSentri) return { eligible: true, preferred: true };
+    if (profile.trustedTraveler === "sentri") return { eligible: true, preferred: true };
     return { eligible: false, preferred: false, reason: "crossing.notEligible.requiresSentri" };
   }
 
   // Ready Lane eligibility (requires RFID-enabled document)
   if (isReadyLane) {
-    if (profile.passportCountry && profile.passportCountry !== "Mexico" && profile.passportCountry !== "United States") {
+    if (profile.accessType === "readyLane") {
       return { eligible: true, preferred: false };
     }
     return { eligible: true, preferred: false };
@@ -790,10 +790,6 @@ export function CrossingIntelligenceView({
           window.location.href = `/${locale}/crossings`;
         } else if (dest === "agent") {
           window.location.href = `/${locale}/agent`;
-        } else if (dest === "favorites") {
-          window.location.href = `/${locale}/favorites`;
-        } else if (dest === "alerts") {
-          window.location.href = `/${locale}/alerts`;
         }
       }} />
 

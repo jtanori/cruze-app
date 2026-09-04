@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowLeft, X, Search, MoreHorizontal, MapPin, Settings, Navigation, LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, X, Search, MoreHorizontal, MapPin, Settings, Navigation, LogOut, Bell } from "lucide-react";
 import { useAlertsStore } from "@/stores/alerts";
 import { useTripStore } from "@/stores/trip";
 import { useLocale } from "@/hooks/use-locale";
@@ -42,6 +43,7 @@ export function TopAppBar({
 }: TopAppBarProps) {
   const t = useTranslations();
   const locale = useLocale();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -129,13 +131,6 @@ export function TopAppBar({
               {title}
             </span>
           )}
-          {variant === "root" && !title && (
-            <div className="flex items-center gap-1.5">
-              <span className="text-cruze-green text-xs font-semibold tabular">
-                ● {t("common.live")}
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Trailing */}
@@ -186,10 +181,24 @@ export function TopAppBar({
                 )}
               </div>
             ) : variant === "root" ? (
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium tabular text-faint">
-                  {userCountry === "MX" ? "MX" : "USA"}
-                </span>
+              <div className="flex items-center gap-1">
+                {/* APP-AV-01: Notification bell */}
+                <button
+                  onClick={() => router.push(`/${locale}/alerts`)}
+                  className="relative w-[44px] h-[44px] flex items-center justify-center rounded-[var(--radius-md)] active:bg-surface-elevated transition-colors"
+                  aria-label={t("nav.alerts")}
+                >
+                  <Bell className="w-5 h-5 text-ink" />
+                  <NotificationBadge />
+                </button>
+                {/* APP-SET-01: Settings gear */}
+                <button
+                  onClick={() => router.push(`/${locale}/settings`)}
+                  className="w-[44px] h-[44px] flex items-center justify-center rounded-[var(--radius-md)] active:bg-surface-elevated transition-colors"
+                  aria-label={t("settings.title")}
+                >
+                  <Settings className="w-5 h-5 text-ink" />
+                </button>
               </div>
             ) : null)}
         </div>
@@ -219,5 +228,16 @@ export function TopAppBar({
         </div>
       )}
     </header>
+  );
+}
+
+function NotificationBadge() {
+  const unreadCount = useAlertsStore((s) => s.unreadCount());
+  if (unreadCount === 0) return null;
+
+  return (
+    <span className="absolute top-1.5 right-1.5 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-critical text-white text-[10px] font-semibold tabular leading-none">
+      {unreadCount > 9 ? "9+" : unreadCount}
+    </span>
   );
 }

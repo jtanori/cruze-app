@@ -2,8 +2,8 @@
 export type { Place, StartPlace, DestinationPlace, PlaceType, TripType, TripDirection, CrossingRecommendation, CrossingLane, CrossingFacts } from "./place";
 
 // ─── Traveler Profile ───
-export type { TravelerProfile, CrossingMode, VisaType } from "./traveler";
-export { CROSSING_MODES, US_VISA_TYPES, MX_VISA_TYPES, COMMON_PASSPORT_COUNTRIES } from "./traveler";
+export type { TravelerProfile, CrossingMode, AccessType, DocumentCategory, TrustedTraveler } from "./traveler";
+export { CROSSING_MODES, ACCESS_TYPES, DOCUMENT_CATEGORIES, TRUSTED_TRAVELER } from "./traveler";
 
 // ─── Directionality ───
 export type CorridorDirection = "MX_TO_US" | "US_TO_MX";
@@ -110,7 +110,7 @@ export type OnboardingStep =
 export type GeolocationPermission = "pending" | "granted" | "denied";
 
 // ─── Navigation ───
-export type BottomNavDestination = "viaje" | "crossings" | "agent" | "favorites" | "alerts";
+export type BottomNavDestination = "viaje" | "crossings" | "agent";
 
 export type HeaderVariant =
   | "root"

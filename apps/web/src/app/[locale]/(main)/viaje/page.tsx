@@ -25,8 +25,14 @@ export default function ViajePage() {
   const hasTrip = start !== null && destination !== null;
 
   useEffect(() => {
-    if (!hasTrip) router.push(`/${locale}/viaje/configure`);
-    else setReady(true);
+    console.log("[Cruze:Viaje] hasTrip:", hasTrip, "start:", start?.name, "dest:", destination?.name);
+    if (!hasTrip) {
+      console.log("[Cruze:Viaje] No trip → redirecting to /viaje/configure");
+      router.push(`/${locale}/viaje/configure`);
+    } else {
+      console.log("[Cruze:Viaje] Trip found → rendering dashboard");
+      setReady(true);
+    }
   }, [hasTrip, router, locale]);
 
   const checkStaleness = useCallback(() => {

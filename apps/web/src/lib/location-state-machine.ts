@@ -2,6 +2,7 @@ export type LocationState =
   | "uninitialized"
   | "requesting_permission"
   | "permission_denied"
+  | "manual_search"
   | "services_disabled"
   | "acquiring"
   | "low_confidence"
@@ -43,6 +44,8 @@ type StateTransition =
   | { type: "REQUEST_PERMISSION" }
   | { type: "PERMISSION_GRANTED" }
   | { type: "PERMISSION_DENIED" }
+  | { type: "ENTER_MANUAL_SEARCH" }
+  | { type: "MANUAL_LOCATION_SELECTED"; data: LocationData }
   | { type: "SERVICES_DISABLED" }
   | { type: "ACQUIRE_START" }
   | { type: "ACQUIRE_SUCCESS"; data: LocationData }
@@ -57,13 +60,14 @@ type StateTransition =
 const VALID_TRANSITIONS: Record<LocationState, LocationState[]> = {
   uninitialized: ["requesting_permission", "unavailable"],
   requesting_permission: ["permission_denied", "acquiring", "services_disabled"],
-  permission_denied: ["requesting_permission", "unavailable"],
-  services_disabled: ["requesting_permission", "unavailable"],
+  permission_denied: ["manual_search", "requesting_permission", "unavailable"],
+  manual_search: ["ready", "unavailable"],
+  services_disabled: ["manual_search", "requesting_permission", "unavailable"],
   acquiring: ["low_confidence", "ready", "unavailable", "acquiring"],
   low_confidence: ["acquiring", "ready", "unavailable"],
   ready: ["stale", "unavailable"],
   stale: ["acquiring", "ready", "unavailable"],
-  unavailable: ["requesting_permission", "acquiring"],
+  unavailable: ["manual_search", "requesting_permission", "acquiring"],
 };
 
 export class LocationStateMachine {
@@ -101,6 +105,10 @@ export class LocationStateMachine {
         return "acquiring";
       case "PERMISSION_DENIED":
         return "permission_denied";
+      case "ENTER_MANUAL_SEARCH":
+        return "manual_search";
+      case "MANUAL_LOCATION_SELECTED":
+        return "ready";
       case "SERVICES_DISABLED":
         return "services_disabled";
       case "ACQUIRE_START":

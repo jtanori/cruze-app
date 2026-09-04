@@ -28,7 +28,7 @@ export default function TripRecommendationPage() {
   ];
 
   return (
-    <div className="min-h-dvh bg-background px-4 sm:px-5 py-4 sm:py-6 max-w-md lg:max-w-xl xl:max-w-2xl mx-auto space-y-4 sm:space-y-6">
+    <div className="min-h-dvh bg-background px-4 sm:px-5 py-4 sm:py-6 space-y-4 sm:space-y-6">
       <TripRecommendationPrimaryCard {...primary} onUseCrossing={() => router.push(`/${locale}/viaje`)} />
       <TripRecommendationReasonList reasons={reasons} />
       <TripAlternativeListSection alternatives={alternatives} onSelect={() => router.push(`/${locale}/viaje`)} />

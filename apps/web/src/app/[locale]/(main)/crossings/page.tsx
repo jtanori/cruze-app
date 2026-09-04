@@ -5,6 +5,7 @@ import { useLocale } from "@/hooks/use-locale";
 import { CrossingsDirectoryList } from "@/components/crossing/CrossingsDirectoryList";
 import { useEffect, useState } from "react";
 import { getMergedCrossingsData } from "@/lib/border-data-service";
+import { LoadingSkeleton } from "@/components/primitives/LoadingSkeleton";
 
 export default function CrossingsPage() {
   const router = useRouter();
@@ -33,7 +34,18 @@ export default function CrossingsPage() {
     });
   }, []);
 
-  if (loading) return <div className="flex items-center justify-center py-8 sm:py-12"><div className="w-6 h-6 border-2 border-cruze-mint border-t-transparent rounded-full animate-spin" /></div>;
+  if (loading) {
+    return (
+      <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4">
+        <LoadingSkeleton variant="text" height="1.5rem" width="8rem" />
+        <div className="space-y-3">
+          {Array.from({ length: 5 }, (_, i) => (
+            <LoadingSkeleton key={i} variant="card" height="5rem" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 sm:px-5 py-4 sm:py-6">

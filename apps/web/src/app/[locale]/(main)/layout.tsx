@@ -1,11 +1,11 @@
 "use client";
 
 import { AppShell } from "@/components/layout/AppShell";
+import { LocationGate } from "@/components/location/LocationGate";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/hooks/use-locale";
 import { useTripStore } from "@/stores/trip";
 import { useTranslations } from "next-intl";
-import { CrossingsFilterProvider, CrossingsFilterTabs } from "@/components/crossing/CrossingsFilterContext";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -13,21 +13,16 @@ interface MainLayoutProps {
 
 function getHeaderVariant(pathname: string): "root" | "search" | "filter" {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
-  if (path.startsWith("/crossings")) return "search";
+  if (path.startsWith("/crossings")) return "root";
   if (path.startsWith("/viaje")) return "root";
-  if (path.startsWith("/favorites")) return "root";
   if (path.startsWith("/agent")) return "root";
-  if (path.startsWith("/alerts")) return "root";
   return "root";
 }
 
-function getActiveTab(pathname: string): "viaje" | "crossings" | "agent" | "favorites" | "alerts" {
+function getActiveTab(pathname: string): "viaje" | "crossings" | "agent" {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
   if (path.startsWith("/viaje")) return "viaje";
-  if (path.startsWith("/crossings")) return "crossings";
   if (path.startsWith("/agent")) return "agent";
-  if (path.startsWith("/favorites")) return "favorites";
-  if (path.startsWith("/alerts")) return "alerts";
   return "crossings";
 }
 
@@ -44,7 +39,6 @@ export default function MainLayout({
   const headerVariant = getHeaderVariant(pathname);
   const activeTab = getActiveTab(pathname);
   const hasTrip = start !== null && destination !== null;
-  const isCrossingsPage = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/").startsWith("/crossings");
 
   const tripActions = hasTrip ? {
     onEndTrip: () => {
@@ -70,17 +64,14 @@ export default function MainLayout({
     },
   } : undefined;
 
-  // For crossings page, search is the header companion
-  // Filter tabs will be rendered in the page content (not in header)
-  const headerCompanion = isCrossingsPage ? undefined : undefined;
-
   return (
-    <AppShell
-      headerVariant={headerVariant}
-      tripActions={tripActions}
-      headerCompanion={headerCompanion}
-    >
-      {children}
-    </AppShell>
+    <LocationGate>
+      <AppShell
+        headerVariant={headerVariant}
+        tripActions={tripActions}
+      >
+        {children}
+      </AppShell>
+    </LocationGate>
   );
 }

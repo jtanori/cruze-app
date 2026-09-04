@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Navigation, Car, Truck, Bus, Shield, CreditCard, ChevronRight, Check } from "lucide-react";
+import { Navigation, Car, Truck, Bus, Shield, ChevronRight, Check } from "lucide-react";
 import {
   type TravelerProfile,
   type CrossingMode,
-  type VisaType,
+  type AccessType,
+  type DocumentCategory,
+  type TrustedTraveler,
   CROSSING_MODES,
-  US_VISA_TYPES,
-  MX_VISA_TYPES,
-  COMMON_PASSPORT_COUNTRIES,
+  ACCESS_TYPES,
+  DOCUMENT_CATEGORIES,
+  TRUSTED_TRAVELER,
 } from "@/types";
 import type { TripDirection } from "@/types";
 
@@ -20,7 +22,7 @@ interface TravelerProfileFormProps {
   onBack: () => void;
 }
 
-type ProfileStep = "mode" | "sentri" | "visa" | "passport";
+type ProfileStep = "mode" | "access" | "document" | "trusted";
 
 const CROSSING_MODE_ICONS: Record<CrossingMode, typeof Navigation> = {
   walking: Navigation,
@@ -33,41 +35,31 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
   const t = useTranslations();
   const [step, setStep] = useState<ProfileStep>("mode");
   const [mode, setMode] = useState<CrossingMode>("personal_vehicle");
-  const [hasSentri, setHasSentri] = useState(false);
-  const [usVisaType, setUsVisaType] = useState<VisaType | null>(null);
-  const [mxVisaType, setMxVisaType] = useState<VisaType | null>(null);
-  const [passportCountry, setPassportCountry] = useState<string | null>(null);
-  const [passportSearch, setPassportSearch] = useState("");
-  const [showPassportInput, setShowPassportInput] = useState(false);
+  const [accessType, setAccessType] = useState<AccessType>("standard");
+  const [documentCategory, setDocumentCategory] = useState<DocumentCategory>("unknown");
+  const [trustedTraveler, setTrustedTraveler] = useState<TrustedTraveler>("none");
 
   const handleModeSelect = (selectedMode: CrossingMode) => {
     setMode(selectedMode);
-    setStep("sentri");
+    setStep("access");
   };
 
-  const handleSentriComplete = () => {
-    setStep("visa");
+  const handleAccessComplete = () => {
+    setStep("document");
   };
 
-  const handleVisaComplete = () => {
-    // If non-MX/US passport, show passport step
-    // For now, we'll ask for passport country if user indicates they have one
-    setStep("passport");
+  const handleDocumentComplete = () => {
+    setStep("trusted");
   };
 
-  const handlePassportComplete = () => {
+  const handleTrustedComplete = () => {
     onComplete({
       crossingMode: mode,
-      hasSentri,
-      usVisaType: direction === "MX_TO_US" ? usVisaType : null,
-      mxVisaType: direction === "US_TO_MX" ? mxVisaType : null,
-      passportCountry,
+      accessType,
+      documentCategory,
+      trustedTraveler,
     });
   };
-
-  const filteredCountries = COMMON_PASSPORT_COUNTRIES.filter((c) =>
-    c.toLowerCase().includes(passportSearch.toLowerCase())
-  );
 
   // Step 1: Crossing Mode
   if (step === "mode") {
@@ -99,29 +91,31 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
     );
   }
 
-  // Step 2: SENTRI
-  if (step === "sentri") {
+  // Step 2: Access Type
+  if (step === "access") {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
-          <h2 className="text-ink text-xl font-semibold">{t("viaje.sentri")}</h2>
-          <p className="text-faint text-sm">{t("viaje.sentriDescription")}</p>
+          <h2 className="text-ink text-xl font-semibold">{t("viaje.accessType")}</h2>
+          <p className="text-faint text-sm">{t("viaje.accessTypeDescription")}</p>
         </div>
 
-        <button
-          onClick={() => setHasSentri(!hasSentri)}
-          className={`w-full flex items-center justify-between p-4 rounded-[var(--radius-lg)] border transition-colors ${
-            hasSentri
-              ? "bg-cruze-green/10 border-cruze-green/30"
-              : "bg-surface border-border"
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <Shield className={`w-5 h-5 ${hasSentri ? "text-cruze-green" : "text-faint"}`} />
-            <span className="text-ink text-sm font-medium">SENTRI</span>
-          </div>
-          {hasSentri && <Check className="w-5 h-5 text-cruze-green" />}
-        </button>
+        <div className="space-y-2">
+          {ACCESS_TYPES.map((a) => (
+            <button
+              key={a.id}
+              onClick={() => setAccessType(a.id)}
+              className={`w-full flex items-center justify-between p-4 rounded-[var(--radius-md)] border transition-colors ${
+                accessType === a.id
+                  ? "bg-cruze-green/10 border-cruze-green/30"
+                  : "bg-surface border-border"
+              }`}
+            >
+              <span className="text-ink text-sm font-medium">{t(a.labelKey)}</span>
+              {accessType === a.id && <Check className="w-4 h-4 text-cruze-green" />}
+            </button>
+          ))}
+        </div>
 
         <div className="flex gap-3">
           <button
@@ -131,7 +125,7 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
             {t("common.back")}
           </button>
           <button
-            onClick={handleSentriComplete}
+            onClick={handleAccessComplete}
             className="flex-1 h-12 flex items-center justify-center gap-2 bg-cruze-green text-dark text-sm font-semibold rounded-[var(--radius-md)] active:bg-cruze-green/90 transition-colors"
           >
             {t("common.next")}
@@ -142,46 +136,41 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
     );
   }
 
-  // Step 3: Visa Type
-  if (step === "visa") {
-    const visaTypes = direction === "MX_TO_US" ? US_VISA_TYPES : MX_VISA_TYPES;
-    const selectedVisa = direction === "MX_TO_US" ? usVisaType : mxVisaType;
-    const setSelectedVisa = direction === "MX_TO_US" ? setUsVisaType : setMxVisaType;
-    const visaTitle = direction === "MX_TO_US" ? t("viaje.usVisa") : t("viaje.mxVisa");
-
+  // Step 3: Document Category
+  if (step === "document") {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
-          <h2 className="text-ink text-xl font-semibold">{visaTitle}</h2>
-          <p className="text-faint text-sm">{t("viaje.visaDescription")}</p>
+          <h2 className="text-ink text-xl font-semibold">{t("viaje.documentCategory")}</h2>
+          <p className="text-faint text-sm">{t("viaje.documentCategoryDescription")}</p>
         </div>
 
         <div className="space-y-2">
-          {visaTypes.map((v) => (
+          {DOCUMENT_CATEGORIES.map((d) => (
             <button
-              key={v.id}
-              onClick={() => setSelectedVisa(v.id)}
+              key={d.id}
+              onClick={() => setDocumentCategory(d.id)}
               className={`w-full flex items-center justify-between p-4 rounded-[var(--radius-md)] border transition-colors ${
-                selectedVisa === v.id
+                documentCategory === d.id
                   ? "bg-cruze-green/10 border-cruze-green/30"
                   : "bg-surface border-border"
               }`}
             >
-              <span className="text-ink text-sm font-medium">{t(v.labelKey)}</span>
-              {selectedVisa === v.id && <Check className="w-4 h-4 text-cruze-green" />}
+              <span className="text-ink text-sm font-medium">{t(d.labelKey)}</span>
+              {documentCategory === d.id && <Check className="w-4 h-4 text-cruze-green" />}
             </button>
           ))}
         </div>
 
         <div className="flex gap-3">
           <button
-            onClick={() => setStep("sentri")}
+            onClick={() => setStep("access")}
             className="flex-1 h-12 flex items-center justify-center bg-surface border border-border text-ink text-sm font-medium rounded-[var(--radius-md)] active:bg-surface-subtle transition-colors"
           >
             {t("common.back")}
           </button>
           <button
-            onClick={handleVisaComplete}
+            onClick={handleDocumentComplete}
             className="flex-1 h-12 flex items-center justify-center gap-2 bg-cruze-green text-dark text-sm font-semibold rounded-[var(--radius-md)] active:bg-cruze-green/90 transition-colors"
           >
             {t("common.next")}
@@ -192,100 +181,48 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
     );
   }
 
-  // Step 4: Passport Country
-  if (step === "passport") {
+  // Step 4: Trusted Traveler Program
+  if (step === "trusted") {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
-          <h2 className="text-ink text-xl font-semibold">{t("viaje.passportCountry")}</h2>
-          <p className="text-faint text-sm">{t("viaje.passportDescription")}</p>
+          <h2 className="text-ink text-xl font-semibold">{t("viaje.trustedTraveler")}</h2>
+          <p className="text-faint text-sm">{t("viaje.trustedTravelerDescription")}</p>
         </div>
 
-        {!showPassportInput ? (
-          <div className="space-y-2">
+        <div className="space-y-2">
+          {TRUSTED_TRAVELER.map((tt) => (
             <button
-              onClick={() => {
-                setPassportCountry("Mexico");
-                handlePassportComplete();
-              }}
-              className="w-full flex items-center justify-between p-4 rounded-[var(--radius-md)] border border-border bg-surface"
-            >
-              <span className="text-ink text-sm font-medium">Mexico</span>
-              {passportCountry === "Mexico" && <Check className="w-4 h-4 text-cruze-green" />}
-            </button>
-            <button
-              onClick={() => {
-                setPassportCountry("United States");
-                handlePassportComplete();
-              }}
-              className="w-full flex items-center justify-between p-4 rounded-[var(--radius-md)] border border-border bg-surface"
-            >
-              <span className="text-ink text-sm font-medium">United States</span>
-              {passportCountry === "United States" && <Check className="w-4 h-4 text-cruze-green" />}
-            </button>
-
-            <div className="relative my-2">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border" />
-              </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="bg-background px-2 text-faint">{t("common.or")}</span>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setShowPassportInput(true)}
-              className="w-full flex items-center justify-between p-4 rounded-[var(--radius-md)] border border-border bg-surface"
+              key={tt.id}
+              onClick={() => setTrustedTraveler(tt.id)}
+              className={`w-full flex items-center justify-between p-4 rounded-[var(--radius-md)] border transition-colors ${
+                trustedTraveler === tt.id
+                  ? "bg-cruze-green/10 border-cruze-green/30"
+                  : "bg-surface border-border"
+              }`}
             >
               <div className="flex items-center gap-3">
-                <CreditCard className="w-4 h-4 text-faint" />
-                <span className="text-ink text-sm font-medium">{t("viaje.otherPassport")}</span>
+                {tt.id !== "none" && <Shield className="w-5 h-5 text-cruze-green" />}
+                <span className="text-ink text-sm font-medium">{t(tt.labelKey)}</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-faint" />
+              {trustedTraveler === tt.id && <Check className="w-4 h-4 text-cruze-green" />}
             </button>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <input
-              type="text"
-              value={passportSearch}
-              onChange={(e) => setPassportSearch(e.target.value)}
-              placeholder={t("viaje.searchCountry")}
-              className="w-full h-12 px-4 bg-surface border border-border rounded-[var(--radius-md)] text-ink text-sm placeholder:text-faint focus:outline-none focus:border-cruze-green"
-            />
-            <div className="max-h-60 overflow-y-auto space-y-1">
-              {filteredCountries.map((country) => (
-                <button
-                  key={country}
-                  onClick={() => {
-                    setPassportCountry(country);
-                    handlePassportComplete();
-                  }}
-                  className="w-full flex items-center justify-between p-3 rounded-[var(--radius-md)] hover:bg-surface-subtle transition-colors"
-                >
-                  <span className="text-ink text-sm">{country}</span>
-                  {passportCountry === country && <Check className="w-4 h-4 text-cruze-green" />}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+          ))}
+        </div>
 
         <div className="flex gap-3">
           <button
-            onClick={() => setStep("visa")}
+            onClick={() => setStep("document")}
             className="flex-1 h-12 flex items-center justify-center bg-surface border border-border text-ink text-sm font-medium rounded-[var(--radius-md)] active:bg-surface-subtle transition-colors"
           >
             {t("common.back")}
           </button>
           <button
-            onClick={() => {
-              setPassportCountry(null);
-              handlePassportComplete();
-            }}
-            className="flex-1 h-12 flex items-center justify-center gap-2 bg-surface border border-border text-ink text-sm font-medium rounded-[var(--radius-md)] active:bg-surface-subtle transition-colors"
+            onClick={handleTrustedComplete}
+            className="flex-1 h-12 flex items-center justify-center gap-2 bg-cruze-green text-dark text-sm font-semibold rounded-[var(--radius-md)] active:bg-cruze-green/90 transition-colors"
           >
-            {t("viaje.skip")}
+            {t("common.next")}
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>

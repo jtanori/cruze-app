@@ -72,15 +72,18 @@ Location acquisition must be treated as a robust state machine rather than a sin
                  ↓                     ↓
           PERMISSION GRANTED     PERMISSION DENIED
                  ↓                     ↓
-          ACQUIRING LOCATION     EXPLAIN / RETRY
-                 ↓
-          VALIDATING LOCATION
-                 ↓
-        ┌────────┴─────────┐
-        ↓                  ↓
-   LOW CONFIDENCE       READY
-        ↓                  ↓
-  REFINE / RETRY       CRUZE HOME
+          ACQUIRING LOCATION     L03 RECOVERY
+                 ↓                     ↓
+          VALIDATING LOCATION    ┌─────────────┐
+                 ↓               │ MANUAL      │
+        ┌────────┴─────────┐     │ SEARCH      │
+        ↓                  ↓     └──────┬──────┘
+   LOW_CONFIDENCE       READY           ↓
+        ↓                  ↓       USER SELECTS
+  REFINE / RETRY       CRUZE HOME       ↓
+                                   GEOCODING API
+                                        ↓
+                                        READY
 ```
 
 ## 2.1 Location states
@@ -89,6 +92,7 @@ Location acquisition must be treated as a robust state machine rather than a sin
 UNINITIALIZED
 REQUESTING_PERMISSION
 PERMISSION_DENIED
+MANUAL_SEARCH
 SERVICES_DISABLED
 ACQUIRING
 LOW_CONFIDENCE
@@ -149,6 +153,62 @@ Secondary action:
 > Configuración
 
 The user should not be dumped into an empty application if location permission fails.
+
+## 3.2 Manual Location Search
+
+When GPS permission is denied or unavailable, users can manually search for their location.
+
+### Content
+
+**Title**
+
+> No se pudo obtener tu ubicación por GPS.
+
+**Search Input**
+
+> 🔍 Buscar ubicación...
+
+**Constraints**
+
+- Limited to MX and USA locations
+- Suggestions powered by geocoding API (Mapbox)
+- Results limited to 5 suggestions
+
+**Actions**
+
+- User types location → API returns suggestions
+- User selects suggestion → coordinates obtained → READY state
+- Alternative: Reintentar GPS
+
+### Persistence
+
+Manual location is saved for future visits but GPS is preferred when available.
+
+```text
+IF GPS available AND permission granted:
+    USE GPS location (default)
+
+ELSE IF manual location selected:
+    USE manual location
+    MARK as manual in store
+```
+
+### Network Dependency
+
+Manual search requires network connectivity. If offline:
+
+```text
+┌─────────────────────────────────────┐
+│                                     │
+│     Sin conexión a internet         │
+│                                     │
+│     La búsqueda de ubicación        │
+│     requiere conexión.              │
+│                                     │
+│     [ Reintentar GPS ]              │
+│                                     │
+└─────────────────────────────────────┘
+```
 
 ---
 

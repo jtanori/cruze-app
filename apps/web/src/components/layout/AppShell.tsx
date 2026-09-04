@@ -30,9 +30,7 @@ interface AppShellProps {
 function pathToDestination(pathname: string): BottomNavDestination {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
   if (path.startsWith("/viaje")) return "viaje";
-  if (path.startsWith("/favorites")) return "favorites";
   if (path.startsWith("/agent")) return "agent";
-  if (path.startsWith("/alerts")) return "alerts";
   return "crossings";
 }
 
@@ -58,8 +56,6 @@ export function AppShell({
     if (dest === "viaje") router.push(`/${locale}/viaje`);
     else if (dest === "crossings") router.push(`/${locale}/crossings`);
     else if (dest === "agent") router.push(`/${locale}/agent`);
-    else if (dest === "favorites") router.push(`/${locale}/favorites`);
-    else if (dest === "alerts") router.push(`/${locale}/alerts`);
   };
 
   return (

@@ -51,13 +51,4 @@ export function LoadingSkeleton({
   );
 }
 
-const baseStyles = "animate-pulse bg-surface-elevated rounded";
-
-const variants = {
-  text: "h-4 rounded",
-  circular: "rounded-full",
-  rectangular: "rounded-[var(--radius-md)]",
-  card: "rounded-[var(--radius-lg)]",
-};
-
 export default LoadingSkeleton;

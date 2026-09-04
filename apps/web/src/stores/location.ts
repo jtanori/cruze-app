@@ -5,9 +5,10 @@ import type { LocationState, LocationData } from "@/lib/location-state-machine";
 interface LocationStore {
   state: LocationState;
   location: LocationData | null;
+  isManual: boolean;
   error: string | null;
   setState: (state: LocationState) => void;
-  setLocation: (location: LocationData | null) => void;
+  setLocation: (location: LocationData | null, isManual?: boolean) => void;
   setError: (error: string | null) => void;
   reset: () => void;
 }
@@ -15,6 +16,7 @@ interface LocationStore {
 const initialState = {
   state: "uninitialized" as LocationState,
   location: null as LocationData | null,
+  isManual: false,
   error: null as string | null,
 };
 
@@ -23,7 +25,7 @@ export const useLocationStore = create<LocationStore>()(
     (set) => ({
       ...initialState,
       setState: (state) => set({ state }),
-      setLocation: (location) => set({ location }),
+      setLocation: (location, isManual = false) => set({ location, isManual }),
       setError: (error) => set({ error }),
       reset: () => set(initialState),
     }),

@@ -73,11 +73,11 @@ function getDocumentChecklist(profile: TravelerProfile | null): ResponseChecklis
     { label: "Valid passport", checked: true, required: true },
   ];
 
-  if (profile?.usVisaType === "b1_b2") {
-    items.push({ label: "US visa (B1/B2)", checked: true, required: true });
+  if (profile?.documentCategory === "visa") {
+    items.push({ label: "US visa", checked: true, required: true });
   }
 
-  if (profile?.hasSentri) {
+  if (profile?.trustedTraveler === "sentri") {
     items.push({ label: "SENTRI card", checked: true, required: false });
   }
 
@@ -213,7 +213,7 @@ function generateSentriResponse(
   profile: TravelerProfile | null,
   isEn: boolean
 ): ResponseContent {
-  if (profile?.hasSentri) {
+  if (profile?.trustedTraveler === "sentri") {
     return {
       text: isEn
         ? "You have SENTRI! Use the dedicated SENTRI lanes for the fastest crossing."

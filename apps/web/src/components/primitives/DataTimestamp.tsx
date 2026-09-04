@@ -1,22 +1,50 @@
 import { Clock } from "lucide-react";
 
+type FreshnessState = "live" | "recent" | "stale" | "very_stale" | "unavailable";
+
+interface FreshnessConfig {
+  label: string;
+  color: string;
+  iconColor: string;
+}
+
+const freshnessConfig: Record<FreshnessState, FreshnessConfig> = {
+  live: { label: "Datos en vivo", color: "text-success", iconColor: "text-success" },
+  recent: { label: "Datos recientes", color: "text-muted", iconColor: "text-muted" },
+  stale: { label: "Datos desactualizados", color: "text-warning", iconColor: "text-warning" },
+  very_stale: { label: "Datos muy antiguos", color: "text-danger", iconColor: "text-danger" },
+  unavailable: { label: "Sin datos", color: "text-muted", iconColor: "text-muted" },
+};
+
+function getFreshness(timestamp: string | Date | null): FreshnessState {
+  if (!timestamp) return "unavailable";
+  const date = typeof timestamp === "string" ? new Date(timestamp) : timestamp;
+  if (isNaN(date.getTime())) return "unavailable";
+
+  const diffMs = Date.now() - date.getTime();
+  const diffMin = diffMs / 60000;
+
+  if (diffMin <= 5) return "live";
+  if (diffMin <= 20) return "recent";
+  if (diffMin <= 60) return "stale";
+  return "very_stale";
+}
+
 interface DataTimestampProps {
-  timestamp: string | Date;
+  timestamp: string | Date | null;
   variant?: "compact" | "verbose";
-  stale?: boolean;
-  staleThresholdMs?: number;
+  showLabel?: boolean;
   className?: string;
 }
 
 export function DataTimestamp({
   timestamp,
   variant = "compact",
-  stale,
-  staleThresholdMs = 300000,
+  showLabel = true,
   className = "",
 }: DataTimestampProps) {
-  const date = typeof timestamp === "string" ? new Date(timestamp) : timestamp;
-  const isStale = stale ?? (Date.now() - date.getTime() > staleThresholdMs);
+  const freshness = getFreshness(timestamp);
+  const config = freshnessConfig[freshness];
 
   const formatCompact = (d: Date) => {
     const h = d.getHours().toString().padStart(2, "0");
@@ -33,15 +61,30 @@ export function DataTimestamp({
     });
   };
 
-  const formatted = variant === "compact" ? formatCompact(date) : formatVerbose(date);
+  const formatRelative = (d: Date) => {
+    const diffMs = Date.now() - d.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return "Hace menos de 1 min";
+    if (diffMin === 1) return "Hace 1 min";
+    if (diffMin < 60) return `Hace ${diffMin} min`;
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH === 1) return "Hace 1 hora";
+    return `Hace ${diffH} horas`;
+  };
+
+  const date = timestamp ? (typeof timestamp === "string" ? new Date(timestamp) : timestamp) : null;
+  const relativeText = date ? formatRelative(date) : "";
+  const clockText = date
+    ? variant === "compact"
+      ? formatCompact(date)
+      : formatVerbose(date)
+    : "";
 
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 text-xs ${isStale ? "text-warning" : "text-muted"} ${className}`}
-    >
-      <Clock className="w-3.5 h-3.5" />
-      <span>{formatted}</span>
-      {isStale && <span className="font-medium">(stale)</span>}
+    <span className={`inline-flex items-center gap-1.5 text-xs ${config.color} ${className}`}>
+      <Clock className={`w-3.5 h-3.5 ${config.iconColor}`} />
+      {showLabel && <span className="font-medium">{config.label}</span>}
+      <span>{relativeText || clockText}</span>
     </span>
   );
 }

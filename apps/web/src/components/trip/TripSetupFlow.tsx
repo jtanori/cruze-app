@@ -12,6 +12,7 @@ import {
   type TripSetupStep,
 } from "@/lib/trip-setup-flow";
 import { detectDirection } from "@/lib/direction-detection";
+import { CruzeBackHeader } from "@/components/layout/CruzeBackHeader";
 import { TripSetupProgress } from "./TripSetupProgress";
 import { TripSetupDestinationStep } from "./TripSetupDestinationStep";
 import { TripSetupOriginStep } from "./TripSetupOriginStep";
@@ -20,6 +21,16 @@ import { TripSetupDirectionStep } from "./TripSetupDirectionStep";
 import { TripSetupVehicleAccessStep } from "./TripSetupVehicleAccessStep";
 import { TripSetupDocumentProfileStep } from "./TripSetupDocumentProfileStep";
 import { trackEvent } from "@/lib/analytics";
+
+const STEP_TITLES: Record<TripSetupStep, string> = {
+  destination: "DESTINO",
+  origin: "ORIGEN",
+  travelMode: "¿CÓMO VIAJAS?",
+  direction: "DIRECCIÓN",
+  accessType: "ACCESO",
+  documentProfile: "PERFIL",
+  recommendation: "RECOMENDACIÓN",
+};
 
 export function TripSetupFlow() {
   const router = useRouter();
@@ -56,13 +67,35 @@ export function TripSetupFlow() {
     else router.back();
   };
 
+  // Check if current step has a selection (for Continue button)
+  const hasSelection = (() => {
+    switch (step) {
+      case "destination":
+        return state.destination !== null;
+      case "origin":
+        return state.origin !== null;
+      case "travelMode":
+        return state.travelMode !== null;
+      case "direction":
+        return state.direction !== null;
+      case "accessType":
+        return state.accessType !== null;
+      case "documentProfile":
+        return true; // documentProfile has skip
+      default:
+        return false;
+    }
+  })();
+
   return (
     <div className="min-h-dvh bg-background flex flex-col">
+      <CruzeBackHeader title={STEP_TITLES[step]} onBack={goBack} />
+
       <div className="sticky top-0 z-10 bg-background border-b border-border-subtle px-5 py-3">
         <TripSetupProgress current={progress.current} total={progress.total} />
       </div>
 
-      <div className="flex-1 px-4 sm:px-5 py-4 sm:py-6 max-w-md lg:max-w-xl xl:max-w-2xl mx-auto w-full">
+      <div className="flex-1 px-4 sm:px-5 py-4 sm:py-6 w-full">
         {step === "destination" && (
           <TripSetupDestinationStep
             onSelect={(dest) => {
@@ -75,19 +108,9 @@ export function TripSetupFlow() {
 
         {step === "origin" && (
           <TripSetupOriginStep
+            value={state.origin}
             onSelect={(origin) => {
-              const newState = { ...state, origin };
-              // Auto-detect direction if both points available
-              if (newState.destination) {
-                const dir = detectDirection(origin, newState.destination);
-                if (dir !== "unknown") {
-                  newState.direction = dir;
-                }
-              }
-              setState(newState);
-              trackEvent("trip_setup_origin_selected", { origin: origin.label });
-              const next = getNextStep(newState, "origin");
-              if (next) setStep(next);
+              setState((s) => ({ ...s, origin }));
             }}
           />
         )}
@@ -152,32 +175,33 @@ export function TripSetupFlow() {
             }}
           />
         )}
-
-        {step === "documentProfile" && state.documentType && (
-          <button
-            onClick={() => router.push(`/${locale}/onboarding/recommendation`)}
-            className="w-full mt-6 py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px]"
-          >
-            Ver recomendaci\u00F3n
-          </button>
-        )}
       </div>
 
-      {step !== "destination" && step !== "documentProfile" && (
-        <div className="px-5 pb-6 max-w-md lg:max-w-xl xl:max-w-2xl mx-auto w-full">
+      {/* Continue button for steps that need explicit confirmation */}
+      {step === "origin" && (
+        <div className="px-4 sm:px-5 pb-6 w-full">
           <button
-            onClick={goBack}
-            className="text-sm font-medium text-muted hover:text-ink transition-colors"
+            onClick={() => {
+              if (state.origin) {
+                trackEvent("trip_setup_origin_selected", { origin: state.origin.label });
+                goNext();
+              }
+            }}
+            disabled={!hasSelection}
+            className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px] disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {"\u2190 Atr\u00E1s"}
+            Continuar
           </button>
         </div>
       )}
 
-      {step === "documentProfile" && (
-        <div className="px-5 pb-6 max-w-md lg:max-w-xl xl:max-w-2xl mx-auto w-full">
-          <button onClick={goBack} className="text-sm font-medium text-muted hover:text-ink transition-colors">
-            {"\u2190 Atr\u00E1s"}
+      {step === "documentProfile" && state.documentType && (
+        <div className="px-4 sm:px-5 pb-6 w-full">
+          <button
+            onClick={() => router.push(`/${locale}/onboarding/recommendation`)}
+            className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px]"
+          >
+            Ver recomendación
           </button>
         </div>
       )}

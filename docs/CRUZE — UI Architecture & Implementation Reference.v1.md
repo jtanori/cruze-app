@@ -168,13 +168,20 @@ LOCATION
 │   └── LOC-ACQ-01 LocationAcquisitionState
 │
 ├── Recovery
-│   └── LOC-REC-01 LocationRecoveryPanel
+│   ├── LOC-REC-01 LocationRecoveryPanel
+│   └── LOC-SEARCH-01 LocationSearchInput
+│
+├── Search
+│   └── LOC-SUGGEST-01 LocationSearchSuggestions
 │
 ├── Confidence
 │   └── LOC-CONF-01 LocationConfidenceIndicator
 │
-└── Status
-    └── LOC-STATUS-01 LocationStatusBanner
+├── Status
+│   └── LOC-STATUS-01 LocationStatusBanner
+│
+└── Network
+    └── LOC-NET-01 LocationNetworkStatus
 ```
 
 ASCII:
@@ -190,6 +197,32 @@ ASCII:
 │                                       │
 │        [ LOC-PROMPT-01 ]              │
 │       Permitir ubicación              │
+│                                       │
+└───────────────────────────────────────┘
+```
+
+L03 — Location Recovery with Manual Search:
+
+```text
+┌───────────────────────────────────────┐
+│                                       │
+│     No se pudo obtener tu             │
+│     ubicación por GPS.                │
+│                                       │
+│  ┌─────────────────────────────────┐  │
+│  │ 🔍 LOC-SEARCH-01                │  │
+│  │ Buscar ubicación...             │  │
+│  └─────────────────────────────────┘  │
+│                                       │
+│  LOC-SUGGEST-01                       │
+│  Tijuana, BC                          │
+│  Mexicali, BC                         │
+│  Ciudad Juárez, CHIH                  │
+│                                       │
+│  ─────────── o ───────────            │
+│                                       │
+│  [ Reintentar GPS ]                   │
+│  [ Configuración del sistema ]        │
 │                                       │
 └───────────────────────────────────────┘
 ```
@@ -346,7 +379,7 @@ SETTINGS
 |---|---|---|
 | `L01` | Location Permission | Establish location |
 | `L02` | Location Acquisition | Acquire/validate location |
-| `L03` | Location Recovery | Recover location |
+| `L03` | Location Recovery | Recover location (GPS retry + manual search) |
 | `T01` | Trip Empty | First/default Trip surface |
 | `T02` | Trip Destination | Select destination |
 | `T03` | Trip Origin | Confirm origin |
@@ -384,7 +417,7 @@ SETTINGS
 |---|---|---|---|
 | `L01` | `LOC-GATE-01`, `LOC-PROMPT-01` | Gate, explanation, CTA | Settings shortcut |
 | `L02` | `LOC-ACQ-01`, `LOC-CONF-01` | Acquisition state | Cancel |
-| `L03` | `LOC-REC-01`, `LOC-STATUS-01` | Recovery action | Technical explanation |
+| `L03` | `LOC-REC-01`, `LOC-SEARCH-01`, `LOC-SUGGEST-01`, `LOC-STATUS-01` | Recovery, search, suggestions | Technical explanation |
 
 ---
 

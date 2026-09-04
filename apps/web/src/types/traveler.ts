@@ -1,13 +1,16 @@
 export type CrossingMode = "walking" | "personal_vehicle" | "commercial_vehicle" | "public_transport";
 
-export type VisaType = "none" | "b1_b2" | "h1b" | "f1" | "global_entry" | "fmm" | "resident";
+export type AccessType = "standard" | "readyLane" | "sentri";
+
+export type DocumentCategory = "passport" | "visa" | "usCitizen" | "unknown";
+
+export type TrustedTraveler = "none" | "sentri" | "globalEntry";
 
 export interface TravelerProfile {
   crossingMode: CrossingMode;
-  hasSentri: boolean;
-  usVisaType: VisaType | null;
-  mxVisaType: VisaType | null;
-  passportCountry: string | null;
+  accessType: AccessType;
+  documentCategory: DocumentCategory;
+  trustedTraveler: TrustedTraveler;
 }
 
 export const CROSSING_MODES: Array<{ id: CrossingMode; labelKey: string }> = [
@@ -17,39 +20,21 @@ export const CROSSING_MODES: Array<{ id: CrossingMode; labelKey: string }> = [
   { id: "public_transport", labelKey: "viaje.publicTransport" },
 ];
 
-export const US_VISA_TYPES: Array<{ id: VisaType; labelKey: string }> = [
-  { id: "b1_b2", labelKey: "viaje.visa.b1b2" },
-  { id: "h1b", labelKey: "viaje.visa.h1b" },
-  { id: "f1", labelKey: "viaje.visa.f1" },
-  { id: "global_entry", labelKey: "viaje.visa.globalEntry" },
-  { id: "none", labelKey: "viaje.visa.none" },
+export const ACCESS_TYPES: Array<{ id: AccessType; labelKey: string }> = [
+  { id: "standard", labelKey: "viaje.access.standard" },
+  { id: "readyLane", labelKey: "viaje.access.readyLane" },
+  { id: "sentri", labelKey: "viaje.access.sentri" },
 ];
 
-export const MX_VISA_TYPES: Array<{ id: VisaType; labelKey: string }> = [
-  { id: "fmm", labelKey: "viaje.visa.fmm" },
-  { id: "resident", labelKey: "viaje.visa.resident" },
-  { id: "none", labelKey: "viaje.visa.none" },
+export const DOCUMENT_CATEGORIES: Array<{ id: DocumentCategory; labelKey: string }> = [
+  { id: "passport", labelKey: "viaje.document.passport" },
+  { id: "visa", labelKey: "viaje.document.visa" },
+  { id: "usCitizen", labelKey: "viaje.document.usCitizen" },
+  { id: "unknown", labelKey: "viaje.document.unknown" },
 ];
 
-export const COMMON_PASSPORT_COUNTRIES = [
-  "Mexico",
-  "United States",
-  "Spain",
-  "Colombia",
-  "China",
-  "India",
-  "Japan",
-  "Germany",
-  "United Kingdom",
-  "Brazil",
-  "Canada",
-  "South Korea",
-  "France",
-  "Argentina",
-  "Cuba",
-  "Guatemala",
-  "Honduras",
-  "El Salvador",
-  "Nicaragua",
-  "Costa Rica",
+export const TRUSTED_TRAVELER: Array<{ id: TrustedTraveler; labelKey: string }> = [
+  { id: "none", labelKey: "viaje.trusted.none" },
+  { id: "sentri", labelKey: "viaje.trusted.sentri" },
+  { id: "globalEntry", labelKey: "viaje.trusted.globalEntry" },
 ];

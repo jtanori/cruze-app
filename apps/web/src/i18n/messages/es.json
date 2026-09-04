@@ -227,6 +227,28 @@
     "personalVehicle": "Vehículo personal",
     "commercialVehicle": "Vehículo comercial",
     "publicTransport": "Transporte público",
+    "accessType": "Tipo de acceso",
+    "accessTypeDescription": "Selecciona tu nivel de acceso para carriles",
+    "access": {
+      "standard": "Estándar",
+      "readyLane": "Ready Lane",
+      "sentri": "SENTRI"
+    },
+    "documentCategory": "Documento de viaje",
+    "documentCategoryDescription": "Selecciona tu tipo de documento para determinar elegibilidad",
+    "document": {
+      "passport": "Pasaporte",
+      "visa": "Visa",
+      "usCitizen": "Ciudadano de EE.UU.",
+      "unknown": "No estoy seguro"
+    },
+    "trustedTraveler": "Programa de viajero confiable",
+    "trustedTravelerDescription": "¿Tienes membresía en un programa de viajero confiable?",
+    "trusted": {
+      "none": "Ninguno",
+      "sentri": "SENTRI",
+      "globalEntry": "Global Entry"
+    },
     "sentri": "Membresía SENTRI",
     "sentriDescription": "¿Tienes membresía SENTRI? Esto desbloquea carriles más rápidos en los cruces.",
     "usVisa": "Tipo de visa US",

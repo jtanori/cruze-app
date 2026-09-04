@@ -1,4 +1,4 @@
-import type { TravelerProfile, CrossingMode, VisaType } from "@/types/traveler";
+import type { TravelerProfile, CrossingMode, AccessType, DocumentCategory, TrustedTraveler } from "@/types/traveler";
 
 export interface ProfileRepository {
   get(): TravelerProfile | null;

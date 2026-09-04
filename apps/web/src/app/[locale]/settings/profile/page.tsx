@@ -1,3 +1,14 @@
 "use client";
+import { CruzeBackHeader } from "@/components/layout/CruzeBackHeader";
 import { SettingsProfile } from "@/components/settings/SettingsProfile";
-export default function ProfilePage() { return <div className="px-4 sm:px-5 py-4 sm:py-6 max-w-md lg:max-w-xl xl:max-w-2xl mx-auto"><SettingsProfile /></div>; }
+
+export default function ProfilePage() {
+  return (
+    <div className="min-h-dvh bg-background">
+      <CruzeBackHeader title="PERFIL" />
+      <div className="px-4 sm:px-5 py-4 sm:py-6">
+        <SettingsProfile />
+      </div>
+    </div>
+  );
+}

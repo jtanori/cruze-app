@@ -43,7 +43,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         )}
         <h3 className="text-ink text-lg font-semibold">{title}</h3>
         {description && (
-          <p className="text-muted text-sm max-w-sm leading-relaxed">{description}</p>
+          <p className="text-muted text-sm leading-relaxed">{description}</p>
         )}
         {action && (
           <div className="mt-2">{action}</div>

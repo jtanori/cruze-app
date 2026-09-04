@@ -15,7 +15,9 @@ export default function LocationPermissionPage() {
   const { state, setState } = useLocationStore();
 
   useEffect(() => {
+    console.log("[Cruze:Onboarding] LocationPermission page — state:", state);
     if (state === "ready") {
+      console.log("[Cruze:Onboarding] Location ready → redirecting to /viaje");
       router.replace(`/${locale}/viaje`);
     }
   }, [state, router, locale]);

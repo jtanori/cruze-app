@@ -52,8 +52,8 @@ export function CrossingsDirectoryExpandedRow({
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">Carriles</p>
               <div className="space-y-1">
-                {lanes.map((l) => (
-                  <div key={l.type} className="flex justify-between text-sm">
+                {lanes.map((l, i) => (
+                  <div key={`${l.type}-${i}`} className="flex justify-between text-sm">
                     <span className="text-muted">{l.type}</span>
                     <span className="text-ink font-medium tabular">{l.waitTime !== null ? `${l.waitTime} min` : "—"}</span>
                   </div>

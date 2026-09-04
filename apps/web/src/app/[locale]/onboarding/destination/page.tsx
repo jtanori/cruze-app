@@ -9,6 +9,7 @@ export default function DestinationPage() {
   const locale = useLocale();
 
   useEffect(() => {
+    console.log("[Cruze:Router] /onboarding/destination → /trip/setup");
     router.replace(`/${locale}/trip/setup`);
   }, [router, locale]);
 

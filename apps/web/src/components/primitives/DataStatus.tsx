@@ -24,7 +24,7 @@ export function DataStatus({
   size = "md",
   className = "",
 }: DataStatusProps) {
-  const config = statusConfig[status];
+  const config = statusConfig[status] || statusConfig.unknown;
   const displayLabel = label || config.label;
 
   const sizeClasses = {

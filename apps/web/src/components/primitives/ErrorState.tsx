@@ -24,7 +24,7 @@ export function ErrorState({
         {icon || <AlertTriangle className="w-7 h-7 text-danger" />}
       </div>
       <h3 className="text-ink font-semibold text-lg mb-2">{title}</h3>
-      <p className="text-muted text-sm max-w-xs leading-relaxed mb-4 sm:mb-6">{message}</p>
+      <p className="text-muted text-sm leading-relaxed mb-4 sm:mb-6">{message}</p>
       {action && (
         <button
           onClick={action.onClick}

@@ -1,8 +1,7 @@
 "use client";
 
-import { Navigation, Compass, MessageCircle, Star, Bell } from "lucide-react";
+import { Navigation, Compass, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useAlertsStore } from "@/stores/alerts";
 import { useTripStore } from "@/stores/trip";
 import type { BottomNavDestination } from "@/types";
 
@@ -13,7 +12,6 @@ interface BottomNavigationProps {
 
 export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
   const t = useTranslations();
-  const unreadCount = useAlertsStore((s) => s.unreadCount());
   const hasTrip = useTripStore((s) => !s.completed && s.destination !== null);
 
   const DESTINATIONS: Array<{
@@ -25,8 +23,6 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
     { id: "viaje", label: t("nav.viaje"), icon: Navigation, showDot: hasTrip },
     { id: "crossings", label: t("nav.crossings"), icon: Compass },
     { id: "agent", label: t("nav.agent"), icon: MessageCircle },
-    { id: "favorites", label: t("nav.favorites"), icon: Star },
-    { id: "alerts", label: t("nav.alerts"), icon: Bell },
   ];
 
   return (
@@ -40,12 +36,6 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
         {DESTINATIONS.map((dest) => {
           const isActive = dest.id === active;
           const Icon = dest.icon;
-          const badge =
-            dest.id === "alerts" && unreadCount > 0
-              ? unreadCount > 9
-                ? "9+"
-                : String(unreadCount)
-              : null;
 
           return (
             <button
@@ -61,7 +51,7 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-[3px] rounded-full bg-cruze-green" />
               )}
 
-              {/* Icon + badge */}
+              {/* Icon */}
               <span className="relative">
                 <Icon
                   className={`w-[22px] h-[22px] transition-colors ${
@@ -69,11 +59,6 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
                   }`}
                   strokeWidth={isActive ? 2 : 1.5}
                 />
-                {badge && (
-                  <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-critical text-white text-xs font-semibold tabular leading-none">
-                    {badge}
-                  </span>
-                )}
                 {dest.showDot && !isActive && (
                   <span className="absolute -top-0.5 -right-1 w-2 h-2 rounded-full bg-cruze-green" />
                 )}

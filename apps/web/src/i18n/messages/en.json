@@ -227,6 +227,28 @@
     "personalVehicle": "Personal vehicle",
     "commercialVehicle": "Commercial vehicle",
     "publicTransport": "Public transport",
+    "accessType": "Access type",
+    "accessTypeDescription": "Select your lane access level",
+    "access": {
+      "standard": "Standard",
+      "readyLane": "Ready Lane",
+      "sentri": "SENTRI"
+    },
+    "documentCategory": "Travel document",
+    "documentCategoryDescription": "Select your document type to determine eligibility",
+    "document": {
+      "passport": "Passport",
+      "visa": "Visa",
+      "usCitizen": "US Citizen",
+      "unknown": "Not sure"
+    },
+    "trustedTraveler": "Trusted Traveler Program",
+    "trustedTravelerDescription": "Do you have a trusted traveler program membership?",
+    "trusted": {
+      "none": "None",
+      "sentri": "SENTRI",
+      "globalEntry": "Global Entry"
+    },
     "sentri": "SENTRI Membership",
     "sentriDescription": "Do you have a SENTRI membership? This unlocks faster lanes at crossings.",
     "usVisa": "US Visa Type",
