@@ -130,7 +130,7 @@ export const CrossingCard: FC<{
       <button
         type="button"
         key={program}
-        className={`flex-1 py-2 px-2 rounded-md text-xs font-medium ${badgeClass} transition-colors duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint focus-visible:ring-offset-2 ${
+        className={`flex-1 py-2 px-2 rounded-[var(--radius-sm)] text-xs font-medium ${badgeClass} transition-colors duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint focus-visible:ring-offset-2 ${
           laneStatuses[program] === "eligible" ? "cursor-pointer" : "cursor-not-allowed"
         }`}
         disabled={!lane.isOpen}
@@ -167,7 +167,7 @@ export const CrossingCard: FC<{
       : "bg-cruze-surface-elevated text-cruze-alert-red";
 
   const statusBadge = (
-    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium">
+    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-[var(--radius-sm)] text-xs font-medium">
       {crossing.status}
     </span>
   );
@@ -200,7 +200,7 @@ export const CrossingCard: FC<{
           <button
             type="button"
             key={program}
-            className={`flex-1 py-2 px-2 rounded-md text-xs font-medium ${badgeClass} transition-colors duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint focus-visible:ring-offset-2 ${
+            className={`flex-1 py-2 px-2 rounded-[var(--radius-sm)] text-xs font-medium ${badgeClass} transition-colors duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint focus-visible:ring-offset-2 ${
               laneStatuses[program] === "eligible" ? "cursor-pointer" : "cursor-not-allowed"
             }`}
             disabled={!lane.isOpen}
@@ -219,7 +219,7 @@ export const CrossingCard: FC<{
 /* ─── Recommendation ─────────────────────────────────────────────────────────*/
 
   const recommendation = showRecommendation ? (
-    <div className="mt-4 p-3 bg-cruze-surface-elevated rounded-md">
+    <div className="mt-4 p-3 bg-cruze-surface-elevated rounded-[var(--radius-md)]">
       <p className="text-cruze-amber text-lg font-medium">
         ✦ BEST OVERALL
       </p>
@@ -250,7 +250,7 @@ export const CrossingCard: FC<{
       onClick={handleSelect}
       role="button"
       tabIndex={0}
-      className="group rounded-md border p-4 hover:bg-cruze-surface-elevated transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint focus-visible:ring-offset-2 min-h-[200px]"
+      className="group rounded-[var(--radius-lg)] border p-4 hover:bg-cruze-surface-elevated transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint focus-visible:ring-offset-2 min-h-[200px]"
       aria-label={`Información del cruce ${crossing.name}`}
     >
       {/* Country Split Header */}

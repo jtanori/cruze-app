@@ -1,5 +1,11 @@
 # Cruze Domain Component Catalog
 
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (per-component specs) + `design/components/README.md` (index).
+> Canonical tokens: `design/workflows/W5_component_level_design_spec.md` §1-2.
+> Workflow bindings: `design/workflows/W*.md`.
+> Testing: `docs/TESTING_TOOLS.md` P0-P5 → `design/TESTING_INTEGRATION_PLAN.md`.
+> Original spec catalogs: `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §5-10 and `docs/CRUZE — Product, UX & Design System Specification.v1.md` — now **superseded** by the per-component specs for implementation. Refer to original docs only for product rationale.
+
 ## 1. Naming Convention
 
 All domain components follow **Domain + Surface + Responsibility** pattern.
@@ -290,3 +296,19 @@ All interactive elements must meet WCAG 2.5.8 minimum:
 | Checkbox | 44x44px |
 | Radio | 44x44px |
 | List Item | 44px height |
+
+---
+
+## 5. Catalog Index (Generated)
+
+All 83 component specs live in `design/components/` — see [`design/components/README.md`](components/README.md) for the full indexed table (APP 7 / LOC 10 / TR 18 / CR 21 / AG 11 / AV 9 / SET 7).
+
+Each entry in `README.md` links to its `design/components/<ID>-<Name>.md`.
+
+## 6. Integration Plan
+
+See [`design/INTEGRATION_PLAN.md`](../INTEGRATION_PLAN.md) for the phased implementation order, and `design/components/README.md` §How to use for the component → workflow → verification flow.
+
+- **Foundations → Primitives → Domain Components → Screen Compositions → Workflow** (W5 §37).
+- Implement per `W5_component_level_design_spec.md` tokens; verify via `design/workflows/W*.md` ASCII + Product spec §36-38 operational vs freshness rule.
+
