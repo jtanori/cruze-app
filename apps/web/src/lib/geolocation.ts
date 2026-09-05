@@ -4,23 +4,19 @@ export interface GeolocationResult {
   accuracy: number;
 }
 
+function isSupported(): boolean {
+  return typeof navigator !== "undefined" && !!navigator.geolocation;
+}
+
 export function requestGeolocation(): Promise<GeolocationResult> {
-  console.log("[Cruze:Geo] requestGeolocation() called");
   return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      console.error("[Cruze:Geo] Geolocation API not supported by browser");
+    if (!isSupported()) {
       reject(new Error("Geolocation not supported"));
       return;
     }
 
-    console.log("[Cruze:Geo] Calling getCurrentPosition (timeout: 10s, highAccuracy: true)");
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log("[Cruze:Geo] getCurrentPosition success:", {
-          lat: position.coords.latitude.toFixed(6),
-          lng: position.coords.longitude.toFixed(6),
-          accuracy: position.coords.accuracy,
-        });
         resolve({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
@@ -28,7 +24,6 @@ export function requestGeolocation(): Promise<GeolocationResult> {
         });
       },
       (error) => {
-        console.error("[Cruze:Geo] getCurrentPosition error:", error.code, error.message);
         reject(error);
       },
       {
@@ -41,15 +36,53 @@ export function requestGeolocation(): Promise<GeolocationResult> {
 }
 
 export function checkGeolocationPermission(): Promise<PermissionState> {
-  console.log("[Cruze:Geo] checkGeolocationPermission()");
-  if (!navigator.permissions) {
-    console.log("[Cruze:Geo] navigator.permissions not available → returning 'prompt'");
+  if (typeof navigator === "undefined" || !navigator.permissions) {
     return Promise.resolve("prompt");
   }
   return navigator.permissions
-    .query({ name: "geolocation" })
+    .query({ name: "geolocation" } as PermissionDescriptor)
+    .then((result) => result.state)
+    .catch(() => "prompt" as PermissionState);
+}
+
+export function watchGeolocationPermission(
+  callback: (state: PermissionState) => void
+): (() => void) | null {
+  if (typeof navigator === "undefined" || !navigator.permissions) {
+    return null;
+  }
+  let status: PermissionStatus | null = null;
+  let handler: (() => void) | null = null;
+  let active = true;
+
+  navigator.permissions
+    .query({ name: "geolocation" } as PermissionDescriptor)
     .then((result) => {
-      console.log("[Cruze:Geo] Permission query result:", result.state);
-      return result.state;
-    });
+      if (!active) return;
+      status = result;
+      callback(result.state);
+      handler = () => {
+        callback(result.state);
+      };
+      // Single subscription mechanism: prefer addEventListener, fall back to onchange.
+      if (typeof result.addEventListener === "function") {
+        result.addEventListener("change", handler as EventListener);
+      } else {
+        (result as unknown as { onchange: (() => void) | null }).onchange = handler;
+      }
+    })
+    .catch(() => {});
+
+  return () => {
+    active = false;
+    if (status && handler) {
+      try {
+        if (typeof status.removeEventListener === "function") {
+          status.removeEventListener("change", handler as EventListener);
+        }
+        const s = status as unknown as { onchange?: (() => void) | null };
+        if (s.onchange === (handler as unknown as () => void)) s.onchange = null;
+      } catch {}
+    }
+  };
 }

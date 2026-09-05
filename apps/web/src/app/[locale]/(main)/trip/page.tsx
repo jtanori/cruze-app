@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/use-locale";
 import { useTripStore } from "@/stores/trip";
-import { useLocationStore } from "@/stores/location";
+import { useLocationContext } from "@/components/location/LocationProvider";
 import { TripStatusHeader } from "@/components/trip/TripStatusHeader";
 import { TripRouteSummary } from "@/components/trip/TripRouteSummary";
 import { TripActionBar } from "@/components/trip/TripActionBar";
@@ -41,7 +41,7 @@ export default function TripPage() {
   const router = useRouter();
   const locale = useLocale();
   const { start, destination, completed, lastEvaluatedAt, refreshActivity, reset, recommendedCrossing } = useTripStore();
-  const { location } = useLocationStore();
+  const { location } = useLocationContext();
   const [isStale, setIsStale] = useState(false);
   const [showStalePrompt, setShowStalePrompt] = useState(false);
   const [ready, setReady] = useState(false);
@@ -63,17 +63,17 @@ export default function TripPage() {
     if (!location) return;
     setLoadingNearby(true);
     try {
-      const response = await fetch(`/${locale}/api/crossings?lat=${location.lat}&lng=${location.lng}&limit=3`);
+      const response = await fetch(`/api/crossings?lat=${location.lat}&lng=${location.lng}&limit=3&direction=MX_TO_US`);
       if (response.ok) {
         const data = await response.json();
         if (data.crossings && Array.isArray(data.crossings)) {
           setNearbyCrossings(data.crossings.slice(0, 3).map((c: any) => ({
             id: c.id,
             name: c.name,
-            waitTime: c.waitTime || 0,
-            direction: c.direction,
-            status: c.status || "open",
-            lastUpdated: c.lastUpdated || Date.now(),
+            waitTime: c.waitTime ?? c.dominantWaitMinutes ?? 0,
+            direction: (String(c.direction || "MX_TO_US").toUpperCase() as "MX_TO_US" | "US_TO_MX"),
+            status: String(c.status || "open").toLowerCase() as "open" | "closed" | "limited",
+            lastUpdated: c.lastUpdated ? new Date(c.lastUpdated).getTime() : Date.now(),
           })));
         }
       }

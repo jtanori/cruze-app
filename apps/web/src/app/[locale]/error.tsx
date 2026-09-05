@@ -17,6 +17,7 @@ export default function Error({
         title={t("common.errorTitle")}
         message={t("common.errorMessage")}
         action={{ label: t("common.retry"), onClick: reset }}
+        error={error}
       />
     </div>
   );

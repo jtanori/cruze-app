@@ -2,7 +2,7 @@
 
 import { MapPin, Navigation, Search } from "lucide-react";
 import { useState } from "react";
-import { useLocationStore } from "@/stores/location";
+import { useLocationContext } from "@/components/location/LocationProvider";
 
 interface TripSetupOriginStepProps {
   value?: { lat: number; lng: number; label: string } | null;
@@ -10,7 +10,7 @@ interface TripSetupOriginStepProps {
 }
 
 export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProps) {
-  const { location } = useLocationStore();
+  const { location } = useLocationContext();
   const [query, setQuery] = useState("");
   const [manual, setManual] = useState(false);
 

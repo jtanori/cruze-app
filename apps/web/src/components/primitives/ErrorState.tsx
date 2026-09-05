@@ -7,6 +7,7 @@ interface ErrorStateProps {
   icon?: ReactNode;
   action?: { label: string; onClick: () => void };
   className?: string;
+  error?: Error & { digest?: string };
 }
 
 export function ErrorState({
@@ -15,10 +16,27 @@ export function ErrorState({
   icon,
   action,
   className = "",
+  error,
 }: ErrorStateProps) {
+  const isDev = process.env.NODE_ENV !== "production";
+  const errorDetails = (() => {
+    if (!error || !isDev) return null;
+    const enumerables: Record<string, unknown> = {};
+    try {
+      for (const k of Object.keys(error)) enumerables[k] = (error as any)[k];
+    } catch {}
+    return {
+      name: error.name,
+      message: error.message,
+      digest: (error as any).digest,
+      stack: error.stack,
+      ...enumerables,
+    };
+  })();
+
   return (
     <div
-      className={`flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6 text-center ${className}`}
+      className={`flex flex-col items-center justify-center w-full max-w-full overflow-hidden py-8 sm:py-12 px-4 sm:px-6 text-center ${className}`}
     >
       <div className="w-14 h-14 rounded-full bg-danger/10 flex items-center justify-center mb-3 sm:mb-4">
         {icon || <AlertTriangle className="w-7 h-7 text-danger" />}
@@ -32,6 +50,21 @@ export function ErrorState({
         >
           {action.label}
         </button>
+      )}
+      {isDev && errorDetails && (
+        <details className="mt-6 w-full max-w-full sm:max-w-[560px] mx-auto text-left bg-surface border border-border rounded-[var(--radius-md)] p-3 overflow-hidden">
+          <summary className="cursor-pointer text-xs font-mono font-semibold text-faint hover:text-ink">
+            Dev — error enumerables
+          </summary>
+          <pre className="mt-2 max-h-[320px] overflow-auto whitespace-pre-wrap break-words break-all font-mono text-[11px] leading-relaxed text-muted">
+            {JSON.stringify(errorDetails, null, 2)}
+          </pre>
+          {errorDetails.stack && (
+            <pre className="mt-3 max-h-[240px] overflow-auto whitespace-pre-wrap break-words break-all font-mono text-[11px] leading-relaxed text-muted/80">
+              {String(errorDetails.stack)}
+            </pre>
+          )}
+        </details>
       )}
     </div>
   );

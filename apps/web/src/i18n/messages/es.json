@@ -28,7 +28,8 @@
     "unitedStates": "Estados Unidos",
     "errorTitle": "Algo salió mal",
     "errorMessage": "No pudimos cargar esta página. Intenta de nuevo.",
-    "unknown": "Desconocido"
+    "unknown": "Desconocido",
+    "loading": "Cargando..."
   },
   "nav": {
     "trip": "Viaje",
@@ -88,6 +89,7 @@
       "title": "¿Dónde estás?",
       "explanation": "Cruze usa tu ubicación para mostrarte los cruces más relevantes, sus tiempos actuales y las mejores opciones para llegar a ellos.",
       "allow": "Permitir ubicación",
+      "manualSearch": "Buscar ubicación",
       "settings": "Configuración",
       "acquiring": "Obteniendo tu ubicación...",
       "recovery": {
@@ -101,7 +103,9 @@
         "staleDesc": "Tu ubicación está desactualizada. Actualiza para obtener resultados actuales.",
         "unavailable": "Ubicación no disponible",
         "unavailableDesc": "No se pudo determinar tu ubicación. Intenta de nuevo.",
-        "retry": "Reintentar"
+        "retry": "Reintentar",
+        "blockedHintTitle": "¿Sigue bloqueado? Restablécelo en la página",
+        "blockedHintBody": "Si ignoraste el aviso de ubicación varias veces, el navegador lo bloquea. Haz clic en el icono junto a la URL, elige Ubicación, restablece el permiso e inténtalo de nuevo."
       },
       "banner": {
         "established": "Ubicación establecida: {placeName}"

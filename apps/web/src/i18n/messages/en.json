@@ -28,7 +28,8 @@
     "unitedStates": "United States",
     "errorTitle": "Something went wrong",
     "errorMessage": "We couldn't load this page. Please try again.",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "loading": "Loading..."
   },
   "nav": {
     "trip": "Trip",
@@ -88,6 +89,7 @@
       "title": "Where are you?",
       "explanation": "Cruze uses your location to show you the most relevant crossings, their current wait times and the best options to get there.",
       "allow": "Allow location",
+      "manualSearch": "Search location",
       "settings": "Settings",
       "acquiring": "Getting your location...",
       "recovery": {
@@ -101,7 +103,9 @@
         "staleDesc": "Your location is outdated. Refresh to get current results.",
         "unavailable": "Location unavailable",
         "unavailableDesc": "Could not determine your location. Please try again.",
-        "retry": "Try again"
+        "retry": "Try again",
+        "blockedHintTitle": "Still blocked? Reset it in Page Info",
+        "blockedHintBody": "If you dismissed the location prompt a few times, the browser blocks it. Click the tune icon next to the URL, choose Location, reset the permission, then try again."
       },
       "banner": {
         "established": "Location set: {placeName}"

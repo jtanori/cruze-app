@@ -2,22 +2,22 @@
 
 import { useTranslations } from "next-intl";
 import { MapPin, Settings, Search } from "lucide-react";
-import { useLocationStore } from "@/stores/location";
+import { useLocationContext } from "./LocationProvider";
 
 export function LocationPermissionPrompt() {
   const t = useTranslations();
-  const { setState } = useLocationStore();
+  const { request, enterManualSearch, markServicesDisabled } = useLocationContext();
 
   const handleAllow = () => {
-    setState("acquiring");
+    request();
   };
 
   const handleManualSearch = () => {
-    setState("manual_search");
+    enterManualSearch();
   };
 
   const handleSettings = () => {
-    setState("services_disabled");
+    markServicesDisabled();
   };
 
   return (

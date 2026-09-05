@@ -36,7 +36,8 @@ export function TripNearbyCrossingRow({
     limited: { label: t("common.limited"), color: "text-warning", dotColor: "bg-warning" },
   };
 
-  const currentStatus = statusConfig[status];
+  const normalizedStatus = (String(status ?? "open").toLowerCase() as keyof typeof statusConfig);
+  const currentStatus = statusConfig[normalizedStatus] ?? statusConfig.open;
 
   return (
     <button

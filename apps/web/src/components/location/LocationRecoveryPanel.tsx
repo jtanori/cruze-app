@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { RefreshCw, Settings, MapPin, Wifi, WifiOff } from "lucide-react";
-import { requestGeolocation } from "@/lib/geolocation";
-import { useLocationStore } from "@/stores/location";
-import { createLocationData } from "@/lib/location-state-machine";
+import { RefreshCw, Settings, MapPin, WifiOff } from "lucide-react";
+import { useLocationContext } from "./LocationProvider";
 import { useNetworkStatus } from "@/lib/network-status";
 import { LocationSearchInput } from "./LocationSearchInput";
 import type { GeocodingResult } from "@/lib/geocoding";
@@ -20,40 +18,20 @@ export function LocationRecoveryPanel({
   className = "",
 }: LocationRecoveryPanelProps) {
   const t = useTranslations();
-  const { setState, setLocation } = useLocationStore();
+  const { retry, selectManual, markServicesDisabled } = useLocationContext();
   const { isReachable } = useNetworkStatus();
   const [showSearch, setShowSearch] = useState(false);
 
-  const handleRetry = async () => {
-    console.log("[Cruze:Recovery] Retry GPS...");
-    try {
-      setState("acquiring");
-      const result = await requestGeolocation();
-      console.log("[Cruze:Recovery] GPS retry succeeded:", result.lat.toFixed(4), result.lng.toFixed(4));
-      const locationData = createLocationData(result.lat, result.lng, result.accuracy);
-      setLocation(locationData);
-      setState("ready");
-      console.log("[Cruze:Recovery] State → ready");
-    } catch (err) {
-      console.warn("[Cruze:Recovery] GPS retry failed:", err);
-      setState("unavailable");
-    }
+  const handleRetry = () => {
+    retry();
   };
 
   const handleManualSelect = (result: GeocodingResult) => {
-    console.log("[Cruze:Recovery] Manual location selected:", result.placeName, "→", result.center[1], result.center[0]);
-    const locationData = createLocationData(
-      result.center[1], // lat
-      result.center[0], // lng
-      1000 // manual locations have lower accuracy
-    );
-    setLocation(locationData, true); // true = isManual
-    setState("ready");
-    console.log("[Cruze:Recovery] State → ready (manual)");
+    selectManual(result.center[1], result.center[0], result.placeName);
   };
 
   const handleSettings = () => {
-    setState("services_disabled");
+    markServicesDisabled();
   };
 
   const reasonConfig = {
@@ -94,6 +72,17 @@ export function LocationRecoveryPanel({
 
       <h3 className="text-ink font-semibold text-lg mb-2">{config.title}</h3>
       <p className="text-muted text-sm leading-relaxed mb-4 sm:mb-6">{config.description}</p>
+
+      {reason === "permission_denied" && (
+        <div className="w-full mb-4 sm:mb-6 rounded-[var(--radius-md)] border border-border bg-surface px-4 py-3 text-left">
+          <p className="text-ink text-sm font-semibold">
+            {t("onboarding.location.recovery.blockedHintTitle")}
+          </p>
+          <p className="text-muted text-xs leading-relaxed mt-1">
+            {t("onboarding.location.recovery.blockedHintBody")}
+          </p>
+        </div>
+      )}
 
       {!showSearch ? (
         <>

@@ -1,10 +1,10 @@
 /*── USE LOCATION FILTER ────────────────────────────────────────────────────╭
   Purpose: Direction + "My area" (geo) + "Open now" filtering — live, no hardcoded city.
-  Single source: border-data.ts (42 ports) + border-data-service live + useLocationStore
+   Single source: border-data.ts (42 ports) + border-data-service live + useLocationContext
   No mock Tijuana filter — uses haversineDistance to user location.
 ──────────────────────────────────────────────────────────────────────────*/
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useLocationStore } from "@/stores/location";
+import { useLocationContext } from "@/components/location/LocationProvider";
 import { haversineDistance } from "@/lib/border-data";
 
 export type FilterOption =
@@ -19,8 +19,8 @@ export function useLocationFilter(
   locale: string,
   selectedFilter: FilterOption
 ) {
-  const { location, state: locationState } = useLocationStore();
-  const hasLocation = locationState === "ready" && location !== null;
+  const { location, status } = useLocationContext();
+  const hasLocation = status === "ready" && location !== null;
 
   /* ─── Direction derived from selectedFilter (not locale) ──────────────── */
   const direction = useMemo<"mx_to_us" | "us_to_mx" | null>(() => {

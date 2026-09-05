@@ -1,15 +1,14 @@
 "use client";
 
 import { AppShell } from "@/components/layout/AppShell";
-import { LocationGate } from "@/components/location/LocationGate";
+import { LocationPermissionPrompt } from "@/components/location/LocationPermissionPrompt";
+import { LocationAcquisitionState } from "@/components/location/LocationAcquisitionState";
+import { LocationRecoveryPanel } from "@/components/location/LocationRecoveryPanel";
+import { Spinner } from "@/components/primitives/Spinner";
+import { useLocationContext } from "@/components/location/LocationProvider";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/hooks/use-locale";
 import { useTripStore } from "@/stores/trip";
-import { useTranslations } from "next-intl";
-
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
 
 function getHeaderVariant(pathname: string): "root" | "search" | "filter" {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
@@ -19,13 +18,6 @@ function getHeaderVariant(pathname: string): "root" | "search" | "filter" {
   return "root";
 }
 
-function getActiveTab(pathname: string): "trip" | "crossings" | "agent" {
-  const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
-  if (path.startsWith("/trip")) return "trip";
-  if (path.startsWith("/agent")) return "agent";
-  return "crossings";
-}
-
 export default function MainLayout({
   children,
 }: {
@@ -33,11 +25,10 @@ export default function MainLayout({
 }) {
   const pathname = usePathname();
   const locale = useLocale();
-  const { start, destination, recommendedCrossing } = useTripStore();
-  const t = useTranslations();
+  const { start, destination } = useTripStore();
+  const { status, reason } = useLocationContext();
 
-  const headerVariant = getHeaderVariant(pathname);
-  const activeTab = getActiveTab(pathname);
+  const headerVariant = getHeaderVariant(pathname ?? "");
   const hasTrip = start !== null && destination !== null;
 
   const tripActions = hasTrip ? {
@@ -64,14 +55,34 @@ export default function MainLayout({
     },
   } : undefined;
 
+  // AppShell chrome always renders; only <main> content switches on
+  // location status. Loading until the location hook resolves (isLoading),
+  // error surface from the hook, children on success.
+  const content = (() => {
+    switch (status) {
+      case "loading":
+        return (
+          <div className="flex items-center justify-center py-16">
+            <Spinner size="lg" />
+          </div>
+        );
+      case "prompt":
+        return <LocationPermissionPrompt />;
+      case "acquiring":
+        return <LocationAcquisitionState />;
+      case "error":
+        return <LocationRecoveryPanel reason={reason} />;
+      case "ready":
+        return <>{children}</>;
+    }
+  })();
+
   return (
-    <LocationGate>
-      <AppShell
-        headerVariant={headerVariant}
-        tripActions={tripActions}
-      >
-        {children}
-      </AppShell>
-    </LocationGate>
+    <AppShell
+      headerVariant={headerVariant}
+      tripActions={tripActions}
+    >
+      {content}
+    </AppShell>
   );
 }

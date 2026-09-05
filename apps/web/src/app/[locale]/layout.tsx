@@ -3,7 +3,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { LangSetter } from "@/components/shared/LangSetter";
-import { RootGate } from "./RootGate";
+import { LocationProvider } from "@/components/location/LocationProvider";
 
 export default async function LocaleLayout({
   children,
@@ -23,7 +23,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages}>
       <LangSetter locale={locale} />
-      <RootGate>{children}</RootGate>
+      <LocationProvider>{children}</LocationProvider>
     </NextIntlClientProvider>
   );
 }
