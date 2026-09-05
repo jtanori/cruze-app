@@ -1,8 +1,23 @@
 # Cruze QA Knowledge Log
+
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (per-component specs, see `design/components/README.md` — 83) + `design/workflows/W*.md` (W1-W10) + `design/INTEGRATION_PLAN.md` Addendum + `design/TESTING_INTEGRATION_PLAN.md` (P0-P5 wiring) + `docs/TESTING_TOOLS.md` (architecture).
+> Original product rationale: `docs/CRUZE — Product, UX & Design System Specification.v1.md` + `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` — reference only.
+> Workflow bindings & page inventory: `docs/PAGES_WORKFLOWS_REPORT.md` — now points to `design/components/README.md` (83).
 ## Issue Index & Fix Patterns
 *Created: 2026-09-03 | Updated per QA session*
 
 ---
+
+## Traceability (Component ↔ Workflow ↔ Page)
+
+| Artifact | Trace |
+|----------|-------|
+| Component specs | `design/components/README.md` → `design/components/<ID>-<Name>.md` (83) — tokens per `W5_component_level_design_spec.md` §1-2 |
+| Testing | `docs/TESTING_TOOLS.md` P0-P5 → `design/TESTING_INTEGRATION_PLAN.md` (TEST-P*-* IDs, 54 scenarios, fixtures) |
+| Workflow specs | `design/workflows/W1-location.md` … `W10-settings.md` + `W5_component_level_design_spec.md` (W5 tokens) |
+| Page ↔ Workflow matrix | `docs/PAGES_WORKFLOWS_REPORT.md` §3 — 28 pages × 10 workflows, T01 = TR-EMPTY-01 + TR-NEAR-01/02 + LOC-STATUS-01, direction derived |
+| Integration order | `design/INTEGRATION_PLAN.md` Addendum (Phases 0-10) |
+| Verification | `docs/CHECKLISTS.md` §§18-34 + `docs/TESTING_TOOLS.md` §§6-13,22 — wired to per-component/per-workflow specs |
 
 ## Issue Taxonomy
 
@@ -79,7 +94,7 @@
 | MOCK_CROSSINGS list: `text-sm` fixed | Y-01 | `text-sm sm:text-base` |
 | BottomNavigation: uses component - verify separately | T-01 | Check BottomNavigation component |
  
-### `/onboarding/location-permission` (Location Permission Page)
+### `/*inline gating* (`LocationGate` L01/L02/L03)` (Location Permission Page)
 | Finding | Category | Fix Applied / Proposed |
 |---------|----------|------------------------|
 | No safe area insets on page wrapper | L-04 | Add `pt-safe pb-safe px-safe` to page wrapper |
@@ -379,14 +394,14 @@
  
 ## Legacy Redirect Pages (Simple Meta Refresh)
  
-### `/onboarding/destination` (Legacy Redirect)
+### `/trip/setup (TR-SETUP-02)` (Legacy Redirect)
 | Finding | Category | Fix Applied / Proposed |
 |---------|----------|------------------------|
 | Legacy redirect page | C-03 | Simple redirect via meta refresh - acceptable for legacy cleanup |
 | Hardcoded `/es/` locale | R-01 | Should use dynamic locale from params |
 | No safe area insets | L-04 | N/A (redirect page) |
  
-### `/onboarding/starting-point` (Legacy Redirect)
+### `/trip/setup (TR-SETUP-03)` (Legacy Redirect)
 | Finding | Category | Fix Applied / Proposed |
 |---------|----------|------------------------|
 | Legacy redirect page | C-03 | Simple redirect via meta refresh - acceptable for legacy cleanup |

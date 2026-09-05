@@ -1,6 +1,9 @@
 # Cruce Comprobation Checklists
 
-Source: `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §§18-34 + `docs/CRUZE — Product, UX & Design System Specification.v1.md` §27
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 83) + `design/workflows/W*.md` (W1-W10) `design/TESTING_INTEGRATION_PLAN.md` (P0-P5 wiring) — checklists §§18-34 now reference those per-component/per-workflow specs. Original spec sections (`docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §§18-34, `docs/CRUZE — Product, UX & Design System Specification.v1.md` §27) remain rationale only. Integration order: `design/INTEGRATION_PLAN.md` Addendum. Testing strategy: `docs/TESTING_TOOLS.md`.
+
+
+Source: `design/components/README.md` + `design/workflows/W*.md` (canonical) — original: `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §§18-34 + `docs/CRUZE — Product, UX & Design System Specification.v1.md` §27 (rationale)
 Generated: 2026-09-03 — refer to this file for all QA/comprobation runs.
 
 ---
@@ -177,7 +180,7 @@ Never use one status to represent both.
 4. Crossing → canonical Crossing Detail
 5. Trip recommendation ≠ Crossing Detail
 
-## 27. Pre-Crossing Checklist — `Product Spec:840`
+## 27. Pre-Crossing Checklist — `Product Spec:830`
 
 Data-driven categories: Operational, Data freshness, Route availability, Access compatibility, Required documentation, Restrictions, Lane availability. Must be source-backed, never invent legal requirements.
 

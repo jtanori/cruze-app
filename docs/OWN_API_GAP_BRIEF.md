@@ -1,4 +1,6 @@
 # CRUCE — Own Border Data API (Brief)
+> **Companion:** Implementation source of truth: `design/components/README.md` (84) + `design/workflows/W*.md` + `design/INTEGRATION_PLAN.md` Addendum. Testing: `docs/TESTING_TOOLS.md` → `design/TESTING_INTEGRATION_PLAN.md`. This doc is **strategy/brief only** — not an implementation spec.
+
 
 **Purpose:** Explore filling the Mexican-side / southbound data gap. Discussion starter only — not a build plan.
 

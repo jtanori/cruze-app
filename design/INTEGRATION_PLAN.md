@@ -1,4 +1,8 @@
 # CRUZE — Integration Plan v3
+
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 83) + `design/workflows/W*.md` (W1-W10, W5 canonical = `W5_component_level_design_spec.md` + `W5-trip-private-northbound.md`) + `docs/TESTING_TOOLS.md` (P0-P5) → `design/TESTING_INTEGRATION_PLAN.md`.
+> Original `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §11-12 + `docs/CRUZE — Product, UX & Design System Specification.v1.md` are rationale only. See Addendum below for phasing.
+
 ## Target Specification Achievement Plan · Third Iteration
 
 ---
@@ -553,3 +557,44 @@ project-root/
 ---
 
 *Plan Version: 3.4 | Target: v3.0 Specification | Foundation-First + Band 4 + Workflows + Follow-up (Redirects/Data/Persistence/Polish) | Based on v3 Target Docs in /docs/ + CHECKLISTS.md + PAGES_WORKFLOWS_REPORT.md | Updated: 2026-09-03*
+---
+
+# Component Spec Integration — Addendum (2026-09-04)
+
+## Source of Truth
+
+| Layer | Source of truth | Supersedes |
+|-------|-----------------|------------|
+| Tokens, typography, spacing, radius, borders, touch targets, shell | `design/workflows/W5_component_level_design_spec.md` §1-2 | Product spec §65 tokens |
+| Per-component ASCII, responsibility, states, composition | `design/components/<ID>-<Name>.md` + `design/components/README.md` index | UI Arch §5-10 catalogs (rationale only) |
+| Workflow screen sequence, ASCII maps, QA checklists | `design/workflows/W*.md` (W1-W10) | UI Arch §11-13 screen maps (rationale) |
+| Pages × Workflows matrix, decision freeze | `docs/PAGES_WORKFLOWS_REPORT.md` + Product spec §104-105 | — |
+
+## Phasing (aligns to existing PHASE 0—14 in this doc)
+
+| Phase | What | Component IDs | Workflow docs | Verification |
+|-------|------|---------------|---------------|--------------|
+| 0 Foundations | Midnight #071A31, Surface, Mint #00E0A0 per W5 §1 | — | — | Visual QA |
+| 1 Shell | APP-HEAD-01, APP-AV-01, APP-SET-01, APP-NAV-01, APP-BACK-01 | W5 §3-6 | Header + bottom nav on all primary surfaces |
+| 2 Location | LOC-GATE-01 .. LOC-NET-01 | W1 | State machine 9 states, L01/L02/L03 inline |
+| 3 Trip Empty + Nearby | TR-EMPTY-01, TR-NEAR-01/02, LOC-STATUS-01, LOC-CONF-01 | W1 §T01, W5 §8/16-17 | T01 Viaje intelligence surface |
+| 4 Trip Setup | TR-SETUP-01..06 + direction derived | W2-W5 | Adaptive questionnaire, direction engine MX→US |
+| 5 Recommendation | TR-REC-01..04, CR-STATUS-01..05 | W5 §23-26 | RECOMENDADO primary card + alternatives |
+| 6 Active + Completion | TR-ACT-01..04, TR-COMP-01 | W6 | EXECUTE → COMPLETED → S04 My Trips |
+| 7 Crossings | CR-DIR-01..05, CR-DET-01..10, CR-CMP-01, CR-STATUS-* | W7 | C01→C03 canonical, 7 metrics |
+| 8 Agent | AG-HEAD-01 .. AG-RESULT-04 | W8 | Context-aware A01→A02→A03 |
+| 9 Avisos | AV-HEAD-01 .. AV-EMPTY-01 | W9 | Bell → N01→N02 → Trip/Agent |
+| 10 Settings | SET-ROOT-01 .. SET-ABOUT-01 | W10 | Gear → S01 hub → 5 leaves |
+
+## How to implement a component
+
+1. Open its spec: `design/components/<ID>-<Name>.md`.
+2. Use tokens from W5 §1-2 (§1.1 colors, §1.2 Sora/Inter, §1.3 4px spacing, §1.4 radius, §1.6 44-48px touch).
+3. Compose primitives per Design Foundation hierarchy (Foundations → Primitives → Domain → Screen → Workflow) — W5 §37.
+4. Verify against its workflow ASCII (`design/workflows/W*.md`) and Product spec §36-38 (operational ≠ freshness).
+
+## Original specs — now reference only
+
+- `docs/CRUZE — Product, UX & Design System Specification.v1.md` — product rationale, decision freeze (§104), one-flow (§105). **Do not implement directly from it; use design/components + design/workflows.**
+- `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` — architecture catalog §5-10, screen maps §13, checklists. **Now index only; per-component specs are source of truth.**
+

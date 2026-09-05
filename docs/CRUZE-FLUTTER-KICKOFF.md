@@ -1,3 +1,5 @@
+> **Companion:** Implementation source of truth: `design/components/README.md` (84) + `design/workflows/W*.md` + `design/INTEGRATION_PLAN.md` Addendum. Testing: `docs/TESTING_TOOLS.md` → `design/TESTING_INTEGRATION_PLAN.md`. This doc is **strategy/brief only** — not an implementation spec.
+
 ```
 I already have a complete tech + component specification for a Next.js web application (I will paste / attach it below or in the next message).
 

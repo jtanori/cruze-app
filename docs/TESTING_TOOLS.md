@@ -10,8 +10,12 @@ Below is the supporting document.
 ## Testing Architecture, Evidence Gathering & Testing Report Specification
 
 **Document Type:** Supporting Engineering Specification
+**Version:** 1.1 — 2026-09-04 — radii/nav amended, 83 specs, 54 scenarios. Check `design/workflows/W5_component_level_design_spec.md:85` + `apps/web/src/app/globals.css:94` — if mismatch, revisit.
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 84) + `design/workflows/W*.md` (W1-W10, W5 canonical = `W5_component_level_design_spec.md` + `W5-trip-private-northbound.md`) — original catalogs `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §5-10 superseded for implementation.
+> Integration wiring: `design/TESTING_INTEGRATION_PLAN.md` (P0-P5 → `TEST-P*-*` IDs, 54 workflow scenarios, fixtures, phasing) bridges this spec to `design/components/README.md` + `design/workflows/W*.md`. Delivery: `design/INTEGRATION_PLAN.md` Addendum (Phases 0-14). Page ↔ Workflow matrix: `docs/PAGES_WORKFLOWS_REPORT.md`.
+
 **Scope:** UI Primitives, Domain Components, Compositions, Navigation, Workflows, Types, Evidence Gathering
-**Status:** Proposed
+**Status:** Plan v1.0 — integration wired 2026-09-04 — radii 4/8/12/16/20, nav 56/80+safe, W5 canon 1.1. If spec version differs, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11`.
 **Testing Philosophy:** Low-level deterministic tests + high-level rendering + selective browser verification
 **Primary Browser Tool:** Playwright
 **Component Verification:** Storybook
@@ -311,6 +315,8 @@ This distinction is important:
 ---
 
 # 6. Per Component Testing Suite
+
+> Wiring: `design/TESTING_INTEGRATION_PLAN.md` §2 (P-layer → 84 IDs) + §3 (TEST-P5-WF-* scenarios) + §4 (fixtures) bridges this spec to `design/components/README.md` (84) + `design/workflows/W*.md`. Each component spec `design/components/<ID>-<Name>.md` defines states/composition/tokens. Test contracts in `design/COMPONENT-CATALOG.md` §2-4 remain base; extend per workflow binding in `docs/PAGES_WORKFLOWS_REPORT.md` §3.
 
 ## 6.1 Objective
 
@@ -674,6 +680,9 @@ The application must never fabricate personalized nearby intelligence when the l
 ---
 
 # 13. Workflow Testing
+
+> Workflows W1-W10 are defined in `design/workflows/W*.md`. See `W5_component_level_design_spec.md` for W5 tokens. Verify via `design/components/<ID>-<Name>.md` ASCII.
+> Wiring: `design/TESTING_INTEGRATION_PLAN.md` §3 (W1-W10 → `TEST-P5-WF-001..054`, 54 scenarios) + `design/INTEGRATION_PLAN.md` §6 phasing.
 
 Workflow tests represent real user goals.
 

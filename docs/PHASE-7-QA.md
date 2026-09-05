@@ -1,5 +1,9 @@
 # Phase 7 — Integration, QA & Polish Report
 
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 84) + `design/workflows/W*.md` (W1-W10, W5 canonical = `W5_component_level_design_spec.md` + `W5-trip-private-northbound.md`) — this doc is a **point-in-time QA snapshot (2026-09-03)**. For current verification use `docs/CHECKLISTS.md` §§18-34 + `docs/TESTING_TOOLS.md` P0-P5 + `design/TESTING_INTEGRATION_PLAN.md`.
+> Supersedes note: original `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §11-12 is rationale only.
+
+
 **Date:** 2026-09-03
 **Branch:** main (upstream/main)
 **TypeScript:** 0 errors (`rtk tsc --noEmit`)
@@ -46,7 +50,7 @@
 ## 5. Navigation Invariants
 
 - `AppShell.tsx:1` — `headerCompanion` + `bottomCompanion` slots verified
-- `BottomNavigation.tsx:1` — 5 tabs (Viaje/Cruces/Agente/Favoritos/Alertas), `useTranslations` for labels
+- `BottomNavigation.tsx:1` — 3 tabs (Viaje/Cruces/Agente) + header bell (Avisos) + gear (Configuración) — per spec §8 nav canonical, `useTranslations` for labels
 - `CruzeBackHeader` + `CruzePageHeader` + `CruzeLiveIndicator` present
 - All `src/app/[locale]/(main)/*` use `(main)/layout.tsx` → AppShell
 
@@ -82,3 +86,5 @@
 ## Sign-off
 
 All 7 phases complete (0→6 + monorepo). Ready for Flutter setup per `docs/PHASE-7-QA.md` + `apps/mobile/README.md`.
+
+> **Current verification:** See `docs/CHECKLISTS.md` + `docs/PAGES_WORKFLOWS_REPORT.md` + `design/TESTING_INTEGRATION_PLAN.md` — this snapshot predates 84 component specs + W5 canon enrichment.

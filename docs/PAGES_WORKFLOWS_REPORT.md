@@ -1,24 +1,28 @@
 # Pages × Workflows Integration Report
 
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 83) + `design/workflows/W*.md` (W1-W10, W5 canonical = `W5_component_level_design_spec.md` + `W5-trip-private-northbound.md`) + `design/INTEGRATION_PLAN.md` Addendum.
+> Original `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §11-12 is rationale only. Testing strategy: `docs/TESTING_TOOLS.md` P0-P5 + `design/TESTING_INTEGRATION_PLAN.md` (when available).
+
+
 **Generated:** 2026-09-03
-**Source:** `design/INTEGRATION_PLAN.md` Phases 8-10, `docs/CHECKLISTS.md`, `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` Reference matrices
-**Status:** Phase 8 compositions complete (Band 4), Phase 9 wiring in progress
+**Source:** `design/INTEGRATION_PLAN.md` Phases 8-10 + Addendum (Component Spec Integration), `design/components/README.md` (83 IDs), `design/workflows/W*.md` (W1-W10), `docs/CHECKLISTS.md` §§18-34 — supersedes `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §11-12 for implementation
+**Status:** Phase 8 compositions complete (Band 4), Phase 9 wiring in progress — component specs complete (83 in `design/components/`), workflows W1-W10 complete (`design/workflows/`)
 
 ## 1. Page Catalog (28 v3 pages)
 
 | # | ID | Page | Route (`apps/web/src/app/[locale]/...`) | Components (Domain+Surface+Responsibility) | Primitives |
 |---|----|------|------------------------------------------|--------------------------------------------|------------|
-| 1 | L01 | Location Permission | `onboarding/location-permission/page.tsx` | LocationPermissionGate, LocationPermissionPrompt, LocationAcquisitionState, LocationRecoveryPanel, LocationConfidenceIndicator, LocationStatusBanner | Button, Spinner, Badge, Banner |
-| 2 | L02 | Location Acquisition | *state within L01* (`acquiring`) | LocationAcquisitionState | Spinner, Stack |
-| 3 | L03 | Location Recovery | *state within L01* (`permission_denied`/`low_confidence`/...) | LocationRecoveryPanel, LocationStatusBanner | Button, Banner, DataStatus |
-| 4 | T02 | Destination | `trip/setup` (TripSetupDestinationStep) + `onboarding/destination` (legacy) | TripSetupDestinationStep, TripSetupProgress | SearchInput, Button, Stack, Section |
-| 5 | T03 | Origin | `trip/setup` (TripSetupOriginStep) | TripSetupOriginStep, LocationConfidenceIndicator | Button, SearchInput, DataStatus |
-| 6 | T04 | Travel Mode | `trip/setup` (TripSetupTravelModeStep) | TripSetupTravelModeStep | RadioGroup, Section, Stack |
+| 1 | L01 | Location Permission | `*inline gating*` (`components/location/LocationGate.tsx` → L01 state) | LocationPermissionGate (LOC-GATE-01), LocationPermissionPrompt (LOC-PROMPT-01), LocationStatusBanner (LOC-STATUS-01) | Button, Banner, DataStatus |
+| 2 | L02 | Location Acquisition | *inline* (`acquiring`) + `LocationAcquisitionDots` (LOC-ACQ-DOTS-01) | LocationAcquisitionState (LOC-ACQ-01), LocationAcquisitionDots (LOC-ACQ-DOTS-01) | Spinner, Stack |
+| 3 | L03 | Location Recovery | *inline* (`permission_denied`/`low_confidence`/timeout) | LocationRecoveryPanel (LOC-REC-01), LocationStatusBanner (LOC-STATUS-01), LocationSearchInput (LOC-SEARCH-01) | Button, Banner, DataStatus, SearchInput |
+| 4 | T01 | Trip Empty / Nearby Intelligence | `(main)/trip/page.tsx` | TripDestinationSearch (TR-EMPTY-01), TripNearbyCrossingsSection (TR-NEAR-01), TripNearbyCrossingRow (TR-NEAR-02), LocationStatusBanner (LOC-STATUS-01) | SearchInput, Button, Stack, Section, DataStatus, DataTimestamp, Badge, DataMetric |
+| 5 | T02 | Trip Setup / Origin | `(main)/trip/setup` (TripSetupOriginStep) | TripSetupOriginStep, LocationConfidenceIndicator | Button, SearchInput, DataStatus |
+| 6 | T03 | Trip Setup / Travel Mode | `trip/setup` (TripSetupTravelModeStep) | TripSetupTravelModeStep | RadioGroup, Section, Stack |
 | 7 | DIR | Direction | `trip/setup` (TripSetupDirectionStep) | TripSetupDirectionStep, direction-detection | RadioGroup |
 | 8 | ACC | Vehicle Access | `trip/setup` (TripSetupVehicleAccessStep) | TripSetupVehicleAccessStep | RadioGroup |
 | 9 | DOC | Document Profile | `trip/setup` (TripSetupDocumentProfileStep) | TripSetupDocumentProfileStep | RadioGroup, Banner |
 | 10 | T07 | Recommendation | `trip/recommendation/page.tsx` | TripRecommendationPrimaryCard (TR-REC-01), TripRecommendationReasonList (TR-REC-02), TripAlternativeListSection (TR-REC-03/04) | DataMetric, DataDelta, Badge, Button, Section |
-| 11 | T08 | Active Trip | `(main)/viaje/page.tsx` | TripStatusHeader, TripRouteSummary, TripActionBar (TR-ACT-03), TripChecklistSection (TR-ACT-04) | DataStatus, DataTimestamp, Button, Stack |
+| 11 | T08 | Active Trip | `(main)/trip/page.tsx` | TripStatusHeader, TripRouteSummary, TripActionBar (TR-ACT-03), TripChecklistSection (TR-ACT-04) | DataStatus, DataTimestamp, Button, Stack |
 | 12 | T10 | Completion | `trip/completion/page.tsx` | TripCompletionPrompt (TR-COMP-01) | Button, Section, Stack |
 | 13 | C01 | Crossings Directory | `(main)/crossings/page.tsx` | CrossingsDirectoryList, CrossingsDirectoryFilterBar (CR-DIR-05), CrossingsDirectoryRow (CR-DIR-02), CrossingsDirectoryExpandedRow (CR-DIR-03) | SearchInput, SegmentedControl, DataStatus, EmptyState |
 | 14 | C03 | Crossing Detail (canonical) | `crossing/[id]/page.tsx` | CrossingDetailHero (CR-DET-01), CrossingDetailMap (C05), CrossingDetailLaneSection (CR-DET-03), CrossingDetailAccessSection (CR-DET-04), CrossingDetailHoursSection (CR-DET-05), CrossingDetailRequirementsSection (CR-DET-06), CrossingDetailRestrictionsSection (CR-DET-07), CrossingDetailServicesSection (CR-DET-08), CrossingDetailActionBar (CR-DET-10) + CruzeBackHeader | DataStatus, DataTimestamp, DataMetric, Badge, Button |
@@ -34,18 +38,18 @@
 | 24 | S04 | My Trips | `settings/trips/page.tsx` | SettingsMyTrips (S04) | EmptyState, Section |
 | 25 | S05 | Data Sharing | `settings/data-sharing/page.tsx` | SettingsDataSharing (S05) | Section, Banner |
 | 26 | S06 | About | `settings/about/page.tsx` | SettingsAbout (S06) | Section, Stack |
-| 27 | ONB | Onboarding Entry | `onboarding/page.tsx` | Redirect → destination | Spinner |
-| 28 | CONF | Viaje Configure | `(main)/viaje/configure/page.tsx` | TripSetupFlow (re-entry) | Button, Section |
+| 27 | ONB | Onboarding Entry | ~~`onboarding/*`~~ → **removed** (gating now inline per W1) | — | — |
+| 28 | CONF | Trip Configure | `(main)/trip/configure/page.tsx` | TripSetupFlow (re-entry) | Button, Section |
 
 ## 2. Workflow Definitions (10)
 
 | Workflow | Spec | Pages (in order) | Branching |
 |----------|------|------------------|-----------|
-| **W1 Location** | Spec §2-3 | L01 → L02 → L03 → Viaje (or manual fallback) | StateMachine 9 states: uninitialized→requesting→acquiring→ready / denied→recovery |
-| **W2 Trip Walking** | Spec §17 | T02 → T03 → T04(walking) → T07 | Minimal, no docs/access |
-| **W3 Trip Commercial** | Spec §18 | T02 → T03 → T04(commercial) → T07 | Filter compatible crossings |
-| **W4 Trip Private SB** | Spec §19 | T02 → T03 → T04(private) → DIR(south) → T07 | Derived direction, no access/docs |
-| **W5 Trip Private NB** | Spec §19/21-22 | T02 → T03 → T04(private) → DIR(north) → ACC → DOC → T07 | Full: access + docs + lifecycle |
+| **W1 Location** | Spec §2-3 | L01 → L02 → L03 → T01 (or manual fallback) | StateMachine 9 states: uninitialized→requesting→acquiring→ready / denied→recovery |
+| **W2 Trip Walking** | Spec §17 | T01 (DestinationSearch) → T02 (Origin) → T03 (TravelMode) → T07 | Minimal, no docs/access |
+| **W3 Trip Commercial** | Spec §18 | T01 (DestinationSearch) → T02 (Origin) → T03 (TravelMode) → T07 | Filter compatible crossings |
+| **W4 Trip Private SB** | Spec §19 | T01 (DestinationSearch) → T02 (Origin) → T03 (TravelMode) → DIR(south) → T07 | Derived direction, no access/docs |
+| **W5 Trip Private NB** | Spec §19/21-22 | T01 (DestinationSearch) → T02 (Origin) → T03 (TravelMode) → DIR(north) → ACC → DOC → T07 | Full: access + docs + lifecycle |
 | **W6 Active Trip** | Spec §26-29 | T07 → T08 → T10 → S04 | Checklist, ActionBar, isEligibleForMyTrips (completed only) |
 | **W7 Crossings** | Spec §30-40 | C01 → C03 → C04 (Compare) → Trip (Usar) | Canonical detail, 7 metrics |
 | **W8 Agent** | Spec §41-44 | A01 → A02 (with/without context) | AG-RESULT-01..04, context: location/trip/crossing/avisos |
@@ -59,6 +63,7 @@
 | L01 | ✓ | | | | | | | ✓ | | | 2 |
 | L02 | ✓ | | | | | | | | | | 1 |
 | L03 | ✓ | | | | | | | | | | 1 |
+| T01 | ✓ | ✓ | ✓ | ✓ | ✓ | | | ✓ | | ✓ | 6 |
 | T02 | | ✓ | ✓ | ✓ | ✓ | | | | | | 4 |
 | T03 | ✓ | ✓ | ✓ | ✓ | ✓ | | | | | | 5 |
 | T04 | | ✓ | ✓ | ✓ | ✓ | | | | | | 4 |
@@ -100,13 +105,15 @@
 - `CrossingsDirectoryRow` → DataStatus, DataTimestamp, Badge, Tab
 - `LocationPermissionPrompt` → Button, IconButton, Stack, EmptyState
 - `AvisoRow` → Badge, DataTimestamp, Stack
-- Full per-component trace in `design/COMPONENT-CATALOG.md` + `src/components/primitives/` (33/33)
+- Full per-component trace in `design/components/README.md` (83) + `design/COMPONENT-CATALOG.md` (primitives) + `src/components/primitives/` (33/33) — see also `design/workflows/W5_component_level_design_spec.md` §1-2 for tokens
 
 ## 6. Gaps / Next
 
 - Legacy `onboarding/destination` + `starting-point` still use v2 `DestinationSearch` — redirect to `trip/setup` (TripSetupFlow) in Phase 8 cleanup
 - `playwright/tests/screens-evidence.test.ts` is `describe.skip` until v3 screens wired per this matrix
 - E2E `playwright` webServer now `pnpm --filter cruce-web dev` (monorepo) — re-enable after wiring
+- Component specs: 83 in `design/components/` (see `design/components/README.md`); workflow specs: W1-W10 in `design/workflows/` (W5 canonical is `W5_component_level_design_spec.md` + `W5-trip-private-northbound.md`)
+- T01 now embeds `TR-EMPTY-01` DestinationSearch + `TR-NEAR-01/02` with `LOC-STATUS-01` — direction is derived (MX→US), not a screen
 
 ---
-*Next: finish Phase 8 wiring (redirects) + Phase 9 E2E per workflow, then re-run `docs/CHECKLISTS.md` §§18-34 + 25-26.*
+*Next: finish Phase 8 wiring (redirects) + Phase 9 E2E per workflow (`design/workflows/W*.md`) + component verification per `design/components/<ID>-<Name>.md`, then re-run `docs/CHECKLISTS.md` §§18-34 + 25-26. Source of truth: `design/components/README.md` + `design/workflows/` + `design/INTEGRATION_PLAN.md` Addendum.*

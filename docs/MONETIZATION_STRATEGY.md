@@ -1,4 +1,6 @@
 # CRUCE — Monetization Strategy
+> **Companion:** Implementation source of truth: `design/components/README.md` (84) + `design/workflows/W*.md` + `design/INTEGRATION_PLAN.md` Addendum. Testing: `docs/TESTING_TOOLS.md` → `design/TESTING_INTEGRATION_PLAN.md`. This doc is **strategy/brief only** — not an implementation spec.
+
 
 **Positioning:** Border intelligence and decision system (not a wait-time dashboard). Monetize outcomes: faster total trips, fewer bad departures, local trip-services when intent fits — without selling the ranking.
 

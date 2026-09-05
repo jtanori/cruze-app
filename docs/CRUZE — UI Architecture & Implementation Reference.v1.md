@@ -1,4 +1,8 @@
 # CRUZE — UI Architecture & Implementation Reference
+> **⚠️ SUPERSEDED FOR IMPLEMENTATION — Source of truth:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 84 specs) + `design/workflows/W*.md` (W1-W10) + `design/workflows/W5_component_level_design_spec.md` (tokens) + `design/INTEGRATION_PLAN.md` Addendum.
+> This document remains **product rationale / decision freeze only** (§104-105). Do not implement directly from it.
+
+
 ### Product Catalog · Component Matrices · ASCII Screen Maps · QA Checklists
 ### Supporting Document v1.0
 
@@ -235,7 +239,7 @@ L03 — Location Recovery with Manual Search:
 TRIP
 │
 ├── Empty
-│   ├── TR-EMPTY-01 TripEmptyActionPanel
+│   ├── TR-EMPTY-01 TripDestinationSearch
 │   └── TR-NEAR-01 TripNearbyCrossingsSection
 │
 ├── Nearby
@@ -425,7 +429,7 @@ SETTINGS
 
 | Page | Components | Required | Conditional |
 |---|---|---|---|
-| `T01` | `TR-EMPTY-01`, `TR-NEAR-01`, `TR-NEAR-02` | Start action, nearby preview | Last trip |
+| `T01` | `TR-EMPTY-01` (DestinationSearch), `TR-NEAR-01`, `TR-NEAR-02`, `LOC-STATUS-01` | Destination search, nearby preview | Last trip |
 | `T02` | `APP-BACK-01`, `TR-SETUP-01`, `TR-SETUP-02` | Destination input | Recent destinations |
 | `T03` | `APP-BACK-01`, `TR-SETUP-01`, `TR-SETUP-03` | Origin | Current location |
 | `T04` | `APP-BACK-01`, `TR-SETUP-01`, `TR-SETUP-04` | Travel modes | Profile shortcut |
