@@ -14,14 +14,14 @@ interface MainLayoutProps {
 function getHeaderVariant(pathname: string): "root" | "search" | "filter" {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
   if (path.startsWith("/crossings")) return "root";
-  if (path.startsWith("/viaje")) return "root";
+  if (path.startsWith("/trip")) return "root";
   if (path.startsWith("/agent")) return "root";
   return "root";
 }
 
-function getActiveTab(pathname: string): "viaje" | "crossings" | "agent" {
+function getActiveTab(pathname: string): "trip" | "crossings" | "agent" {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
-  if (path.startsWith("/viaje")) return "viaje";
+  if (path.startsWith("/trip")) return "trip";
   if (path.startsWith("/agent")) return "agent";
   return "crossings";
 }
@@ -45,7 +45,7 @@ export default function MainLayout({
       useTripStore.getState().reset();
     },
     onConfigure: () => {
-      window.location.href = `/${locale}/viaje/configure`;
+      window.location.href = `/${locale}/trip/configure`;
     },
     onNavigate: () => {
       const rec = useTripStore.getState().recommendedCrossing;

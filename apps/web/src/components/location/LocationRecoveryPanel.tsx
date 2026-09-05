@@ -97,7 +97,7 @@ export function LocationRecoveryPanel({
 
       {!showSearch ? (
         <>
-          <div className="flex flex-col gap-3 w-full max-w-xs">
+          <div className="flex flex-col gap-3 w-full">
             <button
               onClick={handleRetry}
               className="w-full py-3 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px] inline-flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint/50"

@@ -13,7 +13,19 @@
     "retry": "Retry",
     "edit": "Edit",
     "or": "or",
-    "showMore": "Show more"
+    "showMore": "Show more",
+    "open": "Open",
+    "closed": "Closed",
+    "limited": "Limited",
+    "waitTime": "Wait time",
+    "northbound": "North",
+    "southbound": "South",
+    "justNow": "Just now",
+    "minutesAgo": "{count} min ago",
+    "hoursAgo": "{count} h ago",
+    "updated": "Updated {time}",
+    "mexico": "Mexico",
+    "unitedStates": "United States"
   },
   "nav": {
     "trip": "Trip",
@@ -87,6 +99,9 @@
         "unavailable": "Location unavailable",
         "unavailableDesc": "Could not determine your location. Please try again.",
         "retry": "Try again"
+      },
+      "banner": {
+        "established": "Location set: {placeName}"
       }
     }
   },
@@ -204,8 +219,11 @@
       "subtitle": "Plan your border crossing and get the best route.",
       "startTrip": "Start a trip",
       "nearby": "Nearby",
+      "nearbySubtitle": "Relevant crossings now",
       "viewAll": "View all crossings →",
-      "noNearby": "No nearby crossings available"
+      "noNearby": "No nearby crossings available",
+      "searchPlaceholder": "Search for a destination in {country}",
+      "noResultsInCountry": "No destinations found in {country}"
     },
     "title": "My Trip",
     "yourTrip": "YOUR TRIP",
@@ -273,6 +291,22 @@
       "stillCurrent": "Yes, still current",
       "startNew": "Start new trip"
     },
+    "searchPlaceholder": "Search for a destination in {country}",
+    "noResultsInCountry": "No destinations found in {country}",
+    "noNearby": "No nearby crossings available",
+    "mexico": "Mexico",
+    "unitedStates": "United States",
+    "next": "Next",
+    "yourTrip": "YOUR TRIP",
+    "checklist": {
+      "title": "BEFORE CROSSING",
+      "operational": "Crossing open",
+      "freshness": "Recent data",
+      "freshnessDetail": "Updated {minutes} min ago",
+      "docs": "Review documentation",
+      "restrictions": "Review restrictions"
+    },
+    "viewAllCrossings": "View all crossings →",
     "seeMoreRecommendations": "See more recommendations",
     "visa": {
       "b1b2": "B1/B2 Tourist/Business",
@@ -283,6 +317,9 @@
       "resident": "Resident",
       "none": "None"
     }
+  },
+  "settings": {
+    "title": "Settings"
   },
   "agent": {
     "title": "CRUZE Agent",

@@ -13,7 +13,19 @@
     "retry": "Reintentar",
     "edit": "Editar",
     "or": "o",
-    "showMore": "Ver más"
+    "showMore": "Ver más",
+    "open": "Abierto",
+    "closed": "Cerrado",
+    "limited": "Limitado",
+    "waitTime": "Tiempo de espera",
+    "northbound": "Norte",
+    "southbound": "Sur",
+    "justNow": "Ahora mismo",
+    "minutesAgo": "Hace {count} min",
+    "hoursAgo": "Hace {count} h",
+    "updated": "Actualizado {time}",
+    "mexico": "México",
+    "unitedStates": "Estados Unidos"
   },
   "nav": {
     "trip": "Viaje",
@@ -87,6 +99,9 @@
         "unavailable": "Ubicación no disponible",
         "unavailableDesc": "No se pudo determinar tu ubicación. Intenta de nuevo.",
         "retry": "Reintentar"
+      },
+      "banner": {
+        "established": "Ubicación establecida: {placeName}"
       }
     }
   },
@@ -204,8 +219,11 @@
       "subtitle": "Planifica tu cruce fronterizo y obtén la mejor ruta.",
       "startTrip": "Comenzar un viaje",
       "nearby": "Cerca de ti",
+      "nearbySubtitle": "Cruces relevantes ahora",
       "viewAll": "Ver todos los cruces →",
-      "noNearby": "No hay cruces cercanos disponibles"
+      "noNearby": "No hay cruces cercanos disponibles",
+      "searchPlaceholder": "Busca un destino en {country}",
+      "noResultsInCountry": "No se encontraron destinos en {country}"
     },
     "title": "Mi Viaje",
     "yourTrip": "TU VIAJE",
@@ -273,6 +291,22 @@
       "stillCurrent": "Sí, sigue vigente",
       "startNew": "Iniciar nuevo viaje"
     },
+    "searchPlaceholder": "Busca un destino en {country}",
+    "noResultsInCountry": "No se encontraron destinos en {country}",
+    "noNearby": "No hay cruces cercanos disponibles",
+    "mexico": "México",
+    "unitedStates": "Estados Unidos",
+    "next": "Siguiente",
+    "yourTrip": "TU VIAJE",
+    "checklist": {
+      "title": "ANTES DE CRUZAR",
+      "operational": "Cruce abierto",
+      "freshness": "Datos recientes",
+      "freshnessDetail": "Actualizado hace {minutes} min",
+      "docs": "Revisar documentación",
+      "restrictions": "Revisar restricciones"
+    },
+    "viewAllCrossings": "Ver todos los cruces →",
     "seeMoreRecommendations": "Ver más recomendaciones",
     "visa": {
       "b1b2": "B1/B2 Turista/Negocios",
@@ -283,6 +317,9 @@
       "resident": "Residente",
       "none": "Ninguna"
     }
+  },
+  "settings": {
+    "title": "Configuración"
   },
   "agent": {
     "title": "Agente CRUZE",

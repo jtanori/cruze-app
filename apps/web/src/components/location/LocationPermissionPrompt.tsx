@@ -1,25 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { MapPin, Settings } from "lucide-react";
-import { requestGeolocation } from "@/lib/geolocation";
+import { MapPin, Settings, Search } from "lucide-react";
 import { useLocationStore } from "@/stores/location";
-import { createLocationData } from "@/lib/location-state-machine";
 
 export function LocationPermissionPrompt() {
   const t = useTranslations();
-  const { setState, setLocation } = useLocationStore();
+  const { setState } = useLocationStore();
 
-  const handleAllow = async () => {
-    try {
-      setState("acquiring");
-      const result = await requestGeolocation();
-      const locationData = createLocationData(result.lat, result.lng, result.accuracy);
-      setLocation(locationData);
-      setState("ready");
-    } catch {
-      setState("permission_denied");
-    }
+  const handleAllow = () => {
+    setState("acquiring");
+  };
+
+  const handleManualSearch = () => {
+    setState("manual_search");
   };
 
   const handleSettings = () => {
@@ -36,24 +30,34 @@ export function LocationPermissionPrompt() {
         {t("onboarding.location.title")}
       </h1>
 
-      <p className="text-muted text-sm leading-relaxed max-w-xs mb-8">
+      <p className="text-muted text-sm leading-relaxed mb-8">
         {t("onboarding.location.explanation")}
       </p>
 
-      <button
-        onClick={handleAllow}
-        className="w-full max-w-xs py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint/50"
-      >
-        {t("onboarding.location.allow")}
-      </button>
+      <div className="w-full space-y-3">
+        <button
+          onClick={handleAllow}
+          className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint/50"
+        >
+          {t("onboarding.location.allow")}
+        </button>
 
-      <button
-        onClick={handleSettings}
-        className="mt-4 inline-flex items-center gap-2 text-muted text-sm font-medium hover:text-ink transition-colors min-h-[44px]"
-      >
-        <Settings className="w-4 h-4" />
-        {t("onboarding.location.settings")}
-      </button>
+        <button
+          onClick={handleManualSearch}
+          className="w-full py-3.5 rounded-[var(--radius-lg)] border border-border text-ink font-semibold text-sm hover:bg-surface-elevated transition-colors min-h-[48px] inline-flex items-center justify-center gap-2"
+        >
+          <Search className="w-4 h-4" />
+          {t("onboarding.location.manualSearch")}
+        </button>
+
+        <button
+          onClick={handleSettings}
+          className="w-full py-3.5 rounded-[var(--radius-lg)] border border-border text-muted font-semibold text-sm hover:bg-surface-elevated transition-colors min-h-[48px] inline-flex items-center justify-center gap-2"
+        >
+          <Settings className="w-4 h-4" />
+          {t("onboarding.location.settings")}
+        </button>
+      </div>
     </div>
   );
 }

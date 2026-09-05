@@ -62,7 +62,7 @@ stateDiagram-v2
 |-------|-------------|-------------|--------------|
 | `uninitialized` | App just launched, no checks done | Full-page spinner | → `requesting_permission` |
 | `requesting_permission` | Checking `navigator.permissions` | Full-page spinner | → `acquiring` / `permission_denied` / `services_disabled` / `unavailable` |
-| `acquiring` | `getCurrentPosition()` in progress | `LocationAcquisitionState` (L02) — pulsing GPS icon + "Obteniendo tu ubicación…" | → `ready` / `low_confidence` / `unavailable` |
+| `acquiring` | `getCurrentPosition()` in progress | `LocationAcquisitionState` (L02) — pulsing GPS icon + three-dots animation + "Obteniendo tu ubicación…" | → `ready` / `low_confidence` / `unavailable` |
 | `low_confidence` | GPS accuracy > 100m | `LocationRecoveryPanel` (L03, reason=low_confidence) — "Ubicación imprecisa" + retry | → `ready` / `acquiring` / `unavailable` |
 | `ready` | Location established (GPS or manual) | **Gate opens** — children render | → `stale` (after 5 min) / `unavailable` |
 | `stale` | Location > 5 min old | `LocationRecoveryPanel` (L03, reason=stale) — "Ubicación desactualizada" + refresh | → `acquiring` / `ready` / `unavailable` |
@@ -78,14 +78,18 @@ stateDiagram-v2
 | Component ID | Name | Responsibility | Location |
 |--------------|------|----------------|----------|
 | `LOC-GATE-01` | `LocationGate` | Root-level infrastructure gate; orchestrates state machine, renders L01/L02/L03 inline | `src/components/location/LocationGate.tsx` |
-| `LOC-PROMPT-01` | `LocationPermissionPrompt` | L01: Explains why location needed, primary CTA "Permitir ubicación", secondary "Configuración del sistema" | `src/components/location/LocationPermissionPrompt.tsx` |
-| `LOC-ACQ-01` | `LocationAcquisitionState` | L02: Animated GPS acquisition with pulsing icon, "Obteniendo tu ubicación…" | `src/components/location/LocationAcquisitionState.tsx` |
+| `LOC-PROMPT-01` | `LocationPermissionPrompt` | L01: Explains why location needed, primary CTA "Permitir ubicación", manual search entry, secondary "Configuración del sistema" | `src/components/location/LocationPermissionPrompt.tsx` |
+| `LOC-ACQ-01` | `LocationAcquisitionState` | L02: Animated GPS acquisition with pulsing icon, three-dots animation, "Obteniendo tu ubicación…" | `src/components/location/LocationAcquisitionState.tsx` |
+| `LOC-ACQ-DOTS-01` | `LocationAcquisitionDots` | Inline three-dots loading animation (used in L01→L02 transition and L02) | `src/components/location/LocationAcquisitionDots.tsx` |
 | `LOC-REC-01` | `LocationRecoveryPanel` | L03: Unified recovery for all error states; shows reason-specific copy + manual search entry | `src/components/location/LocationRecoveryPanel.tsx` |
 | `LOC-SEARCH-01` | `LocationSearchInput` | Manual search input with debounced Mapbox Geocoding API, MX/US only | `src/components/location/LocationSearchInput.tsx` |
 | `LOC-SUGGEST-01` | `LocationSearchSuggestions` | Nearby suggestion chips below search input | `src/components/location/LocationSearchSuggestions.tsx` |
-| `LOC-CONF-01` | `LocationConfidenceIndicator` | Inline badge showing confidence: GPS (high) / Manual (low) | `src/components/location/LocationConfidenceIndicator.tsx` |
-| `LOC-STATUS-01` | `LocationStatusBanner` | Transient bottom banner on success: "Ubicación establecida: Tijuana, BC" (auto-dismiss 3s) | `src/components/location/LocationStatusBanner.tsx` |
+| `LOC-CONF-01` | `LocationConfidenceIndicator` | Inline badge showing confidence: GPS (high/🟢) / Manual (low/🟡) / Low (>100m/🟠) | `src/components/location/LocationConfidenceIndicator.tsx` |
+| `LOC-STATUS-01` | `LocationStatusBanner` | **Transient banner** (user-dismissible, slides up) on success: "Ubicación establecida: Tijuana, BC" | `src/components/location/LocationStatusBanner.tsx` |
 | `LOC-NET-01` | `useNetworkStatus` | Hook detecting online/reachable state; disables search when offline | `src/lib/network-status.ts` |
+| `TR-EMPTY-01` | `TripEmptyActionPanel` | T01: "¿A dónde vas?" + `[ Comenzar un viaje ]` + `Ver todos los cruces →` | `src/components/trip/TripEmptyActionPanel.tsx` |
+| `TR-NEAR-01` | `TripNearbyCrossingsSection` | T01: "CERCA DE TI" header + "Cruces relevantes ahora" subtitle + 3 cards + `Ver todos los cruces →` | `src/components/trip/TripNearbyCrossingsSection.tsx` |
+| `TR-NEAR-02` | `TripNearbyCrossingRow` | T01: Crossing card with name, wait time, status badge (● Abierto/● Cerrado/● Limitado), direction (Norte/Sur), freshness ("Actualizado hace X min") | `src/components/trip/TripNearbyCrossingRow.tsx` |
 
 ---
 
@@ -106,6 +110,10 @@ stateDiagram-v2
 │  └─────────────────────────────────┘    │
 │                                         │
 │  ┌─────────────────────────────────┐    │
+│  │ 🔍  Buscar ubicación            │    │  ← Manual search entry (LOC-PROMPT-01)
+│  └─────────────────────────────────┘    │
+│                                         │
+│  ┌─────────────────────────────────┐    │
 │  │  ⚙  Configuración del sistema   │    │  ← Secondary (opens iOS/Android settings)
 │  └─────────────────────────────────┘    │
 │                                         │
@@ -122,7 +130,7 @@ stateDiagram-v2
 │                                         │
 │        Obteniendo tu ubicación…         │
 │                                         │
-│        ─────────────────                │  ← Progress bar (indeterminate)
+│        ●  ●  ●                          │  ← Three-dots animation (LOC-ACQ-DOTS-01)
 │                                         │
 └─────────────────────────────────────────┘
 ```
@@ -192,7 +200,8 @@ stateDiagram-v2
 ┌─────────────────────────────────────────┐  ← Fixed bottom, slides up
 │  ✓  Ubicación establecida:              │
 │     Tijuana, BC                         │
-└─────────────────────────────────────────┘  Auto-dismiss after 3s
+│  [ ✕ ]                                  │  ← User dismisses (not auto-dismiss)
+└─────────────────────────────────────────┘
 ```
 
 ---
@@ -212,7 +221,7 @@ stateDiagram-v2
 
 | On Success (`ready`) | On Failure (`unavailable`) |
 |----------------------|----------------------------|
-| `location` object in store: `{ lat, lng, accuracy, timestamp, confidence }` | User at L03 with all recovery options |
+| `location` object in store: `{ lat, lng, accuracy, timestamp, confidence, placeName?, isManual? }` | User at L03 with all recovery options |
 | `isManual: false` (GPS) or `true` (manual search) | `isManual: false` |
 | `state = "ready"` | `state = "unavailable"` |
 | Root gate opens → renders `/trip` (T01) | User must manually resolve |
@@ -310,6 +319,7 @@ searchLocations(query: string, limit=5): Promise<GeocodingResult[]>
 | `onboarding.location.title` | "¿Dónde estás?" | "Where are you?" |
 | `onboarding.location.subtitle` | "Cruze necesita tu ubicación para encontrar los cruces relevantes." | "Cruze needs your location to find relevant crossings." |
 | `onboarding.location.allow` | "Permitir ubicación" | "Allow location" |
+| `onboarding.location.manualSearch` | "Buscar ubicación" | "Search location" |
 | `onboarding.location.settings` | "Configuración del sistema" | "System settings" |
 
 ### Acquisition (L02)
@@ -358,6 +368,7 @@ searchLocations(query: string, limit=5): Promise<GeocodingResult[]>
 | **W7 Crossings** | `/crossings` directory sorts by distance from `location` |
 | **W8 Agent** | Agent context includes `location` for relevant answers |
 | **W9 Avisos** | Filters alerts by user's location corridor |
+| **T01 Trip Empty** | Location gate opens → renders `/trip` with `LOC-STATUS-01` banner, `TR-EMPTY-01` (DestinationSearch), `TR-NEAR-01`/`TR-NEAR-02` nearby crossings |
 
 ---
 
@@ -365,16 +376,29 @@ searchLocations(query: string, limit=5): Promise<GeocodingResult[]>
 
 | ID | Scenario | Expected |
 |----|----------|----------|
-| W1.1 | Fresh launch, GPS granted, high accuracy | `uninitialized` → `requesting_permission` → `acquiring` → `ready` → `/trip` |
+| W1.1 | Fresh launch, GPS granted, high accuracy | `uninitialized` → `requesting_permission` → `acquiring` → `ready` → `/trip` (T01) |
 | W1.2 | Fresh launch, GPS granted, low accuracy | `acquiring` → `low_confidence` → user confirms → `ready` |
 | W1.3 | Fresh launch, GPS denied | `requesting_permission` → `permission_denied` → L03 with manual search |
 | W1.4 | GPS denied → manual search "Tijuana" | `permission_denied` → `manual_search` → select → `ready` (isManual=true) |
 | W1.5 | GPS off (system) | `services_disabled` → L03 with manual search |
 | W1.6 | GPS timeout (10s) | `acquiring` → `unavailable` → L03 |
-| W1.7 | Returning user, location persisted | `ready` immediately (no UI) → `/trip` |
+| W1.7 | Returning user, location persisted | `ready` immediately (no UI) → `/trip` (T01) |
 | W1.8 | Returning user, location stale (>5min) | `ready` → auto-refresh → `acquiring` → `ready` |
 | W1.9 | Offline + manual search attempted | L03 shows "Sin conexión", search disabled |
 | W1.10 | Permission revoked after ready | `ready` → `unavailable` → L03 on next navigation |
+| W1.11 | T01: Location acquired → shows LOC-STATUS-01 banner (non-dismissible) | `ready` → `/trip` shows banner with placeName |
+| W1.12 | T01: User searches destination in target country | Search input filters to US (from MX) or MX (from US) |
+| W1.13 | T01: User selects destination → Next → /trip/setup with dest pre-filled | Selection → Next enabled → navigates to /trip/setup?dest=... |
+| W1.14 | T01: Nearby crossings show status, direction, freshness | TR-NEAR-02 cards show badge, Norte/Sur, "Actualizado hace X min" |
+
+---
+
+## Stale Threshold Clarification
+
+| Threshold | Value | Purpose | Code Constant |
+|-----------|-------|---------|---------------|
+| **Location stale** | **5 min** (300,000ms) | GPS freshness trigger for auto-refresh | `LOCATION_STALE_THRESHOLD_MS = 5 * 60 * 1000` |
+| **Trip data stale** | **12 hours** | Trip recommendation freshness for "trip may be outdated" banner | `TRIP_STALENESS_THRESHOLD_MS = 12 * 60 * 60 * 1000` |
 
 ---
 
@@ -383,13 +407,17 @@ searchLocations(query: string, limit=5): Promise<GeocodingResult[]>
 | File | Purpose |
 |------|---------|
 | `src/components/location/LocationGate.tsx` | Root gate (LOC-GATE-01) |
-| `src/components/location/LocationPermissionPrompt.tsx` | L01 (LOC-PROMPT-01) |
-| `src/components/location/LocationAcquisitionState.tsx` | L02 (LOC-ACQ-01) |
-| `src/components/location/LocationRecoveryPanel.tsx` | L03 (LOC-REC-01) |
+| `src/components/location/LocationPermissionPrompt.tsx` | L01 (LOC-PROMPT-01) — with manual search button |
+| `src/components/location/LocationAcquisitionState.tsx` | L02 (LOC-ACQ-01) — uses three-dots animation |
+| `src/components/location/LocationAcquisitionDots.tsx` | Three-dots animation (LOC-ACQ-DOTS-01) |
+| `src/components/location/LocationRecoveryPanel.tsx` | L03 (LOC-REC-01) — with manual search |
 | `src/components/location/LocationSearchInput.tsx` | Manual search (LOC-SEARCH-01) |
 | `src/components/location/LocationSearchSuggestions.tsx` | Suggestions (LOC-SUGGEST-01) |
 | `src/components/location/LocationConfidenceIndicator.tsx` | Confidence badge (LOC-CONF-01) |
-| `src/components/location/LocationStatusBanner.tsx` | Success banner (LOC-STATUS-01) |
+| `src/components/location/LocationStatusBanner.tsx` | Transient banner (LOC-STATUS-01) — user-dismissible |
+| `src/components/trip/TripEmptyActionPanel.tsx` | T01 action panel (TR-EMPTY-01) |
+| `src/components/trip/TripNearbyCrossingsSection.tsx` | T01 nearby section (TR-NEAR-01) |
+| `src/components/trip/TripNearbyCrossingRow.tsx` | T01 crossing card (TR-NEAR-02) |
 | `src/lib/geolocation.ts` | GPS primitives |
 | `src/lib/geocoding.ts` | Mapbox search + reverse geocode |
 | `src/lib/network-status.ts` | Online/reachable hook |
@@ -397,4 +425,19 @@ searchLocations(query: string, limit=5): Promise<GeocodingResult[]>
 | `src/stores/location.ts` | Zustand + persist |
 | `src/app/[locale]/layout.tsx` | Root layout with RootGate |
 | `src/app/[locale]/RootGate.tsx` | Client wrapper for LocationGate |
-| `src/app/[locale]/trip/page.tsx` | T01 empty state (post-gate) |
+| `src/app/[locale]/(main)/trip/page.tsx` | T01 empty state (post-gate) |
+
+---
+
+## Updated Spec Alignment
+
+### Changes from v1
+1. **L01 Updated**: Added "Buscar ubicación" button to `LocationPermissionPrompt` (direct manual search entry)
+2. **L02 Updated**: Removed circular spinner, uses `LOC-ACQ-DOTS-01` three-dots animation
+3. **L03 Updated**: Manual search available in all recovery states
+4. **New Components**: `LOC-ACQ-DOTS-01`, `LOC-CONF-01`, `LOC-STATUS-01`, `TR-EMPTY-01`, `TR-NEAR-01`, `TR-NEAR-02`
+5. **LOC-STATUS-01**: Changed from auto-dismiss (3s) to **user-dismissible** transient banner
+6. **Root Gate**: Moved to `[locale]/layout.tsx` via `RootGate` wrapper; excludes `/settings`, `/crossing/*`, `/test-index`
+7. **Stale Thresholds**: Clarified 5min (location) vs 12h (trip data) — both kept
+8. **Public Routes**: Removed `/onboarding/` (deleted)
+9. **T01 Spec Compliance**: Implemented `TR-EMPTY-01`, `TR-NEAR-01`, `TR-NEAR-02` with status badge, direction, freshness

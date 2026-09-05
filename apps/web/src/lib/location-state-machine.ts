@@ -23,6 +23,8 @@ export interface LocationData {
   accuracy: number;
   timestamp: number;
   confidence: LocationConfidence;
+  placeName?: string;
+  isManual?: boolean;
 }
 
 export interface LocationStateMachineConfig {

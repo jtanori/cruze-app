@@ -24,7 +24,7 @@ export function AgentWelcomeScreen({ onPrompt, contextPrompts }: AgentWelcomeScr
       </div>
       <div>
         <h2 className="text-ink text-lg font-semibold">Hola. Soy Cruze.</h2>
-        <p className="text-faint text-sm max-w-xs mt-1">Puedo ayudarte a entender la frontera, comparar cruces o revisar tu viaje.</p>
+        <p className="text-faint text-sm mt-1">Puedo ayudarte a entender la frontera, comparar cruces o revisar tu viaje.</p>
       </div>
       <div className="w-full space-y-2">
         {prompts.map((p) => (
