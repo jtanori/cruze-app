@@ -33,3 +33,4 @@ next-env.d.ts
 report/
 test-results/
 playwright-report/
+test-results/
