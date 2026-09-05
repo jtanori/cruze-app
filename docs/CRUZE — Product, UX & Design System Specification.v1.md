@@ -1,4 +1,8 @@
 # CRUZE — Product, UX & Design System Specification
+> **⚠️ SUPERSEDED FOR IMPLEMENTATION — Source of truth:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 83 specs) + `design/workflows/W*.md` (W1-W10) + `design/workflows/W5_component_level_design_spec.md` (tokens) + `design/INTEGRATION_PLAN.md` Addendum.
+> This document remains **product rationale / decision freeze only** (§104-105). Do not implement directly from it.
+
+
 ### Border Intelligence App · Revised Architecture v2
 
 ---
@@ -1579,7 +1583,23 @@ Purpose: Recover from denied, disabled, unavailable or low-confidence location.
 ## Viaje
 
 ### T01 — Trip Empty / Nearby Intelligence
-The default landing surface.
+The default landing surface after location is established.
+
+**Flow:**
+1. User opens app → Location Gate (W1) runs → GPS acquired or manual search
+2. Gate opens → renders `/trip` (T01)
+3. T01 shows:
+   - **LOC-STATUS-01** banner at top: "Ubicación establecida: {placeName}" (non-dismissible)
+   - **TR-EMPTY-01** replaced by inline destination search:
+     - Search input with country filter (MX→US, US→MX based on GPS)
+     - Results dropdown filtered to target country
+     - Selected destination shown with confirm
+   - **Next button** (disabled until selection) → navigates to `/trip/setup` with destination pre-filled
+   - **TR-NEAR-01** section: "CERCA DE TI" + "Cruces relevantes ahora" subtitle
+   - **TR-NEAR-02** cards (max 3): name, wait time, status badge (● Abierto/● Cerrado/● Limitado), direction (Norte/Sur), freshness ("Actualizado hace X min")
+   - **Ver todos los cruces →** centered at bottom → `/crossings`
+
+**No "Comenzar un viaje" button** - destination search IS the entry point.
 
 ### T02 — Trip Setup / Destination
 Select destination.
@@ -1874,10 +1894,12 @@ Use restrained geometry.
 Recommended:
 
 ```text
-Small controls     8px
-Cards              12px
-Large surfaces     16px
-Pills              999px
+Small controls / pills   4px   (--radius-sm)
+Cards / secondary        8px   (--radius-md)   alias: control 8px / card 8px
+Large surfaces          12px   (--radius-lg)   alias: surface 12px
+XL                      16px   (--radius-xl)
+2XL                     20px   (--radius-2xl)
+Pills                  999px   (--radius-pill)
 ```
 
 Do not wrap the entire application in excessive rounded containers.

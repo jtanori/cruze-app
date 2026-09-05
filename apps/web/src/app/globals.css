@@ -1,27 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── CRUZE Dark Theme (v3 baseline) ─── */
-  --color-midnight: #071A31;
-  --color-background: #071A31;
-  --color-surface: #0E223F;
-  --color-surface-elevated: #132B4A;
-  --color-surface-raised: #1A3556;
-  --color-surface-subtle: #0A1A2E;
-  --color-border: #1F3A5A;
-  --color-text-primary: #F5F7FA;
-  --color-text-secondary: #A7B3CC;
-  --color-cruze-mint: #00E0A0;
+  /* ─── CRUZE Dark Theme — W5 Canon (§1.1 canonical) ─── */
+  /* Canonical W5 foundations — do not change without design decision */
+  --color-midnight: #071A31;              /* W5 color.bg.midnight */
+  --color-background: #071A31;            /* W5 color.bg.midnight alias */
+  --color-surface: #0E223F;               /* W5 color.surface */
+  --color-surface-elevated: #132B4A;      /* W5 color.surface.elevated */
+  --color-border: #1F3A54;                /* W5 color.border — canonical 1px #1F3A54 (§1.5) */
+  --color-text-primary: #F5F7FA;          /* W5 color.text.primary */
+  --color-text-secondary: #A7B3CC;        /* W5 color.text.secondary */
+  --color-cruze-mint: #00E0A0;            /* W5 color.brand.mint */
+  --color-cruze-amber: #FFB020;           /* W5 color.semantic.warning */
+  --color-cruze-red: #FF4D4F;             /* W5 color.semantic.danger */
+  --color-cruze-blue: #38A7FF;            /* W5 color.semantic.info — was #3BA7FF, aligned to W5 */
   --color-cruze-green: #22924A;
-  --color-cruze-amber: #FFB020;
-  --color-cruze-red: #FF4D4F;
-  --color-cruze-blue: #3BA7FF;
   --color-cruze-secondary: #A7B3CC;
-  --color-amber: #FFB020;
-  --color-alert-red: #FF4D4F;
-  --color-info-blue: #3BA7FF;
+  --color-amber: #FFB020;                 /* alias: --color-cruze-amber */
+  --color-alert-red: #FF4D4F;             /* alias: --color-cruze-red */
+  --color-info-blue: #38A7FF;             /* alias: --color-cruze-blue */
   --color-white: #FFFFFF;
   --color-dark: #071A31;
+  /* ─── Extensions (not W5 canonical) — keep until promoted ─── */
+  --color-surface-raised: #1A3556;
+  --color-surface-subtle: #0A1A2E;
 
   /* ─── Semantic Aliases ─── */
   --color-ink: #F5F7FA;
@@ -64,10 +66,21 @@
   --color-map-boundary: #31595B;
   --color-map-route: #24A8E0;
 
-  /* ─── Navigation Dimensions ─── */
-  --nav-header-height: 68px;
+  /* ─── Navigation Dimensions — Mobile Standard ───
+      W5 Canon §3.1/§6: header 72–88px, bottom 80–96px + safe area
+      Apple HIG: Tab bar 49pt + home indicator 21pt = 83pt (390×49pt container, 44pt min touch)
+                Nav bar 44pt + status bar 47–54pt = ~91–98pt total on notched iPhones
+                Liquid Glass iOS 26: same metrics, inset capsule
+      Material 3: Navigation bar (bottom) 80dp default (m3_bottom_nav_min_height)
+                Top app bar 64dp (regular), 56dp dense
+      → Mobile choice: header 56px (Material dense / iOS compact) + bottom 80px (M3) + safe-area
+      W5 72px kept as --nav-header-height-desktop alias if needed for larger branding
+   ─── */
+  --nav-header-height: 56px;       /* Mobile standard: Material dense 56dp / HIG compact — use with var(--safe-top) */
+  --nav-header-height-desktop: 72px; /* W5 72–88px — desktop/tablet or branded large header */
   --nav-header-compact-height: 56px;
-  --nav-bottom-height: 72px;
+  --nav-bottom-height: 80px;      /* M3 Navigation bar 80dp = iOS Tab bar 49pt + 34pt safe ≈83pt → 80 mobile */
+  --nav-bottom-height-with-safe: calc(80px + var(--safe-bottom)); /* include home indicator */
 
   /* ─── Navigation Spacing ─── */
   --nav-header-padding-x: 20px;
@@ -78,25 +91,43 @@
   --nav-control-size: 44px;
   --nav-icon-size: 20px;
 
-  /* ─── Radii ─── */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 28px;
-  --radius-full: 9999px;
+  /* ─── Radii — tighter, less AI (updated per operator) ─── */
+  --radius-sm: 4px;               /* controls / small pills */
+  --radius-md: 8px;               /* cards / secondary surfaces */
+  --radius-lg: 12px;              /* large surfaces */
+  --radius-xl: 16px;              /* xl surface */
+  --radius-2xl: 20px;             /* 2xl surface */
+  --radius-full: 999px;           /* pills — was 9999px */
+  /* aliases */
+  --radius-control: 8px;          /* = md */
+  --radius-card: 8px;             /* = md */
+  --radius-surface: 12px;         /* = lg */
+  --radius-pill: 999px;
 
-  /* ─── Spacing Scale (4px base) ─── */
+  /* ─── Spacing Scale — W5 Canon §1.3 (4px base: 4 8 12 16 20 24 32 40 48 64) ─── */
   --spacing-0: 0;
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-lg: 16px;
-  --spacing-xl: 24px;
-  --spacing-2xl: 32px;
-  --spacing-3xl: 48px;
-  --spacing-4xl: 64px;
-  --spacing-5xl: 96px;
+  --spacing-xs: 4px;              /* 4 */
+  --spacing-sm: 8px;              /* 8 */
+  --spacing-md: 12px;             /* 12 */
+  --spacing-lg: 16px;             /* 16 — screens primary */
+  --spacing-xl: 24px;             /* 24 — screens primary */
+  --spacing-2xl: 32px;            /* 32 — screens primary */
+  --spacing-3xl: 48px;            /* 48 */
+  --spacing-4xl: 64px;            /* 64 */
+  --spacing-5xl: 96px;            /* extension */
+  --spacing-20: 20px;             /* W5 20 */
+  --spacing-40: 40px;             /* W5 40 */
+  /* W5 canonical set alias */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
 
   /* ─── Z-Layers ─── */
   --z-header: 40;
