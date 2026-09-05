@@ -1,4 +1,5 @@
 # W2 — Trip Walking Workflow Specification
+**Version:** 1.1 — 2026-09-04 — W5 canon 1.1 (radii 4/8/12/16/20, nav 56/80+safe). If version differs, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11` + `docs/TESTING_TOOLS.md`.
 
 ## Overview
 

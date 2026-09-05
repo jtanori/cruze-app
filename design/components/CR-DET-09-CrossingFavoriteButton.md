@@ -1,4 +1,5 @@
 # CR-DET-09 — CrossingFavoriteButton
+**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `CR-DET-09`

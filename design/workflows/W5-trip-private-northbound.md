@@ -1,4 +1,5 @@
 # CRUZE — W5 Workflow Specification
+**Version:** 1.1 — 2026-09-04 — W5 canon 1.1 (radii 4/8/12/16/20, nav 56/80+safe). If version differs, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11` + `docs/TESTING_TOOLS.md`.
 
 ## Trip Setup — Private Vehicle Northbound (MX → US)
 
@@ -552,4 +553,3 @@ LOCATION READY → T01 VIAJE (Destination + Nearby) → T03 ORIGIN → T04 MODE 
 ```
 
 *Source of truth for W5: this document + `design/workflows/W5_component_level_design_spec.md` (tokens) + `design/components/<ID>-<Name>.md` (per-component specs). See `design/components/README.md` index.*
-

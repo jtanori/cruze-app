@@ -1,4 +1,5 @@
 # CRUZE — Integration Plan v3
+**Version:** 1.1 — 2026-09-04 — 83 specs, W5 1.1. If version differs, revisit testing.
 
 > **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 83) + `design/workflows/W*.md` (W1-W10, W5 canonical = `W5_component_level_design_spec.md` + `W5-trip-private-northbound.md`) + `docs/TESTING_TOOLS.md` (P0-P5) → `design/TESTING_INTEGRATION_PLAN.md`.
 > Original `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §11-12 + `docs/CRUZE — Product, UX & Design System Specification.v1.md` are rationale only. See Addendum below for phasing.
@@ -597,4 +598,3 @@ project-root/
 
 - `docs/CRUZE — Product, UX & Design System Specification.v1.md` — product rationale, decision freeze (§104), one-flow (§105). **Do not implement directly from it; use design/components + design/workflows.**
 - `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` — architecture catalog §5-10, screen maps §13, checklists. **Now index only; per-component specs are source of truth.**
-

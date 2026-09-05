@@ -1,4 +1,5 @@
 # Cruce Comprobation Checklists
+**Version:** 1.1 — 2026-09-04 — 83 specs, W5 1.1. If version differs, revisit testing.
 
 > **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 83) + `design/workflows/W*.md` (W1-W10) `design/TESTING_INTEGRATION_PLAN.md` (P0-P5 wiring) — checklists §§18-34 now reference those per-component/per-workflow specs. Original spec sections (`docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §§18-34, `docs/CRUZE — Product, UX & Design System Specification.v1.md` §27) remain rationale only. Integration order: `design/INTEGRATION_PLAN.md` Addendum. Testing strategy: `docs/TESTING_TOOLS.md`.
 

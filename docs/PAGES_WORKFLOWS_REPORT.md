@@ -1,4 +1,5 @@
 # Pages × Workflows Integration Report
+**Version:** 1.1 — 2026-09-04 — 83 specs, W5 1.1. If version differs, revisit testing.
 
 > **Source of truth for implementation:** `design/components/<ID>-<Name>.md` (see `design/components/README.md` — 83) + `design/workflows/W*.md` (W1-W10, W5 canonical = `W5_component_level_design_spec.md` + `W5-trip-private-northbound.md`) + `design/INTEGRATION_PLAN.md` Addendum.
 > Original `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §11-12 is rationale only. Testing strategy: `docs/TESTING_TOOLS.md` P0-P5 + `design/TESTING_INTEGRATION_PLAN.md` (when available).
