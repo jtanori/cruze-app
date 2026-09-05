@@ -1,7 +1,7 @@
 /**
- * Agent Response Templates
- * Rule-based response generation for each intent band.
- * Returns structured content for the rich response renderer.
+ * Agent Response Templates — i18n via next-intl t()
+ * All user-facing strings come from messages/{es,en}.json agent.template.* + agent.checklist.*
+ * No hardcoded Spanish/English — caller must pass t from useTranslations().
  */
 
 import type { IntentBand } from "./intent-classifier";
@@ -53,7 +53,7 @@ interface TemplateContext {
   allCrossings: MergedCrossingData[];
   trip: TripContext;
   profile: TravelerProfile | null;
-  locale: string;
+  t: (key: string, values?: Record<string, any>) => string;
 }
 
 function getWaitStatus(wait: number): "open" | "limited" | "closed" {
@@ -62,28 +62,18 @@ function getWaitStatus(wait: number): "open" | "limited" | "closed" {
   return "closed";
 }
 
-function getTrendEmoji(wait: number): string {
-  if (wait <= 15) return "🟢";
-  if (wait <= 30) return "🟡";
-  return "🔴";
-}
-
-function getDocumentChecklist(profile: TravelerProfile | null): ResponseChecklistItem[] {
+function getDocumentChecklist(profile: TravelerProfile | null, t: (k: string, v?: any) => string): ResponseChecklistItem[] {
   const items: ResponseChecklistItem[] = [
-    { label: "Valid passport", checked: true, required: true },
+    { label: t("agent.checklist.passport"), checked: true, required: true },
   ];
-
   if (profile?.documentCategory === "visa") {
-    items.push({ label: "US visa", checked: true, required: true });
+    items.push({ label: t("agent.checklist.visa"), checked: true, required: true });
   }
-
   if (profile?.trustedTraveler === "sentri") {
-    items.push({ label: "SENTRI card", checked: true, required: false });
+    items.push({ label: t("agent.checklist.sentri"), checked: true, required: false });
   }
-
-  items.push({ label: "Vehicle registration (if driving)", checked: false, required: false });
-  items.push({ label: "Mexican auto insurance (if driving)", checked: false, required: false });
-
+  items.push({ label: t("agent.checklist.vehicle"), checked: false, required: false });
+  items.push({ label: t("agent.checklist.insurance"), checked: false, required: false });
   return items;
 }
 
@@ -91,154 +81,118 @@ export function generateResponse(
   intent: IntentBand,
   ctx: TemplateContext
 ): ResponseContent {
-  const { crossing, allCrossings, trip, profile, locale } = ctx;
-  const isEn = locale === "en";
-
+  const { crossing, allCrossings, trip, profile, t } = ctx;
   switch (intent) {
     case "wait_times":
-      return generateWaitTimesResponse(crossing, allCrossings, isEn);
-
+      return generateWaitTimesResponse(crossing, allCrossings, t);
     case "hours":
-      return generateHoursResponse(crossing, isEn);
-
+      return generateHoursResponse(crossing, t);
     case "documents":
-      return generateDocumentsResponse(profile, isEn);
-
+      return generateDocumentsResponse(profile, t);
     case "sentry":
-      return generateSentriResponse(profile, isEn);
-
+      return generateSentriResponse(profile, t);
     case "compare":
-      return generateCompareResponse(crossing, allCrossings, isEn);
-
+      return generateCompareResponse(crossing, allCrossings, t);
     case "status":
-      return generateStatusResponse(crossing, isEn);
-
+      return generateStatusResponse(crossing, t);
     case "rules":
-      return generateRulesResponse(isEn);
-
+      return generateRulesResponse(t);
     case "greeting":
-      return generateGreetingResponse(trip, isEn);
-
+      return generateGreetingResponse(trip, t);
     case "whatshappening":
-      return generateWhatsHappeningResponse(allCrossings, isEn);
-
+      return generateWhatsHappeningResponse(allCrossings, t);
     default:
-      return generateDefaultResponse(isEn);
+      return generateDefaultResponse(t);
   }
 }
 
 function generateWaitTimesResponse(
   crossing: MergedCrossingData | null,
   allCrossings: MergedCrossingData[],
-  isEn: boolean
+  t: (k: string, v?: any) => string
 ): ResponseContent {
   if (crossing) {
     const lanes = crossing.lanesNorthbound.slice(0, 3);
     const cards: ResponseCard[] = lanes.map((lane) => ({
       title: lane.name,
       value: `${lane.waitTime}`,
-      unit: "min",
+      unit: t("common.min"),
       status: getWaitStatus(lane.waitTime),
-      detail: lane.isOpen ? "Open" : "Closed",
+      detail: lane.isOpen ? t("common.open") : t("common.closed"),
     }));
-
     return {
-      text: isEn
-        ? `Current wait times at ${crossing.name}:`
-        : `Tiempos de espera actuales en ${crossing.name}:`,
+      text: t("agent.template.waitTimesAt", { name: crossing.name }),
       cards,
       action: {
-        label: isEn ? "View crossing details" : "Ver detalles del cruce",
+        label: t("agent.template.viewCrossingDetails"),
         href: `/crossing/${crossing.id}`,
       },
     };
   }
-
-  const sorted = [...allCrossings]
-    .sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound)
-    .slice(0, 5);
-
+  const sorted = [...allCrossings].sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound).slice(0, 5);
   const dataRows: ResponseDataRow[] = sorted.map((c) => ({
     label: c.name,
-    value: `${c.waitTimeNorthbound} min`,
+    value: `${c.waitTimeNorthbound} ${t("common.min")}`,
     highlight: c.waitTimeNorthbound <= 20,
   }));
-
   return {
-    text: isEn
-      ? "Top 5 fastest crossings right now:"
-      : "Los 5 cruces más rápidos ahora:",
+    text: t("agent.template.top5Fastest"),
     dataRows,
   };
 }
 
 function generateHoursResponse(
   crossing: MergedCrossingData | null,
-  isEn: boolean
+  t: (k: string, v?: any) => string
 ): ResponseContent {
   if (crossing) {
     return {
-      text: isEn
-        ? `${crossing.name} operating hours:`
-        : `Horario de ${crossing.name}:`,
+      text: t("agent.template.hoursAt", { name: crossing.name }),
       dataRows: [
-        { label: isEn ? "Hours" : "Horario", value: crossing.hours },
-        { label: isEn ? "Status" : "Estado", value: crossing.statusNorthbound },
+        { label: t("agent.template.hours"), value: crossing.hours },
+        { label: t("agent.template.status"), value: crossing.statusNorthbound },
       ],
     };
   }
-
   return {
-    text: isEn
-      ? "Most border crossings are open 24/7. Some pedestrian crossings have limited hours."
-      : "La mayoría de los cruces están abiertos 24/7. Algunos cruces peatonales tienen horario limitado.",
+    text: t("agent.template.mostOpen"),
   };
 }
 
 function generateDocumentsResponse(
   profile: TravelerProfile | null,
-  isEn: boolean
+  t: (k: string, v?: any) => string
 ): ResponseContent {
-  const checklist = getDocumentChecklist(profile);
-
+  const checklist = getDocumentChecklist(profile, t);
   return {
-    text: isEn
-      ? "Documents you'll need for crossing:"
-      : "Documentos que necesitas para cruzar:",
+    text: t("agent.template.documentsNeed"),
     checklist,
   };
 }
 
 function generateSentriResponse(
   profile: TravelerProfile | null,
-  isEn: boolean
+  t: (k: string, v?: any) => string
 ): ResponseContent {
   if (profile?.trustedTraveler === "sentri") {
     return {
-      text: isEn
-        ? "You have SENTRI! Use the dedicated SENTRI lanes for the fastest crossing."
-        : "¡Tienes SENTRI! Usa las carriles dedicadas de SENTRI para el cruce más rápido.",
+      text: t("agent.template.sentriHas"),
       dataRows: [
-        { label: "SENTRI lanes", value: "2-10 min", highlight: true },
-        { label: "Standard lanes", value: "30-60 min" },
+        { label: t("agent.template.sentriLanes"), value: "2-10 min", highlight: true },
+        { label: t("agent.template.standardLanes"), value: "30-60 min" },
       ],
     };
   }
-
   return {
-    text: isEn
-      ? "SENTRI (Trusted Traveler) lets you use expedited lanes at the border."
-      : "SENTRI (Viajero Confiable) te permite usar carriles expedidos en la frontera.",
+    text: t("agent.template.sentriInfo"),
     cards: [
       {
-        title: isEn ? "How to apply" : "Cómo aplicar",
-        detail: isEn
-          ? "1. Create a TTP account\n2. Pay $122.50 fee\n3. Complete interview at enrollment center"
-          : "1. Crea una cuenta TTP\n2. Paga $122.50\n3. Completa entrevista en centro de inscripción",
+        title: t("agent.template.howToApply"),
+        detail: t("agent.template.sentriSteps"),
       },
     ],
     action: {
-      label: isEn ? "Apply for SENTRI" : "Aplicar para SENTRI",
+      label: t("agent.template.applySentri"),
       href: "https://ttp.cbp.dhs.gov/",
     },
   };
@@ -247,206 +201,136 @@ function generateSentriResponse(
 function generateCompareResponse(
   crossing: MergedCrossingData | null,
   allCrossings: MergedCrossingData[],
-  isEn: boolean
+  t: (k: string, v?: any) => string
 ): ResponseContent {
   if (!crossing) {
-    const sorted = [...allCrossings]
-      .sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound)
-      .slice(0, 3);
-
+    const sorted = [...allCrossings].sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound).slice(0, 3);
     const cards: ResponseCard[] = sorted.map((c) => ({
       title: c.name,
       subtitle: `${c.mexicanCity} ↔ ${c.usCity}`,
       value: `${c.waitTimeNorthbound}`,
-      unit: "min",
+      unit: t("common.min"),
       status: getWaitStatus(c.waitTimeNorthbound),
     }));
-
     return {
-      text: isEn
-        ? "Top 3 fastest crossings:"
-        : "Los 3 cruces más rápidos:",
+      text: t("agent.template.top3Fastest"),
       cards,
     };
   }
-
-  const nearby = allCrossings
-    .filter((c) => c.id !== crossing.id)
-    .sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound)
-    .slice(0, 3);
-
+  const nearby = allCrossings.filter((c) => c.id !== crossing.id).sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound).slice(0, 3);
   const dataRows: ResponseDataRow[] = [
     {
-      label: `${crossing.name} (current)`,
-      value: `${crossing.waitTimeNorthbound} min`,
+      label: t("agent.template.currentWithName", { name: crossing.name }),
+      value: `${crossing.waitTimeNorthbound} ${t("common.min")}`,
       highlight: true,
     },
     ...nearby.map((c) => ({
       label: c.name,
-      value: `${c.waitTimeNorthbound} min`,
+      value: `${c.waitTimeNorthbound} ${t("common.min")}`,
     })),
   ];
-
   return {
-    text: isEn
-      ? `Comparing ${crossing.name} with nearby alternatives:`
-      : `Comparando ${crossing.name} con alternativas cercanas:`,
+    text: t("agent.template.comparingWith", { name: crossing.name }),
     dataRows,
   };
 }
 
 function generateStatusResponse(
   crossing: MergedCrossingData | null,
-  isEn: boolean
+  t: (k: string, v?: any) => string
 ): ResponseContent {
   if (crossing) {
     return {
-      text: isEn
-        ? `Current status at ${crossing.name}:`
-        : `Estado actual en ${crossing.name}:`,
+      text: t("agent.template.statusAt", { name: crossing.name }),
       dataRows: [
-        { label: isEn ? "Northbound" : "Norte", value: crossing.statusNorthbound },
-        { label: isEn ? "Southbound" : "Sur", value: crossing.statusSouthbound },
-        { label: isEn ? "Hours" : "Horario", value: crossing.hours },
-        { label: isEn ? "Last updated" : "Última actualización", value: crossing.lastUpdated || "Unknown" },
+        { label: t("common.northbound"), value: crossing.statusNorthbound },
+        { label: t("common.southbound"), value: crossing.statusSouthbound },
+        { label: t("agent.template.hours"), value: crossing.hours },
+        { label: t("agent.template.lastUpdated"), value: crossing.lastUpdated || t("common.unknown") },
       ],
     };
   }
-
   return {
-    text: isEn
-      ? "All crossings are currently operating. Check specific crossing for detailed status."
-      : "Todos los cruces están operando. Consulta un cruce específico para detalles.",
+    text: t("agent.template.allOperating"),
   };
 }
 
-function generateRulesResponse(isEn: boolean): ResponseContent {
+function generateRulesResponse(t: (k: string, v?: any) => string): ResponseContent {
   return {
-    text: isEn
-      ? "US customs rules for entering from Mexico:"
-      : "Reglas de aduana de EE.UU. para entrar desde México:",
+    text: t("agent.template.customsRules"),
     checklist: [
-      { label: isEn ? "Declare all food, plants, and animals" : "Declara todos los alimentos, plantas y animales", checked: false, required: true },
-      { label: isEn ? "Declare amounts over $10,000 USD" : "Declara cantidades mayores a $10,000 USD", checked: false, required: true },
-      { label: isEn ? "No fruits, vegetables, or meats from Mexico" : "No frutas, verduras o carnes de México", checked: false, required: true },
-      { label: isEn ? "No illegal drugs or substances" : "No drogas ilegales o sustancias", checked: false, required: true },
-      { label: isEn ? "No firearms without permit" : "No armas de fuego sin permiso", checked: false, required: true },
-      { label: isEn ? "Prescription meds in original container" : "Medicamentos recetados en envase original", checked: false, required: false },
+      { label: t("agent.template.ruleFood"), checked: false, required: true },
+      { label: t("agent.template.ruleCash"), checked: false, required: true },
+      { label: t("agent.template.ruleFruit"), checked: false, required: true },
+      { label: t("agent.template.ruleDrugs"), checked: false, required: true },
+      { label: t("agent.template.ruleFirearms"), checked: false, required: true },
+      { label: t("agent.template.ruleMeds"), checked: false, required: false },
     ],
   };
 }
 
-function generateGreetingResponse(trip: TripContext, isEn: boolean): ResponseContent {
+function generateGreetingResponse(trip: TripContext, t: (k: string, v?: any) => string): ResponseContent {
   const hasTrip = trip.completed && trip.destination && trip.start;
-
   if (hasTrip) {
     return {
-      text: isEn
-        ? `Hi! I see you're traveling from ${trip.start!.name} to ${trip.destination!.name}. How can I help?`
-        : `¡Hola! Veo que viajas de ${trip.start!.name} a ${trip.destination!.name}. ¿Cómo puedo ayudarte?`,
+      text: t("agent.template.greetingWithTrip", { start: trip.start!.name, destination: trip.destination!.name }),
     };
   }
-
   return {
-    text: isEn
-      ? "Hi! I'm your CRUZE assistant. I can help with:\n• Wait times at crossings\n• Required documents\n• SENTRI information\n• Crossing comparisons\n• Customs rules\n\nWhat would you like to know?"
-      : "¡Hola! Soy tu asistente de CRUZE. Puedo ayudarte con:\n• Tiempos de espera en cruces\n• Documentos requeridos\n• Información sobre SENTRI\n• Comparación de cruces\n• Reglas de aduana\n\n¿Qué te gustaría saber?",
+    text: t("agent.template.greetingGeneric"),
   };
 }
 
-function generateDefaultResponse(isEn: boolean): ResponseContent {
+function generateDefaultResponse(t: (k: string, v?: any) => string): ResponseContent {
   return {
-    text: isEn
-      ? "I can help with crossing information. Try asking about:\n• Wait times\n• Documents needed\n• SENTRI\n• Crossing comparisons\n• Customs rules"
-      : "Puedo ayudarte con información de cruces. Pregunta sobre:\n• Tiempos de espera\n• Documentos necesarios\n• SENTRI\n• Comparación de cruces\n• Reglas de aduana",
+    text: t("agent.template.defaultHelp"),
   };
 }
 
 function generateWhatsHappeningResponse(
   allCrossings: MergedCrossingData[],
-  isEn: boolean
+  t: (k: string, v?: any) => string
 ): ResponseContent {
-  const now = new Date();
-  const hour = now.getHours();
-
-  // Find crossings with high wait times
   const highWait = allCrossings.filter((c) => c.waitTimeNorthbound > 45);
   const lowWait = allCrossings.filter((c) => c.waitTimeNorthbound <= 20);
-
-  // Find closed crossings
-  const closed = allCrossings.filter(
-    (c) => c.statusNorthbound === "CLOSED" || c.statusSouthbound === "CLOSED"
-  );
-
-  // Find limited crossings
-  const limited = allCrossings.filter(
-    (c) => c.statusNorthbound === "LIMITED" || c.statusSouthbound === "LIMITED"
-  );
+  const closed = allCrossings.filter((c) => c.statusNorthbound === "CLOSED" || c.statusSouthbound === "CLOSED");
+  const limited = allCrossings.filter((c) => c.statusNorthbound === "LIMITED" || c.statusSouthbound === "LIMITED");
 
   const parts: string[] = [];
+  const now = new Date().toLocaleTimeString();
 
-  if (isEn) {
-    parts.push(`Here's what's happening at the border right now (${now.toLocaleTimeString()}):`);
+  parts.push(t("agent.template.whatsHappeningNow", { time: now }));
 
-    if (highWait.length > 0) {
-      parts.push(`\n⚠️ High traffic (${highWait.length} crossings):`);
-      highWait.slice(0, 3).forEach((c) => {
-        parts.push(`• ${c.name}: ${c.waitTimeNorthbound} min wait`);
-      });
-    }
+  if (highWait.length > 0) {
+    parts.push(t("agent.template.highTraffic", { count: highWait.length }));
+    highWait.slice(0, 3).forEach((c) => {
+      parts.push(t("agent.template.highTrafficRow", { name: c.name, wait: c.waitTimeNorthbound }));
+    });
+  }
 
-    if (lowWait.length > 0) {
-      parts.push(`\n✅ Fast crossings (${lowWait.length}):`);
-      lowWait.slice(0, 3).forEach((c) => {
-        parts.push(`• ${c.name}: ${c.waitTimeNorthbound} min`);
-      });
-    }
+  if (lowWait.length > 0) {
+    parts.push(t("agent.template.fastCrossings", { count: lowWait.length }));
+    lowWait.slice(0, 3).forEach((c) => {
+      parts.push(t("agent.template.fastRow", { name: c.name, wait: c.waitTimeNorthbound }));
+    });
+  }
 
-    if (closed.length > 0) {
-      parts.push(`\n🚫 Closed: ${closed.map((c) => c.name).join(", ")}`);
-    }
+  if (closed.length > 0) {
+    parts.push(t("agent.template.closedList", { names: closed.map((c) => c.name).join(", ") }));
+  }
 
-    if (limited.length > 0) {
-      parts.push(`\n⚠️ Limited service: ${limited.map((c) => c.name).join(", ")}`);
-    }
+  if (limited.length > 0) {
+    parts.push(t("agent.template.limitedList", { names: limited.map((c) => c.name).join(", ") }));
+  }
 
-    if (highWait.length === 0 && lowWait.length > 0) {
-      parts.push("\n\nAll crossings are moving well!");
-    }
-  } else {
-    parts.push(`Así está la frontera ahora (${now.toLocaleTimeString()}):`);
-
-    if (highWait.length > 0) {
-      parts.push(`\n⚠️ Tráfico alto (${highWait.length} cruces):`);
-      highWait.slice(0, 3).forEach((c) => {
-        parts.push(`• ${c.name}: ${c.waitTimeNorthbound} min de espera`);
-      });
-    }
-
-    if (lowWait.length > 0) {
-      parts.push(`\n✅ Cruces rápidos (${lowWait.length}):`);
-      lowWait.slice(0, 3).forEach((c) => {
-        parts.push(`• ${c.name}: ${c.waitTimeNorthbound} min`);
-      });
-    }
-
-    if (closed.length > 0) {
-      parts.push(`\n🚫 Cerrados: ${closed.map((c) => c.name).join(", ")}`);
-    }
-
-    if (limited.length > 0) {
-      parts.push(`\n⚠️ Servicio limitado: ${limited.map((c) => c.name).join(", ")}`);
-    }
-
-    if (highWait.length === 0 && lowWait.length > 0) {
-      parts.push("\n\n¡Todos los cruces están fluidos!");
-    }
+  if (highWait.length === 0 && lowWait.length > 0) {
+    parts.push(t("agent.template.allFlowing"));
   }
 
   return {
     text: parts.join("\n"),
     action: {
-      label: isEn ? "View all crossings" : "Ver todos los cruces",
+      label: t("agent.template.viewAllCrossings"),
       href: "/crossings",
     },
   };

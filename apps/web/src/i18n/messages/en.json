@@ -25,7 +25,10 @@
     "hoursAgo": "{count} h ago",
     "updated": "Updated {time}",
     "mexico": "Mexico",
-    "unitedStates": "United States"
+    "unitedStates": "United States",
+    "errorTitle": "Something went wrong",
+    "errorMessage": "We couldn't load this page. Please try again.",
+    "unknown": "Unknown"
   },
   "nav": {
     "trip": "Trip",
@@ -217,13 +220,15 @@
     "empty": {
       "title": "Where are you going?",
       "subtitle": "Plan your border crossing and get the best route.",
+      "body": "Search for your destination in the United States to receive personalized crossing intelligence.",
       "startTrip": "Start a trip",
       "nearby": "Nearby",
       "nearbySubtitle": "Relevant crossings now",
       "viewAll": "View all crossings →",
       "noNearby": "No nearby crossings available",
       "searchPlaceholder": "Search for a destination in {country}",
-      "noResultsInCountry": "No destinations found in {country}"
+      "noResultsInCountry": "No destinations found in {country}",
+      "selectToContinue": "Select a destination to continue"
     },
     "title": "My Trip",
     "yourTrip": "YOUR TRIP",
@@ -297,7 +302,6 @@
     "mexico": "Mexico",
     "unitedStates": "United States",
     "next": "Next",
-    "yourTrip": "YOUR TRIP",
     "checklist": {
       "title": "BEFORE CROSSING",
       "operational": "Crossing open",
@@ -316,6 +320,13 @@
       "fmm": "Tourist Card (FMM)",
       "resident": "Resident",
       "none": "None"
+    },
+    "recommendation": {
+      "reasons": {
+        "time": "Shorter total time",
+        "compatible": "Compatible with your crossing type",
+        "recent": "Recent data"
+      }
     }
   },
   "settings": {
@@ -333,6 +344,56 @@
       "sentry": "How do I get SENTRI?",
       "waitTimes": "What are the current wait times?",
       "configureTrip": "Help me configure my trip"
+    },
+    "checklist": {
+      "passport": "Valid passport",
+      "visa": "US visa",
+      "sentri": "SENTRI card",
+      "vehicle": "Vehicle registration (if driving)",
+      "insurance": "Mexican auto insurance (if driving)"
+    },
+    "template": {
+      "waitTimesAt": "Current wait times at {name}:",
+      "viewCrossingDetails": "View crossing details",
+      "top5Fastest": "Top 5 fastest crossings right now:",
+      "hoursAt": "{name} operating hours:",
+      "hours": "Hours",
+      "status": "Status",
+      "mostOpen": "Most border crossings are open 24/7. Some pedestrian crossings have limited hours.",
+      "documentsNeed": "Documents you'll need for crossing:",
+      "sentriHas": "You have SENTRI! Use the dedicated SENTRI lanes for the fastest crossing.",
+      "sentriLanes": "SENTRI lanes",
+      "standardLanes": "Standard lanes",
+      "sentriInfo": "SENTRI (Trusted Traveler) lets you use expedited lanes at the border.",
+      "howToApply": "How to apply",
+      "sentriSteps": "1. Create a TTP account\n2. Pay $122.50 fee\n3. Complete interview at enrollment center",
+      "applySentri": "Apply for SENTRI",
+      "top3Fastest": "Top 3 fastest crossings:",
+      "currentWithName": "{name} (current)",
+      "comparingWith": "Comparing {name} with nearby alternatives:",
+      "statusAt": "Current status at {name}:",
+      "lastUpdated": "Last updated",
+      "allOperating": "All crossings are currently operating. Check specific crossing for detailed status.",
+      "customsRules": "US customs rules for entering from Mexico:",
+      "ruleFood": "Declare all food, plants, and animals",
+      "ruleCash": "Declare amounts over $10,000 USD",
+      "ruleFruit": "No fruits, vegetables, or meats from Mexico",
+      "ruleDrugs": "No illegal drugs or substances",
+      "ruleFirearms": "No firearms without permit",
+      "ruleMeds": "Prescription meds in original container",
+      "greetingWithTrip": "Hi! I see you're traveling from {start} to {destination}. How can I help?",
+      "greetingGeneric": "Hi! I'm your CRUZE assistant. I can help with:\n• Wait times at crossings\n• Required documents\n• SENTRI information\n• Crossing comparisons\n• Customs rules\n\nWhat would you like to know?",
+      "defaultHelp": "I can help with crossing information. Try asking about:\n• Wait times\n• Documents needed\n• SENTRI\n• Crossing comparisons\n• Customs rules",
+      "whatsHappeningNow": "Here's what's happening at the border right now ({time}):",
+      "highTraffic": "⚠️ High traffic ({count} crossings):",
+      "highTrafficRow": "• {name}: {wait} min wait",
+      "fastCrossings": "✅ Fast crossings ({count}):",
+      "fastRow": "• {name}: {wait} min",
+      "closedList": "🚫 Closed: {names}",
+      "limitedList": "⚠️ Limited service: {names}",
+      "allFlowing": "All crossings are moving well!",
+      "viewAllCrossings": "View all crossings",
+      "unknown": "Unknown"
     }
   },
   "shared": {

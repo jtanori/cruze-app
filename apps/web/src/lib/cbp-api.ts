@@ -84,37 +84,46 @@ function parseLanesOpen(lanes: string): number {
   return isNaN(num) ? 0 : num;
 }
 
-/** Map CBP port name to our internal crossing ID */
+/** Map CBP port name to our internal crossing ID — dynamic, no hardcoded table to maintain */
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+const LEGACY_ALIASES: Record<string, string> = {
+  // CBP naming quirks → canonical id (kept minimal, everything else slugifies directly)
+  "nogales-deconcini": "nogales-deconcini",
+  "nogales-de-concini": "nogales-deconcini",
+  "san-luis-rio-colorado": "san-luis",
+  ysleta: "el-paso-ysleta",
+  "stanton-dcl": "el-paso-stanton",
+  "bridge-of-the-americas": "el-paso-bridge-of-americas",
+  laredo: "laredo-juarez-lincoln",
+  hidalgo: "hidalgo",
+  brownsville: "brownsville-veterans",
+};
+
 function mapPortToCrossingId(portName: string, crossingName: string): string | null {
-  const name = (crossingName || portName).toLowerCase().replace(/[^a-z0-9]/g, "-");
+  const raw = crossingName?.trim() ? `${portName} ${crossingName}` : portName;
+  const slug = slugify(raw);
 
-  const mapping: Record<string, string> = {
-    "san ysidro": "san-ysidro",
-    "otay mesa": "otay-mesa",
-    tecate: "tecate",
-    "calexico west": "calexico-west",
-    "calexico east": "calexico-east",
-    "nogales deconcini": "nogales-decongestion",
-    nogales: "nogales-mariposa",
-    "san luis": "san-luis",
-    "ysleta": "el-paso-ysleta",
-    "stanton dcl": "el-paso-stanton",
-    "bridge of the americas": "el-paso-bridge-of-americas",
-    "laredo": "laredo-north",
-    hidalgo: "hidalgo",
-    brownsville: "brownsville",
-  };
+  // 1) Direct slug — if we add a new port to border-data.ts with matching slug, it auto-resolves
+  //    e.g. "San Ysidro" → "san-ysidro", "Andrade" → "andrade", "Presidio" → "presidio"
+  //    No table update needed on add/remove/edit.
 
-  // Try exact match first
-  const lowerPort = portName.toLowerCase();
-  const lowerCrossing = crossingName.toLowerCase();
-  const combined = lowerCrossing ? `${lowerPort} ${lowerCrossing}` : lowerPort;
+  // 2) Legacy aliases for CBP quirks where slug != canonical id
+  if (LEGACY_ALIASES[slug]) return LEGACY_ALIASES[slug];
 
-  for (const [key, value] of Object.entries(mapping)) {
-    if (combined.includes(key)) return value;
+  // 3) Substring fallback: check if slug contains a known alias key (covers "Nogales Mariposa" etc.)
+  for (const [key, value] of Object.entries(LEGACY_ALIASES)) {
+    if (slug.includes(key)) return value;
   }
 
-  return null;
+  // 4) Return slug directly — border-data.ts should use same slug convention, so new ports auto-pass
+  //    Caller filters by existence in BORDER_CROSSINGS; if not found, it will be ignored (not dropped silently)
+  return slug || null;
 }
 
 /** Fetch wait times from CBP API */

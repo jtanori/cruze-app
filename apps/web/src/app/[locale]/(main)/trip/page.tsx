@@ -15,7 +15,7 @@ import { TripNearbyCrossingRow } from "@/components/trip/TripNearbyCrossingRow";
 import { DestinationSearch } from "@/components/trip/DestinationSearch";
 import { LocationStatusBanner } from "@/components/location/LocationStatusBanner";
 import { getDisplayName } from "@/lib/display";
-import { AlertTriangle, MapPin } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 const TRIP_STALENESS_THRESHOLD_MS = 12 * 60 * 60 * 1000;
 
@@ -51,15 +51,10 @@ export default function TripPage() {
   const hasTrip = start !== null && destination !== null;
 
   useEffect(() => {
-    console.log("[Cruze:Trip] hasTrip:", hasTrip, "start:", start?.name, "dest:", destination?.name);
     if (!hasTrip) {
-      console.log("[Cruze:Trip] No trip → showing T01 with search");
-      if (location) {
-        fetchNearbyCrossings();
-      }
+      if (location) fetchNearbyCrossings();
       setReady(true);
     } else {
-      console.log("[Cruze:Trip] Trip found → rendering dashboard");
       setReady(true);
     }
   }, [hasTrip, location]);
@@ -123,7 +118,6 @@ export default function TripPage() {
 
   const handleSearchNext = () => {
     if (selectedDestination) {
-      // Pre-fill destination in trip setup
       router.push(`/${locale}/trip/setup?dest=${encodeURIComponent(JSON.stringify(selectedDestination))}`);
     }
   };
@@ -131,11 +125,11 @@ export default function TripPage() {
   if (!ready) return null;
 
   return (
-    <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4 sm:space-y-6">
-      {/* T01 Empty State - No active trip */}
+    <div className="px-5 py-6 space-y-6">
+      {/* T01 Empty — W5 §8 TR-EMPTY-01 + §16 TR-NEAR-01 — mobile-first, 16/24/32 spacing */}
       {!hasTrip && (
         <div className="space-y-6">
-          {/* LOC-STATUS-01: Non-dismissible banner at top */}
+          {/* LOC-STATUS-01 non-dismissible at top per W5 §7 */}
           {location && (
             <LocationStatusBanner
               placeName={location.placeName || `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`}
@@ -143,21 +137,36 @@ export default function TripPage() {
             />
           )}
 
-          {/* TU VIAJE Header */}
-          <div className="space-y-2">
-            <h1 className="text-ink text-xl font-bold">{t("trip.yourTrip")}</h1>
+          {/* W5 §8: TU VIAJE eyebrow + hero + body — Sora / Inter tokens */}
+          <div className="space-y-3">
+            <p className="font-display font-bold text-sm tracking-widest uppercase text-cruze-mint">
+              {t("trip.yourTrip")}
+            </p>
+            <h1 className="font-display font-bold text-[32px] leading-tight text-ink">
+              {t("trip.empty.title")}
+            </h1>
+            <p className="font-sans text-[17px] leading-relaxed text-faint">
+              {t("trip.empty.body")}
+            </p>
           </div>
 
-          {/* Destination Search (replaces TR-EMPTY-01) */}
-          <DestinationSearch
-            userLat={location?.lat || 0}
-            userLng={location?.lng || 0}
-            onSelect={handleDestinationSelect}
-            onNext={handleSearchNext}
-            className="space-y-4"
-          />
+          {/* TR-EMPTY-01 DestinationSearch — Surface Elevated, 56px touch, CTA Mint */}
+          <div className="space-y-3">
+            <DestinationSearch
+              userLat={location?.lat || 0}
+              userLng={location?.lng || 0}
+              onSelect={handleDestinationSelect}
+              onNext={handleSearchNext}
+              className="space-y-3"
+            />
+            {!selectedDestination && (
+              <p className="text-center font-sans text-xs text-muted">
+                {t("trip.empty.selectToContinue")}
+              </p>
+            )}
+          </div>
 
-          {/* TR-NEAR-01: TripNearbyCrossingsSection with centered "Ver todos" at bottom */}
+          {/* TR-NEAR-01 — max 2-3, not duplicate of Cruces */}
           <TripNearbyCrossingsSection
             onViewAll={() => router.push(`/${locale}/crossings`)}
             loading={loadingNearby}
@@ -180,9 +189,9 @@ export default function TripPage() {
         </div>
       )}
 
-      {/* Active Trip Dashboard (T08) */}
+      {/* T08 Active Trip — W5 §27-30 */}
       {hasTrip && destination && start && (
-        <>
+        <div className="space-y-6">
           {showStalePrompt && isStale && (
             <div className="bg-caution/10 border border-caution/30 rounded-[var(--radius-lg)] p-4 space-y-3">
               <div className="flex items-start gap-3">
@@ -213,7 +222,7 @@ export default function TripPage() {
               { id: "restrictions", label: t("trip.checklist.restrictions"), status: "unchecked" },
             ]}
           />
-        </>
+        </div>
       )}
     </div>
   );

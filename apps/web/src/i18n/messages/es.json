@@ -25,7 +25,10 @@
     "hoursAgo": "Hace {count} h",
     "updated": "Actualizado {time}",
     "mexico": "México",
-    "unitedStates": "Estados Unidos"
+    "unitedStates": "Estados Unidos",
+    "errorTitle": "Algo salió mal",
+    "errorMessage": "No pudimos cargar esta página. Intenta de nuevo.",
+    "unknown": "Desconocido"
   },
   "nav": {
     "trip": "Viaje",
@@ -217,13 +220,15 @@
     "empty": {
       "title": "¿A dónde vas?",
       "subtitle": "Planifica tu cruce fronterizo y obtén la mejor ruta.",
+      "body": "Busca tu destino en Estados Unidos para recibir inteligencia personalizada para tu cruce.",
       "startTrip": "Comenzar un viaje",
       "nearby": "Cerca de ti",
       "nearbySubtitle": "Cruces relevantes ahora",
       "viewAll": "Ver todos los cruces →",
       "noNearby": "No hay cruces cercanos disponibles",
       "searchPlaceholder": "Busca un destino en {country}",
-      "noResultsInCountry": "No se encontraron destinos en {country}"
+      "noResultsInCountry": "No se encontraron destinos en {country}",
+      "selectToContinue": "Selecciona un destino para continuar"
     },
     "title": "Mi Viaje",
     "yourTrip": "TU VIAJE",
@@ -297,7 +302,6 @@
     "mexico": "México",
     "unitedStates": "Estados Unidos",
     "next": "Siguiente",
-    "yourTrip": "TU VIAJE",
     "checklist": {
       "title": "ANTES DE CRUZAR",
       "operational": "Cruce abierto",
@@ -316,6 +320,13 @@
       "fmm": "Tarjeta de Turista (FMM)",
       "resident": "Residente",
       "none": "Ninguna"
+    },
+    "recommendation": {
+      "reasons": {
+        "time": "Menor tiempo total",
+        "compatible": "Compatible con tu tipo de cruce",
+        "recent": "Datos recientes"
+      }
     }
   },
   "settings": {
@@ -333,6 +344,56 @@
       "sentry": "¿Cómo obtengo SENTRI?",
       "waitTimes": "¿Cuáles son los tiempos de espera actuales?",
       "configureTrip": "Ayúdame a configurar mi viaje"
+    },
+    "checklist": {
+      "passport": "Pasaporte válido",
+      "visa": "Visa de EE.UU.",
+      "sentri": "Tarjeta SENTRI",
+      "vehicle": "Registro del vehículo (si conduces)",
+      "insurance": "Seguro de auto mexicano (si conduces)"
+    },
+    "template": {
+      "waitTimesAt": "Tiempos de espera actuales en {name}:",
+      "viewCrossingDetails": "Ver detalles del cruce",
+      "top5Fastest": "Los 5 cruces más rápidos ahora:",
+      "hoursAt": "Horario de {name}:",
+      "hours": "Horario",
+      "status": "Estado",
+      "mostOpen": "La mayoría de los cruces están abiertos 24/7. Algunos cruces peatonales tienen horario limitado.",
+      "documentsNeed": "Documentos que necesitas para cruzar:",
+      "sentriHas": "¡Tienes SENTRI! Usa los carriles dedicados de SENTRI para el cruce más rápido.",
+      "sentriLanes": "Carriles SENTRI",
+      "standardLanes": "Carriles estándar",
+      "sentriInfo": "SENTRI (Viajero Confiable) te permite usar carriles expeditos en la frontera.",
+      "howToApply": "Cómo aplicar",
+      "sentriSteps": "1. Crea una cuenta TTP\n2. Paga $122.50\n3. Completa entrevista en centro de inscripción",
+      "applySentri": "Aplicar para SENTRI",
+      "top3Fastest": "Los 3 cruces más rápidos:",
+      "currentWithName": "{name} (actual)",
+      "comparingWith": "Comparando {name} con alternativas cercanas:",
+      "statusAt": "Estado actual en {name}:",
+      "lastUpdated": "Última actualización",
+      "allOperating": "Todos los cruces están operando. Consulta un cruce específico para detalles.",
+      "customsRules": "Reglas de aduana de EE.UU. para entrar desde México:",
+      "ruleFood": "Declara todos los alimentos, plantas y animales",
+      "ruleCash": "Declara cantidades mayores a $10,000 USD",
+      "ruleFruit": "No frutas, verduras o carnes de México",
+      "ruleDrugs": "No drogas ilegales o sustancias",
+      "ruleFirearms": "No armas de fuego sin permiso",
+      "ruleMeds": "Medicamentos recetados en envase original",
+      "greetingWithTrip": "¡Hola! Veo que viajas de {start} a {destination}. ¿Cómo puedo ayudarte?",
+      "greetingGeneric": "¡Hola! Soy tu asistente de CRUZE. Puedo ayudarte con:\n• Tiempos de espera en cruces\n• Documentos requeridos\n• Información sobre SENTRI\n• Comparación de cruces\n• Reglas de aduana\n\n¿Qué te gustaría saber?",
+      "defaultHelp": "Puedo ayudarte con información de cruces. Pregunta sobre:\n• Tiempos de espera\n• Documentos necesarios\n• SENTRI\n• Comparación de cruces\n• Reglas de aduana",
+      "whatsHappeningNow": "Así está la frontera ahora ({time}):",
+      "highTraffic": "⚠️ Tráfico alto ({count} cruces):",
+      "highTrafficRow": "• {name}: {wait} min de espera",
+      "fastCrossings": "✅ Cruces rápidos ({count}):",
+      "fastRow": "• {name}: {wait} min",
+      "closedList": "🚫 Cerrados: {names}",
+      "limitedList": "⚠️ Servicio limitado: {names}",
+      "allFlowing": "¡Todos los cruces están fluidos!",
+      "viewAllCrossings": "Ver todos los cruces",
+      "unknown": "Desconocido"
     }
   },
   "shared": {

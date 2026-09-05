@@ -113,7 +113,7 @@ export function DestinationSearch({
     <div className={`space-y-4 ${className}`}>
       {/* Search Input */}
       <div className="relative">
-        <div className="flex items-center gap-3 h-[48px] bg-surface border border-border rounded-[var(--radius-md)] px-3 focus-within:border-cruze-green transition-colors">
+        <div className="flex items-center gap-3 h-[56px] bg-surface-elevated border border-border rounded-[var(--radius-md)] px-4 focus-within:border-cruze-mint transition-colors">
           <Search className="w-4 h-4 text-faint shrink-0" />
           <input
             ref={inputRef}
@@ -201,7 +201,7 @@ export function DestinationSearch({
           <button
             onClick={handleNext}
             disabled={!selected}
-            className="w-full h-[48px] flex items-center justify-center gap-2 bg-cruze-mint text-midnight font-semibold text-sm rounded-[var(--radius-lg)] hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full h-[56px] flex items-center justify-center gap-2 bg-cruze-mint text-midnight font-semibold text-sm rounded-[var(--radius-md)] hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {t("common.next")}
             <ArrowRight className="w-4 h-4" />

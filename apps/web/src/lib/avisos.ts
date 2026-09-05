@@ -22,23 +22,27 @@ export interface Aviso {
   timestamp: string;
 }
 
-export function groupAvisosByTime(avisos: Aviso[]): { label: string; items: Aviso[] }[] {
+export function groupAvisosByTime(avisos: Aviso[]): { labelKey: string; label: string; items: Aviso[] }[] {
   const now = new Date();
+  const startOfToday = new Date(now);
+  startOfToday.setHours(0, 0, 0, 0);
+  const startOfYesterday = new Date(startOfToday);
+  startOfYesterday.setDate(startOfToday.getDate() - 1);
+
   const today: Aviso[] = [];
   const yesterday: Aviso[] = [];
   const earlier: Aviso[] = [];
 
   avisos.forEach((a) => {
     const d = new Date(a.timestamp);
-    const diffDays = Math.floor((now.getTime() - d.getTime()) / 86400000);
-    if (diffDays === 0) today.push(a);
-    else if (diffDays === 1) yesterday.push(a);
+    if (d >= startOfToday) today.push(a);
+    else if (d >= startOfYesterday) yesterday.push(a);
     else earlier.push(a);
   });
 
-  const groups: { label: string; items: Aviso[] }[] = [];
-  if (today.length) groups.push({ label: "Hoy", items: today });
-  if (yesterday.length) groups.push({ label: "Ayer", items: yesterday });
-  if (earlier.length) groups.push({ label: "Anterior", items: earlier });
+  const groups: { labelKey: string; label: string; items: Aviso[] }[] = [];
+  if (today.length) groups.push({ labelKey: "alerts.today", label: "Hoy", items: today });
+  if (yesterday.length) groups.push({ labelKey: "alerts.yesterday", label: "Ayer", items: yesterday });
+  if (earlier.length) groups.push({ labelKey: "alerts.earlier", label: "Anterior", items: earlier });
   return groups;
 }

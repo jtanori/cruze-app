@@ -8,6 +8,7 @@ import { getMergedCrossingsData, type MergedCrossingData } from "@/lib/border-da
 import { classifyIntent, extractCrossingMention, type IntentBand } from "@/lib/intent-classifier";
 import { generateResponse, type ResponseContent } from "@/lib/agent-templates";
 import { BORDER_CROSSINGS } from "@/lib/border-data";
+import { useTranslations, useLocale } from "next-intl";
 
 interface AgentContextValue {
   crossings: MergedCrossingData[];
@@ -30,6 +31,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
   const trip = useTripStore();
   const { profile } = useTravelerStore();
   const { addMessage } = useAgentStore();
+  const t = useTranslations();
 
   useEffect(() => {
     async function load() {
@@ -52,16 +54,19 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
         ? crossings.find((c) => c.id === crossingId) || null
         : null;
 
-      // Determine locale from trip or default
-      const locale = "es";
-
-      // Generate response
+      // Generate response via i18n t (no hardcoded isEn)
       const response = generateResponse(intent, {
         crossing,
         allCrossings: crossings,
         trip,
         profile,
-        locale,
+        t: (key: string, values?: Record<string, any>) => {
+          try {
+            return t(key as any, values as any);
+          } catch {
+            return key;
+          }
+        },
       });
 
       // Save to agent store

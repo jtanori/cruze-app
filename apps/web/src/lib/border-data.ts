@@ -5,12 +5,20 @@ export type BorderDirection = "MX_TO_US" | "US_TO_MX";
 export type BorderCorridor =
   | "tijuana-san-diego"
   | "mexicali-calexico"
-  | "nogales"
+  | "andrade-los-algodones"
   | "san-luis"
+  | "lukeville-sasabe"
+  | "nogales"
+  | "douglas-naco"
+  | "columbus-santa-teresa"
   | "el-paso-juarez"
+  | "presidio-o-jinaga"
+  | "del-rio-acuna"
+  | "eagle-pass-piedras-negras"
   | "laredo-nuevo-laredo"
   | "reynosa-hidalgo"
-  | "matamoros-brownsville";
+  | "matamoros-brownsville"
+  | "rio-grande-roma";
 
 export interface BorderCrossing {
   id: string;
@@ -23,11 +31,11 @@ export interface BorderCrossing {
   usAddress: string;
   corridor: BorderCorridor;
   coordinates: { lat: number; lng: number };
-  country: "MX" | "US";
+  country: "US";
 }
 
 export const BORDER_CROSSINGS: BorderCrossing[] = [
-  // San Diego / Tijuana Corridor
+  // Tijuana / San Diego Corridor (CA)
   {
     id: "san-ysidro",
     name: "San Ysidro",
@@ -36,7 +44,7 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     mexicanState: "Baja California",
     usState: "California",
     mexicanAddress: "Av. de las Américas s/n, Zona Río, 22000 Tijuana, B.C.",
-    usAddress: "7450一步 1, San Ysidro, CA 92173",
+    usAddress: "7450 Camino de la Plaza, San Ysidro, CA 92173",
     corridor: "tijuana-san-diego",
     coordinates: { lat: 32.5431, lng: -117.0379 },
     country: "US",
@@ -55,6 +63,19 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     country: "US",
   },
   {
+    id: "otay-mesa-east",
+    name: "Otay Mesa East",
+    mexicanCity: "Tijuana",
+    usCity: "San Diego",
+    mexicanState: "Baja California",
+    usState: "California",
+    mexicanAddress: "Blvd. 2000, La Presa, 22105 Tijuana, B.C.",
+    usAddress: "Chula Vista, CA 91913",
+    corridor: "tijuana-san-diego",
+    coordinates: { lat: 32.53, lng: -116.91 },
+    country: "US",
+  },
+  {
     id: "tecate",
     name: "Tecate",
     mexicanCity: "Tecate",
@@ -68,7 +89,7 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     country: "US",
   },
 
-  // Mexicali / Calexico Corridor
+  // Mexicali / Calexico + Andrade
   {
     id: "calexico-west",
     name: "Calexico West",
@@ -95,8 +116,60 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     coordinates: { lat: 32.6703, lng: -115.4614 },
     country: "US",
   },
+  {
+    id: "andrade",
+    name: "Andrade",
+    mexicanCity: "Los Algodones",
+    usCity: "Winterhaven",
+    mexicanState: "Baja California",
+    usState: "California",
+    mexicanAddress: "Av. 5 de Mayo s/n, 21970 Los Algodones, B.C.",
+    usAddress: "550 S Winterhaven Dr, Winterhaven, CA 92283",
+    corridor: "andrade-los-algodones",
+    coordinates: { lat: 32.7315, lng: -114.73 },
+    country: "US",
+  },
 
-  // Arizona Corridor
+  // Yuma / San Luis + Lukeville / Sasabe (AZ)
+  {
+    id: "san-luis",
+    name: "San Luis",
+    mexicanCity: "San Luis Río Colorado",
+    usCity: "San Luis",
+    mexicanState: "Sonora",
+    usState: "Arizona",
+    mexicanAddress: "Av. Sonora s/n, Col. Centro, 83400 San Luis R.C., Son.",
+    usAddress: "1450 S 1st Ave, San Luis, AZ 85349",
+    corridor: "san-luis",
+    coordinates: { lat: 32.4863, lng: -114.7817 },
+    country: "US",
+  },
+  {
+    id: "lukeville",
+    name: "Lukeville",
+    mexicanCity: "Sonoyta",
+    usCity: "Lukeville",
+    mexicanState: "Sonora",
+    usState: "Arizona",
+    mexicanAddress: "Carretera Sonoyta-Lukeville km 2, 83570 Sonoyta, Son.",
+    usAddress: "Highway 85, Lukeville, AZ 85341",
+    corridor: "lukeville-sasabe",
+    coordinates: { lat: 31.884, lng: -112.832 },
+    country: "US",
+  },
+  {
+    id: "sasabe",
+    name: "Sasabe",
+    mexicanCity: "Sasabe",
+    usCity: "Sasabe",
+    mexicanState: "Sonora",
+    usState: "Arizona",
+    mexicanAddress: "Carretera Sásabe-Altar s/n, 83970 Sásabe, Son.",
+    usAddress: "Arizona State Route 286, Sasabe, AZ 85633",
+    corridor: "lukeville-sasabe",
+    coordinates: { lat: 31.485, lng: -111.544 },
+    country: "US",
+  },
   {
     id: "nogales-mariposa",
     name: "Nogales Mariposa",
@@ -111,8 +184,8 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     country: "US",
   },
   {
-    id: "nogales-decongestion",
-    name: "Nogales DeCongestion",
+    id: "nogales-deconcini",
+    name: "Nogales DeConcini",
     mexicanCity: "Nogales",
     usCity: "Nogales",
     mexicanState: "Sonora",
@@ -124,20 +197,87 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     country: "US",
   },
   {
-    id: "san-luis",
-    name: "San Luis",
-    mexicanCity: "San Luis Río Colorado",
-    usCity: "San Luis",
+    id: "nogales-morley",
+    name: "Nogales Morley Gate",
+    mexicanCity: "Nogales",
+    usCity: "Nogales",
     mexicanState: "Sonora",
     usState: "Arizona",
-    mexicanAddress: "Av. Sonora s/n, Col. Centro, 83400 San Luis R.C., Son.",
-    usAddress: "1450 S 1st Ave, San Luis, AZ 85349",
-    corridor: "san-luis",
-    coordinates: { lat: 32.4863, lng: -114.7817 },
+    mexicanAddress: "Calle Morley s/n, Col. Centro, 84000 Nogales, Son.",
+    usAddress: "Morley Ave, Nogales, AZ 85621",
+    corridor: "nogales",
+    coordinates: { lat: 31.3339, lng: -110.9415 },
+    country: "US",
+  },
+  {
+    id: "naco",
+    name: "Naco",
+    mexicanCity: "Naco",
+    usCity: "Naco",
+    mexicanState: "Sonora",
+    usState: "Arizona",
+    mexicanAddress: "Av. Francisco I. Madero s/n, 84180 Naco, Son.",
+    usAddress: "339 W First St, Naco, AZ 85620",
+    corridor: "douglas-naco",
+    coordinates: { lat: 31.336, lng: -109.948 },
+    country: "US",
+  },
+  {
+    id: "douglas",
+    name: "Douglas",
+    mexicanCity: "Agua Prieta",
+    usCity: "Douglas",
+    mexicanState: "Sonora",
+    usState: "Arizona",
+    mexicanAddress: "Av. 6 s/n, Col. Centro, 84200 Agua Prieta, Son.",
+    usAddress: "1 Pan American Ave, Douglas, AZ 85607",
+    corridor: "douglas-naco",
+    coordinates: { lat: 31.344, lng: -109.543 },
     country: "US",
   },
 
-  // Texas Corridor
+  // New Mexico
+  {
+    id: "columbus",
+    name: "Columbus",
+    mexicanCity: "Palomas",
+    usCity: "Columbus",
+    mexicanState: "Chihuahua",
+    usState: "New Mexico",
+    mexicanAddress: "Av. Benito Juárez s/n, 31830 Palomas, Chih.",
+    usAddress: "3000 Ash St, Columbus, NM 88029",
+    corridor: "columbus-santa-teresa",
+    coordinates: { lat: 31.829, lng: -107.639 },
+    country: "US",
+  },
+  {
+    id: "santa-teresa",
+    name: "Santa Teresa",
+    mexicanCity: "San Jerónimo",
+    usCity: "Santa Teresa",
+    mexicanState: "Chihuahua",
+    usState: "New Mexico",
+    mexicanAddress: "Carretera Palomas-Juárez km 12, 32543 San Jerónimo, Chih.",
+    usAddress: "1189 County Road 187, Santa Teresa, NM 88008",
+    corridor: "columbus-santa-teresa",
+    coordinates: { lat: 31.871, lng: -106.68 },
+    country: "US",
+  },
+  {
+    id: "antelope-wells",
+    name: "Antelope Wells",
+    mexicanCity: "El Berrendo",
+    usCity: "Antelope Wells",
+    mexicanState: "Chihuahua",
+    usState: "New Mexico",
+    mexicanAddress: "Carretera Janos-Agua Prieta s/n, 32830 El Berrendo, Chih.",
+    usAddress: "Antelope Wells, NM 88023",
+    corridor: "columbus-santa-teresa",
+    coordinates: { lat: 31.342, lng: -108.506 },
+    country: "US",
+  },
+
+  // El Paso / Juárez (TX)
   {
     id: "el-paso-ysleta",
     name: "Ysleta",
@@ -178,16 +318,165 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     country: "US",
   },
   {
-    id: "laredo-north",
-    name: "Laredo North",
+    id: "el-paso-paso-del-norte",
+    name: "Paso del Norte",
+    mexicanCity: "Ciudad Juárez",
+    usCity: "El Paso",
+    mexicanState: "Chihuahua",
+    usState: "Texas",
+    mexicanAddress: "Av. Juárez s/n, Col. Centro, 32000 Ciudad Juárez, Chih.",
+    usAddress: "1001 E 6th Ave, El Paso, TX 79901",
+    corridor: "el-paso-juarez",
+    coordinates: { lat: 31.765, lng: -106.485 },
+    country: "US",
+  },
+  {
+    id: "fabens",
+    name: "Fabens",
+    mexicanCity: "Caseta",
+    usCity: "Fabens",
+    mexicanState: "Chihuahua",
+    usState: "Texas",
+    mexicanAddress: "Carretera Juárez-Porvenir km 45, 32750 Caseta, Chih.",
+    usAddress: "13500 Fabens St, Fabens, TX 79838",
+    corridor: "el-paso-juarez",
+    coordinates: { lat: 31.438, lng: -106.138 },
+    country: "US",
+  },
+  {
+    id: "presidio",
+    name: "Presidio",
+    mexicanCity: "Ojinaga",
+    usCity: "Presidio",
+    mexicanState: "Chihuahua",
+    usState: "Texas",
+    mexicanAddress: "Av. Transfronteriza s/n, 32882 Ojinaga, Chih.",
+    usAddress: "BIB Rd, Presidio, TX 79845",
+    corridor: "presidio-o-jinaga",
+    coordinates: { lat: 29.56, lng: -104.372 },
+    country: "US",
+  },
+
+  // West Texas: Del Rio / Eagle Pass
+  {
+    id: "del-rio",
+    name: "Del Rio",
+    mexicanCity: "Ciudad Acuña",
+    usCity: "Del Rio",
+    mexicanState: "Coahuila",
+    usState: "Texas",
+    mexicanAddress: "Av. Sur Poniente s/n, Col. Centro, 26200 Ciudad Acuña, Coah.",
+    usAddress: "702 W Gibbs St, Del Rio, TX 78840",
+    corridor: "del-rio-acuna",
+    coordinates: { lat: 29.374, lng: -100.88 },
+    country: "US",
+  },
+  {
+    id: "eagle-pass",
+    name: "Eagle Pass",
+    mexicanCity: "Piedras Negras",
+    usCity: "Eagle Pass",
+    mexicanState: "Coahuila",
+    usState: "Texas",
+    mexicanAddress: "Puente Internacional I, 26000 Piedras Negras, Coah.",
+    usAddress: "1600 Garrison St, Eagle Pass, TX 78852",
+    corridor: "eagle-pass-piedras-negras",
+    coordinates: { lat: 28.707, lng: -100.499 },
+    country: "US",
+  },
+  {
+    id: "eagle-pass-camino-real",
+    name: "Eagle Pass Camino Real",
+    mexicanCity: "Piedras Negras",
+    usCity: "Eagle Pass",
+    mexicanState: "Coahuila",
+    usState: "Texas",
+    mexicanAddress: "Puente Internacional II, 26000 Piedras Negras, Coah.",
+    usAddress: "3200 El Indio Hwy, Eagle Pass, TX 78852",
+    corridor: "eagle-pass-piedras-negras",
+    coordinates: { lat: 28.69, lng: -100.5 },
+    country: "US",
+  },
+
+  // Laredo (TX)
+  {
+    id: "laredo-world-trade",
+    name: "Laredo World Trade",
     mexicanCity: "Nuevo Laredo",
     usCity: "Laredo",
     mexicanState: "Tamaulipas",
     usState: "Texas",
-    mexicanAddress: "Av. Fidel Velázquez s/n, Col. Centro, 88000 Nuevo Laredo, Tamps.",
-    usAddress: "1000 Bob Bullock Loop, Laredo, TX 78045",
+    mexicanAddress: "World Trade Bridge, 88000 Nuevo Laredo, Tamps.",
+    usAddress: "2200 World Trade Bridge, Laredo, TX 78045",
+    corridor: "laredo-nuevo-laredo",
+    coordinates: { lat: 27.623, lng: -99.53 },
+    country: "US",
+  },
+  {
+    id: "laredo-colombia",
+    name: "Laredo Colombia",
+    mexicanCity: "Colombia",
+    usCity: "Laredo",
+    mexicanState: "Nuevo León",
+    usState: "Texas",
+    mexicanAddress: "Puente Colombia, 66000 Colombia, N.L.",
+    usAddress: "Washington St, Laredo, TX 78044",
+    corridor: "laredo-nuevo-laredo",
+    coordinates: { lat: 27.701, lng: -99.753 },
+    country: "US",
+  },
+  {
+    id: "laredo-juarez-lincoln",
+    name: "Juarez-Lincoln",
+    mexicanCity: "Nuevo Laredo",
+    usCity: "Laredo",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Av. 15 de Junio s/n, Col. Centro, 88000 Nuevo Laredo, Tamps.",
+    usAddress: "1000 Salinas Ave, Laredo, TX 78040",
     corridor: "laredo-nuevo-laredo",
     coordinates: { lat: 27.5064, lng: -99.5076 },
+    country: "US",
+  },
+  {
+    id: "laredo-gateway",
+    name: "Gateway to the Americas",
+    mexicanCity: "Nuevo Laredo",
+    usCity: "Laredo",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Av. Doblado s/n, Col. Centro, 88000 Nuevo Laredo, Tamps.",
+    usAddress: "1550 San Bernardo Ave, Laredo, TX 78040",
+    corridor: "laredo-nuevo-laredo",
+    coordinates: { lat: 27.508, lng: -99.505 },
+    country: "US",
+  },
+
+  // Lower Rio Grande
+  {
+    id: "roma",
+    name: "Roma",
+    mexicanCity: "Miguel Alemán",
+    usCity: "Roma",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente Roma-Miguel Alemán, 88300 Miguel Alemán, Tamps.",
+    usAddress: "500 N Water St, Roma, TX 78584",
+    corridor: "rio-grande-roma",
+    coordinates: { lat: 26.407, lng: -99.017 },
+    country: "US",
+  },
+  {
+    id: "rio-grande-city",
+    name: "Rio Grande City",
+    mexicanCity: "Camargo",
+    usCity: "Rio Grande City",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente Camargo, 88440 Camargo, Tamps.",
+    usAddress: "475 S Main St, Rio Grande City, TX 78582",
+    corridor: "rio-grande-roma",
+    coordinates: { lat: 26.379, lng: -98.824 },
     country: "US",
   },
   {
@@ -204,16 +493,107 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     country: "US",
   },
   {
-    id: "brownsville",
-    name: "Brownsville",
+    id: "pharr",
+    name: "Pharr",
+    mexicanCity: "Reynosa",
+    usCity: "Pharr",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente Pharr-Reynosa, 88760 Reynosa, Tamps.",
+    usAddress: "1200 S Cage Blvd, Pharr, TX 78577",
+    corridor: "reynosa-hidalgo",
+    coordinates: { lat: 26.191, lng: -98.191 },
+    country: "US",
+  },
+  {
+    id: "anzalduas",
+    name: "Anzalduas",
+    mexicanCity: "Reynosa",
+    usCity: "Mission",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente Anzaldúas, 88760 Reynosa, Tamps.",
+    usAddress: "2200 S Anzalduas Hwy, Mission, TX 78572",
+    corridor: "reynosa-hidalgo",
+    coordinates: { lat: 26.14, lng: -98.33 },
+    country: "US",
+  },
+  {
+    id: "donna",
+    name: "Donna",
+    mexicanCity: "Río Bravo",
+    usCity: "Donna",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente Donna-Río Bravo, 88900 Río Bravo, Tamps.",
+    usAddress: "1100 S Donna Loop, Donna, TX 78537",
+    corridor: "reynosa-hidalgo",
+    coordinates: { lat: 26.161, lng: -98.06 },
+    country: "US",
+  },
+  {
+    id: "progreso",
+    name: "Progreso",
+    mexicanCity: "Nuevo Progreso",
+    usCity: "Progreso",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente Progreso, 88810 Nuevo Progreso, Tamps.",
+    usAddress: "350 S International Blvd, Progreso, TX 78579",
+    corridor: "reynosa-hidalgo",
+    coordinates: { lat: 26.094, lng: -97.957 },
+    country: "US",
+  },
+  {
+    id: "los-indios",
+    name: "Los Indios",
+    mexicanCity: "Matamoros",
+    usCity: "Los Indios",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente Los Indios, 87360 Matamoros, Tamps.",
+    usAddress: "2500 S International Blvd, Los Indios, TX 78564",
+    corridor: "matamoros-brownsville",
+    coordinates: { lat: 26.045, lng: -97.74 },
+    country: "US",
+  },
+  {
+    id: "brownsville-gateway",
+    name: "Brownsville Gateway",
     mexicanCity: "Matamoros",
     usCity: "Brownsville",
     mexicanState: "Tamaulipas",
     usState: "Texas",
-    mexicanAddress: "Av. 5 de Mayo s/n, Col. Centro, 88000 Matamoros, Tamps.",
-    usAddress: "1 Zapata Dr, Brownsville, TX 78521",
+    mexicanAddress: "Puente Gateway, 87360 Matamoros, Tamps.",
+    usAddress: "301 E 13th St, Brownsville, TX 78520",
+    corridor: "matamoros-brownsville",
+    coordinates: { lat: 25.9, lng: -97.495 },
+    country: "US",
+  },
+  {
+    id: "brownsville-veterans",
+    name: "Brownsville Veterans",
+    mexicanCity: "Matamoros",
+    usCity: "Brownsville",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente Veterans (Los Tomates), 87360 Matamoros, Tamps.",
+    usAddress: "1 Veteran Bridge, Brownsville, TX 78520",
     corridor: "matamoros-brownsville",
     coordinates: { lat: 25.8624, lng: -97.5069 },
+    country: "US",
+  },
+  {
+    id: "brownsville-bm",
+    name: "Brownsville B&M",
+    mexicanCity: "Matamoros",
+    usCity: "Brownsville",
+    mexicanState: "Tamaulipas",
+    usState: "Texas",
+    mexicanAddress: "Puente B&M, 87360 Matamoros, Tamps.",
+    usAddress: "400 E Harrison St, Brownsville, TX 78520",
+    corridor: "matamoros-brownsville",
+    coordinates: { lat: 25.898, lng: -97.51 },
     country: "US",
   },
 ];
@@ -229,25 +609,59 @@ export const BORDER_CITIES_MX: BorderCity[] = [
   { name: "Tijuana", country: "MX", corridor: "tijuana-san-diego", coordinates: { lat: 32.5149, lng: -117.0382 } },
   { name: "Tecate", country: "MX", corridor: "tijuana-san-diego", coordinates: { lat: 32.5694, lng: -116.6333 } },
   { name: "Mexicali", country: "MX", corridor: "mexicali-calexico", coordinates: { lat: 32.6275, lng: -115.4844 } },
+  { name: "Los Algodones", country: "MX", corridor: "andrade-los-algodones", coordinates: { lat: 32.81, lng: -114.73 } },
+  { name: "San Luis Río Colorado", country: "MX", corridor: "san-luis", coordinates: { lat: 32.4863, lng: -114.7817 } },
+  { name: "Sonoyta", country: "MX", corridor: "lukeville-sasabe", coordinates: { lat: 31.861, lng: -112.85 } },
+  { name: "Sasabe", country: "MX", corridor: "lukeville-sasabe", coordinates: { lat: 31.47, lng: -111.54 } },
+  { name: "Nogales", country: "MX", corridor: "nogales", coordinates: { lat: 31.2959, lng: -110.9392 } },
+  { name: "Naco", country: "MX", corridor: "douglas-naco", coordinates: { lat: 31.31, lng: -109.94 } },
+  { name: "Agua Prieta", country: "MX", corridor: "douglas-naco", coordinates: { lat: 31.329, lng: -109.545 } },
+  { name: "Palomas", country: "MX", corridor: "columbus-santa-teresa", coordinates: { lat: 31.78, lng: -107.62 } },
+  { name: "San Jerónimo", country: "MX", corridor: "columbus-santa-teresa", coordinates: { lat: 31.78, lng: -106.68 } },
+  { name: "Ciudad Juárez", country: "MX", corridor: "el-paso-juarez", coordinates: { lat: 31.6904, lng: -106.4245 } },
+  { name: "Ojinaga", country: "MX", corridor: "presidio-o-jinaga", coordinates: { lat: 29.565, lng: -104.415 } },
+  { name: "Ciudad Acuña", country: "MX", corridor: "del-rio-acuna", coordinates: { lat: 29.325, lng: -100.938 } },
+  { name: "Piedras Negras", country: "MX", corridor: "eagle-pass-piedras-negras", coordinates: { lat: 28.685, lng: -100.523 } },
+  { name: "Nuevo Laredo", country: "MX", corridor: "laredo-nuevo-laredo", coordinates: { lat: 27.4757, lng: -99.5213 } },
+  { name: "Colombia", country: "MX", corridor: "laredo-nuevo-laredo", coordinates: { lat: 27.7, lng: -99.75 } },
+  { name: "Miguel Alemán", country: "MX", corridor: "rio-grande-roma", coordinates: { lat: 26.435, lng: -99.028 } },
+  { name: "Camargo", country: "MX", corridor: "rio-grande-roma", coordinates: { lat: 26.319, lng: -98.83 } },
+  { name: "Reynosa", country: "MX", corridor: "reynosa-hidalgo", coordinates: { lat: 26.0928, lng: -98.277 } },
+  { name: "Río Bravo", country: "MX", corridor: "reynosa-hidalgo", coordinates: { lat: 26.02, lng: -98.09 } },
+  { name: "Nuevo Progreso", country: "MX", corridor: "reynosa-hidalgo", coordinates: { lat: 26.05, lng: -97.95 } },
+  { name: "Matamoros", country: "MX", corridor: "matamoros-brownsville", coordinates: { lat: 25.8694, lng: -97.5034 } },
   { name: "Ensenada", country: "MX", corridor: "tijuana-san-diego", coordinates: { lat: 31.8667, lng: -116.6006 } },
   { name: "Rosarito", country: "MX", corridor: "tijuana-san-diego", coordinates: { lat: 32.3595, lng: -117.0464 } },
-  { name: "Nogales", country: "MX", corridor: "nogales", coordinates: { lat: 31.2959, lng: -110.9392 } },
-  { name: "San Luis Río Colorado", country: "MX", corridor: "san-luis", coordinates: { lat: 32.4863, lng: -114.7817 } },
-  { name: "Ciudad Juárez", country: "MX", corridor: "el-paso-juarez", coordinates: { lat: 31.6904, lng: -106.4245 } },
-  { name: "Nuevo Laredo", country: "MX", corridor: "laredo-nuevo-laredo", coordinates: { lat: 27.4757, lng: -99.5213 } },
-  { name: "Reynosa", country: "MX", corridor: "reynosa-hidalgo", coordinates: { lat: 26.0928, lng: -98.2770 } },
-  { name: "Matamoros", country: "MX", corridor: "matamoros-brownsville", coordinates: { lat: 25.8694, lng: -97.5034 } },
 ];
 
 export const BORDER_CITIES_US: BorderCity[] = [
   { name: "San Diego", country: "US", corridor: "tijuana-san-diego", coordinates: { lat: 32.7157, lng: -117.1611 } },
   { name: "Chula Vista", country: "US", corridor: "tijuana-san-diego", coordinates: { lat: 32.6401, lng: -117.0842 } },
+  { name: "Winterhaven", country: "US", corridor: "andrade-los-algodones", coordinates: { lat: 32.78, lng: -114.67 } },
   { name: "Calexico", country: "US", corridor: "mexicali-calexico", coordinates: { lat: 32.6789, lng: -115.4989 } },
+  { name: "San Luis", country: "US", corridor: "san-luis", coordinates: { lat: 32.487, lng: -114.7822 } },
+  { name: "Lukeville", country: "US", corridor: "lukeville-sasabe", coordinates: { lat: 31.884, lng: -112.832 } },
+  { name: "Sasabe", country: "US", corridor: "lukeville-sasabe", coordinates: { lat: 31.485, lng: -111.544 } },
   { name: "Nogales", country: "US", corridor: "nogales", coordinates: { lat: 31.3404, lng: -110.9383 } },
-  { name: "San Luis", country: "US", corridor: "san-luis", coordinates: { lat: 32.4870, lng: -114.7822 } },
-  { name: "El Paso", country: "US", corridor: "el-paso-juarez", coordinates: { lat: 31.7619, lng: -106.4850 } },
+  { name: "Naco", country: "US", corridor: "douglas-naco", coordinates: { lat: 31.33, lng: -109.94 } },
+  { name: "Douglas", country: "US", corridor: "douglas-naco", coordinates: { lat: 31.344, lng: -109.543 } },
+  { name: "Columbus", country: "US", corridor: "columbus-santa-teresa", coordinates: { lat: 31.829, lng: -107.639 } },
+  { name: "Santa Teresa", country: "US", corridor: "columbus-santa-teresa", coordinates: { lat: 31.871, lng: -106.68 } },
+  { name: "Antelope Wells", country: "US", corridor: "columbus-santa-teresa", coordinates: { lat: 31.342, lng: -108.506 } },
+  { name: "El Paso", country: "US", corridor: "el-paso-juarez", coordinates: { lat: 31.7619, lng: -106.485 } },
+  { name: "Fabens", country: "US", corridor: "el-paso-juarez", coordinates: { lat: 31.438, lng: -106.138 } },
+  { name: "Presidio", country: "US", corridor: "presidio-o-jinaga", coordinates: { lat: 29.56, lng: -104.372 } },
+  { name: "Del Rio", country: "US", corridor: "del-rio-acuna", coordinates: { lat: 29.374, lng: -100.88 } },
+  { name: "Eagle Pass", country: "US", corridor: "eagle-pass-piedras-negras", coordinates: { lat: 28.707, lng: -100.499 } },
   { name: "Laredo", country: "US", corridor: "laredo-nuevo-laredo", coordinates: { lat: 27.5064, lng: -99.5076 } },
+  { name: "Roma", country: "US", corridor: "rio-grande-roma", coordinates: { lat: 26.407, lng: -99.017 } },
+  { name: "Rio Grande City", country: "US", corridor: "rio-grande-roma", coordinates: { lat: 26.379, lng: -98.824 } },
   { name: "Hidalgo", country: "US", corridor: "reynosa-hidalgo", coordinates: { lat: 26.2644, lng: -98.2647 } },
+  { name: "Pharr", country: "US", corridor: "reynosa-hidalgo", coordinates: { lat: 26.191, lng: -98.191 } },
+  { name: "Anzalduas", country: "US", corridor: "reynosa-hidalgo", coordinates: { lat: 26.14, lng: -98.33 } },
+  { name: "Donna", country: "US", corridor: "reynosa-hidalgo", coordinates: { lat: 26.161, lng: -98.06 } },
+  { name: "Progreso", country: "US", corridor: "reynosa-hidalgo", coordinates: { lat: 26.094, lng: -97.957 } },
+  { name: "Los Indios", country: "US", corridor: "matamoros-brownsville", coordinates: { lat: 26.045, lng: -97.74 } },
   { name: "Brownsville", country: "US", corridor: "matamoros-brownsville", coordinates: { lat: 25.9261, lng: -97.4973 } },
 ];
 
@@ -301,8 +715,6 @@ export function detectCountryFromLocation(
   const dist = haversineDistance({ lat, lng }, nearest.coordinates);
   if (dist > 200) return null;
 
-  // If closer to the Mexican city side → US (they're in MX heading to US)
-  // If closer to the US city side → MX (they're in US heading to MX)
   const mxCity = BORDER_CITIES_MX.find(
     (c) => c.name === nearest.mexicanCity
   );
@@ -315,9 +727,7 @@ export function detectCountryFromLocation(
   const distToMx = haversineDistance({ lat, lng }, mxCity.coordinates);
   const distToUs = haversineDistance({ lat, lng }, usCity.coordinates);
 
-  // Closer to MX city → they're in MX, heading to US
-  // Closer to US city → they're in US, heading to MX
-  return distToMx < distToUs ? "US" : "MX";
+  return distToMx < distToUs ? "MX" : "US";
 }
 
 /** Get destination cities (the OTHER side) given an origin country */
@@ -347,7 +757,6 @@ export function findCrossingsBetween(
 
   if (direct.length > 0) return direct;
 
-  // Fallback: find crossings in the same corridor as origin or destination
   const originCity = [...BORDER_CITIES_MX, ...BORDER_CITIES_US].find(
     (c) => c.name === originName
   );
@@ -360,7 +769,6 @@ export function findCrossingsBetween(
     return BORDER_CROSSINGS.filter((c) => c.corridor === corridor);
   }
 
-  // Last resort: return top 3 crossings sorted by distance to destination
   if (destCity) {
     return [...BORDER_CROSSINGS]
       .sort(
@@ -379,12 +787,20 @@ export function getCorridorLabel(corridor: BorderCorridor): string {
   const labels: Record<BorderCorridor, string> = {
     "tijuana-san-diego": "Tijuana / San Diego",
     "mexicali-calexico": "Mexicali / Calexico",
-    nogales: "Nogales",
+    "andrade-los-algodones": "Los Algodones / Andrade",
     "san-luis": "San Luis",
+    "lukeville-sasabe": "Lukeville / Sasabe",
+    nogales: "Nogales",
+    "douglas-naco": "Douglas / Naco",
+    "columbus-santa-teresa": "Columbus / Santa Teresa",
     "el-paso-juarez": "El Paso / Ciudad Juárez",
+    "presidio-o-jinaga": "Presidio / Ojinaga",
+    "del-rio-acuna": "Del Rio / Acuña",
+    "eagle-pass-piedras-negras": "Eagle Pass / Piedras Negras",
     "laredo-nuevo-laredo": "Laredo / Nuevo Laredo",
     "reynosa-hidalgo": "Reynosa / Hidalgo",
     "matamoros-brownsville": "Matamoros / Brownsville",
+    "rio-grande-roma": "Roma / Rio Grande",
   };
   return labels[corridor] ?? corridor;
 }
@@ -426,7 +842,6 @@ export function findNearestBorderCity(
     }
   }
 
-  // If nearest city is more than 200km away, not useful
   if (minDist > 200) return null;
 
   return nearest;

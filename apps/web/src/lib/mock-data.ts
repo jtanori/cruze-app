@@ -1,6 +1,12 @@
+// @deprecated — Single source of truth is now:
+// - Crossings dataset: apps/web/src/lib/border-data.ts (42 ports, W5 1.1)
+// - Live merging + fallback waits: apps/web/src/lib/border-data-service.ts FALLBACK_WAIT_TIMES
+// - Test fixtures: apps/web/src/test/fixtures/* per TESTING_TOOLS.md §26
+// This file kept only for GET /api/alerts MOCK_ALERTS until live alerts API lands.
+// Do not add new crossings/recommendations here — use border-data-service.getCrossingsWithLiveData().
 import type { CrossingEntity, LegacyCrossingRecommendation, BorderAlertEvent } from "@/types";
 
-// ─── Mock Data: Crossings ───
+// ─── Mock Data: Crossings (deprecated — see above) ───
 export const MOCK_CROSSINGS: CrossingEntity[] = [
   {
     id: "san-ysidro",

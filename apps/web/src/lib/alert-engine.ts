@@ -39,7 +39,7 @@ export function analyzeCrossing(
   // If no previous snapshot, just return (first load)
   if (!previous) return alerts;
 
-  // Check wait time changes (northbound)
+  // Check wait time changes (northbound) vs previous + vs baseline EMA (single source)
   const currentAvgNb = current.lanesNorthbound.length > 0
     ? current.lanesNorthbound.reduce((sum, l) => sum + l.waitTime, 0) / current.lanesNorthbound.length
     : current.waitTimeNorthbound;
@@ -50,16 +50,17 @@ export function analyzeCrossing(
   const waitDeltaNb = currentAvgNb - prevAvgNb;
   const waitDeltaPctNb = prevAvgNb > 0 ? waitDeltaNb / prevAvgNb : 0;
 
-  // WAIT_SURGE detection
-  if (
-    waitDeltaNb >= WAIT_SURGE_ABSOLUTE_THRESHOLD ||
-    waitDeltaPctNb >= WAIT_SURGE_PERCENTAGE_THRESHOLD
-  ) {
-    alerts.push(createWaitSurgeAlert(current, waitDeltaNb, "northbound", now));
-  }
+  // Also check vs EMA baseline (alert-baseline.ts is single source, 5m CBP cadence)
+  const baselineAvg = getCrossingAverageBaseline(current.id);
+  const baselineDelta = baselineAvg !== null ? currentAvgNb - baselineAvg : 0;
 
-  // WAIT_DROP detection
-  if (waitDeltaNb <= WAIT_DROP_THRESHOLD) {
+  // WAIT_SURGE: trigger on either snapshot delta or baseline drift (deduped)
+  const surgeBySnapshot = waitDeltaNb >= WAIT_SURGE_ABSOLUTE_THRESHOLD || waitDeltaPctNb >= WAIT_SURGE_PERCENTAGE_THRESHOLD;
+  const surgeByBaseline = baselineAvg !== null && (baselineDelta >= WAIT_SURGE_ABSOLUTE_THRESHOLD || (baselineAvg > 0 && baselineDelta / baselineAvg >= WAIT_SURGE_PERCENTAGE_THRESHOLD));
+  if (surgeBySnapshot || surgeByBaseline) {
+    const delta = surgeByBaseline && Math.abs(baselineDelta) > Math.abs(waitDeltaNb) ? baselineDelta : waitDeltaNb;
+    alerts.push(createWaitSurgeAlert(current, delta, "northbound", now));
+  } else if (waitDeltaNb <= WAIT_DROP_THRESHOLD) {
     alerts.push(createWaitDropAlert(current, Math.abs(waitDeltaNb), "northbound", now));
   }
 
