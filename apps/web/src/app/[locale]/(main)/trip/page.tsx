@@ -1,11 +1,21 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/use-locale";
 import { useTripStore } from "@/stores/trip";
 import { useLocationContext } from "@/components/location/LocationProvider";
+import { useNearbyCrossings } from "@/hooks/useNearbyCrossings";
+import { useTripStaleness } from "@/hooks/useTripStaleness";
+import { useLiveCrossingSnapshot } from "@/hooks/useLiveCrossingSnapshot";
+import { buildMapsUrl, buildSetupUrl, type TripDestinationSelection } from "@/lib/trip-navigation";
+import { buildTripChecklistItems } from "@/lib/trip-checklist";
+import { mapPlaceToDestination } from "@/lib/trip-destination";
+import type { Place } from "@/types";
+import { TripHero } from "@/components/trip/TripHero";
+import { TripStalePrompt } from "@/components/trip/TripStalePrompt";
+import { AvisoBanner } from "@/components/avisos/AvisoBanner";
 import { TripStatusHeader } from "@/components/trip/TripStatusHeader";
 import { TripRouteSummary } from "@/components/trip/TripRouteSummary";
 import { TripActionBar } from "@/components/trip/TripActionBar";
@@ -14,178 +24,109 @@ import { TripNearbyCrossingsSection } from "@/components/trip/TripNearbyCrossing
 import { TripNearbyCrossingRow } from "@/components/trip/TripNearbyCrossingRow";
 import { DestinationSearch } from "@/components/trip/DestinationSearch";
 import { LocationStatusBanner } from "@/components/location/LocationStatusBanner";
+
 import { getDisplayName } from "@/lib/display";
-import { AlertTriangle } from "lucide-react";
-
-const TRIP_STALENESS_THRESHOLD_MS = 12 * 60 * 60 * 1000;
-
-interface NearbyCrossing {
-  id: string;
-  name: string;
-  waitTime: number;
-  direction: "MX_TO_US" | "US_TO_MX";
-  status: "open" | "closed" | "limited";
-  lastUpdated: number;
-}
-
-interface SelectedDestination {
-  id: string;
-  name: string;
-  lat: number;
-  lng: number;
-  country: "MX" | "US";
-}
 
 export default function TripPage() {
   const t = useTranslations();
   const router = useRouter();
   const locale = useLocale();
-  const { start, destination, completed, lastEvaluatedAt, refreshActivity, reset, recommendedCrossing } = useTripStore();
+  const { start, destination, completed, refreshActivity, reset, recommendedCrossing, direction } = useTripStore();
   const { location } = useLocationContext();
-  const [isStale, setIsStale] = useState(false);
-  const [showStalePrompt, setShowStalePrompt] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [nearbyCrossings, setNearbyCrossings] = useState<NearbyCrossing[]>([]);
-  const [loadingNearby, setLoadingNearby] = useState(false);
-  const [selectedDestination, setSelectedDestination] = useState<SelectedDestination | null>(null);
+  const { crossings: nearbyCrossings, loading: loadingNearby, empty: emptyNearby } = useNearbyCrossings(location);
+  const { isStale, showStalePrompt, dismissStale } = useTripStaleness();
+  const { snapshot: liveSnapshot, previousSnapshot: livePreviousSnapshot } = useLiveCrossingSnapshot(
+    recommendedCrossing?.crossingId ?? null,
+    direction,
+    recommendedCrossing?.totalJourneyTime ?? 0
+  );
+  const [selectedDestination, setSelectedDestination] = useState<TripDestinationSelection | null>(null);
   const hasTrip = start !== null && destination !== null;
-
-  useEffect(() => {
-    if (!hasTrip) {
-      if (location) fetchNearbyCrossings();
-      setReady(true);
-    } else {
-      setReady(true);
-    }
-  }, [hasTrip, location]);
-
-  const fetchNearbyCrossings = async () => {
-    if (!location) return;
-    setLoadingNearby(true);
-    try {
-      const response = await fetch(`/api/crossings?lat=${location.lat}&lng=${location.lng}&limit=3&direction=MX_TO_US`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data.crossings && Array.isArray(data.crossings)) {
-          setNearbyCrossings(data.crossings.slice(0, 3).map((c: any) => ({
-            id: c.id,
-            name: c.name,
-            waitTime: c.waitTime ?? c.dominantWaitMinutes ?? 0,
-            direction: (String(c.direction || "MX_TO_US").toUpperCase() as "MX_TO_US" | "US_TO_MX"),
-            status: String(c.status || "open").toLowerCase() as "open" | "closed" | "limited",
-            lastUpdated: c.lastUpdated ? new Date(c.lastUpdated).getTime() : Date.now(),
-          })));
-        }
-      }
-    } catch (err) {
-      console.warn("[Cruze:Trip] Failed to fetch nearby crossings:", err);
-    } finally {
-      setLoadingNearby(false);
-    }
-  };
-
-  const checkStaleness = useCallback(() => {
-    if (!destination || completed || !lastEvaluatedAt) return;
-    const elapsed = Date.now() - new Date(lastEvaluatedAt).getTime();
-    if (elapsed > TRIP_STALENESS_THRESHOLD_MS) { setIsStale(true); setShowStalePrompt(true); }
-  }, [destination, completed, lastEvaluatedAt]);
-
-  useEffect(() => {
-    checkStaleness();
-    const h = () => { if (document.visibilityState === "visible") checkStaleness(); };
-    document.addEventListener("visibilitychange", h);
-    return () => document.removeEventListener("visibilitychange", h);
-  }, [checkStaleness]);
 
   useEffect(() => { if (destination && !completed) refreshActivity(); }, [destination, completed, refreshActivity]);
 
-  const handleStillCurrent = () => { refreshActivity(); setIsStale(false); setShowStalePrompt(false); };
+  const handleStillCurrent = () => { refreshActivity(); dismissStale(); };
   const handleStartNew = () => { reset(); router.push(`/${locale}/trip/setup`); };
   const handleViewCrossing = () => { if (recommendedCrossing) router.push(`/${locale}/crossing/${recommendedCrossing.crossingId}`); };
   const handleNavigate = () => {
-    if (recommendedCrossing) window.open(`https://www.google.com/maps/dir/?api=1&destination=${recommendedCrossing.coordinates.lat},${recommendedCrossing.coordinates.lng}`, "_blank");
+    if (recommendedCrossing) window.open(buildMapsUrl(recommendedCrossing.coordinates.lat, recommendedCrossing.coordinates.lng), "_blank");
   };
 
-  const handleDestinationSelect = (place: any) => {
-    setSelectedDestination({
-      id: place.id,
-      name: place.name,
-      lat: place.latitude,
-      lng: place.longitude,
-      country: place.country,
-    });
+  const handleDestinationSelect = (place: Place) => {
+    setSelectedDestination(mapPlaceToDestination(place));
   };
 
   const handleSearchNext = () => {
     if (selectedDestination) {
-      router.push(`/${locale}/trip/setup?dest=${encodeURIComponent(JSON.stringify(selectedDestination))}`);
+      router.push(buildSetupUrl(locale, selectedDestination));
     }
   };
 
-  if (!ready) return null;
+  // Hero body follows the resolved *target* country (opposite side);
+  // UNKNOWN → generic copy that promises nothing.
+  const heroBody = (() => {
+    if (location?.country === "MX") {
+      return t("trip.empty.body", { country: t("common.unitedStatesShort") });
+    }
+    if (location?.country === "US") {
+      return t("trip.empty.body", { country: t("common.mexicoShort") });
+    }
+    return t("trip.empty.bodyGeneric");
+  })();
 
   return (
-    <div className="px-5 py-6 space-y-6">
+    <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4 sm:space-y-6">
       {/* T01 Empty — W5 §8 TR-EMPTY-01 + §16 TR-NEAR-01 — mobile-first, 16/24/32 spacing */}
       {!hasTrip && (
-        <div className="space-y-6">
-          {/* LOC-STATUS-01 non-dismissible at top per W5 §7 */}
-          {location && (
-            <LocationStatusBanner
-              placeName={location.placeName || `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`}
-              dismissible={false}
-            />
-          )}
+        <div>
+          {/* Upper section: location status + hero + destination search */}
+          <section className="space-y-6 sm:space-y-8 mb-6">
+            {/* LOC-STATUS-01 non-dismissible at top per W5 §7 */}
+            {location && (
+              <LocationStatusBanner
+                placeName={location.placeName || `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`}
+                dismissible={false}
+              />
+            )}
 
-          {/* W5 §8: TU VIAJE eyebrow + hero + body — Sora / Inter tokens */}
-          <div className="space-y-3">
-            <p className="font-display font-bold text-sm tracking-widest uppercase text-cruze-mint">
-              {t("trip.yourTrip")}
-            </p>
-            <h1 className="font-display font-bold text-[32px] leading-tight text-ink">
-              {t("trip.empty.title")}
-            </h1>
-            <p className="font-sans text-[17px] leading-relaxed text-faint">
-              {t("trip.empty.body")}
-            </p>
-          </div>
+            {/* W5 §8: hero + body — Sora / Inter tokens, body follows resolved target country */}
+            <TripHero title={t("trip.empty.title")} body={heroBody} />
 
-          {/* TR-EMPTY-01 DestinationSearch — Surface Elevated, 56px touch, CTA Mint */}
-          <div className="space-y-3">
+            {/* TR-EMPTY-01 DestinationSearch — Surface Elevated, 56px touch, CTA Mint */}
             <DestinationSearch
               userLat={location?.lat || 0}
               userLng={location?.lng || 0}
+              userCountry={location?.country}
               onSelect={handleDestinationSelect}
               onNext={handleSearchNext}
-              className="space-y-3"
             />
-            {!selectedDestination && (
-              <p className="text-center font-sans text-xs text-muted">
-                {t("trip.empty.selectToContinue")}
-              </p>
-            )}
-          </div>
+          </section>
+
+          {/* Divider between plan (hero + search) and nearby intelligence — canon #1F3A54 1px */}
+          <div aria-hidden="true" className="border-t border-border" />
 
           {/* TR-NEAR-01 — max 2-3, not duplicate of Cruces */}
-          <TripNearbyCrossingsSection
-            onViewAll={() => router.push(`/${locale}/crossings`)}
+          <div className="mt-7">
+            <TripNearbyCrossingsSection
+              onViewAll={() => router.push(`/${locale}/crossings`)}
             loading={loadingNearby}
-            empty={!loadingNearby && nearbyCrossings.length === 0}
-            emptyMessage={t("trip.empty.noNearby")}
-            showViewAllAtBottom={true}
-          >
-            {nearbyCrossings.map((crossing) => (
-              <TripNearbyCrossingRow
-                key={crossing.id}
-                name={crossing.name}
-                waitTime={crossing.waitTime}
-                direction={crossing.direction}
-                status={crossing.status}
-                lastUpdated={crossing.lastUpdated}
-                onClick={() => router.push(`/${locale}/crossing/${crossing.id}`)}
-              />
-            ))}
-          </TripNearbyCrossingsSection>
+            empty={emptyNearby}
+              emptyMessage={t("trip.empty.noNearby")}
+              showViewAllAtBottom={true}
+            >
+              {nearbyCrossings.map((crossing) => (
+                <TripNearbyCrossingRow
+                  key={crossing.id}
+                  name={crossing.name}
+                  waitTime={crossing.waitTime}
+                  direction={crossing.direction}
+                  status={crossing.status}
+                  lastUpdated={crossing.lastUpdated}
+                  onClick={() => router.push(`/${locale}/crossing/${crossing.id}`)}
+                />
+              ))}
+            </TripNearbyCrossingsSection>
+          </div>
         </div>
       )}
 
@@ -193,34 +134,36 @@ export default function TripPage() {
       {hasTrip && destination && start && (
         <div className="space-y-6">
           {showStalePrompt && isStale && (
-            <div className="bg-caution/10 border border-caution/30 rounded-[var(--radius-lg)] p-4 space-y-3">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-caution shrink-0 mt-0.5" />
-                <div className="space-y-1">
-                  <p className="text-ink text-sm font-medium">{t("trip.stale.title")}</p>
-                  <p className="text-faint text-xs">{t("trip.stale.description")}</p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button onClick={handleStillCurrent} className="flex-1 h-9 bg-cruze-mint text-midnight text-sm font-medium rounded-[var(--radius-md)]">{t("trip.stale.stillCurrent")}</button>
-                <button onClick={handleStartNew} className="flex-1 h-9 bg-surface border border-border text-ink text-sm font-medium rounded-[var(--radius-md)]">{t("trip.stale.startNew")}</button>
-              </div>
-            </div>
+            <TripStalePrompt
+              title={t("trip.stale.title")}
+              description={t("trip.stale.description")}
+              stillCurrentLabel={t("trip.stale.stillCurrent")}
+              startNewLabel={t("trip.stale.startNew")}
+              onStillCurrent={handleStillCurrent}
+              onStartNew={handleStartNew}
+            />
           )}
 
-          <TripStatusHeader originLabel={getDisplayName(start)} destinationLabel={getDisplayName(destination)} />
+          <AvisoBanner />
+
+          <TripStatusHeader
+            originLabel={getDisplayName(start)}
+            destinationLabel={getDisplayName(destination)}
+            status={isStale && showStalePrompt ? "stale" : "active"}
+            crossingStatus={liveSnapshot?.status ?? recommendedCrossing?.status ?? "unknown"}
+            lastUpdated={liveSnapshot?.generatedAt ?? recommendedCrossing?.generatedAt ?? null}
+          />
           {recommendedCrossing && (
             <TripRouteSummary crossingName={recommendedCrossing.crossingName} waitTime={recommendedCrossing.waitTime} totalTime={recommendedCrossing.totalJourneyTime} />
           )}
           <TripActionBar onNavigate={handleNavigate} onViewCrossing={handleViewCrossing} onCompare={() => router.push(`/${locale}/crossings`)} onConfigure={() => router.push(`/${locale}/trip/setup`)} onComplete={() => router.push(`/${locale}/trip/completion`)} />
           <TripChecklistSection
             title={t("trip.checklist.title")}
-            items={[
-              { id: "operational", label: t("trip.checklist.operational"), status: "checked" },
-              { id: "freshness", label: t("trip.checklist.freshness"), status: "checked", detail: recommendedCrossing ? t("trip.checklist.freshnessDetail", { minutes: Math.floor((Date.now() - new Date(recommendedCrossing.generatedAt).getTime())/60000) }) : undefined },
-              { id: "docs", label: t("trip.checklist.docs"), status: "unchecked" },
-              { id: "restrictions", label: t("trip.checklist.restrictions"), status: "unchecked" },
-            ]}
+            items={buildTripChecklistItems({
+              liveSnapshot,
+              recommendedCrossing,
+              t: (key: string, values?: Record<string, any>) => t(key as any, values as any),
+            })}
           />
         </div>
       )}
