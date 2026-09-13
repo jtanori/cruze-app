@@ -7,6 +7,7 @@
 import type { IntentBand } from "./intent-classifier";
 import type { MergedCrossingData } from "./border-data-service";
 import type { TravelerProfile } from "@/types";
+import type { AgentLiveContext } from "./agent-context";
 
 interface TripContext {
   completed: boolean;
@@ -20,6 +21,7 @@ export interface ResponseContent {
   checklist?: ResponseChecklistItem[];
   dataRows?: ResponseDataRow[];
   action?: ResponseAction;
+  suggestions?: string[];
 }
 
 export interface ResponseCard {
@@ -53,6 +55,7 @@ interface TemplateContext {
   allCrossings: MergedCrossingData[];
   trip: TripContext;
   profile: TravelerProfile | null;
+  liveContext?: AgentLiveContext;
   t: (key: string, values?: Record<string, any>) => string;
 }
 
@@ -81,7 +84,7 @@ export function generateResponse(
   intent: IntentBand,
   ctx: TemplateContext
 ): ResponseContent {
-  const { crossing, allCrossings, trip, profile, t } = ctx;
+  const { crossing, allCrossings, trip, profile, liveContext, t } = ctx;
   switch (intent) {
     case "wait_times":
       return generateWaitTimesResponse(crossing, allCrossings, t);
@@ -98,9 +101,13 @@ export function generateResponse(
     case "rules":
       return generateRulesResponse(t);
     case "greeting":
-      return generateGreetingResponse(trip, t);
+      return generateGreetingResponse(trip, t, liveContext);
+    case "direction":
+      return generateDirectionResponse(crossing, allCrossings, t, liveContext);
+    case "general":
+      return generateGeneralResponse(trip, profile, t, liveContext);
     case "whatshappening":
-      return generateWhatsHappeningResponse(allCrossings, t);
+      return generateWhatsHappeningResponse(allCrossings, t, liveContext);
     default:
       return generateDefaultResponse(t);
   }
@@ -127,6 +134,11 @@ function generateWaitTimesResponse(
         label: t("agent.template.viewCrossingDetails"),
         href: `/crossing/${crossing.id}`,
       },
+      suggestions: [
+        t("agent.suggest.compare"),
+        t("agent.suggest.directions"),
+        t("agent.suggest.whatsHappening"),
+      ],
     };
   }
   const sorted = [...allCrossings].sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound).slice(0, 5);
@@ -138,6 +150,10 @@ function generateWaitTimesResponse(
   return {
     text: t("agent.template.top5Fastest"),
     dataRows,
+    suggestions: [
+      t("agent.suggest.compare"),
+      t("agent.suggest.directions"),
+    ],
   };
 }
 
@@ -152,10 +168,18 @@ function generateHoursResponse(
         { label: t("agent.template.hours"), value: crossing.hours },
         { label: t("agent.template.status"), value: crossing.statusNorthbound },
       ],
+      suggestions: [
+        t("agent.suggest.waitTimes"),
+        t("agent.suggest.directions"),
+      ],
     };
   }
   return {
     text: t("agent.template.mostOpen"),
+    suggestions: [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.whatsHappening"),
+    ],
   };
 }
 
@@ -167,6 +191,10 @@ function generateDocumentsResponse(
   return {
     text: t("agent.template.documentsNeed"),
     checklist,
+    suggestions: [
+      t("agent.suggest.sentryInfo"),
+      t("agent.suggest.rules"),
+    ],
   };
 }
 
@@ -180,6 +208,10 @@ function generateSentriResponse(
       dataRows: [
         { label: t("agent.template.sentriLanes"), value: "2-10 min", highlight: true },
         { label: t("agent.template.standardLanes"), value: "30-60 min" },
+      ],
+      suggestions: [
+        t("agent.suggest.waitTimes"),
+        t("agent.suggest.compare"),
       ],
     };
   }
@@ -195,6 +227,10 @@ function generateSentriResponse(
       label: t("agent.template.applySentri"),
       href: "https://ttp.cbp.dhs.gov/",
     },
+    suggestions: [
+      t("agent.suggest.documents"),
+      t("agent.suggest.waitTimes"),
+    ],
   };
 }
 
@@ -215,6 +251,10 @@ function generateCompareResponse(
     return {
       text: t("agent.template.top3Fastest"),
       cards,
+      suggestions: [
+        t("agent.suggest.waitTimes"),
+        t("agent.suggest.directions"),
+      ],
     };
   }
   const nearby = allCrossings.filter((c) => c.id !== crossing.id).sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound).slice(0, 3);
@@ -232,6 +272,10 @@ function generateCompareResponse(
   return {
     text: t("agent.template.comparingWith", { name: crossing.name }),
     dataRows,
+    suggestions: [
+      t("agent.suggest.directions"),
+      t("agent.suggest.waitTimes"),
+    ],
   };
 }
 
@@ -248,10 +292,19 @@ function generateStatusResponse(
         { label: t("agent.template.hours"), value: crossing.hours },
         { label: t("agent.template.lastUpdated"), value: crossing.lastUpdated || t("common.unknown") },
       ],
+      suggestions: [
+        t("agent.suggest.waitTimes"),
+        t("agent.suggest.whatsHappening"),
+        t("agent.suggest.directions"),
+      ],
     };
   }
   return {
     text: t("agent.template.allOperating"),
+    suggestions: [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.whatsHappening"),
+    ],
   };
 }
 
@@ -266,30 +319,68 @@ function generateRulesResponse(t: (k: string, v?: any) => string): ResponseConte
       { label: t("agent.template.ruleFirearms"), checked: false, required: true },
       { label: t("agent.template.ruleMeds"), checked: false, required: false },
     ],
+    suggestions: [
+      t("agent.suggest.documents"),
+      t("agent.suggest.waitTimes"),
+    ],
   };
 }
 
-function generateGreetingResponse(trip: TripContext, t: (k: string, v?: any) => string): ResponseContent {
+function generateGreetingResponse(
+  trip: TripContext,
+  t: (k: string, v?: any) => string,
+  liveContext?: AgentLiveContext
+): ResponseContent {
   const hasTrip = trip.completed && trip.destination && trip.start;
-  if (hasTrip) {
-    return {
-      text: t("agent.template.greetingWithTrip", { start: trip.start!.name, destination: trip.destination!.name }),
-    };
+  let text = hasTrip
+    ? t("agent.template.greetingWithTrip", { start: trip.start!.name, destination: trip.destination!.name })
+    : t("agent.template.greetingGeneric");
+
+  // Proactive greeting when live context is available
+  if (liveContext?.hasLiveCrossingData && liveContext.hasActiveTrip) {
+    const statusText = liveContext.crossingStatus
+      ? t(`agent.status.${liveContext.crossingStatus}`)
+      : t("agent.status.unknown");
+    const waitInfo = liveContext.crossingWaitTime !== undefined
+      ? `, wait ${liveContext.crossingWaitTime} min`
+      : "";
+    text = `${text} ${t("agent.template.proactiveGreeting", {
+      city: liveContext.selectedCrossingName || "",
+      status: statusText,
+      wait: waitInfo,
+    })}`;
   }
-  return {
-    text: t("agent.template.greetingGeneric"),
+
+  return { 
+    text,
+    suggestions: hasTrip ? [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.directions"),
+      t("agent.suggest.whatsHappening"),
+    ] : [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.configureTrip"),
+      t("agent.suggest.whatsHappening"),
+    ],
   };
 }
 
 function generateDefaultResponse(t: (k: string, v?: any) => string): ResponseContent {
   return {
     text: t("agent.template.defaultHelp"),
+    suggestions: [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.documents"),
+      t("agent.suggest.sentryInfo"),
+      t("agent.suggest.rules"),
+    ],
   };
 }
 
 function generateWhatsHappeningResponse(
   allCrossings: MergedCrossingData[],
-  t: (k: string, v?: any) => string
+  t: (k: string, v?: any) => string,
+  liveContext?: AgentLiveContext
 ): ResponseContent {
   const highWait = allCrossings.filter((c) => c.waitTimeNorthbound > 45);
   const lowWait = allCrossings.filter((c) => c.waitTimeNorthbound <= 20);
@@ -327,11 +418,136 @@ function generateWhatsHappeningResponse(
     parts.push(t("agent.template.allFlowing"));
   }
 
+  // Add live context freshness indicator
+  if (liveContext?.hasLiveCrossingData) {
+    const freshnessLabel = t(`agent.freshness.${liveContext.crossingFreshness}`);
+    parts.push(t("agent.template.liveDataFreshness", { freshness: freshnessLabel }));
+  }
+
   return {
     text: parts.join("\n"),
     action: {
       label: t("agent.template.viewAllCrossings"),
       href: "/crossings",
     },
+    suggestions: [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.directions"),
+      t("agent.suggest.compare"),
+    ],
+  };
+}
+
+/**
+ * Direction intent handler — shows current crossing status & wait time
+ */
+function generateDirectionResponse(
+  crossing: MergedCrossingData | null,
+  allCrossings: MergedCrossingData[],
+  t: (k: string, values?: Record<string, any>) => string,
+  liveContext?: AgentLiveContext
+): ResponseContent {
+  // Prefer live context data if available and relevant
+  const liveCrossing = liveContext?.hasLiveCrossingData && liveContext.crossingWaitTime !== undefined;
+  const waitTime = liveCrossing ? liveContext.crossingWaitTime : crossing?.waitTimeNorthbound;
+  const status = liveCrossing ? liveContext.crossingStatus : crossing?.statusNorthbound;
+  const name = liveCrossing && liveContext.selectedCrossingName
+    ? liveContext.selectedCrossingName
+    : crossing?.name;
+
+  if (waitTime !== undefined && name) {
+    const statusText = status
+      ? t(`agent.status.${status}`)
+      : t("agent.status.unknown");
+    return {
+      text: t("agent.template.directionAt", {
+        name,
+        status: statusText,
+        wait: `${waitTime} ${t("common.min")}`,
+      }),
+      cards: [
+        {
+          title: t("agent.template.currentCrossing"),
+          subtitle: t("agent.template.waitTime"),
+          value: `${waitTime} ${t("common.min")}`,
+          status: status === "open" ? "open" : status === "limited" ? "limited" : status === "closed" ? "closed" : "neutral",
+        },
+      ],
+      action: crossing ? {
+        label: t("agent.template.viewCrossingDetails"),
+        href: `/crossing/${crossing.id}`,
+      } : undefined,
+      suggestions: [
+        t("agent.suggest.waitTimes"),
+        t("agent.suggest.compare"),
+        t("agent.suggest.whatsHappening"),
+      ],
+    };
+  }
+
+  return {
+    text: t("agent.template.noCurrentCrossing"),
+    cards: [
+      {
+        title: t("agent.template.mostCommon"),
+        value: t("agent.template.mostCommonCrossing"),
+      },
+    ],
+    action: {
+      label: t("agent.template.viewCrossings"),
+      href: "/crossings",
+    },
+    suggestions: [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.whatsHappening"),
+    ],
+  };
+}
+
+/**
+ * General intent handler — provides general agent assistance
+ */
+function generateGeneralResponse(
+  trip: TripContext,
+  profile: TravelerProfile | null,
+  t: (k: string, values?: Record<string, any>) => string,
+  liveContext?: AgentLiveContext
+): ResponseContent {
+  const hasTrip = trip.completed && trip.start && trip.destination;
+
+  let text = hasTrip
+    ? t("agent.template.generalWithTrip", {
+        start: trip.start!.name,
+        destination: trip.destination!.name,
+      })
+    : t("agent.template.generalHelp");
+
+  // Add live context if available
+  if (liveContext?.hasLiveCrossingData && liveContext.hasActiveTrip) {
+    const statusText = liveContext.crossingStatus
+      ? t(`agent.status.${liveContext.crossingStatus}`)
+      : t("agent.status.unknown");
+    const waitInfo = liveContext.crossingWaitTime !== undefined
+      ? ` ${t("common.currentWait")} ${liveContext.crossingWaitTime} ${t("common.min")}`
+      : "";
+    text += ` ${t("agent.template.liveContextNote", {
+      city: liveContext.selectedCrossingName || "",
+      status: statusText,
+      wait: waitInfo,
+    })}`;
+  }
+
+  return { 
+    text,
+    suggestions: hasTrip ? [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.directions"),
+      t("agent.suggest.whatsHappening"),
+    ] : [
+      t("agent.suggest.waitTimes"),
+      t("agent.suggest.configureTrip"),
+      t("agent.suggest.whatsHappening"),
+      t("agent.suggest.documents"),
+    ],
   };
 }

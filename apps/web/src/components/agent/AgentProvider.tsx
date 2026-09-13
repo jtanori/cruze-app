@@ -4,10 +4,12 @@ import { createContext, useContext, useState, useCallback, useEffect } from "rea
 import { useTripStore } from "@/stores/trip";
 import { useTravelerStore } from "@/stores/traveler";
 import { useAgentStore } from "@/stores/agent";
-import { getMergedCrossingsData, type MergedCrossingData } from "@/lib/border-data-service";
+import { fetchMergedCrossings } from "@/lib/crossings";
+import type { MergedCrossingData } from "@/lib/border-data-service";
 import { classifyIntent, extractCrossingMention, type IntentBand } from "@/lib/intent-classifier";
 import { generateResponse, type ResponseContent } from "@/lib/agent-templates";
 import { BORDER_CROSSINGS } from "@/lib/border-data";
+import { getAgentContext, type AgentLiveContext } from "@/lib/agent-context";
 import { useTranslations, useLocale } from "next-intl";
 
 interface AgentContextValue {
@@ -36,7 +38,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const data = await getMergedCrossingsData();
+      const data = await fetchMergedCrossings();
       setCrossings(data);
       setLoading(false);
     }
@@ -54,12 +56,16 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
         ? crossings.find((c) => c.id === crossingId) || null
         : null;
 
+      // Get live context for this message
+      const liveContext: AgentLiveContext = getAgentContext();
+
       // Generate response via i18n t (no hardcoded isEn)
       const response = generateResponse(intent, {
         crossing,
         allCrossings: crossings,
         trip,
         profile,
+        liveContext,
         t: (key: string, values?: Record<string, any>) => {
           try {
             return t(key as any, values as any);
@@ -71,7 +77,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
 
       // Save to agent store
       addMessage("user", message);
-      addMessage("assistant", response.text);
+      addMessage("assistant", response.text, response);
 
       return response;
     },

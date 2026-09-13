@@ -7,7 +7,6 @@ import { useAgentStore, type AgentMessage } from "@/stores/agent";
 import { useAgent } from "./AgentProvider";
 import { RichResponse } from "./RichResponse";
 import { TypingIndicator } from "./TypingIndicator";
-import type { ResponseContent } from "@/lib/agent-templates";
 
 const SUGGESTED_PROMPTS = [
   "agent.suggest.crossings",
@@ -46,6 +45,9 @@ function MessageBubble({ message }: { message: AgentMessage }) {
           }`}
         >
           {message.content}
+          {!isUser && message.richContent && (
+            <RichResponse content={message.richContent} />
+          )}
         </div>
       </div>
     </div>
@@ -55,10 +57,11 @@ function MessageBubble({ message }: { message: AgentMessage }) {
 export function AgentChat() {
   const t = useTranslations();
   const { messages, addMessage } = useAgentStore();
+  const pendingConsumed = useRef(false);
   const { processMessage } = useAgent();
   const [input, setInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [pendingResponse, setPendingResponse] = useState<ResponseContent | null>(null);
+  const [streamingContent, setStreamingContent] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -69,14 +72,24 @@ export function AgentChat() {
   const handleSend = async (content: string) => {
     if (!content.trim() || isProcessing) return;
 
-    addMessage("user", content.trim());
     setInput("");
     setIsProcessing(true);
-    setPendingResponse(null);
+    setStreamingContent("");
 
     try {
       const response = await processMessage(content.trim());
-      setPendingResponse(response);
+      
+      // Simulate streaming effect for better UX
+      if (response.text) {
+        const words = response.text.split(" ");
+        let currentText = "";
+        for (const word of words) {
+          currentText += (currentText ? " " : "") + word;
+          setStreamingContent(currentText);
+          await new Promise(r => setTimeout(r, 30));
+        }
+      }
+      setStreamingContent(null);
     } catch {
       addMessage("assistant", "Sorry, I encountered an error. Please try again.");
     } finally {
@@ -84,8 +97,8 @@ export function AgentChat() {
     }
   };
 
-  const handleSuggestionClick = (suggestionKey: string) => {
-    handleSend(t(suggestionKey));
+  const handleSuggestionClick = (suggestion: string) => {
+    handleSend(suggestion);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -94,6 +107,17 @@ export function AgentChat() {
       handleSend(input);
     }
   };
+
+  // One-shot C03 handoff: consume pending crossing context once, then clear.
+  // Direct launches (no context) render the default welcome — never stale.
+  useEffect(() => {
+    if (pendingConsumed.current) return;
+    const ctx = useAgentStore.getState().pendingContext;
+    if (!ctx) return;
+    pendingConsumed.current = true;
+    addMessage("assistant", t("agent.askingAbout", { name: ctx.crossingName }));
+    useAgentStore.getState().clearPendingContext();
+  }, [t, addMessage]);
 
   useEffect(() => {
     scrollToBottom();
@@ -116,7 +140,7 @@ export function AgentChat() {
               {SUGGESTED_PROMPTS.map((key) => (
                 <button
                   key={key}
-                  onClick={() => handleSuggestionClick(key)}
+                  onClick={() => handleSuggestionClick(t(key))}
                   className="w-full px-4 py-3 text-left bg-surface border border-border rounded-[var(--radius-md)] text-ink text-sm active:bg-surface-subtle transition-colors"
                 >
                   {t(key)}
@@ -129,19 +153,20 @@ export function AgentChat() {
             {messages.map((msg) => (
               <MessageBubble key={msg.id} message={msg} />
             ))}
-            {isProcessing && <TypingIndicator />}
-            {pendingResponse && !isProcessing && (
+            {isProcessing && streamingContent && (
               <div className="flex justify-start">
                 <div className="flex items-start gap-2 max-w-[85%]">
                   <div className="w-8 h-8 flex items-center justify-center rounded-full shrink-0 bg-cruze-green/10">
                     <Bot className="w-4 h-4 text-cruze-green" />
                   </div>
                   <div className="px-4 py-3 rounded-[var(--radius-lg)] rounded-tl-sm bg-surface border border-border text-ink text-sm">
-                    <RichResponse content={pendingResponse} />
+                    {streamingContent}
+                    <span className="inline-block w-2 h-4 animate-pulse bg-cruze-green ml-1" />
                   </div>
                 </div>
               </div>
             )}
+            {isProcessing && !streamingContent && <TypingIndicator />}
             <div ref={messagesEndRef} />
           </>
         )}

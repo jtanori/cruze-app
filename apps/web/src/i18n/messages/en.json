@@ -29,7 +29,8 @@
     "errorTitle": "Something went wrong",
     "errorMessage": "We couldn't load this page. Please try again.",
     "unknown": "Unknown",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "currentWait": "current wait"
   },
   "nav": {
     "trip": "Trip",
@@ -347,7 +348,14 @@
       "crossings": "What crossings are available?",
       "sentry": "How do I get SENTRI?",
       "waitTimes": "What are the current wait times?",
-      "configureTrip": "Help me configure my trip"
+      "configureTrip": "Help me configure my trip",
+      "compare": "Compare with other crossings",
+      "directions": "Get directions",
+      "whatsHappening": "What's happening at the border?",
+      "documents": "What documents do I need?",
+      "sentryInfo": "Tell me about SENTRI",
+      "rules": "What are the customs rules?",
+      "tripHelp": "Help with my trip"
     },
     "checklist": {
       "passport": "Valid passport",
@@ -355,6 +363,18 @@
       "sentri": "SENTRI card",
       "vehicle": "Vehicle registration (if driving)",
       "insurance": "Mexican auto insurance (if driving)"
+    },
+    "status": {
+      "open": "open",
+      "limited": "limited",
+      "closed": "closed",
+      "unknown": "unknown"
+    },
+    "freshness": {
+      "live": "live",
+      "recent": "recent",
+      "stale": "stale",
+      "unavailable": "unavailable"
     },
     "template": {
       "waitTimesAt": "Current wait times at {name}:",
@@ -397,7 +417,19 @@
       "limitedList": "⚠️ Limited service: {names}",
       "allFlowing": "All crossings are moving well!",
       "viewAllCrossings": "View all crossings",
-      "unknown": "Unknown"
+      "unknown": "Unknown",
+      "directionAt": "Direction to {name}: {status}, wait {wait}",
+      "noCurrentCrossing": "No specific crossing selected. Try the most common:",
+      "mostCommonCrossing": "San Ysidro",
+      "generalWithTrip": "You're traveling from {start} to {destination}. What would you like to know?",
+      "generalHelp": "I can help with wait times, documents, SENTRI, crossings, and customs rules.",
+      "proactiveGreeting": "Your crossing at {city} is {status}{wait}.",
+      "liveDataFreshness": "Live data freshness: {freshness}",
+      "liveContextNote": "Your crossing at {city} is currently {status}{wait}.",
+      "currentCrossing": "Current crossing",
+      "mostCommon": "Most common",
+      "viewCrossings": "View crossings",
+      "waitTime": "Wait time"
     }
   },
   "shared": {

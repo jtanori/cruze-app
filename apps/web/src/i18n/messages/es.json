@@ -29,7 +29,8 @@
     "errorTitle": "Algo salió mal",
     "errorMessage": "No pudimos cargar esta página. Intenta de nuevo.",
     "unknown": "Desconocido",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "currentWait": "espera actual"
   },
   "nav": {
     "trip": "Viaje",
@@ -347,7 +348,14 @@
       "crossings": "¿Qué cruces están disponibles?",
       "sentry": "¿Cómo obtengo SENTRI?",
       "waitTimes": "¿Cuáles son los tiempos de espera actuales?",
-      "configureTrip": "Ayúdame a configurar mi viaje"
+      "configureTrip": "Ayúdame a configurar mi viaje",
+      "compare": "Comparar con otros cruces",
+      "directions": "Obtener direcciones",
+      "whatsHappening": "¿Qué pasa en la frontera?",
+      "documents": "¿Qué documentos necesito?",
+      "sentryInfo": "Cuéntame sobre SENTRI",
+      "rules": "¿Cuáles son las reglas de aduana?",
+      "tripHelp": "Ayuda con mi viaje"
     },
     "checklist": {
       "passport": "Pasaporte válido",
@@ -355,6 +363,18 @@
       "sentri": "Tarjeta SENTRI",
       "vehicle": "Registro del vehículo (si conduces)",
       "insurance": "Seguro de auto mexicano (si conduces)"
+    },
+    "status": {
+      "open": "abierto",
+      "limited": "limitado",
+      "closed": "cerrado",
+      "unknown": "desconocido"
+    },
+    "freshness": {
+      "live": "en vivo",
+      "recent": "reciente",
+      "stale": "antiguo",
+      "unavailable": "no disponible"
     },
     "template": {
       "waitTimesAt": "Tiempos de espera actuales en {name}:",
@@ -397,7 +417,19 @@
       "limitedList": "⚠️ Servicio limitado: {names}",
       "allFlowing": "¡Todos los cruces están fluidos!",
       "viewAllCrossings": "Ver todos los cruces",
-      "unknown": "Desconocido"
+      "unknown": "Desconocido",
+      "directionAt": "Dirección a {name}: {status}, espera {wait}",
+      "noCurrentCrossing": "No hay cruce específico seleccionado. Prueba el más común:",
+      "mostCommonCrossing": "San Ysidro",
+      "generalWithTrip": "Estás viajando de {start} a {destination}. ¿Qué te gustaría saber?",
+      "generalHelp": "Puedo ayudarte con tiempos de espera, documentos, SENTRI, cruces y reglas de aduana.",
+      "proactiveGreeting": "Tu cruce en {city} está {status}{wait}.",
+      "liveDataFreshness": "Datos en vivo: {freshness}",
+      "liveContextNote": "Tu cruce en {city} está actualmente {status}{wait}.",
+      "currentCrossing": "Cruce actual",
+      "mostCommon": "Más común",
+      "viewCrossings": "Ver cruces",
+      "waitTime": "Tiempo de espera"
     }
   },
   "shared": {

@@ -1,6 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { Copy, Share2, Download, Bookmark, ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ResponseContent, ResponseCard, ResponseChecklistItem, ResponseDataRow } from "@/lib/agent-templates";
 
 interface RichResponseProps {
@@ -8,11 +11,18 @@ interface RichResponseProps {
 }
 
 export function RichResponse({ content }: RichResponseProps) {
+  const t = useTranslations();
+
   return (
     <div className="space-y-3">
-      <p className="text-ink text-sm leading-relaxed whitespace-pre-line">
-        {content.text}
-      </p>
+      {content.text && (
+        <div>
+          <p className="text-ink text-sm leading-relaxed whitespace-pre-line">
+            {content.text}
+          </p>
+          <SectionActions content={content.text} />
+        </div>
+      )}
 
       {content.cards && content.cards.length > 0 && (
         <div className="space-y-2">
@@ -27,6 +37,7 @@ export function RichResponse({ content }: RichResponseProps) {
           {content.dataRows.map((row, i) => (
             <DataRow key={i} row={row} isLast={i === content.dataRows!.length - 1} />
           ))}
+          <SectionActions content={formatDataRows(content.dataRows)} />
         </div>
       )}
 
@@ -35,6 +46,7 @@ export function RichResponse({ content }: RichResponseProps) {
           {content.checklist.map((item, i) => (
             <ChecklistItem key={i} item={item} />
           ))}
+          <SectionActions content={formatChecklist(content.checklist)} />
         </div>
       )}
 
@@ -47,6 +59,79 @@ export function RichResponse({ content }: RichResponseProps) {
           <span className="text-xs">→</span>
         </Link>
       )}
+
+      {content.suggestions && content.suggestions.length > 0 && (
+        <div className="flex flex-wrap gap-2 pt-2">
+          {content.suggestions.map((suggestion, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                // This would trigger a new message send
+                // For now, we'll just log - in real implementation this would call processMessage
+                console.log("Suggestion clicked:", suggestion);
+              }}
+              className="px-3 py-1.5 text-xs font-medium text-cruze-green bg-cruze-green/10 border border-cruze-green/30 rounded-full hover:bg-cruze-green/20 transition-colors"
+            >
+              <ArrowRight className="w-3 h-3 inline mr-1" />
+              {suggestion}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function formatDataRows(rows: ResponseDataRow[]): string {
+  return rows.map(r => `${r.label}: ${r.value}`).join("\n");
+}
+
+function formatChecklist(items: ResponseChecklistItem[]): string {
+  return items.map(i => `${i.checked ? "✓" : "☐"} ${i.label}${i.required ? " *" : ""}`).join("\n");
+}
+
+function SectionActions({ content }: { content: string }) {
+  const [copied, setCopied] = useState(false);
+  
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(content);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      await navigator.share({ text: content });
+    } else {
+      await handleCopy();
+    }
+  };
+
+  const handleSave = () => {
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "cruze-response.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="flex items-center gap-1 mt-2 pt-2 border-t border-border-subtle">
+      <button onClick={handleCopy} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label="Copy">
+        <Copy className="w-4 h-4" />
+      </button>
+      <button onClick={handleShare} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label="Share">
+        <Share2 className="w-4 h-4" />
+      </button>
+      <button onClick={handleSave} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label="Save">
+        <Download className="w-4 h-4" />
+      </button>
+      <button className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors ml-auto" aria-label="Bookmark">
+        <Bookmark className="w-4 h-4" />
+      </button>
+      {copied && <span className="text-xs text-cruze-green ml-2">Copied!</span>}
     </div>
   );
 }
