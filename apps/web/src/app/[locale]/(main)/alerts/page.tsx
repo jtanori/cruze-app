@@ -1,16 +1,33 @@
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { BellRing, BellOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useAvisosStore } from "@/stores/avisos";
-import { AvisosList } from "@/components/avisos/AvisosList";
+import { AvisosView } from "@/components/avisos/AvisosView";
+import { useAvisoActions } from "@/hooks/useAvisoActions";
 import { useCriticalAvisoNotifications } from "@/hooks/useCriticalAvisoNotifications";
 
-export default function AlertsPage() {
+function AlertsInner() {
   const t = useTranslations();
+  const searchParams = useSearchParams();
   const activeAvisos = useAvisosStore((s) => s.activeAvisos());
-  const markAllRead = useAvisosStore((s) => s.markAllRead);
+  const markRead = useAvisosStore((s) => s.markRead);
+  const { askAgent, viewRecommendation } = useAvisoActions();
   const { permission, requestPermission } = useCriticalAvisoNotifications(activeAvisos);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // Deep link (?aviso=id): select on entry when still active, then clear.
+  useEffect(() => {
+    const target = searchParams.get("aviso");
+    if (target && activeAvisos.some((a) => a.id === target)) {
+      setSelectedId(target);
+      markRead(target);
+    }
+    // Run once on entry.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-4 sm:space-y-6 px-4 sm:px-5 py-4 sm:py-6">
@@ -44,10 +61,25 @@ export default function AlertsPage() {
         </p>
       )}
 
-      <AvisosList
+      <AvisosView
         avisos={activeAvisos}
-        onSelect={(aviso) => markAllRead()}
+        selectedId={selectedId}
+        onSelect={(aviso) => {
+          setSelectedId(aviso.id);
+          markRead(aviso.id);
+        }}
+        onBack={() => setSelectedId(null)}
+        onAskAgent={askAgent}
+        onViewRecommendation={viewRecommendation}
       />
     </div>
+  );
+}
+
+export default function AlertsPage() {
+  return (
+    <Suspense>
+      <AlertsInner />
+    </Suspense>
   );
 }

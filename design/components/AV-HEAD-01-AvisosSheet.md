@@ -1,5 +1,5 @@
 # AV-HEAD-01 — AvisosSheet
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-13 — implemented: AvisosView (master/detail), AvisosSheet (BottomSheet wrapper), useAvisoActions handoffs, alerts page with ?aviso=id deep link. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `AV-HEAD-01`
@@ -17,8 +17,12 @@ Opened via bell, groups today/yesterday/earlier.
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §AV for canonical definition.
 
 ## Status
-- Spec: defined
-- Implementation: see `src/components/` (domain: av)
+- Spec: defined (v1.2 implemented)
+- Implementation:
+  - `src/components/avisos/AvisosView.tsx` — chrome-free master/detail (AvisosList groups + AvisoDetail + back)
+  - `src/components/avisos/AvisosSheet.tsx` — BottomSheet wrapper, owns selection, mark-read-on-open, `initialAvisoId`
+  - `src/hooks/useAvisoActions.ts` — Ask Agent (one-shot context → /agent) + View recommendation (/crossing/id or /trip)
+  - `src/app/[locale]/(main)/alerts/page.tsx` — hosts AvisosView, `?aviso=id` deep link, fixed row-select (was markAllRead)
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)
