@@ -165,7 +165,10 @@
     "yesterday": "Ayer",
     "earlier": "Anterior",
     "alert": "alerta",
-    "alerts": "alertas"
+    "alerts": "alertas",
+    "enableAlerts": "Activar notificaciones",
+    "notificationsEnabled": "Notificaciones activadas — te avisaremos de cambios críticos",
+    "notificationsBlocked": "Notificaciones bloqueadas — actívalas en tu navegador para alertas críticas"
   },
   "crossing": {
     "laneTimes": "Tiempos por carril",
@@ -430,7 +433,8 @@
       "mostCommon": "Más común",
       "viewCrossings": "Ver cruces",
       "waitTime": "Tiempo de espera"
-    }
+    },
+    "queuedOffline": "Sin conexión — {count} mensaje(s) en cola, se enviarán al reconectar"
   },
   "shared": {
     "offline": "Estás sin conexión — mostrando datos en caché",

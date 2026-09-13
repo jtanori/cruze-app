@@ -7,6 +7,8 @@ import { useAgentStore, type AgentMessage } from "@/stores/agent";
 import { useAgent } from "./AgentProvider";
 import { RichResponse } from "./RichResponse";
 import { TypingIndicator } from "./TypingIndicator";
+import { useNetworkStatus } from "@/lib/network-status";
+import { flushAgentOutbox } from "@/lib/agent-outbox";
 
 const SUGGESTED_PROMPTS = [
   "agent.suggest.crossings",
@@ -57,8 +59,11 @@ function MessageBubble({ message }: { message: AgentMessage }) {
 export function AgentChat() {
   const t = useTranslations();
   const { messages, addMessage } = useAgentStore();
+  const outboxCount = useAgentStore((s) => s.outbox.length);
   const pendingConsumed = useRef(false);
+  const flushingRef = useRef(false);
   const { processMessage } = useAgent();
+  const { online } = useNetworkStatus();
   const [input, setInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [streamingContent, setStreamingContent] = useState<string | null>(null);
@@ -72,12 +77,21 @@ export function AgentChat() {
   const handleSend = async (content: string) => {
     if (!content.trim() || isProcessing) return;
 
+    const trimmed = content.trim();
     setInput("");
+
+    // P5: offline → echo immediately, queue for flush on reconnect
+    if (!online) {
+      addMessage("user", trimmed);
+      useAgentStore.getState().enqueueOutbox(trimmed);
+      return;
+    }
+
     setIsProcessing(true);
     setStreamingContent("");
 
     try {
-      const response = await processMessage(content.trim());
+      const response = await processMessage(trimmed);
       
       // Simulate streaming effect for better UX
       if (response.text) {
@@ -118,6 +132,27 @@ export function AgentChat() {
     addMessage("assistant", t("agent.askingAbout", { name: ctx.crossingName }));
     useAgentStore.getState().clearPendingContext();
   }, [t, addMessage]);
+
+  // P5: flush queued messages in order when back online.
+  // flushingRef + pull-based drain make StrictMode double-effects safe.
+  useEffect(() => {
+    if (!online || flushingRef.current) return;
+    if (useAgentStore.getState().outbox.length === 0) return;
+    flushingRef.current = true;
+    setIsProcessing(true);
+    flushAgentOutbox(
+      () => useAgentStore.getState().outbox[0],
+      (c) => processMessage(c, { echoUser: false }),
+      (id) => useAgentStore.getState().dequeueOutbox(id)
+    )
+      .catch(() => {
+        // Send failed (offline again) — failure stays queued for next reconnect.
+      })
+      .finally(() => {
+        flushingRef.current = false;
+        setIsProcessing(false);
+      });
+  }, [online, outboxCount, processMessage]);
 
   useEffect(() => {
     scrollToBottom();
@@ -174,6 +209,11 @@ export function AgentChat() {
 
       <div className="fixed bottom-[var(--nav-bottom-height)] left-0 right-0 z-[var(--z-overlay)]">
         <div className="px-5 py-3 border-t border-border bg-surface-elevated bg-opacity-95 backdrop-blur-sm">
+          {outboxCount > 0 && (
+            <p className="text-faint text-xs mb-2 text-center" role="status">
+              {t("agent.queuedOffline", { count: outboxCount })}
+            </p>
+          )}
           <div className="flex items-center gap-2">
             <input
               ref={inputRef}

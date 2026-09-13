@@ -165,7 +165,10 @@
     "yesterday": "Yesterday",
     "earlier": "Earlier",
     "alert": "alert",
-    "alerts": "alerts"
+    "alerts": "alerts",
+    "enableAlerts": "Enable notifications",
+    "notificationsEnabled": "Notifications on — we’ll alert you about critical changes",
+    "notificationsBlocked": "Notifications blocked — enable them in your browser settings for critical alerts"
   },
   "crossing": {
     "laneTimes": "Lane times",
@@ -430,7 +433,8 @@
       "mostCommon": "Most common",
       "viewCrossings": "View crossings",
       "waitTime": "Wait time"
-    }
+    },
+    "queuedOffline": "Offline — {count} message(s) queued, will send on reconnect"
   },
   "shared": {
     "offline": "You're offline — showing cached data",

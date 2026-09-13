@@ -15,7 +15,7 @@ import { useTranslations, useLocale } from "next-intl";
 interface AgentContextValue {
   crossings: MergedCrossingData[];
   loading: boolean;
-  processMessage: (message: string) => Promise<ResponseContent>;
+  processMessage: (message: string, opts?: { echoUser?: boolean }) => Promise<ResponseContent>;
 }
 
 const AgentContext = createContext<AgentContextValue | null>(null);
@@ -46,7 +46,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const processMessage = useCallback(
-    async (message: string): Promise<ResponseContent> => {
+    async (message: string, opts?: { echoUser?: boolean }): Promise<ResponseContent> => {
       // Classify intent
       const intent: IntentBand = classifyIntent(message);
 
@@ -75,9 +75,13 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
         },
       });
 
-      // Save to agent store
-      addMessage("user", message);
-      addMessage("assistant", response.text, response);
+      // Save to agent store (flushed outbox items already echoed at queue time)
+      if (opts?.echoUser === false) {
+        addMessage("assistant", response.text, response);
+      } else {
+        addMessage("user", message);
+        addMessage("assistant", response.text, response);
+      }
 
       return response;
     },

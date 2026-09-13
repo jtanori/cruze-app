@@ -1,139 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { BellRing, BellOff } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useAlertsStore } from "@/stores/alerts";
-import { getMergedCrossingsData, type MergedCrossingData } from "@/lib/border-data-service";
-import { analyzeAllCrossings } from "@/lib/alert-engine";
-import type { BorderAlertEvent } from "@/types";
+import { useAvisosStore } from "@/stores/avisos";
+import { AvisosList } from "@/components/avisos/AvisosList";
+import { useCriticalAvisoNotifications } from "@/hooks/useCriticalAvisoNotifications";
 
 export default function AlertsPage() {
   const t = useTranslations();
-  const { alerts, setAlerts, markSeen } = useAlertsStore();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    markSeen();
-  }, [markSeen]);
-
-  useEffect(() => {
-    async function loadAlerts() {
-      setLoading(true);
-      try {
-        const crossings = await getMergedCrossingsData();
-        const newAlerts = analyzeAllCrossings(crossings, []);
-        if (newAlerts.length > 0) {
-          setAlerts([...newAlerts, ...alerts].slice(0, 50));
-        }
-      } catch {
-        // Silently fail
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadAlerts();
-  }, [setAlerts]);
-
-  const grouped = {
-    [t("alerts.today")]: alerts.filter(
-      (a) => new Date(a.timestamp) > new Date(Date.now() - 86400000)
-    ),
-    [t("alerts.yesterday")]: alerts.filter(
-      (a) =>
-        new Date(a.timestamp) <= new Date(Date.now() - 86400000) &&
-        new Date(a.timestamp) > new Date(Date.now() - 172800000)
-    ),
-    [t("alerts.earlier")]: alerts.filter(
-      (a) => new Date(a.timestamp) <= new Date(Date.now() - 172800000)
-    ),
-  };
-
-  const hasAlerts = alerts.length > 0;
-
-  if (!hasAlerts) {
-    return (
-      <div className="min-h-dvh bg-background flex flex-col items-center justify-center gap-4 sm:gap-6 px-4 sm:px-8 py-32">
-        <div className="w-16 h-16 rounded-full bg-surface-elevated border border-border flex items-center justify-center">
-          <svg
-            className="w-7 h-7 text-faint"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-        </div>
-        <div className="text-center space-y-2">
-          <p className="text-ink text-sm font-medium">
-            {t("alerts.empty")}
-          </p>
-          <p className="text-muted text-xs leading-relaxed">
-            {t("alerts.emptyDescription")}
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const activeAvisos = useAvisosStore((s) => s.activeAvisos());
+  const markAllRead = useAvisosStore((s) => s.markAllRead);
+  const { permission, requestPermission } = useCriticalAvisoNotifications(activeAvisos);
 
   return (
     <div className="space-y-4 sm:space-y-6 px-4 sm:px-5 py-4 sm:py-6">
       <div>
         <p className="text-ink text-lg sm:text-xl font-semibold">{t("alerts.title")}</p>
         <p className="text-faint text-xs mt-1 tabular">
-          {alerts.length}{" "}
-          {alerts.length !== 1 ? t("alerts.alerts") : t("alerts.alert")}
+          {activeAvisos.length}{" "}
+          {activeAvisos.length !== 1 ? t("alerts.alerts") : t("alerts.alert")}
         </p>
       </div>
 
-      {Object.entries(grouped).map(([period, periodAlerts]) => {
-        if (periodAlerts.length === 0) return null;
-        return (
-          <div key={period} className="space-y-3">
-            <h3 className="text-muted text-xs font-medium uppercase tracking-wider">
-              {period}
-            </h3>
-            <div className="space-y-0">
-              {periodAlerts.map((alert, i) => (
-                <div key={alert.id}>
-                  <div className="py-3 space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-faint text-xs tabular">
-                        {new Date(alert.timestamp).toLocaleTimeString("en-US", {
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                      <span className="text-ink text-sm font-medium">
-                        {alert.crossingName}
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded text-xs sm:text-sm font-semibold ${
-                          alert.severity === "CRITICAL"
-                            ? "bg-critical-soft text-critical"
-                            : alert.severity === "IMPORTANT"
-                            ? "bg-caution-soft text-caution"
-                            : alert.severity === "NOTABLE"
-                            ? "bg-info-soft text-info"
-                            : "bg-surface-elevated text-faint"
-                        }`}
-                      >
-                        {alert.severity}
-                      </span>
-                    </div>
-                    <p className="text-ink text-sm">{alert.headline}</p>
-                    <p className="text-muted text-xs">{alert.description}</p>
-                  </div>
-                  {i < periodAlerts.length - 1 && (
-                    <div className="h-px bg-border-subtle" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
+      {permission === "default" && (
+        <button
+          onClick={() => requestPermission()}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-surface border border-border rounded-[var(--radius-md)] text-ink text-sm font-medium active:bg-surface-subtle transition-colors"
+        >
+          <BellRing className="w-4 h-4 text-cruze-green" />
+          {t("alerts.enableAlerts")}
+        </button>
+      )}
+      {permission === "granted" && (
+        <p className="flex items-center justify-center gap-2 text-faint text-xs">
+          <BellRing className="w-3.5 h-3.5 text-cruze-green" />
+          {t("alerts.notificationsEnabled")}
+        </p>
+      )}
+      {permission === "denied" && (
+        <p className="flex items-center justify-center gap-2 text-faint text-xs">
+          <BellOff className="w-3.5 h-3.5" />
+          {t("alerts.notificationsBlocked")}
+        </p>
+      )}
+
+      <AvisosList
+        avisos={activeAvisos}
+        onSelect={(aviso) => markAllRead()}
+      />
     </div>
   );
 }
