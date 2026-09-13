@@ -91,7 +91,7 @@ const INTENT_RULES: IntentRule[] = [
   {
     intent: "direction",
     patterns: [
-      /\b(direction|dirección|direcion|going to|yendo a|voy a)\b/i,
+      /\b(directions?|direcci(o|ó)n(es)?|direcion(es)?|going to|yendo a|voy a)\b/i,
       /\b(north|south|sur|norte)\b/i,
       /\b(MX|US|Mexico|Estados Unidos|México|USA)\b/i,
     ],
