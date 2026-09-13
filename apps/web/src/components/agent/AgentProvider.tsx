@@ -7,6 +7,7 @@ import { useAgentStore } from "@/stores/agent";
 import { fetchMergedCrossings } from "@/lib/crossings";
 import type { MergedCrossingData } from "@/lib/border-data-service";
 import { classifyIntent, extractCrossingMention, type IntentBand } from "@/lib/intent-classifier";
+import { buildHistory, resolveFollowUp } from "@/lib/agent-conversation";
 import { generateResponse, type ResponseContent } from "@/lib/agent-templates";
 import { BORDER_CROSSINGS } from "@/lib/border-data";
 import { getAgentContext, type AgentLiveContext } from "@/lib/agent-context";
@@ -47,11 +48,15 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
 
   const processMessage = useCallback(
     async (message: string, opts?: { echoUser?: boolean }): Promise<ResponseContent> => {
-      // Classify intent
-      const intent: IntentBand = classifyIntent(message);
+      // Attach conversation history for follow-up resolution
+      const history = buildHistory(useAgentStore.getState().messages);
+      const { effectiveMessage } = resolveFollowUp(message, history);
 
-      // Extract crossing mention
-      const crossingId = extractCrossingMention(message, BORDER_CROSSINGS);
+      // Classify intent
+      const intent: IntentBand = classifyIntent(effectiveMessage);
+
+      // Extract crossing mention (falls back to previous turn via effectiveMessage)
+      const crossingId = extractCrossingMention(effectiveMessage, BORDER_CROSSINGS);
       const crossing = crossingId
         ? crossings.find((c) => c.id === crossingId) || null
         : null;
@@ -66,6 +71,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
         trip,
         profile,
         liveContext,
+        history,
         t: (key: string, values?: Record<string, any>) => {
           try {
             return t(key as any, values as any);

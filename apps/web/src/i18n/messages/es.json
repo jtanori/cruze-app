@@ -432,7 +432,9 @@
       "currentCrossing": "Cruce actual",
       "mostCommon": "Más común",
       "viewCrossings": "Ver cruces",
-      "waitTime": "Tiempo de espera"
+      "waitTime": "Tiempo de espera",
+      "greetingBack": "¡Bienvenido de nuevo! ¿En qué más puedo ayudarte?",
+      "followUpContext": "Entendido — continuando:"
     },
     "queuedOffline": "Sin conexión — {count} mensaje(s) en cola, se enviarán al reconectar"
   },

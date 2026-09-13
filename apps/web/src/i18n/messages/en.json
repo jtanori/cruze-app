@@ -432,7 +432,9 @@
       "currentCrossing": "Current crossing",
       "mostCommon": "Most common",
       "viewCrossings": "View crossings",
-      "waitTime": "Wait time"
+      "waitTime": "Wait time",
+      "greetingBack": "Welcome back! What else can I do for you?",
+      "followUpContext": "Got it — following up:"
     },
     "queuedOffline": "Offline — {count} message(s) queued, will send on reconnect"
   },

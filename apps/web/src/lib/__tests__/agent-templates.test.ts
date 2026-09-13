@@ -196,6 +196,36 @@ describe("generateResponse — whatshappening with live context", () => {
   });
 });
 
+describe("generateResponse — conversation history", () => {
+  const history = [
+    { role: "user" as const, text: "wait times?" },
+    { role: "assistant" as const, text: "here are wait times" },
+  ];
+
+  it("greets returning users with the compact welcome-back", () => {
+    const res = generateResponse("greeting", baseCtx({ history }));
+    expect(res.text).toContain("agent.template.greetingBack");
+    expect(res.text).not.toContain("agent.template.greetingGeneric");
+    expect(res.suggestions).toContain("agent.suggest.tripHelp");
+  });
+
+  it("greets first-time users generically without history", () => {
+    const res = generateResponse("greeting", baseCtx());
+    expect(res.text).toContain("agent.template.greetingGeneric");
+  });
+
+  it("prefixes general responses with follow-up context when history exists", () => {
+    const res = generateResponse("general", baseCtx({ history }));
+    expect(res.text).toContain("agent.template.followUpContext");
+    expect(res.text).toContain("agent.template.generalHelp");
+  });
+
+  it("leaves general responses untouched without history", () => {
+    const res = generateResponse("general", baseCtx());
+    expect(res.text).not.toContain("agent.template.followUpContext");
+  });
+});
+
 describe("generateResponse — suggestions coverage", () => {
   it("wait_times includes compare/directions suggestions", () => {
     const res = generateResponse("wait_times", baseCtx({ crossing: makeCrossing() }));

@@ -8,9 +8,10 @@ import type { ResponseContent, ResponseCard, ResponseChecklistItem, ResponseData
 
 interface RichResponseProps {
   content: ResponseContent;
+  onSuggestion?: (suggestion: string) => void;
 }
 
-export function RichResponse({ content }: RichResponseProps) {
+export function RichResponse({ content, onSuggestion }: RichResponseProps) {
   const t = useTranslations();
 
   return (
@@ -65,11 +66,7 @@ export function RichResponse({ content }: RichResponseProps) {
           {content.suggestions.map((suggestion, i) => (
             <button
               key={i}
-              onClick={() => {
-                // This would trigger a new message send
-                // For now, we'll just log - in real implementation this would call processMessage
-                console.log("Suggestion clicked:", suggestion);
-              }}
+              onClick={() => onSuggestion?.(suggestion)}
               className="px-3 py-1.5 text-xs font-medium text-cruze-green bg-cruze-green/10 border border-cruze-green/30 rounded-full hover:bg-cruze-green/20 transition-colors"
             >
               <ArrowRight className="w-3 h-3 inline mr-1" />

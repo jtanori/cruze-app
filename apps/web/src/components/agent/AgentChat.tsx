@@ -17,7 +17,13 @@ const SUGGESTED_PROMPTS = [
   "agent.suggest.configureTrip",
 ];
 
-function MessageBubble({ message }: { message: AgentMessage }) {
+function MessageBubble({
+  message,
+  onSuggestion,
+}: {
+  message: AgentMessage;
+  onSuggestion?: (suggestion: string) => void;
+}) {
   const isUser = message.role === "user";
 
   return (
@@ -48,7 +54,7 @@ function MessageBubble({ message }: { message: AgentMessage }) {
         >
           {message.content}
           {!isUser && message.richContent && (
-            <RichResponse content={message.richContent} />
+            <RichResponse content={message.richContent} onSuggestion={onSuggestion} />
           )}
         </div>
       </div>
@@ -186,7 +192,7 @@ export function AgentChat() {
         ) : (
           <>
             {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} />
+              <MessageBubble key={msg.id} message={msg} onSuggestion={handleSend} />
             ))}
             {isProcessing && streamingContent && (
               <div className="flex justify-start">

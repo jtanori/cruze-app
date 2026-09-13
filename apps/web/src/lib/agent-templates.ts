@@ -8,6 +8,7 @@ import type { IntentBand } from "./intent-classifier";
 import type { MergedCrossingData } from "./border-data-service";
 import type { TravelerProfile } from "@/types";
 import type { AgentLiveContext } from "./agent-context";
+import type { ConversationTurn } from "./agent-conversation";
 
 interface TripContext {
   completed: boolean;
@@ -56,6 +57,7 @@ interface TemplateContext {
   trip: TripContext;
   profile: TravelerProfile | null;
   liveContext?: AgentLiveContext;
+  history?: ConversationTurn[];
   t: (key: string, values?: Record<string, any>) => string;
 }
 
@@ -84,7 +86,7 @@ export function generateResponse(
   intent: IntentBand,
   ctx: TemplateContext
 ): ResponseContent {
-  const { crossing, allCrossings, trip, profile, liveContext, t } = ctx;
+  const { crossing, allCrossings, trip, profile, liveContext, history = [], t } = ctx;
   switch (intent) {
     case "wait_times":
       return generateWaitTimesResponse(crossing, allCrossings, t);
@@ -101,11 +103,11 @@ export function generateResponse(
     case "rules":
       return generateRulesResponse(t);
     case "greeting":
-      return generateGreetingResponse(trip, t, liveContext);
+      return generateGreetingResponse(trip, t, liveContext, history);
     case "direction":
       return generateDirectionResponse(crossing, allCrossings, t, liveContext);
     case "general":
-      return generateGeneralResponse(trip, profile, t, liveContext);
+      return generateGeneralResponse(trip, profile, t, liveContext, history);
     case "whatshappening":
       return generateWhatsHappeningResponse(allCrossings, t, liveContext);
     default:
@@ -329,8 +331,20 @@ function generateRulesResponse(t: (k: string, v?: any) => string): ResponseConte
 function generateGreetingResponse(
   trip: TripContext,
   t: (k: string, v?: any) => string,
-  liveContext?: AgentLiveContext
+  liveContext?: AgentLiveContext,
+  history: ConversationTurn[] = []
 ): ResponseContent {
+  // Returning user with conversation history gets a compact welcome-back.
+  if (history.length > 0) {
+    return {
+      text: t("agent.template.greetingBack"),
+      suggestions: [
+        t("agent.suggest.waitTimes"),
+        t("agent.suggest.whatsHappening"),
+        t("agent.suggest.tripHelp"),
+      ],
+    };
+  }
   const hasTrip = trip.completed && trip.destination && trip.start;
   let text = hasTrip
     ? t("agent.template.greetingWithTrip", { start: trip.start!.name, destination: trip.destination!.name })
@@ -511,7 +525,8 @@ function generateGeneralResponse(
   trip: TripContext,
   profile: TravelerProfile | null,
   t: (k: string, values?: Record<string, any>) => string,
-  liveContext?: AgentLiveContext
+  liveContext?: AgentLiveContext,
+  history: ConversationTurn[] = []
 ): ResponseContent {
   const hasTrip = trip.completed && trip.start && trip.destination;
 
@@ -521,6 +536,10 @@ function generateGeneralResponse(
         destination: trip.destination!.name,
       })
     : t("agent.template.generalHelp");
+
+  if (history.length > 0) {
+    text = `${t("agent.template.followUpContext")} ${text}`;
+  }
 
   // Add live context if available
   if (liveContext?.hasLiveCrossingData && liveContext.hasActiveTrip) {
