@@ -1,6 +1,11 @@
 import type { Place } from "@/types";
 
-const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+/**
+ * S2 — Geocoding clients go through same-origin proxies (/api/places,
+ * /api/reverse). The Mapbox token lives server-side; browsers never see
+ * queries or coordinates leave for third parties. Only interactive map
+ * tiles still use the public token (see CrossingDetailMap).
+ */
 
 export interface GeocodingResult {
   id: string;
@@ -9,85 +14,63 @@ export interface GeocodingResult {
   context: string[];
 }
 
-export interface GeocodingFeature {
+interface ProxyPlace {
   id: string;
-  place_name: string;
-  center: [number, number];
-  context: Array<{ id: string; text: string }>;
-  properties?: {
-    short_code?: string;
-  };
+  name: string;
+  formattedAddress: string;
+  latitude: number | null;
+  longitude: number | null;
+  country: "MX" | "US";
+  countryCode: string;
+  city?: string;
+  region?: string;
 }
 
-function detectCountry(feature: GeocodingFeature): "MX" | "US" {
-  const shortCode = feature.properties?.short_code;
-  if (shortCode) {
-    return shortCode.toUpperCase() === "US" ? "US" : "MX";
-  }
-  const contextIds = feature.context?.map((c) => c.id) || [];
-  for (const ctx of contextIds) {
-    if (ctx.startsWith("country.") && ctx.includes("united_states")) return "US";
-  }
-  return "MX";
-}
-
-function featureToPlace(feature: GeocodingFeature): Place {
-  const country = detectCountry(feature);
-  const placeName = feature.place_name || "";
-  const parts = placeName.split(",").map((s) => s.trim());
-  const name = parts[0] || placeName;
-
+function toPlace(p: ProxyPlace): Place {
   return {
-    id: feature.id,
-    name,
-    formattedAddress: placeName,
-    latitude: feature.center[1],
-    longitude: feature.center[0],
-    country,
-    countryCode: country,
-    city: parts[0],
-    region: parts[1],
+    id: p.id,
+    name: p.name,
+    formattedAddress: p.formattedAddress,
+    latitude: p.latitude ?? 0,
+    longitude: p.longitude ?? 0,
+    country: p.country,
+    countryCode: p.countryCode,
+    city: p.city,
+    region: p.region,
   };
 }
 
 /**
- * Search for locations using Mapbox Geocoding API
- * Limited to MX and USA locations
+ * Search for locations via the server proxy.
+ * Limited to MX and USA locations.
  */
 export async function searchLocations(
   query: string,
   limit: number = 5
 ): Promise<GeocodingResult[]> {
-  if (!MAPBOX_TOKEN) {
-    console.warn("Mapbox token not configured");
-    return [];
-  }
-
   if (!query || query.length < 2) {
     return [];
   }
 
   try {
-    const encodedQuery = encodeURIComponent(query);
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedQuery}.json?access_token=${MAPBOX_TOKEN}&country=mx,us&types=place,region&language=es&limit=${limit}`;
-
-    const response = await fetch(url);
+    const params = new URLSearchParams({
+      query,
+      limit: String(limit),
+    });
+    const response = await fetch(`/api/places?${params.toString()}`);
 
     if (!response.ok) {
-      throw new Error(`Geocoding API error: ${response.status}`);
+      throw new Error(`Places API error: ${response.status}`);
     }
 
     const data = await response.json();
+    const places: ProxyPlace[] = Array.isArray(data.places) ? data.places : [];
 
-    if (!data.features || !Array.isArray(data.features)) {
-      return [];
-    }
-
-    return data.features.map((feature: GeocodingFeature) => ({
-      id: feature.id,
-      placeName: feature.place_name,
-      center: feature.center,
-      context: feature.context?.map((c) => c.text) || [],
+    return places.map((p) => ({
+      id: p.id,
+      placeName: p.formattedAddress,
+      center: [p.longitude ?? 0, p.latitude ?? 0],
+      context: [p.city, p.region].filter((x): x is string => Boolean(x)),
     }));
   } catch (error) {
     console.error("Geocoding search failed:", error);
@@ -96,7 +79,7 @@ export async function searchLocations(
 }
 
 /**
- * Search for places using Mapbox Geocoding API
+ * Search for places via the server proxy.
  * Returns Place[] format for compatibility with existing components.
  * `country` is a STRICT server-side filter (ISO alpha-2, lowercase);
  * pass the target side when known, null for both (UNKNOWN user).
@@ -106,32 +89,25 @@ export async function searchPlaces(
   limit: number = 5,
   country?: "MX" | "US" | null
 ): Promise<Place[]> {
-  if (!MAPBOX_TOKEN) {
-    return [];
-  }
-
   if (!query || query.length < 2) {
     return [];
   }
 
   try {
-    const encodedQuery = encodeURIComponent(query);
-    const countryParam = country ? country.toLowerCase() : "mx,us";
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedQuery}.json?access_token=${MAPBOX_TOKEN}&country=${countryParam}&types=place,region&language=es&limit=${limit}`;
-
-    const response = await fetch(url);
+    const params = new URLSearchParams({
+      query,
+      limit: String(limit),
+    });
+    if (country) params.set("country", country);
+    const response = await fetch(`/api/places?${params.toString()}`);
 
     if (!response.ok) {
-      throw new Error(`Geocoding API error: ${response.status}`);
+      throw new Error(`Places API error: ${response.status}`);
     }
 
     const data = await response.json();
-
-    if (!data.features || !Array.isArray(data.features)) {
-      return [];
-    }
-
-    return data.features.map(featureToPlace);
+    const places: ProxyPlace[] = Array.isArray(data.places) ? data.places : [];
+    return places.map(toPlace);
   } catch (error) {
     console.error("Geocoding search failed:", error);
     return [];
@@ -139,32 +115,25 @@ export async function searchPlaces(
 }
 
 /**
- * Reverse geocode coordinates to get a Place object
+ * Reverse geocode coordinates via the server proxy.
  */
 export async function reverseGeocode(
   lat: number,
   lng: number
 ): Promise<Place | null> {
-  if (!MAPBOX_TOKEN) {
-    return null;
-  }
-
   try {
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&country=mx,us&types=place,region&language=es&limit=1`;
-
-    const response = await fetch(url);
+    const params = new URLSearchParams({
+      lat: String(lat),
+      lng: String(lng),
+    });
+    const response = await fetch(`/api/reverse?${params.toString()}`);
 
     if (!response.ok) {
       return null;
     }
 
     const data = await response.json();
-
-    if (data.features && data.features.length > 0) {
-      return featureToPlace(data.features[0]);
-    }
-
-    return null;
+    return data.place ? toPlace(data.place as ProxyPlace) : null;
   } catch {
     return null;
   }

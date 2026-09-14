@@ -24,6 +24,15 @@ lib/
 - Dio for networking
 - freezed + json_serializable
 
+## Security policy (S2 audit)
+- Secrets/tokens (Mapbox, backend keys): `flutter_secure_storage` (Keychain/Keystore) only.
+  Never `--dart-define` secrets into release builds, never in query params or logs.
+- `shared_preferences`: UI state only — no PII, no tokens, no trip/location data.
+- Network: HTTPS base URL only, short timeouts, no `badCertificateCallback` overrides.
+- Location: least-privilege manifest/plist review required before any location code ships
+  (no `ACCESS_BACKGROUND_LOCATION` / `Always` without explicit trip-tracking justification).
+- `pubspec.lock` is tracked for reproducible builds.
+
 ## Commands (via Melos from repo root)
 - `melos gen` — build_runner
 - `melos run analyze` — flutter analyze

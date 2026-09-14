@@ -36,6 +36,7 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
         <div className="relative inline-flex">
           <input
             ref={ref}
+            id={id}
             type="checkbox"
             className="sr-only peer"
             {...props}

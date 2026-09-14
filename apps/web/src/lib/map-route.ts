@@ -11,20 +11,24 @@ export interface MapPoint {
   label?: string;
 }
 
-/** Fetch driving route coordinates from Mapbox Directions API. */
+/**
+ * Fetch driving route coordinates via the server directions proxy.
+ * S2: coordinates stay same-origin; the token lives server-side.
+ * The legacy token param is accepted but ignored (kept for call-site compat).
+ */
 export async function fetchDirectionsRoute(
   start: [number, number],
   end: [number, number],
-  token: string
+  _token?: string
 ): Promise<[number, number][]> {
-  const url =
-    `https://api.mapbox.com/directions/v5/mapbox/driving/` +
-    `${start[0]},${start[1]};${end[0]},${end[1]}` +
-    `?geometries=geojson&access_token=${token}`;
-  const response = await fetch(url);
+  const params = new URLSearchParams({
+    start: `${start[0]},${start[1]}`,
+    end: `${end[0]},${end[1]}`,
+  });
+  const response = await fetch(`/api/directions?${params.toString()}`);
   const data = await response.json();
-  if (data.routes && data.routes.length > 0) {
-    return data.routes[0].geometry.coordinates;
+  if (Array.isArray(data.coordinates) && data.coordinates.length > 0) {
+    return data.coordinates;
   }
   return [start, end];
 }

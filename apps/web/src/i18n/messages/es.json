@@ -48,6 +48,18 @@
     "favorites": "Favoritos",
     "alerts": "Alertas"
   },
+  "privacy": {
+    "title": "Privacidad y datos",
+    "subtitle": "Elige qué compartes. Decide sigue gratis y completo de cualquier forma.",
+    "contributionTitle": "Compartir señales de viaje",
+    "contributionBody": "Muestras anónimas de fila que mejoran los tiempos. Compartir activo significa menos anuncios.",
+    "adsTitle": "Anuncios personalizados",
+    "adsBody": "Permite anuncios adaptados a tus viajes en vez de genéricos.",
+    "analyticsTitle": "Analítica de uso",
+    "analyticsBody": "Ayúdanos a entender qué pantallas funcionan. Ninguna ubicación precisa sale de tu dispositivo.",
+    "revocationNote": "Puedes revocar cualquiera en cualquier momento; aplica de inmediato y los anuncios vuelven a lo normal. Nunca vendemos tus datos personales.",
+    "policyVersion": "Política de consentimiento v{version}"
+  },
   "pwa": {
     "installTitle": "Instalar Cruze",
     "installBody": "Agrega a tu pantalla de inicio para pantalla completa, modo sin conexión y apertura más rápida.",

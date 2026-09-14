@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { BreakState, ContributionSettings, ProState, ConsentRecord } from "@/types/monetization";
 import { MONETIZATION_POLICY } from "@/lib/monetization-policy";
+import { CONSENT_POLICY_VERSION, latestConsentFor } from "@/lib/consent";
 import { trackEvent } from "@/lib/analytics";
 
 interface MonetizationState {
@@ -112,6 +113,8 @@ export const useMonetizationStore = create<MonetizationState>()(
           },
         });
 
+        // Contribution doubles as its own consent record (same gesture).
+        get().recordConsent("data_contribution", newEnabled);
         trackEvent(newEnabled ? "contribution_started" : "consent_revoked", {
           type: "data_contribution",
         });
@@ -159,7 +162,7 @@ export const useMonetizationStore = create<MonetizationState>()(
           type: type as ConsentRecord["type"],
           granted,
           timestamp: new Date().toISOString(),
-          version: "1.0",
+          version: CONSENT_POLICY_VERSION,
         };
 
         set({
@@ -171,10 +174,13 @@ export const useMonetizationStore = create<MonetizationState>()(
 
       hasConsent: (type) => {
         const { consentRecords } = get();
-        const latest = consentRecords
-          .filter((r) => r.type === type)
-          .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
-        return latest?.granted ?? false;
+        const latest = latestConsentFor(
+          consentRecords,
+          type as ConsentRecord["type"]
+        );
+        // Stale policy versions read as denied — user must re-consent.
+        if (!latest || latest.version !== CONSENT_POLICY_VERSION) return false;
+        return latest.granted;
       },
 
       incrementAdsShown: () => {

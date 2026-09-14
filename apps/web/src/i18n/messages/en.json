@@ -48,6 +48,18 @@
     "favorites": "Favorites",
     "alerts": "Alerts"
   },
+  "privacy": {
+    "title": "Privacy and data",
+    "subtitle": "Choose what you share. Decide stays free and complete either way.",
+    "contributionTitle": "Share trip signals",
+    "contributionBody": "Anonymous queue samples that improve wait estimates. Active sharing means fewer ads.",
+    "adsTitle": "Personalized ads",
+    "adsBody": "Allow ads tailored to your trips instead of generic ones.",
+    "analyticsTitle": "Usage analytics",
+    "analyticsBody": "Help us understand which screens work. No precise location leaves your device.",
+    "revocationNote": "You can revoke any of these anytime; the change applies immediately and ads return to default. We never sell personal trails.",
+    "policyVersion": "Consent policy v{version}"
+  },
   "pwa": {
     "installTitle": "Install Cruze",
     "installBody": "Add to your home screen for fullscreen, offline shell, and faster launches.",

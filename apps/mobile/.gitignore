@@ -1,6 +1,8 @@
 .dart_tool/
 .packages
 build/
+# Track pubspec.lock for reproducible app builds; ignore other lock artifacts.
 *.lock
+!pubspec.lock
 *.g.dart
 *.freezed.dart
