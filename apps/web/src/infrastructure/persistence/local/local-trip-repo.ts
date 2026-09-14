@@ -28,7 +28,7 @@ export interface TripRepository {
 }
 
 function createTripRepository(): TripRepository {
-  const STORAGE_KEY = "cruze-trip";
+  const STORAGE_KEY = "cruze-trip-legacy";
 
   // Initial state
   const initialState: Trip = {

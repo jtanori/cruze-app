@@ -127,20 +127,42 @@ export async function GET(request: NextRequest) {
   const documentProfile = searchParams.get("documentProfile");
 
   try {
-    if (originLat && originLng && destLat && destLng) {
+    // S1: strict coordinate validation — NaN and null-island values must
+    // 400, never poison ranking or echo back into context.
+    const { parseLatLngPair, isInvalidCoordinatesError } = await import(
+      "@/lib/coord-validation"
+    );
+    let originCoords;
+    let destCoords;
+    try {
+      originCoords = parseLatLngPair(originLat, originLng);
+      destCoords = parseLatLngPair(destLat, destLng);
+    } catch (error) {
+      if (isInvalidCoordinatesError(error)) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+      }
+      throw error;
+    }
+    if ((originCoords === undefined) !== (destCoords === undefined)) {
+      return NextResponse.json(
+        { error: "Invalid coordinates: origin and destination are required together" },
+        { status: 400 }
+      );
+    }
+    if (originCoords && destCoords) {
       const start: Place = {
         id: "origin",
         name: origin,
-        latitude: parseFloat(originLat),
-        longitude: parseFloat(originLng),
+        latitude: originCoords.lat,
+        longitude: originCoords.lng,
         country: "MX",
         formattedAddress: origin,
       } as Place;
       const dest: Place = {
         id: "destination",
         name: destination,
-        latitude: parseFloat(destLat),
-        longitude: parseFloat(destLng),
+        latitude: destCoords.lat,
+        longitude: destCoords.lng,
         country: "US",
         formattedAddress: destination,
       } as Place;
@@ -196,10 +218,10 @@ export async function GET(request: NextRequest) {
         context: {
           originName: origin,
           destinationName: destination,
-          originLat: parseFloat(originLat),
-          originLng: parseFloat(originLng),
-          destLat: parseFloat(destLat),
-          destLng: parseFloat(destLng),
+          originLat: originCoords!.lat,
+          originLng: originCoords!.lng,
+          destLat: destCoords!.lat,
+          destLng: destCoords!.lng,
           direction,
           ...(travelMode && { travelMode }),
           ...(accessType && { accessType }),
@@ -209,7 +231,8 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Fallback: generic live ranking
+    // Fallback: generic live ranking. Coordinates stay null — never 0,0
+    // (null island); callers must not treat the ranking as geo-anchored.
     const direction = clientDirection ?? "MX_TO_US";
     const liveData = await getCrossingsWithLiveData(direction as any);
     const ranked = rankCrossings(liveData, travelMode, accessType);
@@ -251,10 +274,10 @@ export async function GET(request: NextRequest) {
       context: {
         originName: origin,
         destinationName: destination,
-        originLat: 0,
-        originLng: 0,
-        destLat: 0,
-        destLng: 0,
+        originLat: null,
+        originLng: null,
+        destLat: null,
+        destLng: null,
         direction,
         ...(travelMode && { travelMode }),
         ...(accessType && { accessType }),

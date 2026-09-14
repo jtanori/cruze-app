@@ -28,6 +28,19 @@ import type { NextRequest } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    // S1: reject blatantly invalid coordinates up front instead of letting
+    // them skew distance ranking (parseCrossingsQuery stays lenient by design).
+    const { parseLatLngPair, isInvalidCoordinatesError } = await import(
+      "@/lib/coord-validation"
+    );
+    try {
+      parseLatLngPair(searchParams.get("lat"), searchParams.get("lng"));
+    } catch (error) {
+      if (isInvalidCoordinatesError(error)) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+      }
+      throw error;
+    }
     const { parseCrossingsQuery, applyCrossingsQuery } = await import(
       "@/lib/crossings-query"
     );

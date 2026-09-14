@@ -12,6 +12,7 @@ import type {
   TripRecommendation,
   selectCrossingFromRecommendation,
 } from "@/lib/recommendation/types";
+import { sanitizePlace, sanitizeLatLng, capCompletedTrips } from "@/lib/geo-privacy";
 
 interface CompletedTrip {
   id: string;
@@ -161,7 +162,7 @@ export const useTripStore = create<TripState>()(
         };
         set({
           completed: true,
-          completedTrips: [newCompletedTrip, ...state.completedTrips],
+          completedTrips: capCompletedTrips([newCompletedTrip, ...state.completedTrips]),
         });
       },
       refreshActivity: () => set({ lastEvaluatedAt: new Date().toISOString() }),
@@ -169,10 +170,23 @@ export const useTripStore = create<TripState>()(
     }),
     {
       name: "cruze-trip",
-      // lastRecommendation is ephemeral — don't persist it
+      // lastRecommendation is ephemeral — don't persist it.
+      // S1: persisted places rounded to ~100m; history capped.
       partialize: (state) => {
         const { lastRecommendation, ...rest } = state;
-        return rest;
+        const recommendedCrossing = rest.recommendedCrossing
+          ? {
+              ...rest.recommendedCrossing,
+              coordinates: sanitizeLatLng(rest.recommendedCrossing.coordinates) ?? rest.recommendedCrossing.coordinates,
+            }
+          : rest.recommendedCrossing;
+        return {
+          ...rest,
+          start: sanitizePlace(rest.start),
+          destination: sanitizePlace(rest.destination),
+          recommendedCrossing,
+          completedTrips: capCompletedTrips(rest.completedTrips),
+        };
       },
     }
   )

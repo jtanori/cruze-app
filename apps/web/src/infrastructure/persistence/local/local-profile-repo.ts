@@ -7,7 +7,7 @@ export interface ProfileRepository {
 }
 
 export class LocalProfileRepository implements ProfileRepository {
-  private readonly STORAGE_KEY = "cruze-traveler";
+  private readonly STORAGE_KEY = "cruze-traveler-legacy";
 
   get(): TravelerProfile | null {
     try {

@@ -7,7 +7,7 @@ export interface FavoritesRepository {
 }
 
 export class LocalFavoritesRepository implements FavoritesRepository {
-  private readonly STORAGE_KEY = "cruze-favorites";
+  private readonly STORAGE_KEY = "cruze-favorites-legacy";
 
   get(): string[] {
     try {

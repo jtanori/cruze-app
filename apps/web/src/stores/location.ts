@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { LocationState, LocationData } from "@/lib/location-state-machine";
+import { sanitizeLatLng } from "@/lib/geo-privacy";
 
 interface LocationStore {
   state: LocationState;
@@ -31,6 +32,13 @@ export const useLocationStore = create<LocationStore>()(
     }),
     {
       name: "cruze-location",
+      // S1: persisted fix rounded to ~100m; precise fixes re-acquire live.
+      partialize: (state) => ({
+        state: state.state,
+        location: sanitizeLatLng(state.location),
+        isManual: state.isManual,
+        error: state.error,
+      }),
     }
   )
 );

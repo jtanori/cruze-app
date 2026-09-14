@@ -108,6 +108,12 @@ export const useCrossingDetectionStore = create<CrossingDetectionStore>()(
     }),
     {
       name: "cruze-crossing-detection",
+      // S1: movement trail and last position stay in memory only —
+      // monitoring is session-scoped and restarts cleanly.
+      partialize: (state) => {
+        const { userPosition: _pos, positionHistory: _hist, ...rest } = state;
+        return rest;
+      },
     }
   )
 );

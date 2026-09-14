@@ -85,10 +85,11 @@ export interface TripRecommendation {
   context: {
     originName: string;
     destinationName: string;
-    originLat: number;
-    originLng: number;
-    destLat: number;
-    destLng: number;
+    /** Null when the ranking is not geo-anchored (never null-island 0,0). */
+    originLat: number | null;
+    originLng: number | null;
+    destLat: number | null;
+    destLng: number | null;
     travelMode?: string;
     direction?: string;
     accessType?: string;
