@@ -31,3 +31,9 @@ jobs:
 
       - name: Build
         run: pnpm turbo run build --filter=cruce-web
+
+      - name: Notify Vercel
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: Vercel - cruze-app-web: vercel-pre-build
