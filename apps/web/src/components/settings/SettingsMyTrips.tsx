@@ -17,7 +17,7 @@ interface SettingsMyTripsProps {
 
 export function SettingsMyTrips({ trips, onSelect }: SettingsMyTripsProps) {
   if (trips.length === 0) {
-    return <EmptyState title="Sin viajes completados" description="Los viajes aparecer\u00E1n aqu\u00ED despu\u00E9s de completarlos." />;
+    return <EmptyState title="Sin viajes completados" description="Los viajes aparecerán aquí después de completarlos." />;
   }
 
   return (

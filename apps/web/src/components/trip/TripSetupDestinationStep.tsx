@@ -15,7 +15,7 @@ export function TripSetupDestinationStep({ onSelect }: TripSetupDestinationStepP
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"\u00BFAd\u00F3nde vas?"}</h2>
+        <h2 className="text-xl font-bold text-ink">{"¿Adónde vas?"}</h2>
         <p className="text-sm text-muted mt-1">{"Busca tu destino"}</p>
       </div>
 

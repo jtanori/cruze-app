@@ -8,10 +8,10 @@ interface AgentWelcomeScreenProps {
 }
 
 const DEFAULT_PROMPTS = [
-  "\u00BFQu\u00E9 cruces est\u00E1n disponibles?",
-  "\u00BFCu\u00E1l me conviene m\u00E1s?",
+  "¿Qué cruces están disponibles?",
+  "¿Cuál me conviene más?",
   "Revisa mi viaje",
-  "\u00BFQu\u00E9 debo revisar antes de cruzar?",
+  "¿Qué debo revisar antes de cruzar?",
 ];
 
 export function AgentWelcomeScreen({ onPrompt, contextPrompts }: AgentWelcomeScreenProps) {

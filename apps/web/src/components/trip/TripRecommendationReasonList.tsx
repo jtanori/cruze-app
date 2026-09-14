@@ -12,7 +12,7 @@ export function TripRecommendationReasonList({ reasons, className = "" }: TripRe
 
   return (
     <div className={`space-y-3 ${className}`}>
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted">{"\u00BFPor qu\u00E9?"}</p>
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted">{"¿Por qué?"}</p>
       <ul className="space-y-2">
         {reasons.map((r, i) => (
           <li key={i} className="flex items-start gap-2">

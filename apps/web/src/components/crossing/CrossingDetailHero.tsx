@@ -10,6 +10,9 @@ interface CrossingDetailHeroProps {
   waitTime: number | null;
   direction?: "northbound" | "southbound" | "both";
   secondaryWaitTime?: number | null;
+  /** Southbound waits are modeled estimates — label the slot honestly. */
+  secondaryEstimated?: boolean;
+  secondaryEstimatedLabel?: string;
   updatedAt?: string;
   children?: React.ReactNode;
   className?: string;
@@ -21,6 +24,8 @@ export function CrossingDetailHero({
   waitTime,
   direction = "northbound",
   secondaryWaitTime = null,
+  secondaryEstimated = false,
+  secondaryEstimatedLabel = "Sur · est.",
   updatedAt,
   children,
   className = "",
@@ -47,7 +52,9 @@ export function CrossingDetailHero({
             <p className="text-3xl font-extrabold tabular text-ink">
               {secondaryWaitTime !== null ? formatDuration(secondaryWaitTime) : "—"}
             </p>
-            <p className="text-sm text-muted capitalize">Sur</p>
+            <p className="text-sm text-muted capitalize">
+              {secondaryEstimated ? secondaryEstimatedLabel : "Sur"}
+            </p>
           </div>
         </div>
       ) : (

@@ -66,8 +66,8 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
-          <h2 className="text-ink text-xl font-semibold">{t("viaje.crossingMode")}</h2>
-          <p className="text-faint text-sm">{t("viaje.crossingModeDescription")}</p>
+          <h2 className="text-ink text-xl font-semibold">{t("trip.crossingMode")}</h2>
+          <p className="text-faint text-sm">{t("trip.crossingModeDescription")}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -96,8 +96,8 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
-          <h2 className="text-ink text-xl font-semibold">{t("viaje.accessType")}</h2>
-          <p className="text-faint text-sm">{t("viaje.accessTypeDescription")}</p>
+          <h2 className="text-ink text-xl font-semibold">{t("trip.accessType")}</h2>
+          <p className="text-faint text-sm">{t("trip.accessTypeDescription")}</p>
         </div>
 
         <div className="space-y-2">
@@ -141,8 +141,8 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
-          <h2 className="text-ink text-xl font-semibold">{t("viaje.documentCategory")}</h2>
-          <p className="text-faint text-sm">{t("viaje.documentCategoryDescription")}</p>
+          <h2 className="text-ink text-xl font-semibold">{t("trip.documentCategory")}</h2>
+          <p className="text-faint text-sm">{t("trip.documentCategoryDescription")}</p>
         </div>
 
         <div className="space-y-2">
@@ -186,8 +186,8 @@ export function TravelerProfileForm({ direction, onComplete, onBack }: TravelerP
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
-          <h2 className="text-ink text-xl font-semibold">{t("viaje.trustedTraveler")}</h2>
-          <p className="text-faint text-sm">{t("viaje.trustedTravelerDescription")}</p>
+          <h2 className="text-ink text-xl font-semibold">{t("trip.trustedTraveler")}</h2>
+          <p className="text-faint text-sm">{t("trip.trustedTravelerDescription")}</p>
         </div>
 
         <div className="space-y-2">

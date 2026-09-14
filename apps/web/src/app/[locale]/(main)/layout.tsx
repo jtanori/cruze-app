@@ -22,7 +22,7 @@ function getHeaderVariant(pathname: string): "root" | "search" | "filter" {
 function getHeaderTitle(pathname: string): string | undefined {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
   if (path.startsWith("/crossings")) return "CRUCES";
-  if (path.startsWith("/trip")) return undefined;
+  if (path.startsWith("/trip")) return "VIAJE";
   if (path.startsWith("/agent")) return "AGENTE";
   if (path.startsWith("/favorites")) return "FAVORITOS";
   if (path.startsWith("/alerts")) return "AVISOS";

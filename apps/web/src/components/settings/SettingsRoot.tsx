@@ -22,12 +22,12 @@ export function SettingsRoot({ onProfile, onFavorites, onMyTrips, onDataSharing,
     { title: "PERFIL", items: [{ id: "profile", label: "Perfil", icon: User, onClick: onProfile }] },
     { title: "GUARDADOS", items: [{ id: "favorites", label: "Favoritos", icon: Star, onClick: onFavorites }, { id: "myTrips", label: "Mis viajes", icon: Map, onClick: onMyTrips }] },
     { title: "PRIVACIDAD", items: [{ id: "dataSharing", label: "Compartir datos", icon: Share2, onClick: onDataSharing }] },
-    { title: "INFORMACI\u00D3N", items: [{ id: "about", label: "Acerca de Cruze", icon: Info, onClick: onAbout }] },
+    { title: "INFORMACIÓN", items: [{ id: "about", label: "Acerca de Cruze", icon: Info, onClick: onAbout }] },
   ];
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <h1 className="text-xl font-bold text-ink">CONFIGURACI\u00D3N</h1>
+      <h1 className="text-xl font-bold text-ink">CONFIGURACIÓN</h1>
       {sections.map((s) => (
         <div key={s.title} className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">{s.title}</p>

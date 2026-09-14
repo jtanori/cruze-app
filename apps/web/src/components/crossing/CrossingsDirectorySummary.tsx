@@ -7,6 +7,8 @@ interface CrossingsDirectorySummaryProps {
   scope: CrossingsScope;
   sort: CrossingsSort;
   onSortChange: (sort: CrossingsSort) => void;
+  /** When true, results come from a search term — not the scope filter. */
+  isSearching?: boolean;
   className?: string;
 }
 
@@ -32,12 +34,14 @@ export function CrossingsDirectorySummary({
   scope,
   sort,
   onSortChange,
+  isSearching = false,
   className = "",
 }: CrossingsDirectorySummaryProps) {
+  const unit = total === 1 ? "cruce" : "cruces";
   return (
     <div className={`flex items-center justify-between gap-3 ${className}`}>
       <p className="text-sm text-ink tabular" role="status">
-        {total} {total === 1 ? "cruce" : "cruces"} · {SCOPE_COPY[scope]}
+        {isSearching ? `${total} ${unit} encontrados` : `${total} ${unit} · ${SCOPE_COPY[scope]}`}
       </p>
       <label className="flex items-center gap-1.5 text-sm text-faint shrink-0">
         <span className="sr-only">Ordenar por</span>

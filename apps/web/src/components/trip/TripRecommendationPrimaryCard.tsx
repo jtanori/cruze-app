@@ -20,8 +20,8 @@ interface TripRecommendationPrimaryCardProps {
 
 const rankLabels: Record<RecommendationRank, string> = {
   recommended: "Recomendado",
-  fastest: "M\u00E1s r\u00E1pido",
-  best_overall: "Mejor opci\u00F3n",
+  fastest: "Más rápido",
+  best_overall: "Mejor opción",
   alternative: "Alternativa",
 };
 

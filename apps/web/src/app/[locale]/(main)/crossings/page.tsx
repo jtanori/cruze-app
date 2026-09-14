@@ -100,6 +100,7 @@ export default function CrossingsPage() {
           scope={directory.scope}
           sort={sort}
           onSortChange={setSort}
+          isSearching={search.trim().length > 0}
         />
       )}
       <CrossingsDirectoryList

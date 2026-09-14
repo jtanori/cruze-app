@@ -12,14 +12,14 @@ export function TripSetupDirectionStep({ value, onSelect }: TripSetupDirectionSt
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"\u00BFHacia d\u00F3nde vas?"}</h2>
-        <p className="text-sm text-muted mt-1">Selecciona la direcci\u00F3n de tu cruce</p>
+        <h2 className="text-xl font-bold text-ink">{"¿Hacia dónde vas?"}</h2>
+        <p className="text-sm text-muted mt-1">Selecciona la dirección de tu cruce</p>
       </div>
 
       <div className="space-y-3">
         {[
           { dir: "northbound" as TripDirection, label: "Estados Unidos", sub: "Hacia el norte", icon: ArrowUp },
-          { dir: "southbound" as TripDirection, label: "M\u00E9xico", sub: "Hacia el sur", icon: ArrowDown },
+          { dir: "southbound" as TripDirection, label: "México", sub: "Hacia el sur", icon: ArrowDown },
         ].map((o) => {
           const Icon = o.icon;
           const selected = value === o.dir;

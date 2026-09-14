@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useShallow } from "zustand/react/shallow";
 import { useAvisosStore } from "@/stores/avisos";
 import { useAvisoActions } from "@/hooks/useAvisoActions";
 import { BottomSheet } from "@/components/primitives/BottomSheet";
@@ -20,7 +21,16 @@ interface AvisosSheetProps {
  */
 export function AvisosSheet({ open, onClose, initialAvisoId = null }: AvisosSheetProps) {
   const t = useTranslations();
-  const activeAvisos = useAvisosStore((s) => s.activeAvisos());
+  // Same getSnapshot-stability rule as AlertsInner: select raw state, derive.
+  const avisos = useAvisosStore(useShallow((s) => s.avisos));
+  // Mirrors store.activeAvisos() (undismissed, newest first) with a stable ref.
+  const activeAvisos = useMemo(
+    () =>
+      avisos
+        .filter((a) => !a.dismissed)
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()),
+    [avisos]
+  );
   const markRead = useAvisosStore((s) => s.markRead);
   const { askAgent, viewRecommendation } = useAvisoActions();
   const [selectedId, setSelectedId] = useState<string | null>(null);

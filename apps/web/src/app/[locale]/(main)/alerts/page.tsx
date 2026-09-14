@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { BellRing, BellOff } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useMemo } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useAvisosStore } from "@/stores/avisos";
 import { AvisosView } from "@/components/avisos/AvisosView";
 import { useAvisoActions } from "@/hooks/useAvisoActions";
@@ -12,7 +14,17 @@ import { useCriticalAvisoNotifications } from "@/hooks/useCriticalAvisoNotificat
 function AlertsInner() {
   const t = useTranslations();
   const searchParams = useSearchParams();
-  const activeAvisos = useAvisosStore((s) => s.activeAvisos());
+  // NOTE: activeAvisos() returns a fresh array — never select it directly
+  // (getSnapshot must stay referentially stable or React loops forever).
+  const avisos = useAvisosStore(useShallow((s) => s.avisos));
+  // Mirrors store.activeAvisos() (undismissed, newest first) with a stable ref.
+  const activeAvisos = useMemo(
+    () =>
+      avisos
+        .filter((a) => !a.dismissed)
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()),
+    [avisos]
+  );
   const markRead = useAvisosStore((s) => s.markRead);
   const { askAgent, viewRecommendation } = useAvisoActions();
   const { permission, requestPermission } = useCriticalAvisoNotifications(activeAvisos);

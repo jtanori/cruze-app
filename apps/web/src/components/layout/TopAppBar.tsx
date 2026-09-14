@@ -185,28 +185,28 @@ export function TopAppBar({
                       className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-ink hover:bg-surface-elevated transition-colors"
                     >
                       <LogOut className="w-4 h-4 text-faint" />
-                      {t("viaje.endTrip")}
+                      {t("trip.endTrip")}
                     </button>
                     <button
                       onClick={() => { tripActions.onConfigure(); setMenuOpen(false); }}
                       className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-ink hover:bg-surface-elevated transition-colors"
                     >
                       <Settings className="w-4 h-4 text-faint" />
-                      {t("viaje.configure")}
+                      {t("trip.configure")}
                     </button>
                     <button
                       onClick={() => { tripActions.onNavigate(); setMenuOpen(false); }}
                       className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-ink hover:bg-surface-elevated transition-colors"
                     >
                       <Navigation className="w-4 h-4 text-faint" />
-                      {t("viaje.navigate")}
+                      {t("trip.navigate")}
                     </button>
                     <button
                       onClick={() => { tripActions.onViewCrossing(); setMenuOpen(false); }}
                       className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-ink hover:bg-surface-elevated transition-colors"
                     >
                       <MapPin className="w-4 h-4 text-faint" />
-                      {t("viaje.viewCrossing")}
+                      {t("trip.viewCrossing")}
                     </button>
                   </div>
                 )}

@@ -14,27 +14,27 @@ export interface TravelerProfile {
 }
 
 export const CROSSING_MODES: Array<{ id: CrossingMode; labelKey: string }> = [
-  { id: "walking", labelKey: "viaje.walking" },
-  { id: "personal_vehicle", labelKey: "viaje.personalVehicle" },
-  { id: "commercial_vehicle", labelKey: "viaje.commercialVehicle" },
-  { id: "public_transport", labelKey: "viaje.publicTransport" },
+  { id: "walking", labelKey: "trip.walking" },
+  { id: "personal_vehicle", labelKey: "trip.personalVehicle" },
+  { id: "commercial_vehicle", labelKey: "trip.commercialVehicle" },
+  { id: "public_transport", labelKey: "trip.publicTransport" },
 ];
 
 export const ACCESS_TYPES: Array<{ id: AccessType; labelKey: string }> = [
-  { id: "standard", labelKey: "viaje.access.standard" },
-  { id: "readyLane", labelKey: "viaje.access.readyLane" },
-  { id: "sentri", labelKey: "viaje.access.sentri" },
+  { id: "standard", labelKey: "trip.access.standard" },
+  { id: "readyLane", labelKey: "trip.access.readyLane" },
+  { id: "sentri", labelKey: "trip.access.sentri" },
 ];
 
 export const DOCUMENT_CATEGORIES: Array<{ id: DocumentCategory; labelKey: string }> = [
-  { id: "passport", labelKey: "viaje.document.passport" },
-  { id: "visa", labelKey: "viaje.document.visa" },
-  { id: "usCitizen", labelKey: "viaje.document.usCitizen" },
-  { id: "unknown", labelKey: "viaje.document.unknown" },
+  { id: "passport", labelKey: "trip.document.passport" },
+  { id: "visa", labelKey: "trip.document.visa" },
+  { id: "usCitizen", labelKey: "trip.document.usCitizen" },
+  { id: "unknown", labelKey: "trip.document.unknown" },
 ];
 
 export const TRUSTED_TRAVELER: Array<{ id: TrustedTraveler; labelKey: string }> = [
-  { id: "none", labelKey: "viaje.trusted.none" },
-  { id: "sentri", labelKey: "viaje.trusted.sentri" },
-  { id: "globalEntry", labelKey: "viaje.trusted.globalEntry" },
+  { id: "none", labelKey: "trip.trusted.none" },
+  { id: "sentri", labelKey: "trip.trusted.sentri" },
+  { id: "globalEntry", labelKey: "trip.trusted.globalEntry" },
 ];

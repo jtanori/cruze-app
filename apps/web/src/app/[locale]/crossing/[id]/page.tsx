@@ -88,9 +88,10 @@ export default function CrossingPage({ params }: CrossingPageProps) {
 
         if (liveData && liveData.isLive) {
           const northbound = displayDirection !== "US_TO_MX";
-          const sideLanes = northbound
-            ? liveData.lanesNorthbound
-            : liveData.lanesSouthbound;
+          // CBP publishes lane detail northbound-only; lanesSouthbound mirrors
+          // northbound lanes upstream, so southbound shows the empty notice
+          // instead of mislabeled lanes.
+          const sideLanes = northbound ? liveData.lanesNorthbound : [];
           setCrossing({
             id: staticCrossing.id,
             name: staticCrossing.name,
@@ -236,6 +237,8 @@ export default function CrossingPage({ params }: CrossingPageProps) {
           waitTime={crossing.waitTime}
           direction={crossing.direction}
           secondaryWaitTime={crossing.southboundWait}
+          secondaryEstimated
+          secondaryEstimatedLabel={t("crossing.southEstimated")}
           updatedAt={crossing.lastUpdated}
         />
 
@@ -248,16 +251,21 @@ export default function CrossingPage({ params }: CrossingPageProps) {
           destination={tripMapContext.destination}
         />
 
-        {/* CR-DET-03: Lane times — only with live lane data, category always passed */}
-        {crossing.lanes.length > 0 && (
-          <CrossingDetailLaneSection
-            lanes={crossing.lanes.map((l) => ({
-              type: l.name,
-              waitTime: l.waitTime,
-              category: l.category,
-            }))}
-          />
-        )}
+        {/* CR-DET-03: Lane times — always rendered; empty state explains why */}
+        <CrossingDetailLaneSection
+          lanes={crossing.lanes.map((l) => ({
+            type: l.name,
+            waitTime: l.waitTime,
+            category: l.category,
+          }))}
+          emptyNote={
+            !crossing.isLive
+              ? t("crossing.lanesEmptyNoLive")
+              : crossing.direction === "southbound"
+                ? t("crossing.lanesEmptySouthbound")
+                : t("crossing.lanesEmptyNoDetail")
+          }
+        />
 
         {/* CR-DET-05: Hours — only when sourced */}
         {crossing.hours && (

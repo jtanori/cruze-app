@@ -30,7 +30,16 @@
     "errorMessage": "We couldn't load this page. Please try again.",
     "unknown": "Unknown",
     "loading": "Loading...",
-    "currentWait": "current wait"
+    "currentWait": "current wait",
+    "crossing": "Crossing",
+    "destination": "Destination",
+    "origin": "Origin",
+    "share": "Share",
+    "mexicoShort": "MX",
+    "unitedStatesShort": "U.S.",
+    "unknownStatus": "Unknown status",
+    "viewInCruze": "View in CRUZE",
+    "backToHome": "Back to home"
   },
   "nav": {
     "trip": "Trip",
@@ -38,6 +47,13 @@
     "agent": "Agent",
     "favorites": "Favorites",
     "alerts": "Alerts"
+  },
+  "pwa": {
+    "installTitle": "Install Cruze",
+    "installBody": "Add to your home screen for fullscreen, offline shell, and faster launches.",
+    "installAction": "Install",
+    "iosGuide": "iPhone has no one-tap install — pin Cruze manually:",
+    "iosSteps": "Share → Add to Home Screen, then open it from your home screen."
   },
   "onboarding": {
     "destination": {
@@ -148,7 +164,9 @@
     "vsRecommended": "vs. recommended",
     "selectCrossing": "Select crossing",
     "expandLanes": "Expand lanes",
-    "collapseLanes": "Collapse lanes"
+    "collapseLanes": "Collapse lanes",
+    "laneTimes": "Lane times",
+    "unknown": "Unknown"
   },
   "favorites": {
     "title": "Favorites",
@@ -222,7 +240,33 @@
       "waitTimesVary": "Wait times can change rapidly",
       "arriveEarly": "Arrive early during peak hours",
       "checkStatus": "Check status before departure"
-    }
+    },
+    "compareAction": "Compare",
+    "confirm": {
+      "title": "Confirm your crossing",
+      "estimated": "Estimated time",
+      "actual": "Actual time",
+      "yes": "Yes, that's right",
+      "no": "No, go back"
+    },
+    "summary": {
+      "title": "Crossing complete!",
+      "noData": "No crossing data",
+      "goToCrossings": "View crossings",
+      "completedAt": "Completed at",
+      "contributeTitle": "How long did it take?",
+      "contributeDescription": "Share your time to improve estimates.",
+      "contributeYes": "Share",
+      "thanks": "Thanks for contributing!",
+      "saveFavorite": "Save to favorites",
+      "share": "Share",
+      "done": "Done"
+    },
+    "lanesEmpty": "No lane data",
+    "lanesEmptyNoLive": "No live data for this crossing",
+    "lanesEmptySouthbound": "Lane detail is only published northbound",
+    "lanesEmptyNoDetail": "This crossing publishes no lane breakdown",
+    "southEstimated": "South · est."
   },
   "trip": {
     "empty": {
@@ -236,7 +280,10 @@
       "noNearby": "No nearby crossings available",
       "searchPlaceholder": "Search for a destination in {country}",
       "noResultsInCountry": "No destinations found in {country}",
-      "selectToContinue": "Select a destination to continue"
+      "selectToContinue": "Select a destination to continue",
+      "bodyGeneric": "Search your destination to get crossing intelligence.",
+      "searchPlaceholderGeneric": "Search for a destination",
+      "noResultsGeneric": "No results"
     },
     "title": "My Trip",
     "yourTrip": "YOUR TRIP",
@@ -335,6 +382,31 @@
         "compatible": "Compatible with your crossing type",
         "recent": "Recent data"
       }
+    },
+    "actions": {
+      "navigate": "Navigate",
+      "viewCrossing": "View crossing",
+      "compare": "Compare",
+      "configure": "Configure",
+      "complete": "Complete"
+    },
+    "completion": {
+      "title": "TRIP COMPLETE",
+      "crossingLabel": "Crossing",
+      "save": "Save",
+      "done": "Done"
+    },
+    "routeSummary": {
+      "title": "ROUTE SUMMARY"
+    },
+    "setup": {
+      "handoffCandidate": "Suggested crossing: {crossing}",
+      "handoffConflict": "You already have an active trip",
+      "handoffUnknownCrossing": "Unrecognized crossing"
+    },
+    "status": {
+      "active": "Active",
+      "stale": "Stale"
     }
   },
   "settings": {
@@ -440,7 +512,9 @@
       "greetingBack": "Welcome back! What else can I do for you?",
       "followUpContext": "Got it — following up:"
     },
-    "queuedOffline": "Offline — {count} message(s) queued, will send on reconnect"
+    "queuedOffline": "Offline — {count} message(s) queued, will send on reconnect",
+    "askAboutCrossing": "Ask about this crossing",
+    "askingAbout": "Asking about {name}…"
   },
   "shared": {
     "offline": "You're offline — showing cached data",

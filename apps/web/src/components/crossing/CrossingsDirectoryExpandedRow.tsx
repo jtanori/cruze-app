@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDuration } from "@/lib/display";
 import { CrossingsDirectoryRow, type CrossingOperationalStatus } from "./CrossingsDirectoryRow";
 
 interface LaneInfo {
@@ -55,7 +56,7 @@ export function CrossingsDirectoryExpandedRow({
                 {lanes.map((l, i) => (
                   <div key={`${l.type}-${i}`} className="flex justify-between text-sm">
                     <span className="text-muted">{l.type}</span>
-                    <span className="text-ink font-medium tabular">{l.waitTime !== null ? `${l.waitTime} min` : "—"}</span>
+                    <span className="text-ink font-medium tabular">{l.waitTime !== null ? formatDuration(l.waitTime) : "—"}</span>
                   </div>
                 ))}
               </div>

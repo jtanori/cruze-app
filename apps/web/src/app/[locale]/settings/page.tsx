@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "@/hooks/use-locale";
 import { CruzeBackHeader } from "@/components/layout/CruzeBackHeader";
 import { SettingsRoot } from "@/components/settings/SettingsRoot";
+import { PwaInstallRow } from "@/components/pwa/PwaInstallRow";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -10,7 +11,8 @@ export default function SettingsPage() {
   return (
     <div className="min-h-dvh bg-background">
       <CruzeBackHeader title="CONFIGURACIÓN" />
-      <div className="px-4 sm:px-5 py-4 sm:py-6">
+      <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4">
+        <PwaInstallRow />
         <SettingsRoot
           onProfile={() => router.push(`/${locale}/settings/profile`)}
           onFavorites={() => router.push(`/${locale}/settings/favorites`)}

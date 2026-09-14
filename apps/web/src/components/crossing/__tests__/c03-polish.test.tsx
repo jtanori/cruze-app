@@ -1,8 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { CrossingDetailHero } from "../CrossingDetailHero";
 import { CrossingDetailLaneSection } from "../CrossingDetailLaneSection";
 import { DataTimestamp } from "../../primitives/DataTimestamp";
+import esMessages from "@/i18n/messages/es.json";
 
 describe("C03 hero — waits survive unknown status", () => {
   it("renders both waits + Desconocido without timestamp", () => {
@@ -27,13 +29,15 @@ describe("C03 hero — waits survive unknown status", () => {
 describe("C03 lanes — category qualifier disambiguates", () => {
   it("no two rows share identical labels", () => {
     const { container } = render(
-      <CrossingDetailLaneSection
-        lanes={[
-          { type: "Standard", waitTime: 20, category: "passenger" },
-          { type: "Ready Lane", waitTime: 20, category: "passenger" },
-          { type: "Standard", waitTime: 0, category: "commercial" },
-        ]}
-      />
+      <NextIntlClientProvider locale="es" messages={esMessages}>
+        <CrossingDetailLaneSection
+          lanes={[
+            { type: "Standard", waitTime: 20, category: "passenger" },
+            { type: "Ready Lane", waitTime: 20, category: "passenger" },
+            { type: "Standard", waitTime: 0, category: "commercial" },
+          ]}
+        />
+      </NextIntlClientProvider>
     );
     const text = container.textContent ?? "";
     expect(text).toContain("Vehículo");
@@ -41,6 +45,50 @@ describe("C03 lanes — category qualifier disambiguates", () => {
     // Full row labels are unique even though "Standard" repeats.
     expect(text).toContain("Standard · Vehículo");
     expect(text).toContain("Standard · Comercial");
+  });
+});
+
+describe("C03 hero — southbound estimate is labeled", () => {
+  it("marks the south slot estimated when flagged", () => {
+    const { container } = render(
+      <CrossingDetailHero
+        crossingName="San Luis"
+        status="operational"
+        waitTime={45}
+        direction="both"
+        secondaryWaitTime={32}
+        secondaryEstimated
+        secondaryEstimatedLabel="Sur · est."
+      />
+    );
+    const text = container.textContent ?? "";
+    expect(text).toContain("Sur · est.");
+  });
+
+  it("labels plain Sur without the flag", () => {
+    const { container } = render(
+      <CrossingDetailHero
+        crossingName="San Luis"
+        status="operational"
+        waitTime={45}
+        direction="both"
+        secondaryWaitTime={32}
+      />
+    );
+    expect(container.textContent ?? "").toContain("Sur");
+    expect(container.textContent ?? "").not.toContain("est.");
+  });
+});
+
+describe("C03 lanes — empty state explains why", () => {
+  it("shows empty notice with reason", () => {
+    const { container } = render(
+      <NextIntlClientProvider locale="es" messages={esMessages}>
+        <CrossingDetailLaneSection lanes={[]} emptyNote="Solo norte" />
+      </NextIntlClientProvider>
+    );
+    expect(container.textContent ?? "").toContain("No hay datos de carriles");
+    expect(container.textContent ?? "").toContain("Solo norte");
   });
 });
 

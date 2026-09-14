@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { formatDuration } from "@/lib/display";
 
 type LaneCategory = "passenger" | "commercial" | "pedestrian";
@@ -19,10 +20,13 @@ interface LaneRow {
 
 interface CrossingDetailLaneSectionProps {
   lanes: LaneRow[];
+  /** Why the list is empty (shown under the empty notice). */
+  emptyNote?: string;
   className?: string;
 }
 
-export function CrossingDetailLaneSection({ lanes, className = "" }: CrossingDetailLaneSectionProps) {
+export function CrossingDetailLaneSection({ lanes, emptyNote, className = "" }: CrossingDetailLaneSectionProps) {
+  const t = useTranslations();
   return (
     <div className={`space-y-3 ${className}`}>
       <p className="text-xs font-semibold uppercase tracking-wider text-muted">TIEMPOS POR CARRIL</p>
@@ -38,7 +42,12 @@ export function CrossingDetailLaneSection({ lanes, className = "" }: CrossingDet
             <span className="text-sm font-bold tabular text-ink">{l.waitTime !== null ? formatDuration(l.waitTime) : "—"}</span>
           </div>
         ))}
-        {lanes.length === 0 && <p className="px-4 py-3 text-sm text-muted">No hay datos de carriles</p>}
+        {lanes.length === 0 && (
+          <div className="px-4 py-3 space-y-1">
+            <p className="text-sm text-muted">{t("crossing.lanesEmpty")}</p>
+            {emptyNote && <p className="text-xs text-faint">{emptyNote}</p>}
+          </div>
+        )}
       </div>
     </div>
   );

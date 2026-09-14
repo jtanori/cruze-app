@@ -12,13 +12,19 @@ interface ShareOptions {
  */
 export function useShare() {
   const share = useCallback(async ({ title, text, url }: ShareOptions) => {
-    const shareData = { title, text, url: url || window.location.href };
+    const shareUrl = url || window.location.href;
+    const shareData = { title, text, url: shareUrl };
 
     try {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        await navigator.clipboard.writeText(`${title}\n${text}\n${shareData.url}`);
+        // Avoid duplicating the link when the text already carries it
+        // (e.g. crossing payloads end with the URL line).
+        const body = text.includes(shareUrl)
+          ? `${title}\n${text}`
+          : `${title}\n${text}\n${shareUrl}`;
+        await navigator.clipboard.writeText(body);
       }
     } catch {
       // User cancelled or clipboard failed — silently ignore

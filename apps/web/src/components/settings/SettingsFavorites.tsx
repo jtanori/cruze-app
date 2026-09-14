@@ -16,7 +16,7 @@ interface SettingsFavoritesProps {
 
 export function SettingsFavorites({ favorites, onSelect, onRemove }: SettingsFavoritesProps) {
   if (favorites.length === 0) {
-    return <EmptyState title="Sin favoritos" description="Guarda cruces para acceso r\u00E1pido." />;
+    return <EmptyState title="Sin favoritos" description="Guarda cruces para acceso rápido." />;
   }
 
   return (

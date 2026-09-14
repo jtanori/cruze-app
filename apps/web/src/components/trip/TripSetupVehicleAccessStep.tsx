@@ -9,16 +9,16 @@ interface TripSetupVehicleAccessStepProps {
 
 export function TripSetupVehicleAccessStep({ value, onSelect }: TripSetupVehicleAccessStepProps) {
   const options: { access: AccessType; label: string; desc: string }[] = [
-    { access: "standard", label: "Cruce est\u00E1ndar", desc: "Carriles generales" },
+    { access: "standard", label: "Cruce estándar", desc: "Carriles generales" },
     { access: "readyLane", label: "Ready Lane", desc: "Documentos RFID" },
-    { access: "sentri", label: "SENTRI / Global Entry", desc: "Carriles expr\u00E9s" },
+    { access: "sentri", label: "SENTRI / Global Entry", desc: "Carriles exprés" },
     { access: "unknown", label: "No estoy seguro", desc: "Mostrar todas las opciones" },
   ];
 
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"\u00BFC\u00F3mo cruzas normalmente?"}</h2>
+        <h2 className="text-xl font-bold text-ink">{"¿Cómo cruzas normalmente?"}</h2>
         <p className="text-sm text-muted mt-1">Filtra recomendaciones por tipo de acceso</p>
       </div>
 

@@ -32,10 +32,10 @@ export function SettingsProfile({ className = "" }: SettingsProfileProps) {
 
   return (
     <div className={`space-y-4 sm:space-y-5 ${className}`}>
-      <h2 className="text-lg font-bold text-ink">{t("viaje.travelerProfile")}</h2>
+      <h2 className="text-lg font-bold text-ink">{t("trip.travelerProfile")}</h2>
       <div className="space-y-4">
         <div>
-          <label className="text-xs font-medium text-muted">{t("viaje.crossingMode")}</label>
+          <label className="text-xs font-medium text-muted">{t("trip.crossingMode")}</label>
           <Select
             value={current.crossingMode}
             onChange={(e) => update({ crossingMode: e.target.value as CrossingMode })}
@@ -44,7 +44,7 @@ export function SettingsProfile({ className = "" }: SettingsProfileProps) {
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-muted">{t("viaje.accessType")}</label>
+          <label className="text-xs font-medium text-muted">{t("trip.accessType")}</label>
           <Select
             value={current.accessType}
             onChange={(e) => update({ accessType: e.target.value as AccessType })}
@@ -53,7 +53,7 @@ export function SettingsProfile({ className = "" }: SettingsProfileProps) {
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-muted">{t("viaje.documentCategory")}</label>
+          <label className="text-xs font-medium text-muted">{t("trip.documentCategory")}</label>
           <Select
             value={current.documentCategory}
             onChange={(e) => update({ documentCategory: e.target.value as DocumentCategory })}
@@ -62,7 +62,7 @@ export function SettingsProfile({ className = "" }: SettingsProfileProps) {
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-muted">{t("viaje.trustedTraveler")}</label>
+          <label className="text-xs font-medium text-muted">{t("trip.trustedTraveler")}</label>
           <Select
             value={current.trustedTraveler}
             onChange={(e) => update({ trustedTraveler: e.target.value as TrustedTraveler })}

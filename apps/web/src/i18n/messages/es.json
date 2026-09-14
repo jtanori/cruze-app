@@ -30,7 +30,16 @@
     "errorMessage": "No pudimos cargar esta página. Intenta de nuevo.",
     "unknown": "Desconocido",
     "loading": "Cargando...",
-    "currentWait": "espera actual"
+    "currentWait": "espera actual",
+    "crossing": "Cruce",
+    "destination": "Destino",
+    "origin": "Origen",
+    "share": "Compartir",
+    "mexicoShort": "MX",
+    "unitedStatesShort": "EE. UU.",
+    "unknownStatus": "Estado desconocido",
+    "viewInCruze": "Ver en CRUZE",
+    "backToHome": "Volver al inicio"
   },
   "nav": {
     "trip": "Viaje",
@@ -38,6 +47,13 @@
     "agent": "Agente",
     "favorites": "Favoritos",
     "alerts": "Alertas"
+  },
+  "pwa": {
+    "installTitle": "Instalar Cruze",
+    "installBody": "Agrega a tu pantalla de inicio para pantalla completa, modo sin conexión y apertura más rápida.",
+    "installAction": "Instalar",
+    "iosGuide": "iPhone no permite instalación directa — fíjalo manualmente:",
+    "iosSteps": "Compartir → Agregar a pantalla de inicio, luego ábrelo desde tu inicio."
   },
   "onboarding": {
     "destination": {
@@ -148,7 +164,9 @@
     "vsRecommended": "vs. recomendado",
     "selectCrossing": "Seleccionar cruce",
     "expandLanes": "Expandir carriles",
-    "collapseLanes": "Colapsar carriles"
+    "collapseLanes": "Colapsar carriles",
+    "laneTimes": "Tiempos por carril",
+    "unknown": "Desconocido"
   },
   "favorites": {
     "title": "Favoritos",
@@ -222,7 +240,33 @@
       "waitTimesVary": "Los tiempos de espera pueden cambiar rápidamente",
       "arriveEarly": "Llegar temprano en horas pico",
       "checkStatus": "Verificar el estado antes de salir"
-    }
+    },
+    "compareAction": "Comparar",
+    "confirm": {
+      "title": "Confirma tu cruce",
+      "estimated": "Tiempo estimado",
+      "actual": "Tiempo real",
+      "yes": "Sí, es correcto",
+      "no": "No, volver"
+    },
+    "summary": {
+      "title": "¡Cruce completado!",
+      "noData": "Sin datos del cruce",
+      "goToCrossings": "Ver cruces",
+      "completedAt": "Completado a las",
+      "contributeTitle": "¿Cuánto tardaste?",
+      "contributeDescription": "Comparte tu tiempo para mejorar las estimaciones.",
+      "contributeYes": "Compartir",
+      "thanks": "¡Gracias por contribuir!",
+      "saveFavorite": "Guardar en favoritos",
+      "share": "Compartir",
+      "done": "Listo"
+    },
+    "lanesEmpty": "No hay datos de carriles",
+    "lanesEmptyNoLive": "Sin datos en vivo para este cruce",
+    "lanesEmptySouthbound": "El detalle por carril solo se publica para el sentido norte",
+    "lanesEmptyNoDetail": "Este cruce no publica detalle por carril",
+    "southEstimated": "Sur · est."
   },
   "trip": {
     "empty": {
@@ -236,7 +280,10 @@
       "noNearby": "No hay cruces cercanos disponibles",
       "searchPlaceholder": "Busca un destino en {country}",
       "noResultsInCountry": "No se encontraron destinos en {country}",
-      "selectToContinue": "Selecciona un destino para continuar"
+      "selectToContinue": "Selecciona un destino para continuar",
+      "bodyGeneric": "Busca tu destino para recibir inteligencia para tu cruce.",
+      "searchPlaceholderGeneric": "Buscar un destino",
+      "noResultsGeneric": "Sin resultados"
     },
     "title": "Mi Viaje",
     "yourTrip": "TU VIAJE",
@@ -335,6 +382,31 @@
         "compatible": "Compatible con tu tipo de cruce",
         "recent": "Datos recientes"
       }
+    },
+    "actions": {
+      "navigate": "Navegar",
+      "viewCrossing": "Ver cruce",
+      "compare": "Comparar",
+      "configure": "Configurar",
+      "complete": "Finalizar"
+    },
+    "completion": {
+      "title": "VIAJE COMPLETADO",
+      "crossingLabel": "Cruce",
+      "save": "Guardar",
+      "done": "Listo"
+    },
+    "routeSummary": {
+      "title": "RESUMEN DE RUTA"
+    },
+    "setup": {
+      "handoffCandidate": "Cruce sugerido: {crossing}",
+      "handoffConflict": "Ya tienes un viaje activo",
+      "handoffUnknownCrossing": "Cruce no reconocido"
+    },
+    "status": {
+      "active": "Activo",
+      "stale": "Desactualizado"
     }
   },
   "settings": {
@@ -440,7 +512,9 @@
       "greetingBack": "¡Bienvenido de nuevo! ¿En qué más puedo ayudarte?",
       "followUpContext": "Entendido — continuando:"
     },
-    "queuedOffline": "Sin conexión — {count} mensaje(s) en cola, se enviarán al reconectar"
+    "queuedOffline": "Sin conexión — {count} mensaje(s) en cola, se enviarán al reconectar",
+    "askAboutCrossing": "Preguntar sobre este cruce",
+    "askingAbout": "Preguntando sobre {name}…"
   },
   "shared": {
     "offline": "Estás sin conexión — mostrando datos en caché",

@@ -12,7 +12,7 @@ export function TripSetupDocumentProfileStep({ value, onSelect, onSkip }: TripSe
   const options: { doc: DocumentType; label: string }[] = [
     { doc: "passport", label: "Pasaporte / documento de viaje" },
     { doc: "visa", label: "Visa" },
-    { doc: "usCitizen", label: "Ciudadan\u00EDa / residencia de EE. UU." },
+    { doc: "usCitizen", label: "Ciudadanía / residencia de EE. UU." },
     { doc: "trustedTraveler", label: "Programa de viajero confiable" },
     { doc: "unknown", label: "No estoy seguro" },
   ];
@@ -20,13 +20,13 @@ export function TripSetupDocumentProfileStep({ value, onSelect, onSkip }: TripSe
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"\u00BFQu\u00E9 documentaci\u00F3n tienes?"}</h2>
+        <h2 className="text-xl font-bold text-ink">{"¿Qué documentación tienes?"}</h2>
         <p className="text-sm text-muted mt-1">Opcional — ayuda a filtrar recomendaciones</p>
       </div>
 
       <div className="p-3 rounded-[var(--radius-lg)] bg-info/10 border border-info/20">
         <p className="text-xs text-info leading-relaxed">
-          Esta informaci\u00F3n ayuda a filtrar recomendaciones. No determina tu elegibilidad legal para ingresar al pa\u00EDs.
+          Esta información ayuda a filtrar recomendaciones. No determina tu elegibilidad legal para ingresar al país.
         </p>
       </div>
 

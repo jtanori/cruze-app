@@ -11,14 +11,14 @@ interface TripSetupTravelModeStepProps {
 export function TripSetupTravelModeStep({ value, onSelect }: TripSetupTravelModeStepProps) {
   const modes: { mode: TravelMode; label: string; icon: typeof Footprints; desc: string }[] = [
     { mode: "walking", label: "A pie", icon: Footprints, desc: "Cruce peatonal" },
-    { mode: "privateVehicle", label: "Veh\u00EDculo privado", icon: Car, desc: "Auto, SUV, moto" },
-    { mode: "commercial", label: "Comercial", icon: Truck, desc: "Cami\u00F3n / Truck" },
+    { mode: "privateVehicle", label: "Vehículo privado", icon: Car, desc: "Auto, SUV, moto" },
+    { mode: "commercial", label: "Comercial", icon: Truck, desc: "Camión / Truck" },
   ];
 
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"\u00BFC\u00F3mo cruzas?"}</h2>
+        <h2 className="text-xl font-bold text-ink">{"¿Cómo cruzas?"}</h2>
         <p className="text-sm text-muted mt-1">Selecciona tu modo de cruce</p>
       </div>
 
