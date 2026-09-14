@@ -81,15 +81,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/* ─── POST /api/cbp/waittimes - Submit observed wait times ─────────────────╭
-  Purpose: Allow users to submit observed wait times (crowdsourcing)
-──────────────────────────────────────────────────────────────────────────╯*/
-export async function POST(request: NextRequest) {
-  const body = await request.json();
-
-  // Acknowledge receipt
-  return NextResponse.json(
-    { status: "received", submitted: new Date().toISOString() },
-    { status: 201 }
-  );
-}
+// NOTE (S0 audit): the unauthenticated POST crowdsourcing stub lived here and
+// was removed — it parsed and discarded its body with no schema, no rate
+// limit, and no callers. If crowdsourced samples return, they get a designed
+// endpoint with auth, zod validation, and throttling.

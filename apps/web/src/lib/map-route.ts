@@ -82,26 +82,37 @@ export function fitJourneyBounds(
   map.fitBounds(bounds, { padding: 50, maxZoom: 12 });
 }
 
-/** Create a labeled marker element. */
-function createLabeledMarker(
+/**
+ * Create a labeled marker element.
+ *
+ * SECURITY: `label` comes from trip store data (Mapbox place names + user
+ * selection) and must never be interpolated into HTML. The static shell is
+ * template markup; the label is attached via textContent only. Color/align
+ * are constrained to safe values even though callers are internal.
+ */
+export function createLabeledMarker(
   label: string,
   color: string,
   align: "left" | "right"
 ): mapboxgl.Marker {
+  const safeColor = /^#[0-9a-fA-F]{6}$/.test(color) ? color : "#FFFFFF";
+  const side = align === "left" ? "left" : "right";
   const el = document.createElement("div");
   el.innerHTML = `
-    <div style="position: relative; display: flex; flex-direction: column; align-items: flex-${align};">
+    <div style="position: relative; display: flex; flex-direction: column; align-items: flex-${side};">
       <div style="display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(7, 26, 49, 0.85); backdrop-filter: blur(8px); border-radius: 9999px; border: 1px solid rgba(31, 58, 90, 0.5); white-space: nowrap;">
-        <div style="width: 8px; height: 8px; border-radius: 50%; background: ${color};"></div>
-        <span style="color: #FFFFFF; font-size: 11px; font-weight: 500; font-family: Inter, sans-serif;">${label}</span>
+        <div style="width: 8px; height: 8px; border-radius: 50%; background: ${safeColor};"></div>
+        <span data-marker-label="true" style="color: #FFFFFF; font-size: 11px; font-weight: 500; font-family: Inter, sans-serif;"></span>
       </div>
-      <svg style="margin-${align === "left" ? "left" : "right"}: 12px;" viewBox="0 0 24 32" width="24" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="${color}"/>
+      <svg style="margin-${side === "left" ? "left" : "right"}: 12px;" viewBox="0 0 24 32" width="24" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="${safeColor}"/>
         <circle cx="12" cy="12" r="5" fill="#081830"/>
       </svg>
     </div>
   `;
-  return new mapboxgl.Marker({ element: el, anchor: align === "left" ? "bottom-left" : "bottom-right" });
+  const labelSpan = el.querySelector("[data-marker-label]");
+  if (labelSpan) labelSpan.textContent = label;
+  return new mapboxgl.Marker({ element: el, anchor: side === "left" ? "bottom-left" : "bottom-right" });
 }
 
 /** Create the pulsing crossing gate marker. */
@@ -156,8 +167,9 @@ export function addCrossingMarker(
     .setLngLat([crossing.lng, crossing.lat])
     .addTo(map);
 
+  // SECURITY: setText escapes by construction — never setHTML() with a name.
   new mapboxgl.Popup({ offset: 25, closeButton: false })
     .setLngLat([crossing.lng, crossing.lat])
-    .setHTML(`<strong>${name || "Crossing"}</strong>`)
+    .setText(name || "Crossing")
     .addTo(map);
 }

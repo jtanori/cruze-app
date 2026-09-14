@@ -1,50 +1,69 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import mapboxgl from "mapbox-gl";
 import {
   fetchDirectionsRoute,
   drawRouteLayers,
   fitJourneyBounds,
   addJourneyMarkers,
   addCrossingMarker,
+  createLabeledMarker,
   type MapPoint,
 } from "../map-route";
 
-// Mock mapbox-gl
-const mockMarkerInstance = {
-  setLngLat: vi.fn().mockReturnThis(),
-  addTo: vi.fn().mockReturnThis(),
-};
-
-const mockMapInstance = {
-  addSource: vi.fn(),
-  addLayer: vi.fn(),
-  fitBounds: vi.fn(),
-  jumpTo: vi.fn(),
-};
-
-class MockMarker {
-  setLngLat() { return this; }
-  addTo() { return this; }
-}
-
-class MockPopup {
-  setLngLat() { return this; }
-  addTo() { return this; }
-  setHTML() { return this; }
-}
-
+// Mock mapbox-gl (classes defined inside the hoisted factory).
 vi.mock("mapbox-gl", () => {
+  class MockMarker {
+    static instances: MockMarker[] = [];
+    element: unknown;
+    constructor(opts?: { element?: unknown }) {
+      this.element = opts?.element;
+      MockMarker.instances.push(this);
+    }
+    setLngLat() { return this; }
+    addTo() { return this; }
+  }
+  class MockPopup {
+    static instances: MockPopup[] = [];
+    text: string | undefined;
+    constructor() {
+      MockPopup.instances.push(this);
+    }
+    setLngLat() { return this; }
+    addTo() { return this; }
+    setText(text: string) { this.text = text; return this; }
+  }
   return {
     default: {
-      Map: vi.fn().mockImplementation(() => mockMapInstance),
+      Map: vi.fn().mockImplementation(() => ({
+        addSource: vi.fn(),
+        addLayer: vi.fn(),
+        fitBounds: vi.fn(),
+        jumpTo: vi.fn(),
+      })),
       Marker: MockMarker,
       Popup: MockPopup,
-      LngLatBounds: vi.fn().mockImplementation(() => ({
-        extend: vi.fn(),
-      })),
+      LngLatBounds: class {
+        extend() { return this; }
+      },
       supported: vi.fn(() => true),
     },
   };
 });
+
+function mockedClasses() {
+  // Static import resolves through the same mock registry as the SUT.
+  // (Dynamic import() bypasses it and returns the real mapbox-gl.)
+  return mapboxgl as unknown as {
+    Marker: { instances: Array<{ element?: unknown }> };
+    Popup: { instances: Array<{ text?: string }> };
+  };
+}
+
+function clearMockInstances() {
+  const mocked = mockedClasses();
+  mocked.Marker.instances.length = 0;
+  mocked.Popup.instances.length = 0;
+}
 
 describe("map-route primitives", () => {
   const crossing: MapPoint = { lat: 32.5, lng: -117.0, label: "Lukeville" };
@@ -134,25 +153,57 @@ describe("map-route primitives", () => {
 
   describe("addJourneyMarkers", () => {
     it("creates 3 markers (origin, destination, crossing)", () => {
-      const mapboxgl = require("mapbox-gl");
+      clearMockInstances();
       const map = {} as any;
 
       addJourneyMarkers(map, origin, crossing, destination);
 
-      // 3 from addJourneyMarkers + previous calls cleared by beforeEach
-      expect(mapboxgl.Marker).toHaveBeenCalledTimes(3);
+      expect(mockedClasses().Marker.instances).toHaveLength(3);
     });
   });
 
   describe("addCrossingMarker", () => {
-    it("creates marker + popup", () => {
-      const mapboxgl = require("mapbox-gl");
+    it("creates marker + text popup (never HTML)", () => {
+      clearMockInstances();
       const map = {} as any;
 
-      addCrossingMarker(map, crossing, "Lukeville");
+      addCrossingMarker(map, crossing, "Lukeville<script>alert(1)</script>");
 
-      expect(mapboxgl.Marker).toHaveBeenCalledTimes(1);
-      expect(mapboxgl.Popup).toHaveBeenCalledTimes(1);
+      const mocked = mockedClasses();
+      expect(mocked.Marker.instances).toHaveLength(1);
+      expect(mocked.Popup.instances).toHaveLength(1);
+      // setText path: payload stored as text, never parsed as markup.
+      expect(mocked.Popup.instances[0].text).toBe(
+        "Lukeville<script>alert(1)</script>"
+      );
+    });
+  });
+
+  describe("createLabeledMarker (XSS)", () => {
+    it("renders a hostile label as inert text, not markup", () => {
+      const marker = createLabeledMarker(
+        '</span><img src=x onerror="window.__xss=1">',
+        "#FFFFFF",
+        "left"
+      ) as unknown as { element: HTMLElement };
+      const el = marker.element;
+      // No executable nodes may exist in the marker DOM.
+      expect(el.querySelector("img")).toBeNull();
+      expect(el.querySelector("script")).toBeNull();
+      const span = el.querySelector("[data-marker-label]");
+      expect(span?.textContent).toContain('<img src=x onerror="window.__xss=1">');
+      expect((window as any).__xss).toBeUndefined();
+    });
+
+    it("falls back to white for non-hex colors", () => {
+      const marker = createLabeledMarker(
+        "Tijuana",
+        'red";background:url(javascript:alert(1))',
+        "left"
+      ) as unknown as { element: HTMLElement };
+      const el = marker.element;
+      expect(el.innerHTML).not.toContain("javascript:");
+      expect(el.innerHTML).toContain("#FFFFFF");
     });
   });
 });
