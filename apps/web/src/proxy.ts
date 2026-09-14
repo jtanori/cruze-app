@@ -7,7 +7,8 @@ import { isRateLimited, getClientIp } from '@/lib/rate-limit';
 const intlMiddleware = createMiddleware(routing);
 
 export default function proxy(request: NextRequest) {
-  // S1: throttle API burst traffic before it reaches route handlers.
+  // API routes must NEVER pass through locale middleware (it would rewrite
+  // /api/places to /es/api/places → 404). Throttle, then continue unprefixed.
   if (request.nextUrl.pathname.startsWith("/api/")) {
     const { limited, retryAfterSec } = isRateLimited(getClientIp(request));
     if (limited) {
@@ -19,6 +20,7 @@ export default function proxy(request: NextRequest) {
         }
       );
     }
+    return NextResponse.next();
   }
   return intlMiddleware(request);
 }
