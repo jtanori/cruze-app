@@ -278,7 +278,7 @@
     "lanesEmptyNoLive": "Sin datos en vivo para este cruce",
     "lanesEmptySouthbound": "El detalle por carril solo se publica para el sentido norte",
     "lanesEmptyNoDetail": "Este cruce no publica detalle por carril",
-    "southEstimated": "Sur · est."
+    "southEstimated": "US → MX · est."
   },
   "trip": {
     "empty": {

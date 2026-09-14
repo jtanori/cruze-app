@@ -293,8 +293,8 @@ function generateStatusResponse(
     return {
       text: t("agent.template.statusAt", { name: crossing.name }),
       dataRows: [
-        { label: t("common.northbound"), value: crossing.statusNorthbound },
-        { label: t("common.southbound"), value: crossing.statusSouthbound },
+        { label: "MX → US", value: crossing.statusNorthbound },
+        { label: "US → MX", value: crossing.statusSouthbound },
         { label: t("agent.template.hours"), value: crossing.hours },
         { label: t("agent.template.lastUpdated"), value: crossing.lastUpdated || t("common.unknown") },
       ],

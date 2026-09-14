@@ -278,7 +278,7 @@
     "lanesEmptyNoLive": "No live data for this crossing",
     "lanesEmptySouthbound": "Lane detail is only published northbound",
     "lanesEmptyNoDetail": "This crossing publishes no lane breakdown",
-    "southEstimated": "South · est."
+    "southEstimated": "US → MX · est."
   },
   "trip": {
     "empty": {

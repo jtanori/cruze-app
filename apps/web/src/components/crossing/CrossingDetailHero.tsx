@@ -25,7 +25,7 @@ export function CrossingDetailHero({
   direction = "northbound",
   secondaryWaitTime = null,
   secondaryEstimated = false,
-  secondaryEstimatedLabel = "Sur · est.",
+  secondaryEstimatedLabel = "US → MX · est.",
   updatedAt,
   children,
   className = "",
@@ -46,14 +46,14 @@ export function CrossingDetailHero({
             <p className="text-3xl font-extrabold tabular text-ink">
               {waitTime !== null ? formatDuration(waitTime) : "—"}
             </p>
-            <p className="text-sm text-muted capitalize">Norte</p>
+            <p className="text-sm text-muted">MX → US</p>
           </div>
           <div>
             <p className="text-3xl font-extrabold tabular text-ink">
               {secondaryWaitTime !== null ? formatDuration(secondaryWaitTime) : "—"}
             </p>
-            <p className="text-sm text-muted capitalize">
-              {secondaryEstimated ? secondaryEstimatedLabel : "Sur"}
+            <p className="text-sm text-muted">
+              {secondaryEstimated ? secondaryEstimatedLabel : "US → MX"}
             </p>
           </div>
         </div>
@@ -62,8 +62,8 @@ export function CrossingDetailHero({
           <p className="text-3xl font-extrabold tabular text-ink">
             {waitTime !== null ? formatDuration(waitTime) : "—"}
           </p>
-          <p className="text-sm text-muted capitalize">
-            {direction === "northbound" ? "Norte" : "Sur"}
+          <p className="text-sm text-muted">
+            {direction === "northbound" ? "MX → US" : "US → MX"}
           </p>
         </div>
       )}

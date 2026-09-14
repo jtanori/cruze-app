@@ -48,7 +48,7 @@ describe("C03 lanes — category qualifier disambiguates", () => {
   });
 });
 
-describe("C03 hero — southbound estimate is labeled", () => {
+describe("C03 hero — country-pair direction labels", () => {
   it("marks the south slot estimated when flagged", () => {
     const { container } = render(
       <CrossingDetailHero
@@ -58,14 +58,15 @@ describe("C03 hero — southbound estimate is labeled", () => {
         direction="both"
         secondaryWaitTime={32}
         secondaryEstimated
-        secondaryEstimatedLabel="Sur · est."
+        secondaryEstimatedLabel="US → MX · est."
       />
     );
     const text = container.textContent ?? "";
-    expect(text).toContain("Sur · est.");
+    expect(text).toContain("MX → US");
+    expect(text).toContain("US → MX · est.");
   });
 
-  it("labels plain Sur without the flag", () => {
+  it("labels plain country pairs without the flag", () => {
     const { container } = render(
       <CrossingDetailHero
         crossingName="San Luis"
@@ -75,8 +76,23 @@ describe("C03 hero — southbound estimate is labeled", () => {
         secondaryWaitTime={32}
       />
     );
-    expect(container.textContent ?? "").toContain("Sur");
+    expect(container.textContent ?? "").toContain("MX → US");
+    expect(container.textContent ?? "").toContain("US → MX");
     expect(container.textContent ?? "").not.toContain("est.");
+  });
+
+  it("single-direction mode shows the travel pair, never bare Norte/Sur", () => {
+    const { container } = render(
+      <CrossingDetailHero
+        crossingName="San Luis"
+        status="operational"
+        waitTime={45}
+        direction="northbound"
+      />
+    );
+    const text = container.textContent ?? "";
+    expect(text).toContain("MX → US");
+    expect(text).not.toMatch(/Norte/);
   });
 });
 

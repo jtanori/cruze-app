@@ -51,7 +51,7 @@ export function TripNearbyCrossingRow({
           <span aria-hidden="true" className={`w-1.5 h-1.5 rounded-full shrink-0 ${currentStatus.dotColor}`} />
           <span className={currentStatus.color}>{currentStatus.label}</span>
         </span>
-        <span className="text-faint shrink-0">{direction === "MX_TO_US" ? t("common.northbound") : t("common.southbound")}</span>
+        <span className="text-faint shrink-0">{direction === "MX_TO_US" ? "MX → US" : "US → MX"}</span>
         <span className="ml-auto flex items-center gap-1 text-faint truncate">
           <Clock className="w-3 h-3 shrink-0" />
           {/* freshnessText already includes the Updated/Actualizado prefix — do not re-wrap. */}
