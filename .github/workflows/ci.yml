@@ -8,6 +8,11 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    # repository-dispatch status action needs Jobs API read + commit status write
+    permissions:
+      contents: read
+      actions: read
+      statuses: write
     steps:
       - uses: actions/checkout@v4
 
