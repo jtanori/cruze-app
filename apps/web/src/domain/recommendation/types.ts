@@ -17,6 +17,16 @@ export type RecommendationReason =
   | "only_open_option"
   | "lowest_total_time";
 
+/**
+ * Domain-layer recommendation type.
+ *
+ * This is the domain's internal representation, independent of the application-level
+ * `TripRecommendation` / `SelectedCrossing` from `@/lib/recommendation/types`.
+ *
+ * Boundary mapping:
+ *   TripRecommendation → CrossingRecommendation (domain, at persistence boundary)
+ *   CrossingRecommendation (domain) → SelectedCrossing (at read boundary)
+ */
 export interface CrossingRecommendation {
   crossing: CrossingEntity;
   reasons: RecommendationReason[];

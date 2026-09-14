@@ -1,8 +1,8 @@
 # Component Catalog — Index
 
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, nav 56/80+safe, LOC-ACQ-DOTS-01 added. If version differs from `design/workflows/W*.md` or `apps/web/src/app/globals.css:94`, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11`.
+**Version:** 1.4 — 2026-09-11 — LIVE-01 locked; TR-ACT-01 updated for LiveCrossingSnapshot; TR-ACT-02/04 updated for live data consumer mapping. If version differs from `design/workflows/W*.md` or `apps/web/src/app/globals.css:94`, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11`.
 
-> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` — this directory is canonical per component (84). Tokens: `design/workflows/W5_component_level_design_spec.md` §1-2. Workflows: `design/workflows/W*.md` (W1-W10). Matrix: `docs/PAGES_WORKFLOWS_REPORT.md`. Testing: `docs/TESTING_TOOLS.md` P0-P5 → `design/TESTING_INTEGRATION_PLAN.md`. Integration order: `design/INTEGRATION_PLAN.md` Addendum.
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` — this directory is canonical per component (92). Tokens: `design/workflows/W5_component_level_design_spec.md` §1-2. Workflows: `design/workflows/W*.md` (W1-W10) + `design/workflows/T07-recommendation.md`. Matrix: `docs/PAGES_WORKFLOWS_REPORT.md`. Testing: `docs/TESTING_TOOLS.md` P0-P5 → `design/TESTING_INTEGRATION_PLAN.md`. Integration order: `design/INTEGRATION_PLAN.md` Addendum.
 > Original catalogs `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §5-10 are rationale only.
 
 ## How to use
@@ -11,9 +11,9 @@
 2. **Implement** using tokens in W5 §1-2; compose primitives per Design Foundation → hierarchy (Foundations → Primitives → Domain Components → Screen Compositions → Workflow).
 3. **Verify** via workflow doc ASCII + `docs/CRUZE — Product, UX & Design System Specification.v1.md` §36-38 (operational vs freshness), and `PAGES_WORKFLOWS_REPORT.md` matrix.
 
-## Inventory (83 IDs)
+## Inventory (91 IDs, 1 retired)
 
-### APP — Application Shell (7)
+### APP — Application Shell (8)
 | ID | Name | Spec Doc |
 |----|------|----------|
 | APP-HEAD-01 | CruzeAppHeader | [APP-HEAD-01-CruzeAppHeader.md](APP-HEAD-01-CruzeAppHeader.md) |
@@ -23,6 +23,7 @@
 | APP-BACK-01 | CruzeBackHeader | [APP-BACK-01-CruzeBackHeader.md](APP-BACK-01-CruzeBackHeader.md) |
 | APP-LIVE-01 | CruzeLiveIndicator | [APP-LIVE-01-CruzeLiveIndicator.md](APP-LIVE-01-CruzeLiveIndicator.md) |
 | APP-PAGE-01 | CruzePageHeader | [APP-PAGE-01-CruzePageHeader.md](APP-PAGE-01-CruzePageHeader.md) |
+| APP-COMPANION-01 | HeaderCompanionContext | [APP-COMPANION-01-HeaderCompanionContext.md](APP-COMPANION-01-HeaderCompanionContext.md) |
 
 ### LOC — Location (10)
 | ID | Name | Spec Doc |
@@ -38,9 +39,10 @@
 | LOC-STATUS-01 | LocationStatusBanner | [LOC-STATUS-01-LocationStatusBanner.md](LOC-STATUS-01-LocationStatusBanner.md) |
 | LOC-NET-01 | LocationNetworkStatus | [LOC-NET-01-LocationNetworkStatus.md](LOC-NET-01-LocationNetworkStatus.md) |
 
-### TR — Trip (17)
+### TR — Trip (19)
 | ID | Name | Spec Doc |
 |----|------|----------|
+| TR-HERO-01 | TripHero | [TR-HERO-01-TripHero.md](TR-HERO-01-TripHero.md) |
 | TR-EMPTY-01 | TripDestinationSearch | [TR-EMPTY-01-TripDestinationSearch.md](TR-EMPTY-01-TripDestinationSearch.md) |
 | TR-NEAR-01 | TripNearbyCrossingsSection | [TR-NEAR-01-TripNearbyCrossingsSection.md](TR-NEAR-01-TripNearbyCrossingsSection.md) |
 | TR-NEAR-02 | TripNearbyCrossingRow | [TR-NEAR-02-TripNearbyCrossingRow.md](TR-NEAR-02-TripNearbyCrossingRow.md) |
@@ -58,16 +60,22 @@
 | TR-ACT-02 | TripRouteSummary | [TR-ACT-02-TripRouteSummary.md](TR-ACT-02-TripRouteSummary.md) |
 | TR-ACT-03 | TripActionBar | [TR-ACT-03-TripActionBar.md](TR-ACT-03-TripActionBar.md) |
 | TR-ACT-04 | TripChecklistSection | [TR-ACT-04-TripChecklistSection.md](TR-ACT-04-TripChecklistSection.md) |
+| TR-ACT-05 | TripStalePrompt | [TR-ACT-05-TripStalePrompt.md](TR-ACT-05-TripStalePrompt.md) |
 | TR-COMP-01 | TripCompletionPrompt | [TR-COMP-01-TripCompletionPrompt.md](TR-COMP-01-TripCompletionPrompt.md) |
 
-### CR — Crossings (21)
+### CR — Crossings (26, 1 retired)
 | ID | Name | Spec Doc |
 |----|------|----------|
 | CR-DIR-01 | CrossingsDirectoryList | [CR-DIR-01-CrossingsDirectoryList.md](CR-DIR-01-CrossingsDirectoryList.md) |
 | CR-DIR-02 | CrossingsDirectoryRow | [CR-DIR-02-CrossingsDirectoryRow.md](CR-DIR-02-CrossingsDirectoryRow.md) |
 | CR-DIR-03 | CrossingsDirectoryExpandedRow | [CR-DIR-03-CrossingsDirectoryExpandedRow.md](CR-DIR-03-CrossingsDirectoryExpandedRow.md) |
 | CR-DIR-04 | CrossingsDirectorySearchInput | [CR-DIR-04-CrossingsDirectorySearchInput.md](CR-DIR-04-CrossingsDirectorySearchInput.md) |
-| CR-DIR-05 | CrossingsDirectoryFilterBar | [CR-DIR-05-CrossingsDirectoryFilterBar.md](CR-DIR-05-CrossingsDirectoryFilterBar.md) |
+| CR-DIR-05 | CrossingsDirectoryFilterBar | [CR-DIR-05-CrossingsDirectoryFilterBar.md](CR-DIR-05-CrossingsDirectoryFilterBar.md) — RETIRED |
+| CR-DIR-05A | CrossingsDirectoryFilterSheet | [CR-DIR-05A-CrossingsDirectoryFilterSheet.md](CR-DIR-05A-CrossingsDirectoryFilterSheet.md) |
+| CR-DIR-06 | CrossingsDirectoryToolbar | [CR-DIR-06-CrossingsDirectoryToolbar.md](CR-DIR-06-CrossingsDirectoryToolbar.md) |
+| CR-DIR-07 | CrossingsDirectorySummary | [CR-DIR-07-CrossingsDirectorySummary.md](CR-DIR-07-CrossingsDirectorySummary.md) |
+| CR-DIR-08 | CrossingsDirectorySortControl | [CR-DIR-08-CrossingsDirectorySortControl.md](CR-DIR-08-CrossingsDirectorySortControl.md) |
+| CR-DIR-09 | CrossingsDirectoryLoadMoreState | [CR-DIR-09-CrossingsDirectoryLoadMoreState.md](CR-DIR-09-CrossingsDirectoryLoadMoreState.md) |
 | CR-STATUS-01 | CrossingStatusBadge | [CR-STATUS-01-CrossingStatusBadge.md](CR-STATUS-01-CrossingStatusBadge.md) |
 | CR-STATUS-02 | CrossingDirectionTimes | [CR-STATUS-02-CrossingDirectionTimes.md](CR-STATUS-02-CrossingDirectionTimes.md) |
 | CR-STATUS-03 | CrossingWaitTime | [CR-STATUS-03-CrossingWaitTime.md](CR-STATUS-03-CrossingWaitTime.md) |
@@ -125,4 +133,4 @@
 | SET-ABOUT-01 | AboutLinksList | [SET-ABOUT-01-AboutLinksList.md](SET-ABOUT-01-AboutLinksList.md) |
 
 ---
-*Total: 83 component specs. All files in this directory are source of truth for implementation. See `design/workflows/W*.md` for workflow bindings + `docs/TESTING_TOOLS.md` P0-P5 for testing.*
+*Total: 91 component specs (1 retired: CR-DIR-05). All files in this directory are source of truth for implementation. See `design/workflows/W*.md` for workflow bindings + `docs/TESTING_TOOLS.md` P0-P5 for testing.*

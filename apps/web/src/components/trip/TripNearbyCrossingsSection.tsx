@@ -24,13 +24,18 @@ export function TripNearbyCrossingsSection({
   if (empty) {
     return (
       <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-ink font-semibold text-sm uppercase tracking-wider">
-            {t("trip.empty.nearby")}
-          </h2>
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-0.5">
+            <h2 className="text-ink font-semibold text-sm uppercase tracking-wider">
+              {t("trip.empty.nearby")}
+            </h2>
+            <p className="text-faint text-xs">
+              {t("trip.empty.nearbySubtitle")}
+            </p>
+          </div>
           <button
             onClick={onViewAll}
-            className="text-cruze-mint text-sm font-medium hover:underline"
+            className="text-cruze-mint text-sm font-medium hover:underline shrink-0"
           >
             {t("trip.empty.viewAll")}
           </button>
@@ -46,13 +51,13 @@ export function TripNearbyCrossingsSection({
 
   return (
     <section className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-ink font-semibold text-sm uppercase tracking-wider">
+      <div className="space-y-0.5">
+        <h2 className="text-[18px] font-semibold uppercase tracking-wider text-[color:var(--color-text-primary)]">
           {t("trip.empty.nearby")}
         </h2>
-        {!showViewAllAtBottom && (
-          <p className="text-faint text-xs">{t("trip.empty.nearbySubtitle")}</p>
-        )}
+        <p className="text-xs text-faint">
+          {t("trip.empty.nearbySubtitle")}
+        </p>
       </div>
 
       {loading ? (

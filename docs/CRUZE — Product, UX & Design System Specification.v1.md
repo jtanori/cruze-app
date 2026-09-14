@@ -287,26 +287,19 @@ The actual formula can evolve independently of the UI.
 
 ## 5.2 Nearby preview card
 
-Each item should communicate:
+Each item should communicate (two rows — canon T01 layout):
 
-- crossing name
-- operational status
-- current wait
-- direction
-- estimated travel time from current location
-- freshness
+- row 1: crossing name (left) + current wait (right, tabular)
+- row 2 (single line): operational status ● + direction + short freshness right-aligned
+- travel time ("Desde tu ubicación") is omitted until route data exists — do not invent it
+- freshness is short-form only: es "Hace X min" / "Ahora", en "Updated …"
 
 Example:
 
 ```text
-San Luis
+San Luis              11 min
 
-● Abierto
-
-11 min          2h 14m
-Norte           Desde tu ubicación
-
-Actualizado hace 2 min
+● Abierto  Norte      Hace 2 min
 ```
 
 Do not overload this card with:
@@ -1588,15 +1581,18 @@ The default landing surface after location is established.
 **Flow:**
 1. User opens app → Location Gate (W1) runs → GPS acquired or manual search
 2. Gate opens → renders `/trip` (T01)
-3. T01 shows:
-   - **LOC-STATUS-01** banner at top: "Ubicación establecida: {placeName}" (non-dismissible)
-   - **TR-EMPTY-01** replaced by inline destination search:
-     - Search input with country filter (MX→US, US→MX based on GPS)
-     - Results dropdown filtered to target country
-     - Selected destination shown with confirm
-   - **Next button** (disabled until selection) → navigates to `/trip/setup` with destination pre-filled
-   - **TR-NEAR-01** section: "CERCA DE TI" + "Cruces relevantes ahora" subtitle
-   - **TR-NEAR-02** cards (max 3): name, wait time, status badge (● Abierto/● Cerrado/● Limitado), direction (Norte/Sur), freshness ("Actualizado hace X min")
+3. T01 shows (upper `<section>`, `mb-6` = 24px; internal rhythm `space-y-6 sm:space-y-8`):
+   - **LOC-STATUS-01** inline strip at top: "Ubicación establecida: {placeName}" (non-dismissible, no card — `px-2 py-2`, gap inherited from parent)
+   - **TR-HERO-01 TripHero**: optional eyebrow (`text-xs` uppercase) + title `text-3xl` Sora display + body `text-base` Inter `text-balance` (`space-y-2 sm:space-y-3`). Owns typography, scale, rhythm, hierarchy — never search, CTA, or location state. T01 passes no eyebrow.
+   - **TR-EMPTY-01 / TR-SETUP-02-DestinationInput** compound control (single component):
+     - Search field = Surface Elevated, 56px touch target; country filter (MX→US, US→MX from resolved location country, UNKNOWN → unfiltered)
+     - Placeholder uses short country names ("EE.UU." / "México") — never the long form inside the input
+     - Arrow action = contextual continuation: icon-only (`ArrowRight`), floating inside the input right (`w-10 h-10 rounded-full`, mint when a destination is selected, dimmed/disabled until selection) → `/trip/setup` with destination pre-filled. The arrow appears once — no text label, no helper line (disabled state communicates it).
+     - States: EMPTY / FOCUSED / TYPING / RESULTS / SELECTED / DISABLED / LOADING
+     - Results dropdown filtered to target country; selected destination shown with confirm below the input
+ - 1px `border-border` divider (canon #1F3A54, no vertical margin) separating the upper section from nearby — a section separator, not a component
+   - **TR-NEAR-01** section (`mt-7` = 28px wrapper): stacked header — "CERCA DE TI" section title, "Cruces relevantes ahora" descriptor below (`text-xs`), never same-line parity
+    - **TR-NEAR-02** rows (max 3, quiet containers: `bg-surface`, `border-border-subtle`, `rounded-xl` 12px — tap affordance without card-heaviness): name + wait time on row 1; status badge (● Operativo/● Limitado/● Cerrado/● Desconocido), direction (Norte/Sur), and short freshness ("Hace X min" / "Ahora", es only — en keeps "Updated …") on a single row 2
    - **Ver todos los cruces →** centered at bottom → `/crossings`
 
 **No "Comenzar un viaje" button** - destination search IS the entry point.
@@ -1620,7 +1616,7 @@ Optional northbound private profile.
 Primary recommendation + alternatives.
 
 ### T08 — Active Trip
-Execution surface.
+Execution surface. Stale trips surface **TR-ACT-05 TripStalePrompt** (caution tint, still-current vs start-new actions).
 
 ### T09 — Trip Settings
 Change trip context.
@@ -2096,7 +2092,9 @@ The location gate is infrastructure-level, not a Trip component.
 # 67. Trip Components
 
 ```text
+TripHero
 TripEmptyActionPanel
+TripDestinationSearch
 TripNearbyCrossingsSection
 TripNearbyCrossingRow
 
@@ -2117,6 +2115,7 @@ TripRouteSummary
 TripActionBar
 TripChecklistSection
 TripChecklistRow
+TripStalePrompt
 TripSettingsSheet
 TripCompletionPrompt
 ```
@@ -2130,7 +2129,11 @@ CrossingsDirectoryList
 CrossingsDirectoryRow
 CrossingsDirectoryExpandedRow
 CrossingsDirectorySearchInput
-CrossingsDirectoryFilterBar
+CrossingsDirectoryToolbar
+CrossingsDirectoryFilterSheet
+CrossingsDirectorySummary
+CrossingsDirectorySortControl
+CrossingsDirectoryLoadMoreState
 
 CrossingStatusBadge
 CrossingDirectionTimes

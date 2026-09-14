@@ -1,12 +1,19 @@
+/**
+ * AV-01 — Unified Aviso types.
+ *
+ * Replaces BorderAlertEvent as the canonical notification model.
+ * Extends with product-level event types, read/dismissed state,
+ * and diff tracking from BorderAlertEvent.
+ */
+
 export type AvisoType =
-  | "crossing_changed"
+  | "crossing_changed"      // STATUS_CHANGE from CrossingChange
+  | "wait_surge"            // WAIT_SURGE from CrossingChange
+  | "wait_drop"             // WAIT_DROP from CrossingChange
   | "recommendation_changed"
-  | "crossing_closed"
-  | "wait_increased"
-  | "wait_decreased"
   | "trip_reminder"
   | "checklist_reminder"
-  | "data_warning"
+  | "data_warning"          // freshness degradation
   | "unusual_condition";
 
 export type AvisoSeverity = "info" | "warning" | "critical";
@@ -19,7 +26,11 @@ export interface Aviso {
   description: string;
   crossingId?: string;
   crossingName?: string;
+  previousValue?: string;
+  currentValue?: string;
   timestamp: string;
+  read: boolean;
+  dismissed: boolean;
 }
 
 export function groupAvisosByTime(avisos: Aviso[]): { labelKey: string; label: string; items: Aviso[] }[] {
@@ -34,6 +45,7 @@ export function groupAvisosByTime(avisos: Aviso[]): { labelKey: string; label: s
   const earlier: Aviso[] = [];
 
   avisos.forEach((a) => {
+    if (a.dismissed) return;
     const d = new Date(a.timestamp);
     if (d >= startOfToday) today.push(a);
     else if (d >= startOfYesterday) yesterday.push(a);

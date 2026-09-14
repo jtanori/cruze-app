@@ -34,3 +34,6 @@ report/
 test-results/
 playwright-report/
 test-results/
+
+# turborepo cache
+.turbo/

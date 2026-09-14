@@ -10,6 +10,7 @@ import { recommendCrossing } from "@/lib/recommendation";
 import { getDisplayName, formatDuration } from "@/lib/display";
 import { useTranslations } from "next-intl";
 import type { CrossingRecommendation } from "@/types";
+import type { SelectedCrossing } from "@/lib/recommendation/types";
 
 interface RecommendationViewProps {
   onSeeAllCrossings: () => void;
@@ -25,7 +26,7 @@ export function RecommendationView({
   const destination = useTripStore((s) => s.destination);
   const setTripType = useTripStore((s) => s.setTripType);
   const setDirection = useTripStore((s) => s.setDirection);
-  const setRecommendedCrossing = useTripStore((s) => s.setRecommendedCrossing);
+  const setSelectedCrossing = useTripStore((s) => s.setSelectedCrossing);
   const complete = useTripStore((s) => s.complete);
 
   const [recommendation, setRecommendation] =
@@ -54,7 +55,19 @@ export function RecommendationView({
 
     recommendCrossing({ start, destination, direction }).then((rec) => {
       setRecommendation(rec);
-      setRecommendedCrossing(rec);
+      const selected: SelectedCrossing = {
+        crossingId: rec.crossingId,
+        crossingName: rec.crossingName,
+        mexicanCity: rec.mexicanCity,
+        usCity: rec.usCity,
+        waitTime: rec.waitTime,
+        totalJourneyTime: rec.totalJourneyTime,
+        status: "open",
+        isLive: false,
+        generatedAt: rec.generatedAt,
+        coordinates: rec.coordinates,
+      };
+      setSelectedCrossing(selected);
       setLoading(false);
     });
   }, [
@@ -62,7 +75,7 @@ export function RecommendationView({
     destination,
     setTripType,
     setDirection,
-    setRecommendedCrossing,
+    setSelectedCrossing,
   ]);
 
   const handleStartTrip = () => {

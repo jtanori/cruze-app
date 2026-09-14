@@ -1,7 +1,7 @@
 # TR-ACT-03 — 03
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-08 — W6 audit; 5 actions (Navegar, Ver cruce, Comparar, Configurar, Finalizar); labels hardcoded → should use `useTranslations()`. If version differs, revisit.
 
-> **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
+> **Canonical:** `design/workflows/W6-active-trip.md` — source of truth for active trip actions. See `design/components/README.md`.
 
 # 29. `TR-ACT-03` --- TripActionBar
 
@@ -9,20 +9,60 @@
 
 ``` text
 ┌──────────────────────────────────────────────┐
-│   Ver cruce        Agente        Navegar     │
+│ Navegar  │ Ver cruce │ Comparar │ Config │ Fin│
 └──────────────────────────────────────────────┘
 ```
+
+### Purpose
+
+Action buttons for the active trip. All buttons are optional — only rendered when handler is provided.
+
+### Props
+
+```typescript
+interface TripActionBarProps {
+  onNavigate?: () => void;
+  onViewCrossing?: () => void;
+  onCompare?: () => void;
+  onConfigure?: () => void;
+  onComplete?: () => void;
+  className?: string;
+}
+```
+
+### Actions
+
+| Action | Label | Style | Event |
+|--------|-------|-------|-------|
+| Navegar | Navegar | Primary (Cruze Mint) | `trackEvent("trip_navigate")` |
+| Ver cruce | Ver cruce | Secondary | `trackEvent("trip_view_crossing")` |
+| Comparar | Comparar | Secondary | `trackEvent("trip_compare")` |
+| Configurar | Configurar | Secondary | `trackEvent("trip_configure")` |
+| Finalizar | Finalizar | Secondary | `trackEvent("trip_complete")` → navigates to `/trip/completion` |
 
 ### Tokens
 
 ``` text
-Height:       ≥56px
-Primary:      Cruze Mint
-Secondary:    Info Blue / Text Primary
-Surface:      Surface Elevated
+Container:
+  flex gap-2
+
+Button:
+  h-44px px-4
+  rounded-md
+  Inter 13px / 500
+
+Primary (Navegar):
+  bg-cruze-mint text-midnight
+
+Secondary:
+  bg-surface-elevated border border-border text-ink
 ```
 
-Actions should remain contextual to the active trip.
+### Rule
+
+- All buttons fire `trackEvent()` before calling their handler
+- "Finalizar" navigates to `/trip/completion` (does NOT call `store.complete()` — that happens on the completion page)
+- Labels should use `useTranslations()` (currently hardcoded Spanish)
 
 ------------------------------------------------------------------------
 
@@ -30,5 +70,5 @@ Actions should remain contextual to the active trip.
 
 ## File Reference
 - Spec doc: `design/components/{f.name}` (this file) — canonical
-- Workflow: `design/workflows/W5-trip-private-northbound.md` + `design/workflows/W*.md`
+- Workflow: `design/workflows/W6-active-trip.md`
 - Catalog index: `design/components/README.md`

@@ -14,19 +14,19 @@ Global header for primary application surfaces.
 ```text
 ┌──────────────────────────────────────────────┐
 │                                              │
-│  CRUZE                         ◉     ⚙      │
+│  CRUZE          CRUCES           ◉     ⚙     │
+│  (left 30%)    (centered)      (right 30%)   │
 │                                              │
 └──────────────────────────────────────────────┘
 ```
 
 ## Anatomy
 ```text
-CruzeAppHeader
-├── Brand
-│   └── CRUZE
-├── CruzeNotificationButton
-│   └── unread badge when required
-└── CruzeSettingsButton
+CruzeAppHeader (3-zone, measured centering)
+├── Left: Brand / back (country badge next to brand when resolved)
+├── Center: route title (CRUCES/AGENTE/…, viewport-centered via
+│   equal side widths — ResizeObserver takes max(left, right))
+└── Right: CruzeNotificationButton (owns unread badge) + Settings
 ```
 
 ## Tokens

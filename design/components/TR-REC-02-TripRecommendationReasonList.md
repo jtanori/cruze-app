@@ -1,7 +1,7 @@
 # TR-REC-02 — 02
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-08 — T07 locked; reasons now use `RecommendationReasonCode` (structured codes + data, not prose). If version differs, revisit.
 
-> **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
+> **Canonical:** `design/workflows/T07-recommendation.md` — source of truth for reason codes. See `design/components/README.md`.
 
 # 24. `TR-REC-02` --- TripRecommendationReasonList
 
@@ -10,25 +10,57 @@
 ``` text
 ¿POR QUÉ ESTE CRUCE?
 
-✓ Compatible con tu acceso
-✓ Compatible con tu perfil
-✓ Datos recientes
+✓ Menor tiempo total
+✓ Datos en vivo
 ```
+
+### Purpose
+
+Explains why the engine recommended this crossing. Reasons are data-derived from `RecommendationReason.code` + `data`.
+
+### Props
+
+```typescript
+interface TripRecommendationReasonListProps {
+  reasons: string[];  // pre-mapped i18n strings from code + data
+  className?: string;
+}
+```
+
+### Reason code mapping
+
+The page component maps `RecommendationReason.code` to i18n strings:
+
+| Code | Spanish | English |
+|------|---------|---------|
+| `fastest_total_time` | Menor tiempo total | Fastest total time |
+| `shortest_wait` | Menor tiempo de espera | Shortest wait |
+| `best_access_match` | Mejor compatibilidad de acceso | Best access match |
+| `only_open_option` | Única opción abierta | Only open option |
+| `closest_to_route` | Más cercano a tu ruta | Closest to route |
+| `candidate_preference` | Cruce seleccionado previamente | Previously selected crossing |
+
+Data fields (e.g. `accessType`, `deltaMinutes`) are interpolated into the localized string.
 
 ### Tokens
 
 ``` text
-Heading:     Inter 12–14px / 700
-Reason:      Inter 14–16px
-Check:       Cruze Mint
-Supporting:  Text Secondary
-Gap:         8–12px
+Heading:     Inter 12px / 700 uppercase
+             Text Secondary
+
+Reason:      Inter 14px
+             Text Primary
+
+Check:       16px Cruze Mint
+
+Gap:         12px between reasons
 ```
 
 ### Rule
 
-Reasons should be data-derived and explain the recommendation rather
-than merely decorate it.
+- Reasons should be data-derived and explain the recommendation
+- Engine never produces human-readable text — UI layer handles i18n
+- Returns null if reasons array is empty
 
 ------------------------------------------------------------------------
 
@@ -36,5 +68,5 @@ than merely decorate it.
 
 ## File Reference
 - Spec doc: `design/components/{f.name}` (this file) — canonical
-- Workflow: `design/workflows/W5-trip-private-northbound.md` + `design/workflows/W*.md`
+- Workflow: `design/workflows/T07-recommendation.md`
 - Catalog index: `design/components/README.md`

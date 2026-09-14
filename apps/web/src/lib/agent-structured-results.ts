@@ -39,7 +39,7 @@ export type AgentStructuredResult =
   | AgentChecklistResult;
 
 export function getAgentContext(): Record<string, unknown> {
-  // Context snapshot: location, trip, profile, recommendation, avisos
-  // Minimal implementation - aggregates from stores
+  // Re-export from agent-context.ts for backward compatibility
+  // This stub is replaced by the real implementation in agent-context.ts
   return {};
 }

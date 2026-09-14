@@ -9,6 +9,7 @@ import {
 
 describe("trip-setup-flow", () => {
   const baseState: TripSetupState = {
+    crossingCandidate: null,
     destination: null,
     origin: null,
     travelMode: null,
@@ -17,67 +18,75 @@ describe("trip-setup-flow", () => {
     documentType: null,
   };
 
+  const dest = { id: "san-diego", name: "San Diego", lat: 33.0, lng: -117.5, country: "US" as const };
+  const orig = { id: "mexicali", name: "Mexicali", lat: 31.0, lng: -115.5, country: "MX" as const };
+
   it("returns base steps for empty state", () => {
     const steps = getRequiredSteps(baseState);
     expect(steps).toEqual(["destination", "origin", "travelMode"]);
   });
 
   it("returns walking flow steps", () => {
-    const state = { ...baseState, travelMode: "walking" as any };
+    const state = { ...baseState, travelMode: "walking" as const };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "recommendation"]);
   });
 
   it("returns commercial flow steps", () => {
-    const state = { ...baseState, travelMode: "commercial" as any };
+    const state = { ...baseState, travelMode: "commercial" as const };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "recommendation"]);
   });
 
   it("returns private vehicle southbound steps", () => {
-    const state = { ...baseState, travelMode: "privateVehicle" as any, direction: "southbound" as any };
+    const state = { ...baseState, travelMode: "privateVehicle" as const, direction: "southbound" as const };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "recommendation"]);
   });
 
   it("returns private vehicle northbound steps with access + docs", () => {
-    // When direction is already set, it's not included in required steps
-    const state = { ...baseState, travelMode: "privateVehicle" as any, direction: "northbound" as any };
+    const state = { ...baseState, travelMode: "privateVehicle" as const, direction: "northbound" as const };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "accessType", "documentProfile", "recommendation"]);
   });
 
-it("returns private vehicle northbound steps (without pre-set direction)", () => {
-    // When direction is NOT set, it should only ask for direction first
-    const state = { ...baseState, travelMode: "privateVehicle" as any };
+  it("returns private vehicle steps (without pre-set direction)", () => {
+    const state = { ...baseState, travelMode: "privateVehicle" as const };
     const steps = getRequiredSteps(state);
     expect(steps).toEqual(["destination", "origin", "travelMode", "direction", "recommendation"]);
   });
 
-  it("returns private vehicle northbound steps with access + docs (when direction is northbound)", () => {
-    // When direction is northbound, it adds accessType and documentProfile
-    const state = { ...baseState, travelMode: "privateVehicle" as any, direction: "northbound" as any };
-    const steps = getRequiredSteps(state);
-    expect(steps).toEqual(["destination", "origin", "travelMode", "accessType", "documentProfile", "recommendation"]);
-  });
-
   it("getNextStep returns correct next step", () => {
-    const state = { ...baseState, destination: { lat: 0, lng: 0, label: "test" }, origin: { lat: 0, lng: 0, label: "test" }, travelMode: "privateVehicle" as any };
+    const state = { ...baseState, destination: dest, origin: orig, travelMode: "privateVehicle" as const };
     expect(getNextStep(state, "destination")).toBe("origin");
     expect(getNextStep(state, "origin")).toBe("travelMode");
-    expect(getNextStep(state, "travelMode")).toBe("direction"); // privateVehicle needs direction
+    expect(getNextStep(state, "travelMode")).toBe("direction");
   });
 
   it("getPreviousStep returns correct previous step", () => {
-    const state = { ...baseState, destination: { lat: 0, lng: 0, label: "test" }, origin: { lat: 0, lng: 0, label: "test" } };
+    const state = { ...baseState, destination: dest, origin: orig };
     expect(getPreviousStep(state, "origin")).toBe("destination");
     expect(getPreviousStep(state, "travelMode")).toBe("origin");
   });
 
   it("getStepProgress calculates correctly", () => {
-    const state = { ...baseState, destination: { lat: 0, lng: 0, label: "test" }, origin: { lat: 0, lng: 0, label: "test" } };
+    const state = { ...baseState, destination: dest, origin: orig };
     const progress = getStepProgress(state, "origin");
     expect(progress.current).toBe(2);
     expect(progress.total).toBe(3);
+  });
+
+  it("crossingCandidate is part of state shape", () => {
+    const state: TripSetupState = {
+      ...baseState,
+      crossingCandidate: { id: "lukeville", name: "Lukeville" },
+    };
+    expect(state.crossingCandidate).toEqual({ id: "lukeville", name: "Lukeville" });
+  });
+
+  it("destination uses TripDestinationSelection shape", () => {
+    const state: TripSetupState = { ...baseState, destination: dest };
+    expect(state.destination?.country).toBe("US");
+    expect(state.destination?.lat).toBe(33.0);
   });
 });

@@ -79,7 +79,7 @@
   --nav-header-height: 56px;       /* Mobile standard: Material dense 56dp / HIG compact — use with var(--safe-top) */
   --nav-header-height-desktop: 72px; /* W5 72–88px — desktop/tablet or branded large header */
   --nav-header-compact-height: 56px;
-  --nav-bottom-height: 80px;      /* M3 Navigation bar 80dp = iOS Tab bar 49pt + 34pt safe ≈83pt → 80 mobile */
+  --nav-bottom-height: 68px;      /* tightened per W7 polish — was 80, now denser */
   --nav-bottom-height-with-safe: calc(80px + var(--safe-bottom)); /* include home indicator */
 
   /* ─── Navigation Spacing ─── */

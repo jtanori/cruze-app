@@ -2,23 +2,38 @@
 
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Share2 } from "lucide-react";
 import { CrossingDetailHero } from "@/components/crossing/CrossingDetailHero";
 import { CrossingDetailMap } from "@/components/crossing/CrossingDetailMap";
 import { CrossingDetailLaneSection } from "@/components/crossing/CrossingDetailLaneSection";
-import { CrossingDetailAccessSection } from "@/components/crossing/CrossingDetailAccessSection";
 import { CrossingDetailHoursSection } from "@/components/crossing/CrossingDetailHoursSection";
-import { CrossingDetailRequirementsSection } from "@/components/crossing/CrossingDetailRequirementsSection";
-import { CrossingDetailRestrictionsSection } from "@/components/crossing/CrossingDetailRestrictionsSection";
-import { CrossingDetailServicesSection } from "@/components/crossing/CrossingDetailServicesSection";
 import { CrossingDetailActionBar } from "@/components/crossing/CrossingDetailActionBar";
 import { CrossingFavoriteButton } from "@/components/crossing/CrossingFavoriteButton";
 import { CruzeBackHeader } from "@/components/layout/CruzeBackHeader";
 import { Spinner } from "@/components/primitives/Spinner";
-import { BORDER_CROSSINGS } from "@/lib/border-data";
-import { getCrossingWithLiveData } from "@/lib/border-data-service";
+import { BORDER_CROSSINGS, haversineDistance } from "@/lib/border-data";
+import { fetchMergedCrossings } from "@/lib/crossings";
+import { resolveDisplayDirection } from "@/lib/country-resolution";
+import { buildSetupUrl } from "@/lib/trip-navigation";
+import { buildCrossingSharePayload } from "@/lib/crossing-share";
+import { formatFreshness } from "@/lib/format-freshness";
+import { useShare } from "@/hooks/use-share";
+import { useLocationContext } from "@/components/location/LocationProvider";
+import { useTripStore } from "@/stores/trip";
+import { useAgentStore } from "@/stores/agent";
+import { useTripMapContext } from "@/hooks/useTripMapContext";
 
 interface CrossingPageProps {
   params: Promise<{ id: string; locale: string }>;
+}
+
+type LaneCategory = "passenger" | "commercial" | "pedestrian";
+
+function toLaneCategory(value: unknown): LaneCategory | undefined {
+  return value === "passenger" || value === "commercial" || value === "pedestrian"
+    ? value
+    : undefined;
 }
 
 interface LiveCrossingData {
@@ -26,16 +41,28 @@ interface LiveCrossingData {
   name: string;
   coordinates: { lat: number; lng: number };
   status: "operational" | "limited" | "closed" | "unknown";
-  waitTime: number;
+  waitTime: number | null;
+  southboundWait: number | null;
+  direction: "northbound" | "southbound" | "both";
   isLive: boolean;
   lastUpdated?: string;
-  hours: string;
-  lanes: { name: string; waitTime: number; isOpen: boolean }[];
+  hours: string | null;
+  lanes: {
+    name: string;
+    waitTime: number;
+    isOpen: boolean;
+    category?: LaneCategory;
+  }[];
 }
 
 export default function CrossingPage({ params }: CrossingPageProps) {
   const { id, locale } = use(params);
   const router = useRouter();
+  const t = useTranslations();
+  const { share } = useShare();
+  const { location } = useLocationContext();
+  const tripDirection = useTripStore((s) => s.direction);
+  const tripMapContext = useTripMapContext();
   const [crossing, setCrossing] = useState<LiveCrossingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,34 +78,61 @@ export default function CrossingPage({ params }: CrossingPageProps) {
           return;
         }
 
-        const liveData = await getCrossingWithLiveData(id, "MX_TO_US");
+        // Direction hierarchy: trip → contextual → both (never hardcoded).
+        const displayDirection = resolveDisplayDirection(
+          tripDirection,
+          location?.country ?? "UNKNOWN"
+        );
+        const merged = await fetchMergedCrossings();
+        const liveData = merged.find((c) => c.id === id) ?? null;
 
         if (liveData && liveData.isLive) {
+          const northbound = displayDirection !== "US_TO_MX";
+          const sideLanes = northbound
+            ? liveData.lanesNorthbound
+            : liveData.lanesSouthbound;
           setCrossing({
             id: staticCrossing.id,
             name: staticCrossing.name,
             coordinates: staticCrossing.coordinates,
-            status: liveData.status.toLowerCase() as "operational" | "limited" | "closed" | "unknown",
-            waitTime: liveData.waitTime,
+            status: (northbound
+              ? liveData.statusNorthbound
+              : liveData.statusSouthbound
+            ).toLowerCase() as "operational" | "limited" | "closed" | "unknown",
+            waitTime: northbound
+              ? liveData.waitTimeNorthbound
+              : liveData.waitTimeSouthbound,
+            southboundWait:
+              displayDirection === null ? liveData.waitTimeSouthbound : null,
+            direction:
+              displayDirection === "US_TO_MX"
+                ? "southbound"
+                : displayDirection === "MX_TO_US"
+                  ? "northbound"
+                  : "both",
             isLive: true,
             lastUpdated: liveData.lastUpdated,
             hours: liveData.hours,
-            lanes: liveData.lanes.map((l) => ({
+            lanes: sideLanes.map((l) => ({
               name: l.name,
               waitTime: l.waitTime,
               isOpen: l.isOpen,
+              category: toLaneCategory(l.category),
             })),
           });
         } else {
+          // No live data: explicit unknown state — never invented defaults.
           setCrossing({
             id: staticCrossing.id,
             name: staticCrossing.name,
             coordinates: staticCrossing.coordinates,
-            status: "operational",
-            waitTime: 0,
+            status: "unknown",
+            waitTime: null,
+            southboundWait: null,
+            direction: "both",
             isLive: false,
-            lastUpdated: new Date().toISOString(),
-            hours: "Abierto 24 horas",
+            lastUpdated: undefined,
+            hours: null,
             lanes: [],
           });
         }
@@ -90,11 +144,13 @@ export default function CrossingPage({ params }: CrossingPageProps) {
             id: staticCrossing.id,
             name: staticCrossing.name,
             coordinates: staticCrossing.coordinates,
-            status: "operational",
-            waitTime: 0,
+            status: "unknown",
+            waitTime: null,
+            southboundWait: null,
+            direction: "both",
             isLive: false,
-            lastUpdated: new Date().toISOString(),
-            hours: "Abierto 24 horas",
+            lastUpdated: undefined,
+            hours: null,
             lanes: [],
           });
         }
@@ -104,7 +160,7 @@ export default function CrossingPage({ params }: CrossingPageProps) {
     }
 
     loadCrossing();
-  }, [id]);
+  }, [id, tripDirection, location?.country]);
 
   if (loading) {
     return (
@@ -117,67 +173,133 @@ export default function CrossingPage({ params }: CrossingPageProps) {
   if (error || !crossing) {
     return (
       <div className="min-h-dvh bg-background">
-        <CruzeBackHeader title="Cruces" onBack={() => router.push(`/${locale}/crossings`)} />
+        <CruzeBackHeader title="CRUCES" onBack={() => router.push(`/${locale}/crossings`)} />
         <div className="px-5 py-8 sm:py-12 text-center text-muted">{error || "Cruce no encontrado"}</div>
       </div>
     );
   }
 
+  const statusLabel =
+    crossing.status === "unknown"
+      ? null
+      : t(
+          `common.${crossing.status === "operational" ? "open" : crossing.status === "limited" ? "limited" : "closed"}`
+        );
+
+  const handleShare = () => {
+    const lastUpdatedMs = crossing.lastUpdated
+      ? new Date(crossing.lastUpdated).getTime()
+      : null;
+    void share(
+      buildCrossingSharePayload({
+        id: crossing.id,
+        name: crossing.name,
+        locale,
+        statusLabel,
+        unknownStatusLabel: t("common.unknownStatus"),
+        northLabel: t("common.northbound"),
+        southLabel: t("common.southbound"),
+        waitNorthbound: crossing.waitTime,
+        waitSouthbound: crossing.southboundWait,
+        freshnessText:
+          lastUpdatedMs !== null && Number.isFinite(lastUpdatedMs)
+            ? formatFreshness(lastUpdatedMs, t)
+            : null,
+        viewInLabel: t("common.viewInCruze"),
+      })
+    );
+  };
+
   return (
     <div className="min-h-dvh bg-background">
-      <CruzeBackHeader title={crossing.name} onBack={() => router.push(`/${locale}/crossings`)} />
-      <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4 sm:space-y-6 pb-24">
-        {/* CR-DET-01: Hero with name + status + wait + direction + freshness + favorite */}
+      <CruzeBackHeader
+        title="CRUCES"
+        onBack={() => router.push(`/${locale}/crossings`)}
+        trailing={
+          <div className="flex items-center">
+            <button
+              onClick={handleShare}
+              aria-label={t("common.share")}
+              className="w-[44px] h-[44px] flex items-center justify-center rounded-[var(--radius-md)] active:bg-surface-elevated transition-colors"
+            >
+              <Share2 className="w-5 h-5 text-ink" />
+            </button>
+            <CrossingFavoriteButton crossingId={crossing.id} />
+          </div>
+        }
+      />
+      <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-6 sm:space-y-8">
+        {/* CR-DET-01: Hero — identity only (actions live in header) */}
         <CrossingDetailHero
           crossingName={crossing.name}
           status={crossing.status}
           waitTime={crossing.waitTime}
-          direction="northbound"
-          updatedAt={crossing.lastUpdated || new Date().toISOString()}
-        >
-          <CrossingFavoriteButton crossingId={crossing.id} />
-        </CrossingDetailHero>
+          direction={crossing.direction}
+          secondaryWaitTime={crossing.southboundWait}
+          updatedAt={crossing.lastUpdated}
+        />
 
         {/* CR-DET-02: Map */}
         <CrossingDetailMap
           lat={crossing.coordinates.lat}
           lng={crossing.coordinates.lng}
           crossingName={crossing.name}
+          origin={tripMapContext.origin}
+          destination={tripMapContext.destination}
         />
 
-        {/* CR-DET-03: Lane times */}
-        <CrossingDetailLaneSection
-          lanes={crossing.lanes.map((l) => ({ type: l.name, waitTime: l.waitTime }))}
+        {/* CR-DET-03: Lane times — only with live lane data, category always passed */}
+        {crossing.lanes.length > 0 && (
+          <CrossingDetailLaneSection
+            lanes={crossing.lanes.map((l) => ({
+              type: l.name,
+              waitTime: l.waitTime,
+              category: l.category,
+            }))}
+          />
+        )}
+
+        {/* CR-DET-05: Hours — only when sourced */}
+        {crossing.hours && (
+          <CrossingDetailHoursSection
+            hours={crossing.hours}
+            note="Horarios pueden variar en días festivos"
+          />
+        )}
+
+        {/* Contextual agent handoff — quiet text-link, no CTA block */}
+        <div>
+          <button
+            onClick={() => {
+              useAgentStore.getState().setPendingContext({
+                crossingId: crossing.id,
+                crossingName: crossing.name,
+              });
+              router.push(`/${locale}/agent`);
+            }}
+            className="min-h-[44px] flex items-center text-sm font-medium text-faint hover:text-ink transition-colors"
+          >
+            {t("agent.askAboutCrossing")}
+          </button>
+        </div>
+        {/* CR-DET-10: Action Bar — in-flow, inside the content inset */}
+        <CrossingDetailActionBar
+          onUseCrossing={() => router.push(buildSetupUrl(locale, null, crossing.id))}
+          onCompare={() => {
+            const alternatives = BORDER_CROSSINGS.filter((c) => c.id !== crossing.id)
+              .map((c) => ({
+                id: c.id,
+                distance: haversineDistance(crossing.coordinates, c.coordinates),
+              }))
+              .sort((a, b) => a.distance - b.distance)
+              .slice(0, 2)
+              .map((c) => c.id);
+            router.push(
+              `/${locale}/crossings/compare?ids=${[crossing.id, ...alternatives].join(",")}`
+            );
+          }}
         />
-
-        {/* CR-DET-04: Access */}
-        <CrossingDetailAccessSection accessTypes={["Auto", "A pie", "Comercial"]} />
-
-        {/* CR-DET-05: Hours */}
-        <CrossingDetailHoursSection
-          hours={crossing.hours}
-          note="Horarios pueden variar en días festivos"
-        />
-
-        {/* CR-DET-06: Requirements (progressive disclosure per category) */}
-        <CrossingDetailRequirementsSection
-          requirements={[
-            { label: "Documentación", items: ["Pasaporte válido", "Visa (si aplica)"] },
-            { label: "Acceso", items: ["Auto", "A pie"] },
-            { label: "Vehículos", items: [] },
-            { label: "Restricciones", items: [] },
-          ]}
-        />
-
-        {/* CR-DET-07: Restrictions */}
-        <CrossingDetailRestrictionsSection restrictions={[]} />
-
-        {/* CR-DET-08: Services */}
-        <CrossingDetailServicesSection services={["Cambio de divisas", "Estacionamiento"]} />
       </div>
-
-      {/* CR-DET-10: Action Bar */}
-      <CrossingDetailActionBar onUseCrossing={() => router.push(`/${locale}/trip/setup`)} />
     </div>
   );
 }

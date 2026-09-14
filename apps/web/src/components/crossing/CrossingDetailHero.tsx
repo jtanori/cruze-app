@@ -8,8 +8,9 @@ interface CrossingDetailHeroProps {
   crossingName: string;
   status: "operational" | "limited" | "closed" | "unknown";
   waitTime: number | null;
-  direction?: "northbound" | "southbound";
-  updatedAt: string;
+  direction?: "northbound" | "southbound" | "both";
+  secondaryWaitTime?: number | null;
+  updatedAt?: string;
   children?: React.ReactNode;
   className?: string;
 }
@@ -19,12 +20,14 @@ export function CrossingDetailHero({
   status,
   waitTime,
   direction = "northbound",
+  secondaryWaitTime = null,
   updatedAt,
   children,
   className = "",
 }: CrossingDetailHeroProps) {
+  const showBoth = direction === "both";
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`space-y-3 ${className}`}>
       <div className="flex items-start justify-between gap-4">
         <h1 className="text-2xl font-bold text-ink uppercase tracking-tight">{crossingName}</h1>
         {children}
@@ -32,15 +35,32 @@ export function CrossingDetailHero({
       <div className="flex items-center gap-3">
         <DataStatus status={status} />
       </div>
-      <div>
-        <p className="text-3xl font-extrabold tabular text-ink">
-          {waitTime !== null ? formatDuration(waitTime) : "—"}
-        </p>
-        <p className="text-sm text-muted capitalize">
-          {direction === "northbound" ? "Norte" : "Sur"}
-        </p>
-      </div>
-      <DataTimestamp timestamp={updatedAt} variant="compact" />
+      {showBoth ? (
+        <div className="flex gap-6">
+          <div>
+            <p className="text-3xl font-extrabold tabular text-ink">
+              {waitTime !== null ? formatDuration(waitTime) : "—"}
+            </p>
+            <p className="text-sm text-muted capitalize">Norte</p>
+          </div>
+          <div>
+            <p className="text-3xl font-extrabold tabular text-ink">
+              {secondaryWaitTime !== null ? formatDuration(secondaryWaitTime) : "—"}
+            </p>
+            <p className="text-sm text-muted capitalize">Sur</p>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <p className="text-3xl font-extrabold tabular text-ink">
+            {waitTime !== null ? formatDuration(waitTime) : "—"}
+          </p>
+          <p className="text-sm text-muted capitalize">
+            {direction === "northbound" ? "Norte" : "Sur"}
+          </p>
+        </div>
+      )}
+      {updatedAt && <DataTimestamp timestamp={updatedAt} />}
     </div>
   );
 }

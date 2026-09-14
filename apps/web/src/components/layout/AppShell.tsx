@@ -81,7 +81,7 @@ export function AppShell({
           paddingTop: hasSearch
             ? "calc(var(--nav-header-height) + 80px)"
             : headerCompanion
-            ? "calc(var(--nav-header-height) + 48px)"
+            ? "calc(var(--nav-header-height) + 64px)"
             : "var(--nav-header-height)",
           paddingBottom: "calc(var(--nav-bottom-height) + env(safe-area-inset-bottom) + 24px)",
         }}

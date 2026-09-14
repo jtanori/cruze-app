@@ -5,11 +5,14 @@ import { Search, X, MapPin, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { searchPlaces } from "@/lib/geocoding";
 import type { Place } from "@/types";
-import { detectUserCountry, getTargetDestinationCountry, filterDestinationsByCountry, getTargetCountryCode } from "@/lib/destination-filter";
+import { detectUserCountry, getTargetDestinationCountry, filterDestinationsByCountry } from "@/lib/destination-filter";
+import type { ResolvedCountry } from "@/lib/country-resolution";
 
 interface DestinationSearchProps {
   userLat: number;
   userLng: number;
+  /** Resolved user country — preferred over coordinate detection. */
+  userCountry?: ResolvedCountry;
   onSelect: (place: Place) => void;
   onNext?: () => void;
   placeholder?: string;
@@ -19,6 +22,7 @@ interface DestinationSearchProps {
 export function DestinationSearch({
   userLat,
   userLng,
+  userCountry: userCountryProp,
   onSelect,
   onNext,
   placeholder,
@@ -33,13 +37,24 @@ export function DestinationSearch({
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Determine target country
-  const userCountry = detectUserCountry(userLat, userLng);
-  const targetCountry = getTargetDestinationCountry(userCountry);
-  const targetCountryCode = getTargetCountryCode(userLat, userLng);
-  
-  // Get i18n country name
-  const targetCountryName = targetCountry === "MX" ? t("common.mexico") : t("common.unitedStates");
+  // Target country from the resolved location country.
+  // UNKNOWN (or absent prop) never forces a side: unfiltered + generic copy.
+  // Legacy coordinate detection remains only for callers without a prop.
+  const hasKnownCountry = !!userCountryProp && userCountryProp !== "UNKNOWN";
+  const userCountry = hasKnownCountry
+    ? userCountryProp
+    : detectUserCountry(userLat, userLng);
+  const targetCountry = hasKnownCountry
+    ? getTargetDestinationCountry(userCountry)
+    : null;
+
+  // Get i18n country name (short form for inline copy: EE.UU. / the U.S.)
+  const targetCountryName =
+    targetCountry === "MX"
+      ? t("common.mexicoShort")
+      : targetCountry === "US"
+        ? t("common.unitedStatesShort")
+        : null;
 
   const handleSearch = useCallback(async (searchQuery: string) => {
     if (!searchQuery || searchQuery.length < 2) {
@@ -50,10 +65,15 @@ export function DestinationSearch({
 
     setLoading(true);
     try {
-      // Search all places first
-      const allPlaces = await searchPlaces(searchQuery, 10);
-      // Filter by target country
-      const filtered = filterDestinationsByCountry(allPlaces, userLat, userLng);
+      // Strict server-side country filter when the target side is known;
+      // both sides when UNKNOWN (client filter below stays a safety net).
+      const allPlaces = await searchPlaces(searchQuery, 10, targetCountry);
+      const filtered = filterDestinationsByCountry(
+        allPlaces,
+        userLat,
+        userLng,
+        userCountryProp ?? null
+      );
       setResults(filtered.slice(0, 5));
       setShowResults(true);
     } catch (error) {
@@ -62,7 +82,7 @@ export function DestinationSearch({
     } finally {
       setLoading(false);
     }
-  }, [userLat, userLng]);
+  }, [userLat, userLng, userCountryProp, targetCountry]);
 
   const handleInputChange = (value: string) => {
     setQuery(value);
@@ -107,12 +127,14 @@ export function DestinationSearch({
     };
   }, []);
 
-  const defaultPlaceholder = t("trip.empty.searchPlaceholder", { country: targetCountryName });
+  const defaultPlaceholder = targetCountryName
+    ? t("trip.empty.searchPlaceholder", { country: targetCountryName })
+    : t("trip.empty.searchPlaceholderGeneric");
 
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`space-y-2 sm:space-y-3 ${className}`}>
       {/* Search Input */}
-      <div className="relative">
+      <div className="relative space-y-2 sm:space-y-3">
         <div className="flex items-center gap-3 h-[56px] bg-surface-elevated border border-border rounded-[var(--radius-md)] px-4 focus-within:border-cruze-mint transition-colors">
           <Search className="w-4 h-4 text-faint shrink-0" />
           <input
@@ -134,9 +156,24 @@ export function DestinationSearch({
           {query && !loading && (
             <button
               onClick={handleClear}
-              className="text-faint hover:text-ink"
+              className="text-faint hover:text-ink shrink-0"
+              aria-label={t("common.close")}
             >
               <X className="w-4 h-4" />
+            </button>
+          )}
+          {onNext && (
+            <button
+              onClick={handleNext}
+              disabled={!selected}
+              aria-label={t("common.next")}
+              className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-opacity ${
+                !selected
+                  ? "bg-surface-elevated border border-border text-secondary opacity-40 cursor-not-allowed"
+                  : "bg-cruze-mint text-midnight hover:opacity-90"
+              }`}
+            >
+              <ArrowRight className="w-4 h-4" />
             </button>
           )}
         </div>
@@ -170,11 +207,13 @@ export function DestinationSearch({
                 ))}
               </div>
             ) : (
-              <div className="px-4 py-6 text-center">
-                <p className="text-muted text-sm">
-                  {t("trip.empty.noResultsInCountry", { country: targetCountryName })}
-                </p>
-              </div>
+                <div className="px-4 py-6 text-center">
+                  <p className="text-muted text-sm">
+                    {targetCountryName
+                      ? t("trip.empty.noResultsInCountry", { country: targetCountryName })
+                      : t("trip.empty.noResultsGeneric")}
+                  </p>
+                </div>
             )}
           </div>
         )}
@@ -196,17 +235,6 @@ export function DestinationSearch({
           </div>
         )}
 
-        {/* Next Button */}
-        {onNext && (
-          <button
-            onClick={handleNext}
-            disabled={!selected}
-            className="w-full h-[56px] flex items-center justify-center gap-2 bg-cruze-mint text-midnight font-semibold text-sm rounded-[var(--radius-md)] hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            {t("common.next")}
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        )}
       </div>
     </div>
   );

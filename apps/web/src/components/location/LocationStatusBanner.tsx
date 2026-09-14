@@ -13,7 +13,7 @@ interface LocationStatusBannerProps {
 /**
  * LOC-STATUS-01 — Location status banner
  * Shows current location after acquisition
- * Non-dismissible on T01 page, dismissible elsewhere
+ * Integrated inline strip — no card, minimal visual weight.
  */
 export function LocationStatusBanner({
   placeName,
@@ -24,11 +24,11 @@ export function LocationStatusBanner({
   const t = useTranslations();
 
   return (
-    <div className={`flex items-center justify-between px-4 py-3 bg-cruze-mint/10 border-b border-cruze-mint/20 ${className}`}>
+    <div className={`flex items-center justify-between px-2 py-2 ${className}`}>
       <div className="flex items-center gap-2">
-        <MapPin className="w-4 h-4 text-cruze-green shrink-0" />
+        <MapPin className="w-3 h-3 text-cruze-mint shrink-0" />
         <div>
-          <p className="text-cruze-green text-xs font-medium">
+          <p className="text-cruze-mint text-xs font-medium">
             {t("onboarding.location.banner.established", { placeName })}
           </p>
         </div>
@@ -37,10 +37,10 @@ export function LocationStatusBanner({
       {dismissible && onDismiss && (
         <button
           onClick={onDismiss}
-          className="p-1 text-cruze-green hover:text-cruze-green/70 transition-colors"
+          className="p-1 text-cruze-mint hover:text-cruze-mint/70 transition-colors"
           aria-label="Dismiss"
         >
-          <X className="w-4 h-4" />
+          <X className="w-3 h-3" />
         </button>
       )}
     </div>

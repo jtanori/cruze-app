@@ -1,5 +1,5 @@
 # CRUZE --- W5 Component-Level Design Specification
-**Version:** 1.1 — 2026-09-04 — W5 canon 1.1 (radii 4/8/12/16/20, nav 56/80+safe). If version differs, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11` + `docs/TESTING_TOOLS.md`.
+**Version:** 1.2 — 2026-09-07 — W5 canon 1.1 (radii 4/8/12/16/20, nav 56/68+safe); header 56px 3-zone + measured centering; TR-EMPTY-01 compound input (icon CTA, no eyebrow/button/helper); bottom nav 68px. If version differs, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11` + `docs/TESTING_TOOLS.md`.
 
 ## Trip Setup --- Private Vehicle Northbound (MX → US)
 
@@ -215,11 +215,13 @@ CruzeAppHeader
 ### Tokens
 
 ``` text
-Height:       72–88px depending on device shell
-Padding X:    24px
+Height:       56px (compact-height alias; measured 3-zone row)
+Padding X:    20px
 Background:   transparent / background layer
-Brand:        Sora, 24–28px, 700–800
-Icon size:    24–28px
+Brand:        text-sm, 700, uppercase tracking-wider (+ MX/USA badge when resolved)
+Title:        center zone, text-xs/sm uppercase, viewport-centered via
+              equal side widths (30/30 default, ResizeObserver max)
+Icon size:    w-5 (20px)
 Icon color:   Text Primary
 Gap:          20–24px
 Border:       1px #1F3A54
@@ -339,13 +341,13 @@ Label:     Text Secondary
 ### Tokens
 
 ``` text
-Height:          80–96px + safe area
+Height:          68px + safe area (tightened per W7 polish; was 80–96px)
 Background:      Surface / translucent Midnight
 Top border:      1px #1F3A54
 Item width:      33.333%
 Touch target:    ≥48px
-Label:           Inter 14–16px
-Icon:            24–28px
+Label:           Inter 12px (text-xs)
+Icon:            w-5 (20px)
 Active accent:   #00E0A0
 ```
 
@@ -406,75 +408,60 @@ Unavailable
 
 ------------------------------------------------------------------------
 
-# 8. `TR-EMPTY-01` --- TripEmptyActionPanel / Destination Entry
+# 8. `TR-EMPTY-01` --- TripDestinationSearch / Destination Entry
 
-The source architecture calls this `TripEmptyActionPanel`; the
-implementation should expose destination search as its primary
-responsibility.
+Hero lives in `TR-HERO-01` (no eyebrow on T01); this component is the
+compound search control only.
 
 ### ASCII
 
 ``` text
-TU VIAJE
-
-¿A dónde vas?
-
-Busca tu destino en Estados Unidos para recibir
-inteligencia personalizada para tu cruce.
-
 ┌──────────────────────────────────────────────┐
-│  ⌕  Buscar destino en EE.UU...              │
+│  ⌕  Busca un destino en EE.UU...        (→)  │
 └──────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────┐
-│                Siguiente  →                  │
-└──────────────────────────────────────────────┘
-
-        Selecciona un destino para continuar
 ```
 
 ### Tokens
 
 ``` text
-Eyebrow:
-  Sora 16–18px / 700
-  Cruze Mint
-
-Hero:
-  Sora 40–48px / 700–800
-  Text Primary
-
-Body:
-  Inter 17–20px / 400
-  Text Secondary
+Hero (TR-HERO-01):
+  Title: Sora 30px (text-3xl) / 700, Text Primary
+  Body:  Inter 16px (text-base) / 400, Text Secondary, balanced
+  No eyebrow on T01
 
 Search:
   Surface Elevated
   Border #1F3A54
   Radius  8px
-  Height 56–64px
+  Height 56px
 
-CTA:
-  Cruze Mint
-  Text on mint: Midnight
-  Radius 12px
-  Height ≥48px
+CTA (icon-only ArrowRight, floating inside input right):
+  w-10 h-10 rounded-full
+  Cruze Mint + Midnight icon when selected
+  dimmed/disabled until selection
+  No text label, no helper line
+
+Placeholder:
+  short country names ("EE.UU." / "México"); generic when UNKNOWN
 ```
 
 ### States
 
 ``` text
 Empty
+Focused
 Typing
 Results
 Selected
-Invalid
+Disabled
 Loading
 ```
 
 ### Important rule
 
-The button is disabled until a destination is selected.
+Country comes from resolved location (`userCountry` prop); UNKNOWN never
+forces a side (unfiltered + generic copy). The CTA is disabled until a
+destination is selected.
 
 ------------------------------------------------------------------------
 

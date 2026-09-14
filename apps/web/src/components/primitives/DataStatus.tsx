@@ -11,10 +11,10 @@ interface DataStatusProps {
 }
 
 const statusConfig: Record<Status, { color: string; dot: string; label: string }> = {
-  operational: { color: "text-success", dot: "bg-success", label: "Operational" },
-  limited: { color: "text-warning", dot: "bg-warning", label: "Limited" },
-  closed: { color: "text-danger", dot: "bg-danger", label: "Closed" },
-  unknown: { color: "text-muted", dot: "bg-muted", label: "Unknown" },
+  operational: { color: "text-success", dot: "bg-success", label: "Operativo" },
+  limited: { color: "text-warning", dot: "bg-warning", label: "Limitado" },
+  closed: { color: "text-danger", dot: "bg-danger", label: "Cerrado" },
+  unknown: { color: "text-muted", dot: "bg-muted", label: "Desconocido" },
 };
 
 export function DataStatus({

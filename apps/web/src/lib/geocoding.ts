@@ -97,11 +97,14 @@ export async function searchLocations(
 
 /**
  * Search for places using Mapbox Geocoding API
- * Returns Place[] format for compatibility with existing components
+ * Returns Place[] format for compatibility with existing components.
+ * `country` is a STRICT server-side filter (ISO alpha-2, lowercase);
+ * pass the target side when known, null for both (UNKNOWN user).
  */
 export async function searchPlaces(
   query: string,
-  limit: number = 5
+  limit: number = 5,
+  country?: "MX" | "US" | null
 ): Promise<Place[]> {
   if (!MAPBOX_TOKEN) {
     return [];
@@ -113,7 +116,8 @@ export async function searchPlaces(
 
   try {
     const encodedQuery = encodeURIComponent(query);
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedQuery}.json?access_token=${MAPBOX_TOKEN}&country=mx,us&types=place,region&language=es&limit=${limit}`;
+    const countryParam = country ? country.toLowerCase() : "mx,us";
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedQuery}.json?access_token=${MAPBOX_TOKEN}&country=${countryParam}&types=place,region&language=es&limit=${limit}`;
 
     const response = await fetch(url);
 
@@ -146,7 +150,7 @@ export async function reverseGeocode(
   }
 
   try {
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&types=place,region&language=es&limit=1`;
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&country=mx,us&types=place,region&language=es&limit=1`;
 
     const response = await fetch(url);
 

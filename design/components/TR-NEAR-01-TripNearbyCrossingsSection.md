@@ -8,13 +8,8 @@
 ### ASCII
 
 ``` text
-CERCA DE TI                              Ver todos →
-
-Cruces relevantes ahora
-
-┌──────────────────────────────────────────────┐
-│ TR-NEAR-02                                   │
-└──────────────────────────────────────────────┘
+CERCA DE TI
+Cruces relevantes ahora (text-xs, stacked — never same-line parity)
 
 ┌──────────────────────────────────────────────┐
 │ TR-NEAR-02                                   │

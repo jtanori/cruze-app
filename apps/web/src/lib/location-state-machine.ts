@@ -17,6 +17,9 @@ export type LocationConfidence =
   | "ready"
   | "needs_refreshing";
 
+import type { ResolvedCountry, CountryConfidence } from "./country-resolution";
+import { resolveUserCountry } from "./country-resolution";
+
 export interface LocationData {
   lat: number;
   lng: number;
@@ -24,6 +27,12 @@ export interface LocationData {
   timestamp: number;
   confidence: LocationConfidence;
   placeName?: string;
+  /** Resolved via country-resolution domain — UNKNOWN when ambiguous, never forced. */
+  country: ResolvedCountry;
+  countryConfidence: CountryConfidence;
+  formattedAddress?: string;
+  city?: string;
+  region?: string;
   isManual?: boolean;
 }
 
@@ -214,11 +223,14 @@ export function createLocationData(
   lng: number,
   accuracy: number,
 ): LocationData {
+  const resolved = resolveUserCountry(lat, lng, null);
   return {
     lat,
     lng,
     accuracy,
     timestamp: Date.now(),
     confidence: "determining",
+    country: resolved.country,
+    countryConfidence: resolved.confidence,
   };
 }

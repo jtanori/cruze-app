@@ -1,8 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/use-locale";
+import { useTripStore } from "@/stores/trip";
+import {
+  parseSetupParams,
+  checkHandoffCompatibility,
+} from "@/lib/trip-handoff";
 import {
   getRequiredSteps,
   getNextStep,
@@ -34,23 +40,99 @@ const STEP_TITLES: Record<TripSetupStep, string> = {
 
 export function TripSetupFlow() {
   const router = useRouter();
+  const t = useTranslations();
   const locale = useLocale();
-  const [state, setState] = useState<TripSetupState>({
-    destination: null,
+  const searchParams = useSearchParams();
+  const activeDestinationId = useTripStore((s) => s.destination?.id ?? null);
+
+  // Handoff (?dest= / ?crossing=): resolve once, guard before committing.
+  const handoff = useMemo(() => {
+    const request = parseSetupParams(searchParams?.toString() ?? "");
+    const verdict = checkHandoffCompatibility(request, {
+      destinationId: activeDestinationId,
+    });
+    return { request, verdict };
+  }, [searchParams, activeDestinationId]);
+
+  const [state, setState] = useState<TripSetupState>(() => ({
+    crossingCandidate:
+      handoff.verdict.compatible ? handoff.verdict.candidate : null,
+    destination:
+      handoff.verdict.compatible && handoff.request.destination
+        ? handoff.request.destination
+        : null,
     origin: null,
     travelMode: null,
     direction: null,
     accessType: null,
     documentType: null,
-  });
-  const [step, setStep] = useState<TripSetupStep>("destination");
+  }));
+  const [step, setStep] = useState<TripSetupStep>(() =>
+    handoff.verdict.compatible && handoff.request.destination ? "origin" : "destination"
+  );
+  const handoffCandidate =
+    handoff.verdict.compatible ? handoff.verdict.candidate : null;
+  const handoffRejection =
+    handoff.verdict.compatible === false ? handoff.verdict.reason : null;
 
   const progress = getStepProgress(state, step);
   const required = getRequiredSteps(state);
 
+  /** Write setup state to trip store — the commitment boundary. */
+  const commitSetupToStore = () => {
+    const store = useTripStore.getState();
+    const s = state;
+
+    if (s.destination) {
+      store.setDestination({
+        id: s.destination.id,
+        name: s.destination.name,
+        latitude: s.destination.lat,
+        longitude: s.destination.lng,
+        country: s.destination.country,
+        countryCode: s.destination.country,
+        type: "search",
+      });
+    }
+
+    if (s.origin) {
+      store.setStart({
+        id: s.origin.id,
+        name: s.origin.name,
+        latitude: s.origin.lat,
+        longitude: s.origin.lng,
+        country: s.origin.country,
+        countryCode: s.origin.country,
+        type: s.origin.id === "current-location" ? "current_location" : "search",
+      });
+    }
+
+    if (s.direction === "northbound") {
+      store.setDirection("MX_TO_US");
+    } else if (s.direction === "southbound") {
+      store.setDirection("US_TO_MX");
+    }
+
+    if (s.destination) {
+      const originCountry = s.origin?.country;
+      const destCountry = s.destination.country;
+      if (originCountry && originCountry !== destCountry) {
+        store.setTripType("cross_border");
+      } else {
+        store.setTripType("same_country");
+      }
+    }
+
+    // Wire trip context inputs for recommendation engine
+    store.setTravelMode(s.travelMode);
+    store.setAccessType(s.accessType);
+    store.setDocumentProfile(s.documentType);
+  };
+
   const goNext = () => {
     const next = getNextStep(state, step);
     if (next === "recommendation") {
+      commitSetupToStore();
       trackEvent("trip_setup_completed", { stepsCompleted: progress.current });
       router.push(`/${locale}/trip/recommendation`);
       return;
@@ -95,12 +177,29 @@ export function TripSetupFlow() {
         <TripSetupProgress current={progress.current} total={progress.total} />
       </div>
 
+      {handoffCandidate && (
+        <div className="px-4 sm:px-5 pt-4">
+          <p className="bg-cruze-mint/10 border border-cruze-mint/30 rounded-[var(--radius-md)] px-4 py-3 text-sm text-ink">
+            {t("trip.setup.handoffCandidate", { crossing: handoffCandidate.name })}
+          </p>
+        </div>
+      )}
+      {handoffRejection && (
+        <div className="px-4 sm:px-5 pt-4">
+          <p className="bg-caution/10 border border-caution/30 rounded-[var(--radius-md)] px-4 py-3 text-sm text-ink">
+            {handoffRejection === "active-trip-conflict"
+              ? t("trip.setup.handoffConflict")
+              : t("trip.setup.handoffUnknownCrossing")}
+          </p>
+        </div>
+      )}
+
       <div className="flex-1 px-4 sm:px-5 py-4 sm:py-6 w-full">
         {step === "destination" && (
           <TripSetupDestinationStep
             onSelect={(dest) => {
               setState((s) => ({ ...s, destination: dest }));
-              trackEvent("trip_setup_destination_selected", { destination: dest.label });
+              trackEvent("trip_setup_destination_selected", { destination: dest.name });
               setStep("origin");
             }}
           />
@@ -124,6 +223,7 @@ export function TripSetupFlow() {
               trackEvent("trip_setup_travel_mode_selected", { mode });
               const next = getNextStep(newState, "travelMode");
               if (next === "recommendation") {
+                commitSetupToStore();
                 router.push(`/${locale}/trip/recommendation`);
               } else if (next) {
                 setStep(next);
@@ -141,6 +241,7 @@ export function TripSetupFlow() {
               trackEvent("trip_setup_direction_selected", { direction: dir });
               const next = getNextStep(newState, "direction");
               if (next === "recommendation") {
+                commitSetupToStore();
                 router.push(`/${locale}/trip/recommendation`);
               } else if (next) {
                 setStep(next);
@@ -171,6 +272,7 @@ export function TripSetupFlow() {
             }}
             onSkip={() => {
               trackEvent("trip_setup_document_skipped");
+              commitSetupToStore();
               router.push(`/${locale}/trip/recommendation`);
             }}
           />
@@ -183,7 +285,7 @@ export function TripSetupFlow() {
           <button
             onClick={() => {
               if (state.origin) {
-                trackEvent("trip_setup_origin_selected", { origin: state.origin.label });
+                trackEvent("trip_setup_origin_selected", { origin: state.origin.name });
                 goNext();
               }
             }}
@@ -198,7 +300,10 @@ export function TripSetupFlow() {
       {step === "documentProfile" && state.documentType && (
         <div className="px-4 sm:px-5 pb-6 w-full">
           <button
-            onClick={() => router.push(`/${locale}/trip/recommendation`)}
+            onClick={() => {
+              commitSetupToStore();
+              router.push(`/${locale}/trip/recommendation`);
+            }}
             className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px]"
           >
             Ver recomendación

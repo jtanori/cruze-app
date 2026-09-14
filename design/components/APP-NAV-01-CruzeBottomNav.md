@@ -42,7 +42,7 @@ Label:     Text Secondary
 
 ## Tokens
 ```text
-Height:          80–96px + safe area
+Height:          68px + safe area (tightened per W7 polish; was 80–96px)
 Background:      Surface / translucent Midnight
 Top border:      1px #1F3A54
 Item width:      33.333%

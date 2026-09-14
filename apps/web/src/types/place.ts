@@ -41,6 +41,11 @@ export interface CrossingFacts {
   commercialAccess: boolean;
 }
 
+/**
+ * @deprecated Use `SelectedCrossing` from `@/lib/recommendation/types` for trip store,
+ * or `CrossingEntity` from `@/types` for crossing details display.
+ * This flat recommendation type is retained for onboarding mock engine compatibility only.
+ */
 export interface CrossingRecommendation {
   crossingId: string;
   crossingName: string;

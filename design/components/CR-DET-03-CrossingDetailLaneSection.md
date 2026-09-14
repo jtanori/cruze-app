@@ -1,5 +1,5 @@
 # CR-DET-03 — CrossingDetailLaneSection
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-07 — category qualifier; live-only rendering. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `CR-DET-03`
@@ -8,10 +8,10 @@
 CrossingDetailLaneSection
 
 ## Responsibility
-TIEMPOS POR CARRIL expandable
+TIEMPOS POR CARRIL expandable (live lane data only — hidden otherwise)
 
 ## Details
-Standard 11 Ready 7 SENTRI 3 mode-filtered.
+Rows always carry a category qualifier (`· Vehículo / A pie / Comercial`); lane data is side-agnostic (CBP reports one set), so directional grouping is forbidden — category is the discriminator. No two rendered rows share identical labels.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

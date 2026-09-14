@@ -1,7 +1,117 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCrossingsWithLiveData } from "@/lib/border-data-service";
+import { getCrossingsWithLiveData, type CrossingWithLiveData } from "@/lib/border-data-service";
 import { findCandidateCrossings } from "@/lib/border-data";
 import type { Place } from "@/types";
+
+interface RankedCrossing extends CrossingWithLiveData {
+  totalJourneyTime: number;
+  score: number;
+  reasonCode: string;
+  reasonData: Record<string, string | number>;
+}
+
+/** Filter crossings by travel mode eligibility */
+function isEligibleForTravelMode(
+  crossing: CrossingWithLiveData,
+  travelMode: string | null,
+): boolean {
+  if (!travelMode) return true;
+  if (travelMode === "walking") {
+    return crossing.lanes.some((l) => l.category === "pedestrian" && l.isOpen);
+  }
+  if (travelMode === "commercial") {
+    return crossing.lanes.some((l) => l.category === "commercial" && l.isOpen);
+  }
+  // privateVehicle — must have at least one open passenger lane
+  return crossing.lanes.some((l) => l.category === "passenger" && l.isOpen);
+}
+
+/** Filter crossings by access type compatibility */
+function isAccessCompatible(
+  crossing: CrossingWithLiveData,
+  accessType: string | null,
+): boolean {
+  if (!accessType || accessType === "unknown") return true;
+  if (accessType === "sentri") {
+    // SENTRI users can use any lane, but prefer SENTRI-equipped crossings
+    return true;
+  }
+  if (accessType === "readyLane") {
+    // Ready Lane users can use standard + Ready Lane
+    return true;
+  }
+  // standard — can use any open lane
+  return true;
+}
+
+/** Check if crossing has SENTRI lanes */
+function hasSentryLanes(crossing: CrossingWithLiveData): boolean {
+  return crossing.lanes.some((l) => l.name.toLowerCase().includes("sentri") && l.isOpen);
+}
+
+/** Check if crossing has Ready Lane */
+function hasReadyLane(crossing: CrossingWithLiveData): boolean {
+  return crossing.lanes.some((l) => l.name.toLowerCase().includes("ready") && l.isOpen);
+}
+
+/** Rank crossings and generate structured reasons */
+function rankCrossings(
+  candidates: CrossingWithLiveData[],
+  travelMode: string | null,
+  accessType: string | null,
+): RankedCrossing[] {
+  const eligible = candidates.filter((c) => {
+    if (c.status === "CLOSED") return false;
+    if (!isEligibleForTravelMode(c, travelMode)) return false;
+    if (!isAccessCompatible(c, accessType)) return false;
+    return true;
+  });
+
+  // If no eligible crossings, fall back to closed ones (user should know)
+  const pool = eligible.length > 0 ? eligible : candidates.filter((c) => c.status !== "CLOSED");
+  if (pool.length === 0) return candidates.slice(0, 3).map((c) => ({
+    ...c,
+    totalJourneyTime: c.waitTime + 30,
+    score: 0,
+    reasonCode: "only_option",
+    reasonData: {},
+  }));
+
+  return pool
+    .map((c) => {
+      const totalJourneyTime = c.waitTime + 30; // approach estimate
+      let score = 100 - c.waitTime; // base: lower wait = higher score
+      let reasonCode = "fastest_total_time";
+      const reasonData: Record<string, string | number> = {
+        deltaMinutes: 0,
+      };
+
+      // Access type bonus
+      if (accessType === "sentri" && hasSentryLanes(c)) {
+        score += 15;
+        reasonCode = "best_access_match";
+        reasonData.accessType = "sentri";
+      } else if (accessType === "readyLane" && hasReadyLane(c)) {
+        score += 10;
+        reasonCode = "best_access_match";
+        reasonData.accessType = "readyLane";
+      }
+
+      // Live data confidence bonus
+      if (c.isLive) {
+        score += 5;
+      }
+
+      return {
+        ...c,
+        totalJourneyTime,
+        score,
+        reasonCode,
+        reasonData,
+      };
+    })
+    .sort((a, b) => b.score - a.score);
+}
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -11,9 +121,12 @@ export async function GET(request: NextRequest) {
   const destLng = searchParams.get("destLng");
   const origin = searchParams.get("origin") ?? "Tijuana";
   const destination = searchParams.get("destination") ?? "San Diego";
+  const clientDirection = searchParams.get("direction");
+  const travelMode = searchParams.get("travelMode");
+  const accessType = searchParams.get("accessType");
+  const documentProfile = searchParams.get("documentProfile");
 
   try {
-    // If we have coordinates, use live candidate logic
     if (originLat && originLng && destLat && destLng) {
       const start: Place = {
         id: "origin",
@@ -32,30 +145,17 @@ export async function GET(request: NextRequest) {
         formattedAddress: destination,
       } as Place;
 
-      // Derive direction from country
-      const direction = start.country === "MX" && dest.country === "US" ? "MX_TO_US" : "US_TO_MX";
+      const direction = clientDirection ?? (start.country === "MX" && dest.country === "US" ? "MX_TO_US" : "US_TO_MX");
 
       const candidates = findCandidateCrossings(start, dest, direction as any);
       const liveData = await getCrossingsWithLiveData(direction as any);
-
       const liveById = new Map(liveData.map((c) => [c.id, c]));
 
-      const ranked = candidates
-        .map((c) => {
-          const live = liveById.get(c.id);
-          return {
-            crossingId: c.id,
-            crossingName: c.name,
-            mexicanCity: c.mexicanCity,
-            usCity: c.usCity,
-            waitTime: live?.waitTime ?? 20,
-            totalJourneyTime: (live?.waitTime ?? 20) + 30, // + approach estimate
-            status: (live?.status ?? "OPEN").toLowerCase() as "open" | "limited" | "closed",
-            generatedAt: live?.lastUpdated ?? new Date().toISOString(),
-            isLive: live?.isLive ?? false,
-          };
-        })
-        .sort((a, b) => a.waitTime - b.waitTime);
+      const enriched = candidates
+        .map((c) => liveById.get(c.id))
+        .filter((c): c is CrossingWithLiveData => c !== undefined);
+
+      const ranked = rankCrossings(enriched, travelMode, accessType);
 
       if (ranked.length === 0) {
         return NextResponse.json({ error: "No crossings found" }, { status: 404 });
@@ -63,45 +163,56 @@ export async function GET(request: NextRequest) {
 
       const primary = ranked[0];
       const alternatives = ranked.slice(1, 3).map((r) => ({
-        crossingId: r.crossingId,
-        crossingName: r.crossingName,
+        crossingId: r.id,
+        crossingName: r.name,
         mexicanCity: r.mexicanCity,
         usCity: r.usCity,
+        coordinates: r.coordinates,
         waitTime: r.waitTime,
         totalJourneyTime: r.totalJourneyTime,
         deltaMinutes: r.waitTime - primary.waitTime,
-        status: r.status,
-        generatedAt: r.generatedAt,
+        status: r.status.toLowerCase() as "open" | "limited" | "closed",
+        isLive: r.isLive,
+        generatedAt: r.lastUpdated ?? new Date().toISOString(),
       }));
-
-      const reasons = [
-        `Menor tiempo total (${primary.waitTime} min)`,
-        "Compatible con tu tipo de cruce",
-        primary.isLive ? "Datos en vivo" : "Datos estimados",
-      ];
 
       return NextResponse.json({
         primary: {
-          crossingName: primary.crossingName,
+          crossingName: primary.name,
           mexicanCity: primary.mexicanCity,
           usCity: primary.usCity,
+          coordinates: primary.coordinates,
           waitTime: primary.waitTime,
           totalJourneyTime: primary.totalJourneyTime,
           rank: "recommended" as const,
-          status: primary.status,
-          generatedAt: primary.generatedAt,
+          status: primary.status.toLowerCase() as "open" | "limited" | "closed",
+          generatedAt: primary.lastUpdated ?? new Date().toISOString(),
           isLive: primary.isLive,
-          crossingId: primary.crossingId,
+          crossingId: primary.id,
+          reasonCode: primary.reasonCode,
+          reasonData: primary.reasonData,
         },
-        reasons,
         alternatives,
+        context: {
+          originName: origin,
+          destinationName: destination,
+          originLat: parseFloat(originLat),
+          originLng: parseFloat(originLng),
+          destLat: parseFloat(destLat),
+          destLng: parseFloat(destLng),
+          direction,
+          ...(travelMode && { travelMode }),
+          ...(accessType && { accessType }),
+          ...(documentProfile && { documentProfile }),
+        },
         generatedAt: new Date().toISOString(),
       });
     }
 
-    // Fallback: generic live ranking without specific origin/dest (e.g. direct browse)
-    const liveData = await getCrossingsWithLiveData("MX_TO_US");
-    const ranked = [...liveData].sort((a, b) => a.waitTime - b.waitTime);
+    // Fallback: generic live ranking
+    const direction = clientDirection ?? "MX_TO_US";
+    const liveData = await getCrossingsWithLiveData(direction as any);
+    const ranked = rankCrossings(liveData, travelMode, accessType);
     const primary = ranked[0];
     if (!primary) {
       return NextResponse.json({ error: "No live data" }, { status: 500 });
@@ -111,10 +222,12 @@ export async function GET(request: NextRequest) {
       crossingName: r.name,
       mexicanCity: r.mexicanCity,
       usCity: r.usCity,
+      coordinates: r.coordinates,
       waitTime: r.waitTime,
-      totalJourneyTime: r.waitTime + 30,
+      totalJourneyTime: r.totalJourneyTime,
       deltaMinutes: r.waitTime - primary.waitTime,
       status: r.status.toLowerCase() as "open" | "limited" | "closed",
+      isLive: r.isLive,
       generatedAt: r.lastUpdated ?? new Date().toISOString(),
     }));
 
@@ -123,20 +236,30 @@ export async function GET(request: NextRequest) {
         crossingName: primary.name,
         mexicanCity: primary.mexicanCity,
         usCity: primary.usCity,
+        coordinates: primary.coordinates,
         waitTime: primary.waitTime,
-        totalJourneyTime: primary.waitTime + 30,
+        totalJourneyTime: primary.totalJourneyTime,
         rank: "recommended" as const,
         status: primary.status.toLowerCase() as "open" | "limited" | "closed",
         generatedAt: primary.lastUpdated ?? new Date().toISOString(),
         isLive: primary.isLive,
         crossingId: primary.id,
+        reasonCode: primary.reasonCode,
+        reasonData: primary.reasonData,
       },
-      reasons: [
-        `Menor tiempo total (${primary.waitTime} min)`,
-        "Compatible con tu tipo de cruce",
-        primary.isLive ? "Datos en vivo" : "Datos estimados",
-      ],
       alternatives,
+      context: {
+        originName: origin,
+        destinationName: destination,
+        originLat: 0,
+        originLng: 0,
+        destLat: 0,
+        destLng: 0,
+        direction,
+        ...(travelMode && { travelMode }),
+        ...(accessType && { accessType }),
+        ...(documentProfile && { documentProfile }),
+      },
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {

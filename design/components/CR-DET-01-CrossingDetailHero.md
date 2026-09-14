@@ -11,7 +11,7 @@ CrossingDetailHero
 Canonical header SAN LUIS
 
 ## Details
-Name + ☆ favorite + ●ABIERTO + wait + freshness. Variations trip vs directory.
+Name + ☆ favorite + status + wait + freshness (timestamp optional — omitted when unknown, never fabricated). `direction: northbound | southbound | both`; `both` renders NORTE + SUR side-by-side per W7 C03 ASCII (driven by `resolveDisplayDirection`: trip → contextual → both). Null waits render "—". Variations trip vs directory.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

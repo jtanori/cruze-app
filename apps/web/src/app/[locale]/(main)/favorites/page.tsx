@@ -6,7 +6,8 @@ import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/use-locale";
 import { Star } from "lucide-react";
 import { useFavoritesStore } from "@/stores/favorites";
-import { getMergedCrossingsData, type MergedCrossingData } from "@/lib/border-data-service";
+import { fetchMergedCrossings } from "@/lib/crossings";
+import type { MergedCrossingData } from "@/lib/border-data-service";
 
 export default function FavoritesPage() {
   const t = useTranslations();
@@ -20,7 +21,7 @@ export default function FavoritesPage() {
   useEffect(() => {
     async function loadCrossings() {
       setLoading(true);
-      const data = await getMergedCrossingsData();
+      const data = await fetchMergedCrossings();
       setCrossings(data);
       setLoading(false);
     }

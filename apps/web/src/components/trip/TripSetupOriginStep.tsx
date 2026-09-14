@@ -3,10 +3,11 @@
 import { MapPin, Navigation, Search } from "lucide-react";
 import { useState } from "react";
 import { useLocationContext } from "@/components/location/LocationProvider";
+import type { TripDestinationSelection } from "@/lib/trip-navigation";
 
 interface TripSetupOriginStepProps {
-  value?: { lat: number; lng: number; label: string } | null;
-  onSelect: (origin: { lat: number; lng: number; label: string }) => void;
+  value?: TripDestinationSelection | null;
+  onSelect: (origin: TripDestinationSelection) => void;
 }
 
 export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProps) {
@@ -16,7 +17,13 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
 
   const handleUseLocation = () => {
     if (location) {
-      onSelect({ lat: location.lat, lng: location.lng, label: "Mi ubicación actual" });
+      onSelect({
+        id: "current-location",
+        name: "Mi ubicación actual",
+        lat: location.lat,
+        lng: location.lng,
+        country: location.country === "MX" ? "MX" : "US",
+      });
     }
   };
 
@@ -31,7 +38,7 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
         <button
           onClick={handleUseLocation}
           className={`w-full flex items-center gap-3 px-4 py-4 border rounded-[var(--radius-lg)] transition-colors text-left ${
-            value?.label === "Mi ubicación actual"
+            value?.id === "current-location"
               ? "bg-cruze-mint/15 border-cruze-mint/40"
               : "bg-cruze-mint/10 border-cruze-mint/30 hover:bg-cruze-mint/15"
           }`}
@@ -67,9 +74,17 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
           </div>
           {query.length > 2 && (
             <button
-              onClick={() => onSelect({ lat: 32.5, lng: -117.0, label: query })}
+              onClick={() =>
+                onSelect({
+                  id: `manual-${query}`,
+                  name: query,
+                  lat: 32.5,
+                  lng: -117.0,
+                  country: "US",
+                })
+              }
               className={`w-full flex items-center gap-3 px-4 py-3 bg-surface border rounded-[var(--radius-lg)] transition-colors text-left ${
-                value?.label === query
+                value?.name === query
                   ? "border-cruze-mint/40 bg-cruze-mint/5"
                   : "border-border hover:border-cruze-mint/50"
               }`}

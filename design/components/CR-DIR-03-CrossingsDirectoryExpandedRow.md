@@ -11,7 +11,9 @@ CrossingsDirectoryExpandedRow
 Expanded row exposing lane info
 
 ## Details
-Lane, access, hours, services on expansion.
+Lane, access, hours, services on expansion — each section renders only with
+sourced data (empty sections hidden, never invented). "Ver detalle" action
+navigates to C03.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

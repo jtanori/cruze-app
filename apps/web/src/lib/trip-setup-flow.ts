@@ -1,3 +1,5 @@
+import type { TripDestinationSelection } from "./trip-navigation";
+
 export type TripSetupStep =
   | "destination"
   | "origin"
@@ -12,9 +14,33 @@ export type TripDirection = "northbound" | "southbound" | "unknown";
 export type AccessType = "standard" | "readyLane" | "sentri" | "unknown";
 export type DocumentType = "passport" | "visa" | "usCitizen" | "trustedTraveler" | "unknown";
 
+/**
+ * Crossing candidate resolved from C03/C04 handoff URL.
+ * This is a suggestion, not an instruction — the user can override it.
+ */
+export interface CrossingCandidate {
+  id: string;
+  name: string;
+}
+
+/**
+ * Trip setup workflow state — LOCAL, not persisted to the trip store.
+ *
+ * Lifecycle:
+ *   DRAFT / PLANNING = wizard open, local state (this type)
+ *   READY            = wizard complete, written to TripState
+ *   ACTIVE           = recommendation selected, trip persisted
+ *   COMPLETED        = trip finished
+ *
+ * `crossingCandidate` comes from C03/C04 URL handoff.
+ * `recommendedCrossing` comes from T07 recommendation engine.
+ * These are deliberately distinct — the candidate is input context,
+ * the recommendation is output.
+ */
 export interface TripSetupState {
-  destination: { lat: number; lng: number; label: string } | null;
-  origin: { lat: number; lng: number; label: string } | null;
+  crossingCandidate: CrossingCandidate | null;
+  destination: TripDestinationSelection | null;
+  origin: TripDestinationSelection | null;
   travelMode: TravelMode | null;
   direction: TripDirection | null;
   accessType: AccessType | null;

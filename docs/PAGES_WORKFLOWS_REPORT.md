@@ -16,18 +16,18 @@
 | 1 | L01 | Location Permission | `*inline gating*` (`components/location/LocationGate.tsx` → L01 state) | LocationPermissionGate (LOC-GATE-01), LocationPermissionPrompt (LOC-PROMPT-01), LocationStatusBanner (LOC-STATUS-01) | Button, Banner, DataStatus |
 | 2 | L02 | Location Acquisition | *inline* (`acquiring`) + `LocationAcquisitionDots` (LOC-ACQ-DOTS-01) | LocationAcquisitionState (LOC-ACQ-01), LocationAcquisitionDots (LOC-ACQ-DOTS-01) | Spinner, Stack |
 | 3 | L03 | Location Recovery | *inline* (`permission_denied`/`low_confidence`/timeout) | LocationRecoveryPanel (LOC-REC-01), LocationStatusBanner (LOC-STATUS-01), LocationSearchInput (LOC-SEARCH-01) | Button, Banner, DataStatus, SearchInput |
-| 4 | T01 | Trip Empty / Nearby Intelligence | `(main)/trip/page.tsx` | TripDestinationSearch (TR-EMPTY-01), TripNearbyCrossingsSection (TR-NEAR-01), TripNearbyCrossingRow (TR-NEAR-02), LocationStatusBanner (LOC-STATUS-01) | SearchInput, Button, Stack, Section, DataStatus, DataTimestamp, Badge, DataMetric |
+| 4 | T01 | Trip Empty / Nearby Intelligence | `(main)/trip/page.tsx` | TripHero (TR-HERO-01, eyebrow + title + body), TripDestinationSearch (TR-EMPTY-01 compound input, icon-only CTA, EE.UU. placeholder), TripNearbyCrossingsSection (TR-NEAR-01, stacked header), TripNearbyCrossingRow (TR-NEAR-02, single meta row, quiet container), LocationStatusBanner (LOC-STATUS-01) | SearchInput, Button, Stack, Section, DataStatus, DataTimestamp, Badge, DataMetric |
 | 5 | T02 | Trip Setup / Origin | `(main)/trip/setup` (TripSetupOriginStep) | TripSetupOriginStep, LocationConfidenceIndicator | Button, SearchInput, DataStatus |
 | 6 | T03 | Trip Setup / Travel Mode | `trip/setup` (TripSetupTravelModeStep) | TripSetupTravelModeStep | RadioGroup, Section, Stack |
 | 7 | DIR | Direction | `trip/setup` (TripSetupDirectionStep) | TripSetupDirectionStep, direction-detection | RadioGroup |
 | 8 | ACC | Vehicle Access | `trip/setup` (TripSetupVehicleAccessStep) | TripSetupVehicleAccessStep | RadioGroup |
 | 9 | DOC | Document Profile | `trip/setup` (TripSetupDocumentProfileStep) | TripSetupDocumentProfileStep | RadioGroup, Banner |
 | 10 | T07 | Recommendation | `trip/recommendation/page.tsx` | TripRecommendationPrimaryCard (TR-REC-01), TripRecommendationReasonList (TR-REC-02), TripAlternativeListSection (TR-REC-03/04) | DataMetric, DataDelta, Badge, Button, Section |
-| 11 | T08 | Active Trip | `(main)/trip/page.tsx` | TripStatusHeader, TripRouteSummary, TripActionBar (TR-ACT-03), TripChecklistSection (TR-ACT-04) | DataStatus, DataTimestamp, Button, Stack |
+| 11 | T08 | Active Trip | `(main)/trip/page.tsx` | TripStatusHeader, TripRouteSummary, TripActionBar (TR-ACT-03), TripChecklistSection (TR-ACT-04), TripStalePrompt (TR-ACT-05) | DataStatus, DataTimestamp, Button, Stack |
 | 12 | T10 | Completion | `trip/completion/page.tsx` | TripCompletionPrompt (TR-COMP-01) | Button, Section, Stack |
-| 13 | C01 | Crossings Directory | `(main)/crossings/page.tsx` | CrossingsDirectoryList, CrossingsDirectoryFilterBar (CR-DIR-05), CrossingsDirectoryRow (CR-DIR-02), CrossingsDirectoryExpandedRow (CR-DIR-03) | SearchInput, SegmentedControl, DataStatus, EmptyState |
-| 14 | C03 | Crossing Detail (canonical) | `crossing/[id]/page.tsx` | CrossingDetailHero (CR-DET-01), CrossingDetailMap (C05), CrossingDetailLaneSection (CR-DET-03), CrossingDetailAccessSection (CR-DET-04), CrossingDetailHoursSection (CR-DET-05), CrossingDetailRequirementsSection (CR-DET-06), CrossingDetailRestrictionsSection (CR-DET-07), CrossingDetailServicesSection (CR-DET-08), CrossingDetailActionBar (CR-DET-10) + CruzeBackHeader | DataStatus, DataTimestamp, DataMetric, Badge, Button |
-| 15 | C04 | Compare | *via* CrossingsCompareTable (C04) | CrossingsCompareTable (CMP) | DataMetric, DataDelta, Tab |
+| 13 | C01 | Crossings Directory | `(main)/crossings/page.tsx` | CrossingsDirectoryToolbar (CR-DIR-06, headerCompanion), CrossingsDirectoryFilterSheet (CR-DIR-05A, BottomSheet + fixed footer), CrossingsDirectorySummary/Sort (CR-DIR-07/08, total + NEAREST default), CrossingsDirectoryList (CR-DIR-01, presentational), CrossingsDirectoryRow (CR-DIR-02), CrossingsDirectoryExpandedRow (CR-DIR-03), CrossingsDirectoryLoadMoreState (CR-DIR-09) | SearchInput, BottomSheet, RadioGroup, DataStatus, EmptyState, ErrorState, Spinner |
+| 14 | C04 | Compare | `(main)/crossings/compare/page.tsx` | CrossingsCompareTable (CR-CMP-01, §31 rows + Mejor opción + compat filter), useCrossingsCompare | Table, Button, Section |
+| 15 | C03 | Crossing Detail (canonical) | `crossing/[id]/page.tsx` | CrossingDetailHero (CR-DET-01, optional timestamp, both-direction mode), CrossingDetailMap (C05), CrossingDetailLaneSection (CR-DET-03, live-only), CrossingDetailHoursSection (CR-DET-05, sourced-only), CrossingDetailActionBar (CR-DET-10, candidate handoff + Comparar) + CruzeBackHeader. Unknown → Desconocido/—/hidden sections; direction hierarchy trip → contextual → both. (CR-DET-04/06/07/08 kept for sourced-data future use, not rendered.) | DataStatus, DataTimestamp, Button |
 | 16 | C05 | Map | *via* CrossingDetailMap (C05) | CrossingDetailMap | Section, Stack |
 | 17 | A01 | Agent Welcome | `(main)/agent/page.tsx` → AgentChat → AgentWelcomeScreen | AgentWelcomeScreen (A01), AgentChat (A02) | Button, TextInput, Avatar, Spinner |
 | 18 | A02 | Agent Conversation | `(main)/agent/page.tsx` | AgentChat, AgentCrossingResult (AG-RESULT-01), AgentRecommendationResult (AG-RESULT-02), AgentTripAction (AG-RESULT-03), AgentChecklistResult (AG-RESULT-04) | Badge, DataMetric, Button |
@@ -103,7 +103,10 @@
 
 - `TripRecommendationPrimaryCard` → DataMetric, DataDelta, Badge, Button, Stack, Section
 - `TripChecklistSection` → Divider, Badge, Toggle, Stack
-- `CrossingsDirectoryRow` → DataStatus, DataTimestamp, Badge, Tab
+- `CrossingsDirectoryRow` → DataStatus, ChevronDown/Up, formatDuration (Norte/Sur waits, no invented freshness)
+- `CrossingsDirectoryToolbar` → SearchInput, SlidersHorizontal trigger + count badge (headerCompanion)
+- `CrossingsDirectoryFilterSheet` → BottomSheet (portal, scroll-lock) + RadioGroup + fixed footer (disabled until changed)
+- `BottomSheet` → portal to body, guaranteed width, scroll-lock, optional fixed footer toolbar
 - `LocationPermissionPrompt` → Button, IconButton, Stack, EmptyState
 - `AvisoRow` → Badge, DataTimestamp, Stack
 - Full per-component trace in `design/components/README.md` (83) + `design/COMPONENT-CATALOG.md` (primitives) + `src/components/primitives/` (33/33) — see also `design/workflows/W5_component_level_design_spec.md` §1-2 for tokens

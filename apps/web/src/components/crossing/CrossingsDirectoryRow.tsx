@@ -31,7 +31,7 @@ export function CrossingsDirectoryRow({
     <div className={`bg-surface border border-border rounded-[var(--radius-lg)] overflow-hidden ${className}`}>
       <button
         onClick={onToggle ?? onSelect}
-        className="w-full px-4 py-3 flex items-center justify-between text-left"
+        className="w-full px-4 py-2.5 flex items-center justify-between text-left"
       >
         <div className="min-w-0 flex-1">
           <p className="text-ink text-sm font-semibold truncate">{crossingName}</p>

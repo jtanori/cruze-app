@@ -9,44 +9,44 @@
 
 ``` text
 ┌────────────────────────────────────────────────────────┐
-│                                                        │
-│  🚗   San Ysidro                         11 min       │
-│       ● Abierto   Norte                2 min ago  →  │
-│                                                        │
+│  San Ysidro                                      11 min│
+│  ● Abierto  Norte                          Hace 2 min  │
 └────────────────────────────────────────────────────────┘
 ```
 
 ### Required information
 
 ``` text
-Crossing name
-Operational status
-Current wait
-Direction
-Freshness
+Row 1: crossing name (left, truncate) + wait (right, tabular)
+Row 2 (single line): status dot + label + direction + freshness (ml-auto)
 ```
+
+Status vocabulary: Operativo / Limitado / Cerrado / Desconocido (muted,
+non-semantic color; unknown is default, never coerced to open).
+Freshness short-form via shared `formatFreshness` ("Hace X min" / "Ahora").
+Container: bg-surface, border-subtle, rounded-xl (12px).
 
 Optional useful contextual metric:
 
 ``` text
-Estimated travel time from current location
+Estimated travel time from current location (omitted until route data exists)
 ```
 
 ### Tokens
 
 ``` text
-Surface:             transparent / Surface
-Border:              1px #1F3A54
-Radius:               8px
-Padding:             16px
-Name:                Sora 18–20px / 700
-Wait:                Sora 28–32px / 600–700
-Open:                Cruze Mint
-Limited:             Amber
-Closed:              Alert Red
+Surface:             Surface
+Border:              1px #1F3A54 (subtle variant)
+Radius:               12px (rounded-xl)
+Padding:             12px
+Name:                Inter 14px / 600
+Wait:                Inter 14px / 600 tabular
+Operativo:           Cruze Mint
+Limitado:            Amber
+Cerrado:             Alert Red
+Desconocido:         Muted (non-semantic)
 Direction:           Text Secondary
 Freshness:           Text Secondary
-Chevron:             Text Secondary
 ```
 
 ### Do not include

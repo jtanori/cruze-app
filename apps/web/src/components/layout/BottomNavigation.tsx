@@ -41,7 +41,7 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
             <button
               key={dest.id}
               onClick={() => onSelect(dest.id)}
-              className="relative flex-1 flex flex-col items-center justify-center gap-1 transition-colors"
+              className="relative flex-1 flex flex-col items-center justify-center gap-0.5 py-1 transition-colors"
               role="tab"
               aria-selected={isActive}
               aria-label={dest.label}
@@ -54,7 +54,7 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
               {/* Icon */}
               <span className="relative">
                 <Icon
-                  className={`w-[22px] h-[22px] transition-colors ${
+                  className={`w-5 h-5 transition-colors ${
                     isActive ? "text-cruze-green" : "text-faint"
                   }`}
                   strokeWidth={isActive ? 2 : 1.5}

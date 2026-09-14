@@ -7,7 +7,7 @@
   - Covers 55+ US-Mexico crossings
    - 5min cache for production, 30s for development
   - Single source: border-data.ts (42 ports) + border-data-service.ts (live CBP merge, no inline mock)
-  - Route: GET /api/crossings?direction=MX_TO_US
+  - Route: GET /api/crossings (W7 §34: scope/mode/status/search/sort/direction/cursor/limit/lat/lng)
   - Route: GET /api/crossings/[id] for single crossing detail
 
   DATA TRANSFORMATION:
@@ -23,63 +23,62 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// GET /api/crossings - List crossings with live CBP data via border-data-service (42 ports, no mock)
+// GET /api/crossings - W7 §34 query contract. Thin: fetch live data,
+// adapt, delegate filter/rank/sort/paginate to lib/crossings-query.
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const direction = (searchParams.get("direction") as "MX_TO_US" | "US_TO_MX" | undefined) ?? "MX_TO_US";
-    const lat = searchParams.get("lat") ? parseFloat(searchParams.get("lat")!) : undefined;
-    const lng = searchParams.get("lng") ? parseFloat(searchParams.get("lng")!) : undefined;
+    const { parseCrossingsQuery, applyCrossingsQuery } = await import(
+      "@/lib/crossings-query"
+    );
+    const query = parseCrossingsQuery(searchParams);
 
-    const { getCrossingsWithLiveData } = await import("@/lib/border-data-service");
-    const liveCrossings = await getCrossingsWithLiveData(direction);
-    let crossings: any[] = liveCrossings.map((c) => ({
+    const { getMergedCrossingsData } = await import("@/lib/border-data-service");
+    const mergedCrossings = await getMergedCrossingsData();
+    const northbound = query.direction === "MX_TO_US";
+    const rankable = mergedCrossings.map((c) => ({
       id: c.id,
       name: c.name,
+      mexicanCity: c.mexicanCity,
+      usCity: c.usCity,
+      status: northbound ? c.statusNorthbound : c.statusSouthbound,
+      waitTime: northbound ? c.waitTimeNorthbound : c.waitTimeSouthbound,
+      lastUpdated: c.lastUpdated,
+      laneCategories: (northbound ? c.lanesNorthbound : c.lanesSouthbound).map(
+        (l) => l.category
+      ),
+      coordinates: c.coordinates,
+      // Both sides for directory rows + compat payload.
+      waitTimeNorthbound: c.waitTimeNorthbound,
+      waitTimeSouthbound: c.waitTimeSouthbound,
+      statusNorthbound: c.statusNorthbound,
+      statusSouthbound: c.statusSouthbound,
+      isLive: c.isLive,
+      hours: c.hours,
       cityOrigin: c.mexicanCity,
       cityDestination: c.usCity,
-      direction,
-      status: c.status,
+      direction: query.direction,
       is24Hours: true,
       operatingHoursText: c.hours,
-      waitTime: c.waitTime,
-      isLive: c.isLive,
-      lastUpdated: c.lastUpdated,
-      coordinates: c.coordinates,
-      lanes: c.lanes,
-      dominantWaitMinutes: c.waitTime,
-      typicalWaitMinutes: c.waitTime,
+      lanes: northbound ? c.lanesNorthbound : c.lanesSouthbound,
+      dominantWaitMinutes: northbound ? c.waitTimeNorthbound : c.waitTimeSouthbound,
+      typicalWaitMinutes: northbound ? c.waitTimeNorthbound : c.waitTimeSouthbound,
     }));
-    if (lat !== undefined && lng !== undefined) {
-      const { haversineDistance } = await import("@/lib/border-data");
-      crossings = crossings
-        .map((c: any) => ({ ...c, distanceKm: haversineDistance({ lat, lng }, c.coordinates) }))
-        .sort((a: any, b: any) => a.distanceKm - b.distanceKm);
-    } else {
-      const statusOrder: Record<string, number> = { OPEN: 0, LIMITED: 1, CLOSED: 2 };
-      crossings.sort((a, b) => (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99));
-    }
-    return NextResponse.json({ crossings, cacheTtl: 300, isLive: crossings.some((c: any) => c.isLive) });
+    const result = applyCrossingsQuery(rankable, query);
+    return NextResponse.json({
+      crossings: result.items,
+      total: result.total,
+      nextCursor: result.nextCursor,
+      hasMore: result.hasMore,
+      scope: result.scope,
+      cacheTtl: 300,
+      isLive: result.items.some((c) => c.isLive),
+    });
   } catch (error) {
     console.error("CBP API error:", error);
-    return NextResponse.json({ crossings: [], error: "Failed to fetch crossings" }, { status: 500 });
-  }
-}
-
-// GET /api/crossings/[id] - Single crossing detail (live, via border-data-service)
-async function GET_DETAIL(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const { getCrossingWithLiveData } = await import("@/lib/border-data-service");
-    const crossing = await getCrossingWithLiveData(params.id);
-    if (!crossing) {
-      return NextResponse.json({ error: "Crossing not found" }, { status: 404 });
-    }
-    return NextResponse.json({ crossing, cacheTtl: 300 });
-  } catch (error) {
-    console.error("Error fetching crossing:", error);
-    return NextResponse.json({ error: "Failed to fetch crossing detail" }, { status: 500 });
+    return NextResponse.json(
+      { crossings: [], total: 0, nextCursor: null, hasMore: false, error: "Failed to fetch crossings" },
+      { status: 500 }
+    );
   }
 }

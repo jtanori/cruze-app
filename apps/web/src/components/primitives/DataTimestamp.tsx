@@ -9,8 +9,8 @@ interface FreshnessConfig {
 }
 
 const freshnessConfig: Record<FreshnessState, FreshnessConfig> = {
-  live: { label: "Datos en vivo", color: "text-success", iconColor: "text-success" },
-  recent: { label: "Datos recientes", color: "text-muted", iconColor: "text-muted" },
+  live: { label: "Ahora", color: "text-success", iconColor: "text-success" },
+  recent: { label: "", color: "text-muted", iconColor: "text-muted" },
   stale: { label: "Datos desactualizados", color: "text-warning", iconColor: "text-warning" },
   very_stale: { label: "Datos muy antiguos", color: "text-danger", iconColor: "text-danger" },
   unavailable: { label: "Sin datos", color: "text-muted", iconColor: "text-muted" },
@@ -32,39 +32,22 @@ function getFreshness(timestamp: string | Date | null): FreshnessState {
 
 interface DataTimestampProps {
   timestamp: string | Date | null;
-  variant?: "compact" | "verbose";
   showLabel?: boolean;
   className?: string;
 }
 
 export function DataTimestamp({
   timestamp,
-  variant = "compact",
   showLabel = true,
   className = "",
 }: DataTimestampProps) {
   const freshness = getFreshness(timestamp);
   const config = freshnessConfig[freshness];
 
-  const formatCompact = (d: Date) => {
-    const h = d.getHours().toString().padStart(2, "0");
-    const m = d.getMinutes().toString().padStart(2, "0");
-    return `${h}:${m}`;
-  };
-
-  const formatVerbose = (d: Date) => {
-    return d.toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    });
-  };
-
   const formatRelative = (d: Date) => {
     const diffMs = Date.now() - d.getTime();
     const diffMin = Math.floor(diffMs / 60000);
-    if (diffMin < 1) return "Hace menos de 1 min";
+    if (diffMin < 1) return "Ahora";
     if (diffMin === 1) return "Hace 1 min";
     if (diffMin < 60) return `Hace ${diffMin} min`;
     const diffH = Math.floor(diffMin / 60);
@@ -74,17 +57,18 @@ export function DataTimestamp({
 
   const date = timestamp ? (typeof timestamp === "string" ? new Date(timestamp) : timestamp) : null;
   const relativeText = date ? formatRelative(date) : "";
-  const clockText = date
-    ? variant === "compact"
-      ? formatCompact(date)
-      : formatVerbose(date)
-    : "";
 
+  // Normalized vocabulary: live/recent show relative time only
+  // ("Ahora", "Hace X min"); stale+ show their status label only.
+  // No "en vivo" anywhere; freshness never implies liveness.
+  const showRelativeOnly = freshness === "live" || freshness === "recent";
   return (
     <span className={`inline-flex items-center gap-1.5 text-xs ${config.color} ${className}`}>
       <Clock className={`w-3.5 h-3.5 ${config.iconColor}`} />
-      {showLabel && <span className="font-medium">{config.label}</span>}
-      <span>{relativeText || clockText}</span>
+      {showLabel && !showRelativeOnly && (
+        <span className="font-medium">{config.label}</span>
+      )}
+      {showRelativeOnly && <span>{relativeText}</span>}
     </span>
   );
 }

@@ -19,9 +19,6 @@ describe("trip-lifecycle", () => {
     machine.dispatch("ACTIVATE");
     expect(machine.getState()).toBe("active");
     
-    machine.dispatch("ARRIVE_AT_BORDER");
-    expect(machine.getState()).toBe("at_border");
-    
     machine.dispatch("COMPLETE");
     expect(machine.getState()).toBe("completed");
   });
@@ -42,7 +39,6 @@ describe("trip-lifecycle", () => {
     machine.dispatch("START_PLANNING");
     machine.dispatch("COMPLETE_SETUP");
     machine.dispatch("ACTIVATE");
-    machine.dispatch("ARRIVE_AT_BORDER");
     machine.dispatch("COMPLETE");
     expect(machine.isCompleted()).toBe(true);
   });
@@ -52,7 +48,6 @@ describe("trip-lifecycle", () => {
     expect(isEligibleForMyTrips("planning")).toBe(false);
     expect(isEligibleForMyTrips("ready")).toBe(false);
     expect(isEligibleForMyTrips("active")).toBe(false);
-    expect(isEligibleForMyTrips("at_border")).toBe(false);
     expect(isEligibleForMyTrips("completed")).toBe(true);
   });
 });

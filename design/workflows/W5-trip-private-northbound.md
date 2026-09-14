@@ -1,5 +1,5 @@
 # CRUZE — W5 Workflow Specification
-**Version:** 1.1 — 2026-09-04 — W5 canon 1.1 (radii 4/8/12/16/20, nav 56/80+safe). If version differs, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11` + `docs/TESTING_TOOLS.md`.
+**Version:** 1.2 — 2026-09-07 — W5 canon 1.1 (radii 4/8/12/16/20, nav 56/68+safe); T01 without eyebrow/full CTA/helper; short freshness strings. If version differs, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11` + `docs/TESTING_TOOLS.md`.
 
 ## Trip Setup — Private Vehicle Northbound (MX → US)
 
@@ -54,10 +54,9 @@ The workflow should therefore never ask for information that does not materially
 ┌─────────────────────────────────────────────────────────────────────┐
 │ T01 — VIAJE                                                         │
 │                                                                     │
-│  TU VIAJE                                                           │
-│  ¿A dónde vas?                                                     │
+│  ¿A dónde vas? (TR-HERO-01, no eyebrow)                            │
 │                                                                     │
-│  [ Buscar destino en EE.UU... ]                                    │
+│  [ Buscar destino en EE.UU...  (→) ]  ← icon-only CTA              │
 │                                                                     │
 │  ───────────────────────────────────────────────────────────────    │
 │                                                                     │
@@ -66,12 +65,12 @@ The workflow should therefore never ask for information that does not materially
 │                                                                     │
 │  ┌─────────────────────────────────────────────────────────────┐   │
 │  │ San Ysidro                               11 min             │   │
-│  │ ● Abierto · Norte · Actualizado hace 2 min              → │   │
+│  │ ● Operativo · Norte · Hace 2 min                        │   │
 │  └─────────────────────────────────────────────────────────────┘   │
 │                                                                     │
 │  ┌─────────────────────────────────────────────────────────────┐   │
-│  │ Otay Mesa                               25 min              │   │
-│  │ ● Limitado · Norte · Actualizado hace 3 min              → │   │
+│  │ Otay Mesa                               25 min             │   │
+│  │ ● Limitado · Norte · Hace 3 min                         │   │
 │  └─────────────────────────────────────────────────────────────┘   │
 │                                                                     │
 │                       Ver todos los cruces →                        │
@@ -209,27 +208,21 @@ The key architectural correction is **step 4**: direction does not need to consu
 │ ✓ Ubicación establecida                      │
 │   Tijuana, BC                                │
 │                                              │
-│ TU VIAJE                                     │
-│                                              │
-│ ¿A dónde vas?                                │
+│ ¿A dónde vas? (no eyebrow)                   │
 │                                              │
 │ Busca tu destino para recibir                │
 │ inteligencia personalizada para tu cruce.    │
 │                                              │
 │ ┌──────────────────────────────────────────┐ │
-│ │ 🔍  Buscar destino en EE.UU...          │ │
+│ │ 🔍  Buscar destino en EE.UU...      (→) │ │
 │ └──────────────────────────────────────────┘ │
 │                                              │
-│ ┌──────────────────────────────────────────┐ │
-│ │              Siguiente →                 │ │
-│ └──────────────────────────────────────────┘ │
-│                                              │
-│ CERCA DE TI                         Ver todos │
-│ Cruces relevantes ahora                     │
+│ CERCA DE TI                                  │
+│ Cruces relevantes ahora                      │
 │                                              │
 │ ┌──────────────────────────────────────────┐ │
-│ │ 🚗  San Ysidro                 11 min    │ │
-│ │     ● Abierto · Norte · Actualizado 2m │ │
+│ │ San Ysidro                      11 min   │ │
+│ │ ● Operativo · Norte · Hace 2 min       │ │
 │ └──────────────────────────────────────────┘ │
 │                                              │
 │ ┌──────────────────────────────────────────┐ │
@@ -255,6 +248,7 @@ APP-HEAD-01   CruzeAppHeader
 APP-AV-01     CruzeNotificationButton
 APP-SET-01    CruzeSettingsButton
 LOC-STATUS-01 LocationStatusBanner
+TR-HERO-01    TripHero
 TR-EMPTY-01   TripDestinationSearch
 TR-NEAR-01    TripNearbyCrossingsSection
 TR-NEAR-02    TripNearbyCrossingRow

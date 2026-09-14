@@ -9,6 +9,7 @@ import { useLocationContext } from "@/components/location/LocationProvider";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/hooks/use-locale";
 import { useTripStore } from "@/stores/trip";
+import { HeaderCompanionProvider, useHeaderCompanion } from "@/components/layout/HeaderCompanionContext";
 
 function getHeaderVariant(pathname: string): "root" | "search" | "filter" {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
@@ -18,17 +19,26 @@ function getHeaderVariant(pathname: string): "root" | "search" | "filter" {
   return "root";
 }
 
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function getHeaderTitle(pathname: string): string | undefined {
+  const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
+  if (path.startsWith("/crossings")) return "CRUCES";
+  if (path.startsWith("/trip")) return undefined;
+  if (path.startsWith("/agent")) return "AGENTE";
+  if (path.startsWith("/favorites")) return "FAVORITOS";
+  if (path.startsWith("/alerts")) return "AVISOS";
+  return undefined;
+}
+
+function MainLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const locale = useLocale();
   const { start, destination } = useTripStore();
   const { status, reason } = useLocationContext();
+  const { headerCompanion, headerTitle: companionTitle } = useHeaderCompanion();
 
   const headerVariant = getHeaderVariant(pathname ?? "");
+  const routeTitle = getHeaderTitle(pathname ?? "");
+  const headerTitle = companionTitle ?? routeTitle;
   const hasTrip = start !== null && destination !== null;
 
   const tripActions = hasTrip ? {
@@ -80,9 +90,23 @@ export default function MainLayout({
   return (
     <AppShell
       headerVariant={headerVariant}
+      headerTitle={headerTitle}
+      headerCompanion={headerCompanion}
       tripActions={tripActions}
     >
       {content}
     </AppShell>
+  );
+}
+
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <HeaderCompanionProvider>
+      <MainLayoutInner>{children}</MainLayoutInner>
+    </HeaderCompanionProvider>
   );
 }

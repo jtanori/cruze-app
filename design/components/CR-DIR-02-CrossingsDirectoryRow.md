@@ -12,6 +12,10 @@ Compact directory row
 
 ## Details
 Name + Status + North Wait + South Wait decision-critical only.
+Layout: name left, Norte/Sur waits right, chevron; button row `px-4 py-2.5`
+(~8px tighter than v1.1). Status via DataStatus (es labels:
+Operativo/Limitado/Cerrado/Desconocido). No invented freshness on rows —
+freshness lives in detail/compare surfaces.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

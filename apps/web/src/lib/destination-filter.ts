@@ -58,14 +58,18 @@ export function getTargetDestinationCountry(userCountry: Country): Country {
 }
 
 /**
- * Filter places by target destination country
+ * Filter places by target destination country.
+ * A known country filters to the opposite side; UNKNOWN (or absent)
+ * returns candidates unfiltered — never invent a side.
  */
 export function filterDestinationsByCountry(
   places: Place[],
   userLat: number,
-  userLng: number
+  userLng: number,
+  knownCountry?: Country | "UNKNOWN" | null
 ): Place[] {
-  const userCountry = detectUserCountry(userLat, userLng);
+  const userCountry = knownCountry ?? detectUserCountry(userLat, userLng);
+  if (userCountry === "UNKNOWN") return places;
   const targetCountry = getTargetDestinationCountry(userCountry);
 
   return places.filter((place) => place.country === targetCountry);

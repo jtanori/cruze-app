@@ -132,8 +132,10 @@ TripRecommendationPrimaryCard
 
 ```text
 ┌─────────────────────────────────────────────────────────┐
-│ [APP-HEAD-01] CRUZE                    [APP-AV-01] 🔔  │
-│                                          [APP-SET-01] ⚙ │
+│ [APP-HEAD-01] CRUZE      CRUCES        [APP-AV-01] 🔔  │
+│     (left 30%)        (centered)         [APP-SET-01] ⚙ │
+├─────────────────────────────────────────────────────────┤
+│ [APP-COMPANION-01] search / filter companion (per-page) │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │                    PAGE CONTENT                         │
@@ -143,14 +145,24 @@ TripRecommendationPrimaryCard
 └─────────────────────────────────────────────────────────┘
 ```
 
+Header zones: left (brand/back, 30%), center (route title, viewport-centered
+via measured equal side widths — ResizeObserver takes max(left, right)),
+right (actions/helpers, 30%). The notification badge stays owned by
+`APP-AV-01`; it never moves into the title zone. Route titles: CRUCES /
+AGENTE / FAVORITOS / AVISOS; Trip shows brand only. `headerCompanion`
+(`HeaderCompanionContext`) lets a page portal fixed chrome under the header
+(C01 portals its search/filter toolbar there); AppShell offsets content
+accordingly (+64px).
+
 ## Global components
 
 | Ref | Component | Source name |
 |---|---|---|
-| `APP-HEAD-01` | Application header | `CruzeAppHeader` |
-| `APP-AV-01` | Avisos trigger | `CruzeNotificationButton` |
+| `APP-HEAD-01` | Application header | `CruzeAppHeader` (`TopAppBar`: 3-zone, measured centering) |
+| `APP-AV-01` | Avisos trigger | `CruzeNotificationButton` (owns unread badge) |
 | `APP-SET-01` | Settings trigger | `CruzeSettingsButton` |
-| `APP-NAV-01` | Primary navigation | `CruzeBottomNav` |
+| `APP-COMPANION-01` | Header companion slot | `HeaderCompanionContext` (per-page fixed chrome) |
+| `APP-NAV-01` | Primary navigation | `CruzeBottomNav` (68px) |
 | `APP-LIVE-01` | Global/live indicator | `CruzeLiveIndicator` |
 | `APP-PAGE-01` | Page header | `CruzePageHeader` |
 | `APP-BACK-01` | Back navigation | `CruzeBackHeader` |
@@ -239,6 +251,7 @@ L03 — Location Recovery with Manual Search:
 TRIP
 │
 ├── Empty
+│   ├── TR-HERO-01 TripHero
 │   ├── TR-EMPTY-01 TripDestinationSearch
 │   └── TR-NEAR-01 TripNearbyCrossingsSection
 │
@@ -263,10 +276,83 @@ TRIP
 │   ├── TR-ACT-01 TripStatusHeader
 │   ├── TR-ACT-02 TripRouteSummary
 │   ├── TR-ACT-03 TripActionBar
-│   └── TR-ACT-04 TripChecklistSection
+│   ├── TR-ACT-04 TripChecklistSection
+│   └── TR-ACT-05 TripStalePrompt
 │
 └── Completion
     └── TR-COMP-01 TripCompletionPrompt
+```
+
+# 6b. Architecture Registry — Domain Hooks & Services
+
+UI components live in the catalogs above. Implementation utilities live here.
+
+```text
+DOMAIN — location (Mapbox is the authority; geometry never guesses)
+├── resolveCountryFromCoordinates(lat, lng)   pure fallback: exclusive boxes → MX/US;
+│                                             overlap/out-of-bounds → UNKNOWN
+├── resolveUserCountry(lat, lng, geocoded?)   precedence: geocoded (HIGH) → coordinates (MEDIUM) → UNKNOWN (LOW)
+├── geocoding country params (strict)         forward search filters to target side; reverse constrains mx,us
+└── contextualDirectionForCountry(country)    T01 contextual direction (UNKNOWN → null, unfiltered)
+UNKNOWN consumer contract: TopBar badge hidden · search unfiltered + generic copy ·
+  hero generic body · nearby omits direction (API default applies)
+
+FOLLOW-UP REVISIONS (post Phase G)
+R1 — service-layer honesty: mergeWithCBPData/getMergedCrossingsData null-paths
+  return UNKNOWN + null waits/hours (delete FALLBACK_WAIT_TIMES); lands with
+  the Phase E backend migration; acceptance: no || "OPEN" / || 20 /
+  || "Open 24 hours" remains.
+R2 — C01 location-gate wiring: denied/unavailable → inline recovery;
+  MX/US → default "Cerca de ti"; UNKNOWN → explicit "Toda la frontera";
+  scope flows into the §34 query. Lands after the toolbar rebuild.
+
+FOUR SEPARATE CONCEPTS (never collapse):
+  location availability (hook state: acquiring/ready/denied…) — gates recovery UI
+  country resolution (MX/US/UNKNOWN + confidence) — gates contextual defaults
+  operational state (OPEN/LIMITED/CLOSED/UNKNOWN) — per crossing, data-driven
+  freshness (timestamp or nothing) — per value, never invented
+UNKNOWN country → explicit unfiltered scope ("Toda la frontera");
+  never manufacture "Cerca de ti" without resolved country semantics.
+Direction hierarchy: trip direction → contextualDirectionForCountry → null (both).
+
+DOMAIN — trip
+├── useNearbyCrossings(location)              candidates → normalize → rank → 2–3 (+ contextual direction)
+├── useTripStaleness()                        trip-lifecycle staleness only (never crossing freshness)
+├── isTripStale(lastEvaluatedAt)              pure lifecycle predicate
+├── buildSetupUrl() / buildMapsUrl()          pure navigation builders
+├── mapPlaceToDestination(place)              Mapbox Place → domain destination
+└── trip-handoff (?dest=/?crossing=)          parse → resolve candidate → compat guard;
+                                              crossing is CANDIDATE, never silent overwrite
+
+DOMAIN — crossings
+├── NETWORK RULE: browser fetches crossing data only via /api/*.
+│   Direct bwt.cbp.gov calls live server-side only (border-data-service,
+│   consumed by API routes). No exceptions.
+├── fetchMergedCrossings()                    client choke point → GET /api/crossings/merged
+│                                             (full dataset, both directions; favorites/alerts/
+│                                             agent/intelligence/detail all use this)
+├── normalizeCrossings(items)                 typed API normalization (no any-casts)
+├── rankCrossings(list)                       INTERIM relevance rank until backend ranks
+├── compareCrossings(inputs, opts)            C04: viaje/distancia/winner/compat (pure, tested)
+├── formatFreshness(ts, t)                    shared short-form freshness (single source)
+├── buildCrossingSharePayload(input)          C03 ↗: omission-safe snapshot (unknown→explicit line,
+│                                             missing waits/freshness omitted; locale-aware URL)
+└── agent pendingContext (NON-PERSISTED)      C03→Agent one-shot handoff: set → navigate →
+                                              consume → clear. Direct launches never inherit.
+├── useCrossingsCompare(ids, …)               C04 data owner (origin: trip → location)
+├── parseCrossingsQuery(params)               W7 §34: validated scope/mode/status/search/sort/
+│                                             direction/cursor/limit (+lat/lng); safe defaults
+├── applyCrossingsQuery(items, query)         server filter/rank/sort/paginate → items/total/
+│                                             nextCursor/hasMore/scope (NEARBY w/o coords → ALL)
+└── useCrossingsDirectory(…)                  C01 data owner (debounced search, cursor append)
+
+QUERY CONTRACT (W7 §34, implemented in /api/crossings):
+  scope: NEARBY (needs lat/lng) | MX | US | ALL — scopes label, never exclude (all POEs binational)
+  sort: RELEVANCE (status → wait → freshness → distance) | FASTEST | NEAREST | NAME
+  mode/status filters pass through unknown data (absence ≠ incompatibility)
+  cursor: offset-based; limit default 10, max 50; directory sort default NEAREST
+  response: { crossings (compat slice), total, nextCursor, hasMore, scope }
+  R1 PENDING: manufactured OPEN/fallback waits still flow from border-data-service.
 ```
 
 ---
@@ -277,11 +363,16 @@ TRIP
 CROSSINGS
 │
 ├── Directory
-│   ├── CR-DIR-01 CrossingsDirectoryList
-│   ├── CR-DIR-02 CrossingsDirectoryRow
-│   ├── CR-DIR-03 CrossingsDirectoryExpandedRow
-│   ├── CR-DIR-04 CrossingsDirectorySearchInput
-│   └── CR-DIR-05 CrossingsDirectoryFilterBar
+│   ├── CR-DIR-01 CrossingsDirectoryList (presentational; data via useCrossingsDirectory)
+│   ├── CR-DIR-02 CrossingsDirectoryRow (name + Norte/Sur waits + chevron, py-2.5)
+│   ├── CR-DIR-03 CrossingsDirectoryExpandedRow (lanes/hours/services conditional)
+│   ├── CR-DIR-04 CrossingsDirectorySearchInput (h-11, native clear hidden)
+│   ├── CR-DIR-06 CrossingsDirectoryToolbar (search + ≡ trigger w/ count badge)
+│   ├── CR-DIR-05A CrossingsDirectoryFilterSheet (BottomSheet + draft RadioGroups + fixed Aplicar footer)
+│   ├── CR-DIR-07 CrossingsDirectorySummary (total + scope copy)
+│   ├── CR-DIR-08 SortControl (compact select, default NEAREST: Más cercanos first)
+│   └── CR-DIR-09 CrossingsDirectoryLoadMoreState (Cargar más / spinner)
+│   └── (removed) CR-DIR-05 CrossingsDirectoryFilterBar — superseded by 05A sheet
 │
 ├── Status
 │   ├── CR-STATUS-01 CrossingStatusBadge
@@ -429,14 +520,14 @@ SETTINGS
 
 | Page | Components | Required | Conditional |
 |---|---|---|---|
-| `T01` | `TR-EMPTY-01` (DestinationSearch), `TR-NEAR-01`, `TR-NEAR-02`, `LOC-STATUS-01` | Destination search, nearby preview | Last trip |
+| `T01` | `TR-HERO-01`, `TR-EMPTY-01` (DestinationSearch), `TR-NEAR-01`, `TR-NEAR-02`, `LOC-STATUS-01` | Hero + destination search, nearby preview | Last trip |
 | `T02` | `APP-BACK-01`, `TR-SETUP-01`, `TR-SETUP-02` | Destination input | Recent destinations |
 | `T03` | `APP-BACK-01`, `TR-SETUP-01`, `TR-SETUP-03` | Origin | Current location |
 | `T04` | `APP-BACK-01`, `TR-SETUP-01`, `TR-SETUP-04` | Travel modes | Profile shortcut |
 | `T05` | `APP-BACK-01`, `TR-SETUP-05` | Access selection | Help |
 | `T06` | `APP-BACK-01`, `TR-SETUP-06` | Document categories | Skip |
 | `T07` | `TR-REC-01`, `TR-REC-02`, `TR-REC-03`, `TR-REC-04` | Recommendation | Compare |
-| `T08` | `TR-ACT-01..04` | Trip status, route, action, checklist | Aviso banner |
+| `T08` | `TR-ACT-01..05` | Trip status, route, action, checklist, stale prompt | Aviso banner |
 | `T09` | `TR-SETUP-*` | Relevant editable fields | Reset |
 | `T10` | `TR-COMP-01` | Completion | Save |
 
@@ -446,7 +537,7 @@ SETTINGS
 
 | Page | Components | Required | Conditional |
 |---|---|---|---|
-| `C01` | `CR-DIR-01..05`, `CR-STATUS-*` | Search, filter, rows | Expansion |
+| `C01` | `CR-DIR-01..04`, `CR-DIR-06`, `CR-DIR-05A`, `CR-DIR-07..09`, `CR-STATUS-*` | Toolbar + sheet + summary/sort, rows | Expansion |
 | `C02` | `CR-DIR-04`, `CR-DIR-05` | Search/filter | Sort |
 | `C03` | `CR-DET-01..10` | Hero, status, wait, actions | Detail sections |
 | `C04` | `CR-CMP-01` | Comparison | Compatibility filter |
@@ -521,38 +612,35 @@ SETTINGS
 
 ```text
 ┌─────────────────────────────────────┐
-│ [APP-HEAD-01] CRUZE       🔔    ⚙   │
+│ [APP-HEAD-01] CRUZE MX    🔔    ⚙   │
 ├─────────────────────────────────────┤
 │                                     │
-│ TU VIAJE                            │
+│ <section> (mb-6 = 24px)             │
+│ [LOC-STATUS-01 inline strip]        │
 │                                     │
-│ [TR-EMPTY-01]                       │
-│ ¿A dónde vas?                       │
+│ ¿A dónde vas? (text-3xl)            │
+│ …body… (text-base, balance)         │
 │                                     │
-│ [ Comenzar un viaje ]               │
+│ [TR-EMPTY-01 compound input]        │
+│ [ 🔍 …EE.UU. …………… (→) ]  │ ← icon-only CTA, no helper
 │                                     │
-│ Ver todos los cruces →              │
-│                                     │
+│ </section>                          │
 │─────────────────────────────────────│
-│                                     │
-│ [TR-NEAR-01]                        │
+│ [TR-NEAR-01] (mt-7 = 28px)          │
 │ CERCA DE TI                         │
-│ Cruces relevantes ahora             │
+│ Cruces relevantes ahora (xs)        │
 │                                     │
 │ [TR-NEAR-02]                        │
 │ San Luis                 11 min     │
-│ ● Abierto               Norte       │
-│ Actualizado hace 2 min              │
+│ ● Abierto  Norte     Hace 2 min    │
 │                                     │
 │ [TR-NEAR-02]                        │
 │ Lukeville                18 min     │
-│ ● Abierto               Norte       │
-│ Actualizado hace 3 min              │
+│ ● Abierto  Norte     Hace 3 min    │
 │                                     │
 │ [TR-NEAR-02]                        │
 │ Nogales Mariposa         24 min     │
-│ ● Abierto               Norte       │
-│ Actualizado hace 2 min              │
+│ ● Abierto  Norte     Hace 2 min    │
 │                                     │
 │          Ver todos los cruces →     │
 │                                     │
@@ -799,40 +887,34 @@ SETTINGS
 
 ```text
 ┌─────────────────────────────────────┐
-│ [APP-HEAD-01] CRUZE       🔔    ⚙   │
+│ [APP-HEAD-01] CRUZE  CRUCES  🔔  ⚙  │
 ├─────────────────────────────────────┤
-│                                     │
-│ CRUCES                              │
-│                                     │
-│ [CR-DIR-04]                         │
-│ [ 🔍 Buscar cruces... ]             │
-│                                     │
-│ [CR-DIR-05]                         │
-│ Todos   México   EE.UU.             │
-│                                     │
-│ Auto   A pie   Comercial            │
-│                                     │
-│─────────────────────────────────────│
+│ [APP-COMPANION-01: CR-DIR-06]       │
+│ [ 🔍 Buscar cruces... ]  [≡ n]      │
+├─────────────────────────────────────┤
+│ [CR-DIR-07] 42 cruces · Toda la…    │
+│             Más cercanos ↓ [CR-DIR-08│
 │                                     │
 │ [CR-DIR-02]                         │
-│ San Luis                            │
-│ ● Abierto                           │
-│ Norte 11 min      Sur 5 min         │
+│ San Luis                       ˅    │
+│ ● Operativo  Norte 11 min           │
+│              Sur    5 min            │
 │                                     │
 │ [CR-DIR-02]                         │
-│ Lukeville                           │
-│ ● Abierto                           │
-│ Norte 18 min      Sur 8 min         │
+│ Lukeville                      ˅    │
+│ ● Operativo  Norte 18 min           │
+│              Sur    8 min            │
 │                                     │
-│ [CR-DIR-02]                         │
-│ Nogales Mariposa                    │
-│ ● Abierto                           │
-│ Norte 24 min      Sur 12 min        │
-│                                     │
+│ [CR-DIR-09] Cargar más              │
 ├─────────────────────────────────────┤
 │ [APP-NAV-01] Viaje | Cruces | Agente│
 └─────────────────────────────────────┘
 ```
+
+No content-level CRUCES heading (context lives in header). Filter lives in
+`CR-DIR-05A` sheet (scope/mode/state + fixed Aplicar footer, disabled until
+changed); `CR-DIR-05` FilterBar is removed. Count = total matching query;
+empty ≠ unavailable (retry vs clear-filters).
 
 ---
 
@@ -845,39 +927,33 @@ SETTINGS
 │                                     │
 │ [CR-DET-01]                         │
 │ SAN LUIS                 ☆          │
-│ ● ABIERTO                           │
+│ ● Operativo      Hace 2 min         │
+│                                     │
+│ NORTE              SUR              │
+│ 11 min             5 min            │
+│ (trip/contextual side, else both)   │
 │                                     │
 │ [CR-DET-02]                         │
 │ ┌─────────────────────────────────┐ │
-│ │                                 │ │
 │ │             MAP                 │ │
-│ │                                 │ │
 │ └─────────────────────────────────┘ │
 │                                     │
-│ [CR-STATUS-03]                      │
-│ 11 min                              │
-│ Norte                               │
-│                                     │
-│ [CR-STATUS-05]                      │
-│ Datos recientes                     │
-│ Actualizado hace 2 min              │
-│                                     │
-│ [CR-DET-03]                         │
+│ [CR-DET-03] (only with live lanes)  │
 │ TIEMPOS POR CARRIL                  │
 │ Standard       11 min               │
-│ Ready Lane      7 min               │
-│ SENTRI           3 min               │
 │                                     │
-│ [CR-DET-04] ACCESO                  │
-│ [CR-DET-05] HORARIOS                │
-│ [CR-DET-06] REQUISITOS              │
-│ [CR-DET-07] RESTRICCIONES           │
-│ [CR-DET-08] SERVICIOS               │
+│ [CR-DET-05] (only when sourced)     │
+│ HORARIOS                            │
 │                                     │
 │ [CR-DET-10]                         │
-│ [ Usar este cruce ]                 │
+│ [ Usar este cruce ] (candidate)     │
+│ [ Comparar ]      (secondary)       │
 └─────────────────────────────────────┘
 ```
+
+No live data → `Desconocido` + "—", no timestamp, sections hidden (never
+invented defaults). Direction hierarchy: trip → contextual → both.
+`CR-DET-04/06/07/08` render only with sourced data.
 
 ---
 
@@ -891,14 +967,14 @@ SETTINGS
 │ [CR-CMP-01]                         │
 │                                     │
 │                 San Luis  Lukeville │
-│ Espera             11       18      │
+│              ★ Mejor opción        │
+│ Espera Norte       11       18      │
+│ Espera Sur          5        8      │
 │ Viaje              8h35     8h52    │
 │ Distancia          168km    181km   │
 │ Estado             Abierto  Abierto │
-│ Acceso             ✓        ✓       │
-│ Datos              2m       3m      │
-│                                     │
-│        [ Usar San Luis ]            │
+│ Datos              Hace 2m  Ahora   │
+│ [Usar este cruce] [Usar este cruce]│
 └─────────────────────────────────────┘
 ```
 
@@ -1015,7 +1091,7 @@ Components are classified by type before being classified by domain.
 | `Button` | Primary | Secondary, Ghost, Destructive | Default, pressed, disabled, loading |
 | `IconButton` | Standard | Compact, prominent | Default, pressed, disabled |
 | `TextInput` | Standard | Search, location, destination | Empty, focused, filled, error |
-| `SearchInput` | Search | Directory, destination | Empty, typing, results, no results |
+| `SearchInput` | Search (h-11, native clear suppressed, custom clear) | Directory, destination | Empty, typing, results, no results |
 | `SegmentedControl` | Standard | Filter | Selected, disabled |
 | `RadioGroup` | Standard | Card radio | Selected, error |
 | `Checkbox` | Standard | Checklist | Checked, unchecked, disabled |
@@ -1027,12 +1103,12 @@ Components are classified by type before being classified by domain.
 | `Skeleton` | Text | Card, list, metric | Loading |
 | `Spinner` | Standard | Inline, page | Loading |
 | `Divider` | Standard | Section | Default |
-| `BottomSheet` | Standard | Action, detail | Open/closed |
+| `BottomSheet` | Standard (portal to body, guaranteed width, scroll-lock) | Action, detail, footer toolbar | Open/closed, footer, scroll-locked page |
 | `Modal` | Standard | Confirmation | Open/closed |
 | `DataMetric` | Numeric | Large, compact | Normal, unavailable |
 | `DataDelta` | Change | Positive, negative, neutral | Normal |
 | `DataTimestamp` | Time | Compact, verbose | Current, stale |
-| `DataStatus` | Semantic | Operational, freshness | All status states |
+| `DataStatus` | Semantic (es labels: Operativo/Limitado/Cerrado/Desconocido) | Operational, freshness | All status states |
 
 ---
 
@@ -1043,6 +1119,10 @@ Components are classified by type before being classified by domain.
 | Component | Base variation | Context variations |
 |---|---|---|
 | `CrossingListRow` | Compact | Nearby, directory, search |
+| `CrossingsDirectoryToolbar` | Search + filter trigger | C01 header companion |
+| `CrossingsDirectoryFilterSheet` | Scope/mode/state + fixed footer | C01 filter |
+| `CrossingsDirectorySummary` | Count + scope + sort | C01 summary |
+| `CrossingsDirectoryLoadMoreState` | Cargar más / spinner | C01 pagination |
 | `CrossingStatusBadge` | Operational | Open, limited, closed, unknown |
 | `CrossingWaitTime` | Standard | Large, compact, unavailable |
 | `CrossingFreshness` | Timestamp | Live, recent, stale |
@@ -1059,8 +1139,10 @@ Components are classified by type before being classified by domain.
 
 | Component | Base variation | Context variations |
 |---|---|---|
+| `TripHero` | Eyebrow + title + body | T01 (no eyebrow), generic hero |
 | `TripEmptyActionPanel` | No trip | First-use, returning |
-| `TripNearbyCrossingRow` | Compact | Nearby, selected |
+| `TripNearbyCrossingRow` | Compact (single meta row) | Nearby, selected |
+| `TripStalePrompt` | Stale recovery | Still-current vs start-new |
 | `TripSetupProgress` | Stepper | 3-step, 4-step, adaptive |
 | `TripSetupTravelModeStep` | Selection | Walking, private, commercial |
 | `TripSetupVehicleAccessStep` | Selection | Northbound only |

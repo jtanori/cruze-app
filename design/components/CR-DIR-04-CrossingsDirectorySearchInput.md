@@ -8,7 +8,7 @@
 CrossingsDirectorySearchInput
 
 ## Responsibility
-Search input Buscar cruces...
+Search input Buscar cruces... (h-11 / 44px touch; native cancel button suppressed, custom far-right clear kept; `type="text"`, no double-clear affordance)
 
 ## Details
 Debounce clear no-results.

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useLayoutEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
+import { useLocale } from "@/hooks/use-locale";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, X, Search, MoreHorizontal, MapPin, Settings, Navigation, LogOut, Bell } from "lucide-react";
 import { useAlertsStore } from "@/stores/alerts";
 import { useTripStore } from "@/stores/trip";
-import { useLocale } from "@/hooks/use-locale";
 import type { HeaderVariant } from "@/types";
+import { useLocationContext } from "@/components/location/LocationProvider";
 
 interface TripActions {
   onEndTrip: () => void;
@@ -47,6 +48,12 @@ export function TopAppBar({
   const [collapsed, setCollapsed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
+  // Equal side widths keep the center title viewport-centered.
+  const [sideWidth, setSideWidth] = useState<number | null>(null);
+  const { location } = useLocationContext();
 
   const handleScroll = useCallback(() => {
     setCollapsed(window.scrollY > 48);
@@ -57,21 +64,35 @@ export function TopAppBar({
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // Country display for header
-  const [userCountry, setUserCountry] = useState<"MX" | "US" | null>(null);
+// Country display for header - use location country from hook
+  const userCountry = location?.country;
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setUserCountry(pos.coords.longitude < -100 ? "MX" : "US");
-        },
-        () => setUserCountry("US")
+  // Measured centering: sides default to 30% each; when either side's
+  // content needs more, both sides take the wider width so the center
+  // title stays viewport-centered.
+  useLayoutEffect(() => {
+    const measure = () => {
+      const headerWidth = headerRef.current?.clientWidth ?? 0;
+      if (!headerWidth) return;
+      const contentWidth = Math.max(
+        leftRef.current?.scrollWidth ?? 0,
+        rightRef.current?.scrollWidth ?? 0
       );
-    } else {
-      setUserCountry("US");
+      setSideWidth(Math.max(headerWidth * 0.3, contentWidth));
+    };
+    measure();
+    const observer =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    if (observer) {
+      if (leftRef.current) observer.observe(leftRef.current);
+      if (rightRef.current) observer.observe(rightRef.current);
     }
-  }, []);
+    window.addEventListener("resize", measure);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [variant, title, menuOpen, trailingIcon, tripActions, userCountry]);
 
   // Close menu on outside click
   useEffect(() => {
@@ -93,17 +114,23 @@ export function TopAppBar({
       className="fixed top-0 left-0 right-0 z-[var(--z-header)] bg-background border-b border-border-subtle transition-all duration-[180ms]"
       style={{ height }}
     >
-      <div className="h-full flex items-center justify-between px-5">
-        {/* Leading */}
-        <div className="min-w-[44px] flex items-center justify-start">
+      <div ref={headerRef} className="h-full flex items-center px-5">
+        {/* Left zone — brand / back */}
+        <div
+          ref={leftRef}
+          className="flex items-center justify-start shrink-0"
+          style={sideWidth ? { width: sideWidth } : { flexBasis: "30%" }}
+        >
           {variant === "root" ? (
             <div className="flex items-center gap-2">
               <span className="text-ink font-bold text-sm tracking-wider uppercase">
                 {t("common.cruze")}
               </span>
-              <span className="text-xs font-medium tabular text-faint">
-                {userCountry === "MX" ? "MX" : "USA"}
-              </span>
+              {(userCountry === "MX" || userCountry === "US") && (
+                <span className="text-xs font-medium tabular text-faint">
+                  {userCountry === "MX" ? "MX" : "USA"}
+                </span>
+              )}
             </div>
           ) : onBack ? (
             <button
@@ -124,17 +151,21 @@ export function TopAppBar({
           ) : null}
         </div>
 
-        {/* Center */}
-        <div className="flex-1 flex flex-col items-center justify-center">
+        {/* Center zone — title, viewport-centered via equal side widths */}
+        <div className="flex-1 min-w-0 flex flex-col items-center justify-center">
           {title && (
-            <span className="text-ink font-semibold text-xs sm:text-sm uppercase tracking-wider truncate max-w-[200px]">
+            <span className="text-ink font-semibold text-xs sm:text-sm uppercase tracking-wider truncate max-w-full px-2 text-center">
               {title}
             </span>
           )}
         </div>
 
-        {/* Trailing */}
-        <div className="min-w-[44px] flex items-center justify-end">
+        {/* Right zone — actions / helpers */}
+        <div
+          ref={rightRef}
+          className="flex items-center justify-end shrink-0"
+          style={sideWidth ? { width: sideWidth } : { flexBasis: "30%" }}
+        >
           {trailingIcon ??
             (variant === "root" && tripActions ? (
               <div className="relative" ref={menuRef}>

@@ -3,14 +3,12 @@ export type TripLifecycleState =
   | "planning"
   | "ready"
   | "active"
-  | "at_border"
   | "completed";
 
 export type TripLifecycleEvent =
   | "START_PLANNING"
   | "COMPLETE_SETUP"
   | "ACTIVATE"
-  | "ARRIVE_AT_BORDER"
   | "COMPLETE"
   | "RESET";
 
@@ -18,8 +16,7 @@ const TRANSITIONS: Record<TripLifecycleState, Partial<Record<TripLifecycleEvent,
   draft: { START_PLANNING: "planning", RESET: "draft" },
   planning: { COMPLETE_SETUP: "ready", RESET: "draft" },
   ready: { ACTIVATE: "active", RESET: "draft" },
-  active: { ARRIVE_AT_BORDER: "at_border", COMPLETE: "completed", RESET: "draft" },
-  at_border: { COMPLETE: "completed", RESET: "draft" },
+  active: { COMPLETE: "completed", RESET: "draft" },
   completed: { RESET: "draft" },
 };
 
@@ -46,7 +43,7 @@ export class TripLifecycleMachine {
   }
 
   isActive(): boolean {
-    return this.state === "active" || this.state === "at_border";
+    return this.state === "active";
   }
 }
 

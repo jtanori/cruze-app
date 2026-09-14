@@ -1,17 +1,18 @@
-# CR-DIR-05 — CrossingsDirectoryFilterBar
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+# CR-DIR-05 — CrossingsDirectoryFilterBar — SUPERSEDED
+**Version:** 1.2 — 2026-09-07 — REMOVED from implementation. Permanent segmented filter bars violate W7 (toolbar + progressive sheet model).
 
 ## ID
-`CR-DIR-05`
+`CR-DIR-05` (retired)
 
 ## Name
 CrossingsDirectoryFilterBar
 
 ## Responsibility
-Filter bar
+~~Filter bar~~ — superseded by `CR-DIR-06` (toolbar) + `CR-DIR-05A` (filter sheet).
 
 ## Details
-Todos/México/EE.UU. + Auto/A pie/Comercial + sort relevance/speed/distance/name.
+~~Todos/México/EE.UU. + Auto/A pie/Comercial + sort relevance/speed/distance/name.~~
+Do not implement. See `CR-DIR-05A-CrossingsDirectoryFilterSheet.md` and `CR-DIR-06-CrossingsDirectoryToolbar.md`. This file is retained as a retirement record.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

@@ -1,5 +1,5 @@
 # CR-DIR-01 — CrossingsDirectoryList
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-07 — presentational; server-driven via useCrossingsDirectory; empty ≠ unavailable.
 
 ## ID
 `CR-DIR-01`
@@ -8,10 +8,11 @@
 CrossingsDirectoryList
 
 ## Responsibility
-Container for live border directory
+Presentational directory list. Data, filtering, ranking, pagination live server-side (`useCrossingsDirectory` + §34 query contract).
 
 ## Details
 Denser info-oriented list, not duplicate of nearby preview.
+States: loading skeletons → unavailable (retry) → empty (clear-filters when filters active) → rows + CR-DIR-09 load-more. Empty ≠ unavailable, always distinct.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

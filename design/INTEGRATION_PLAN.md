@@ -128,7 +128,7 @@ These archived v1 documents represent the **complete target architecture** for v
 | Skeleton (Text, Card, List, Metric) | | Loading | |
 | Spinner (Standard, Inline, Page) | | Loading | |
 | Divider (Standard, Section) | | Default | |
-| BottomSheet (Standard, Action, Detail) | | Open/closed | |
+| BottomSheet (Standard, Action, Detail, Footer toolbar) | | Open/closed, portal, scroll-lock | |
 | Modal (Standard, Confirmation) | | Open/closed | |
 | DataMetric (Numeric, Large, Compact) | | Normal, unavailable | |
 | DataDelta (Change: Positive, Negative, Neutral) | | Normal | |
@@ -238,13 +238,13 @@ These archived v1 documents represent the **complete target architecture** for v
 |------|----------|-------------|--------|
 | Crossings Directory (C01) | Spec §30-33 | Full directory with search, filters, rows | 5 days |
 | Crossings Directory Row (CR-DIR-02) | Spec §33 | Name, status, NB/SB wait, expand | 3 days |
-| Filter Pills (CR-DIR-05) | Spec §32 | All/MX/US, Auto/A pie/Comercial | 2 days |
-| Sort Options | Spec §32 | Relevance, fastest, closest, name | 2 days |
+| Filter Pills (CR-DIR-05) | Spec §32 | SUPERSEDED — toolbar (CR-DIR-06) + sheet (CR-DIR-05A) | done |
+| Sort Options | Spec §32 | NEAREST default; Relevancia, Más rápidos, Nombre | 2 days |
 | Crossings Directory Row Expanded | Spec §33, CR-DIR-03 | Lane info, access, hours, services | 4 days |
 | Crossing Detail (C03) | Spec §34-35 | Canonical detail page | 5 days |
 | Crossing Detail Hero (CR-DET-01) | Spec §35 | Hero with map, status, wait | 3 days |
 | Lane Times Section (CR-DET-03) | Spec §35 | Standard/Ready/SENTRI with wait | 3 days |
-| Access Section (CR-DET-04) | Spec §35 | Auto/A pie/Comercial/... | 2 days |
+| Access Section (CR-DET-04) | Spec §35 | Vehículo/A pie/Comercial; sourced-data only (hidden when unsourced) | 2 days |
 | Hours Section (CR-DET-05) | Spec §35 | Hours display | 2 days |
 | Requirements Section (CR-DET-06) | Spec §38 | Progressive disclosure | 3 days |
 | Restrictions Section (CR-DET-07) | Spec §35 | Restrictions display | 2 days |

@@ -5,6 +5,7 @@ import { useLocationStore } from "@/stores/location";
 import { useGeolocationPermission } from "./useGeolocationPermission";
 import { requestGeolocation } from "@/lib/geolocation";
 import { reverseGeocode } from "@/lib/geocoding";
+import { resolveUserCountry, type Country } from "@/lib/country-resolution";
 import { createLocationData, type LocationData } from "@/lib/location-state-machine";
 
 export type LocationStatus = "loading" | "prompt" | "acquiring" | "ready" | "error";
@@ -26,7 +27,12 @@ export interface UseLocationResult {
   isLoading: boolean;
   request: () => void;
   retry: () => void;
-  selectManual: (lat: number, lng: number, placeName?: string) => void;
+  selectManual: (
+    lat: number,
+    lng: number,
+    placeName?: string,
+    country?: Country | null
+  ) => void;
   enterManualSearch: () => void;
   markServicesDisabled: () => void;
 }
@@ -122,10 +128,20 @@ export function useLocation(): UseLocationResult {
       clearTimeout(watchdog);
       // Late success after a watchdog firing still wins (user eventually accepted).
       const place = await reverseGeocode(result.lat, result.lng).catch(() => null);
-      const placeName =
-        place?.name ?? `${result.lat.toFixed(4)}, ${result.lng.toFixed(4)}`;
       const data = createLocationData(result.lat, result.lng, result.accuracy);
-      (data as LocationData & { placeName?: string }).placeName = placeName;
+      // Keep the full place — country upgrades to HIGH when geocoded.
+      const resolved = resolveUserCountry(
+        result.lat,
+        result.lng,
+        place?.country ?? null
+      );
+      data.country = resolved.country;
+      data.countryConfidence = resolved.confidence;
+      data.placeName =
+        place?.name ?? `${result.lat.toFixed(4)}, ${result.lng.toFixed(4)}`;
+      if (place?.formattedAddress) data.formattedAddress = place.formattedAddress;
+      if (place?.city) data.city = place.city;
+      if (place?.region) data.region = place.region;
       setLocation(data, false);
       setState("ready");
     } catch (e) {
@@ -202,10 +218,19 @@ export function useLocation(): UseLocationResult {
   }, [acquire]);
 
   const selectManual = useCallback(
-    (lat: number, lng: number, placeName?: string) => {
+    (
+      lat: number,
+      lng: number,
+      placeName?: string,
+      country?: Country | null
+    ) => {
       const data = createLocationData(lat, lng, 1000);
+      // Manual picks carry their geocoded country when the caller has it.
+      const resolved = resolveUserCountry(lat, lng, country ?? null);
+      data.country = resolved.country;
+      data.countryConfidence = resolved.confidence;
       if (placeName) {
-        (data as LocationData & { placeName?: string }).placeName = placeName;
+        data.placeName = placeName;
       }
       setError(null);
       setLocation(data, true);

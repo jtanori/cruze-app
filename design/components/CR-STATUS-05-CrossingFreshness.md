@@ -1,5 +1,5 @@
-# CR-STATUS-05 — 05
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+# CR-STATUS-05 — CrossingFreshness
+**Version:** 1.2 — 2026-09-07 — normalized user-facing vocabulary (no "en vivo"). If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
 
@@ -8,8 +8,19 @@
 ### ASCII
 
 ``` text
-Actualizado hace 2 min
+Hace 2 min  (es short-form; "Ahora" at <1 min)
 ```
+
+### User-facing vocabulary (canonical — shared with `formatFreshness`)
+
+``` text
+LIVE        → Ahora                    (relative dropped; <5 min IS now)
+RECENT      → Hace X min               (relative only)
+STALE       → Datos desactualizados    (label only)
+UNAVAILABLE → Sin datos                (label only)
+```
+
+No "en vivo" anywhere — freshness never implies liveness.
 
 ### Freshness states
 

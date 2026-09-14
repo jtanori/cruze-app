@@ -40,12 +40,12 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           <input
             ref={ref}
             id={id}
-            type="search"
+            type="text"
             disabled={disabled}
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className="w-full h-12 pl-10 pr-10 bg-surface border border-border rounded-[var(--radius-md)] text-ink text-sm placeholder:text-faint focus:outline-none focus:border-cruze-mint focus:ring-2 focus:ring-cruze-mint/20 focus:ring-offset-2 focus:ring-offset-midnight disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-[var(--transition-fast)]"
+            className="w-full h-11 pl-10 pr-10 bg-surface border border-border rounded-[var(--radius-md)] text-ink text-sm placeholder:text-faint focus:outline-none focus:border-cruze-mint focus:ring-2 focus:ring-cruze-mint/20 focus:ring-offset-2 focus:ring-offset-midnight disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-[var(--transition-fast)] [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
             {...props}
           />
           {value && !disabled && (

@@ -119,6 +119,45 @@ export async function getCrossingWithLiveData(
   return mergeWithCBPData(crossing, cbpWait, direction);
 }
 
+export interface CrossingBothDirections {
+  crossing: BorderCrossing;
+  northbound: { waitTime: number; status: "OPEN" | "CLOSED" | "LIMITED" };
+  southbound: { waitTime: number; status: "OPEN" | "CLOSED" | "LIMITED" };
+  isLive: boolean;
+  lastUpdated?: string;
+  hours: string;
+  lanes: CBPLane[];
+}
+
+/**
+ * Single crossing with both directions from one fetch.
+ * Used when no confident direction exists — the surface renders
+ * NORTE + SUR instead of picking a side.
+ */
+export async function getCrossingWithBothDirections(
+  crossingId: string
+): Promise<CrossingBothDirections | null> {
+  const crossing = BORDER_CROSSINGS.find((c) => c.id === crossingId);
+  if (!crossing) return null;
+
+  const cbpData = await fetchCBPWaitTimes();
+  const cbpWait = cbpData.find((w) => w.portId === crossingId) || null;
+  if (!cbpWait) return null;
+
+  return {
+    crossing,
+    northbound: { waitTime: cbpWait.primaryWaitTime, status: cbpWait.status },
+    southbound: {
+      waitTime: estimateSouthboundWait(cbpWait),
+      status: cbpWait.status,
+    },
+    isLive: true,
+    lastUpdated: cbpWait.lastUpdated,
+    hours: cbpWait.hours,
+    lanes: cbpWait.lanes,
+  };
+}
+
 /** Get all crossings with both northbound and southbound data */
 export async function getMergedCrossingsData(): Promise<MergedCrossingData[]> {
   const cbpData = await fetchCBPWaitTimes();

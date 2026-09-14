@@ -66,7 +66,7 @@ Domain + Surface + Responsibility
 
 | Variant | States |
 |---------|--------|
-| Directory | Empty, Typing, Results, No Results |
+| Directory (h-11, native clear suppressed, custom far-right clear) | Empty, Typing, Results, No Results |
 | Destination | Empty, Typing, Results, No Results |
 
 ### SegmentedControl
@@ -171,9 +171,10 @@ Domain + Surface + Responsibility
 
 | Variant | States |
 |---------|--------|
-| Standard | Open, Closed |
+| Standard (portal to body, guaranteed width, scroll-lock) | Open, Closed |
 | Action | Open, Closed |
 | Detail | Open, Closed |
+| Footer toolbar (optional fixed slot, e.g. Aplicar; disabled until changed) | Open, Closed |
 
 ### Modal
 
