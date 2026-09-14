@@ -360,6 +360,10 @@
       "rules": "¿Cuáles son las reglas de aduana?",
       "tripHelp": "Ayuda con mi viaje"
     },
+    "guide": {
+      "title": "¿Qué puedo preguntar?",
+      "body": "• Tiempos de espera actuales de cualquier cruce\n• Toca una tarjeta de cruce para ver sus detalles\n• Documentos, SENTRI y reglas de aduana\n• Compara cruces y obtén direcciones"
+    },
     "checklist": {
       "passport": "Pasaporte válido",
       "visa": "Visa de EE.UU.",

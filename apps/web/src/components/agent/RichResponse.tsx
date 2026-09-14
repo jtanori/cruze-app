@@ -97,9 +97,15 @@ function SectionActions({ content }: { content: string }) {
   };
 
   const handleShare = async () => {
-    if (navigator.share) {
+    if (!navigator.share) {
+      await handleCopy();
+      return;
+    }
+    try {
       await navigator.share({ text: content });
-    } else {
+    } catch (err) {
+      // User dismissed the share sheet — not an error worth surfacing.
+      if (err instanceof DOMException && err.name === "AbortError") return;
       await handleCopy();
     }
   };
@@ -141,8 +147,8 @@ function Card({ card }: { card: ResponseCard }) {
     neutral: "border-border bg-surface",
   };
 
-  return (
-    <div className={`rounded-[var(--radius-md)] border p-3 ${statusColors[card.status || "neutral"]}`}>
+  const body = (
+    <>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-ink text-sm font-medium">{card.title}</p>
@@ -162,8 +168,24 @@ function Card({ card }: { card: ResponseCard }) {
       {card.detail && (
         <p className="text-faint text-xs mt-2">{card.detail}</p>
       )}
-    </div>
+    </>
   );
+
+  const className = `rounded-[var(--radius-md)] border p-3 ${statusColors[card.status || "neutral"]}`;
+
+  // Cards with a crossing id are tappable → crossing detail.
+  if (card.id) {
+    return (
+      <Link
+        href={`/crossing/${card.id}`}
+        className={`${className} block hover:border-cruze-green/40 active:bg-surface-subtle transition-colors`}
+      >
+        {body}
+      </Link>
+    );
+  }
+
+  return <div className={className}>{body}</div>;
 }
 
 function DataRow({ row, isLast }: { row: ResponseDataRow; isLast: boolean }) {

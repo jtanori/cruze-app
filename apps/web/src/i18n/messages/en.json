@@ -360,6 +360,10 @@
       "rules": "What are the customs rules?",
       "tripHelp": "Help with my trip"
     },
+    "guide": {
+      "title": "What can I ask?",
+      "body": "• Current wait times at any crossing\n• Tap a crossing card to open its details\n• Documents, SENTRI and customs rules\n• Compare crossings and get directions"
+    },
     "checklist": {
       "passport": "Valid passport",
       "visa": "US visa",

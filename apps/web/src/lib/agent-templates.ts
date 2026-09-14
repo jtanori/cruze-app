@@ -26,6 +26,7 @@ export interface ResponseContent {
 }
 
 export interface ResponseCard {
+  id?: string;
   title: string;
   subtitle?: string;
   value?: string;
@@ -99,7 +100,7 @@ export function generateResponse(
     case "compare":
       return generateCompareResponse(crossing, allCrossings, t);
     case "status":
-      return generateStatusResponse(crossing, t);
+      return generateStatusResponse(crossing, allCrossings, t);
     case "rules":
       return generateRulesResponse(t);
     case "greeting":
@@ -123,6 +124,7 @@ function generateWaitTimesResponse(
   if (crossing) {
     const lanes = crossing.lanesNorthbound.slice(0, 3);
     const cards: ResponseCard[] = lanes.map((lane) => ({
+      id: crossing.id,
       title: lane.name,
       value: `${lane.waitTime}`,
       unit: t("common.min"),
@@ -244,6 +246,7 @@ function generateCompareResponse(
   if (!crossing) {
     const sorted = [...allCrossings].sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound).slice(0, 3);
     const cards: ResponseCard[] = sorted.map((c) => ({
+      id: c.id,
       title: c.name,
       subtitle: `${c.mexicanCity} ↔ ${c.usCity}`,
       value: `${c.waitTimeNorthbound}`,
@@ -283,6 +286,7 @@ function generateCompareResponse(
 
 function generateStatusResponse(
   crossing: MergedCrossingData | null,
+  allCrossings: MergedCrossingData[],
   t: (k: string, v?: any) => string
 ): ResponseContent {
   if (crossing) {
@@ -298,6 +302,33 @@ function generateStatusResponse(
         t("agent.suggest.waitTimes"),
         t("agent.suggest.whatsHappening"),
         t("agent.suggest.directions"),
+      ],
+    };
+  }
+  // No specific crossing: show fastest gates as cards so the user can
+  // pick one to compare instead of hitting a dead-end text.
+  if (allCrossings.length > 0) {
+    const sorted = [...allCrossings]
+      .sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound)
+      .slice(0, 3);
+    return {
+      text: t("agent.template.allOperating"),
+      cards: sorted.map((c) => ({
+        id: c.id,
+        title: c.name,
+        subtitle: `${c.mexicanCity} ↔ ${c.usCity}`,
+        value: `${c.waitTimeNorthbound}`,
+        unit: t("common.min"),
+        status: getWaitStatus(c.waitTimeNorthbound),
+      })),
+      action: {
+        label: t("agent.template.viewAllCrossings"),
+        href: "/crossings",
+      },
+      suggestions: [
+        t("agent.suggest.compare"),
+        t("agent.suggest.directions"),
+        t("agent.suggest.waitTimes"),
       ],
     };
   }
@@ -481,6 +512,7 @@ function generateDirectionResponse(
       }),
       cards: [
         {
+          id: crossing?.id ?? liveContext?.selectedCrossingId ?? undefined,
           title: t("agent.template.currentCrossing"),
           subtitle: t("agent.template.waitTime"),
           value: `${waitTime} ${t("common.min")}`,
@@ -494,6 +526,36 @@ function generateDirectionResponse(
       suggestions: [
         t("agent.suggest.waitTimes"),
         t("agent.suggest.compare"),
+        t("agent.suggest.whatsHappening"),
+      ],
+    };
+  }
+
+  // No specific crossing: resolve a real fallback gate so the card is
+  // tappable instead of a dead label.
+  const fallback =
+    allCrossings.find((c) => c.id === "san-ysidro") ??
+    [...allCrossings].sort((a, b) => a.waitTimeNorthbound - b.waitTimeNorthbound)[0] ??
+    null;
+
+  if (fallback) {
+    return {
+      text: t("agent.template.noCurrentCrossing"),
+      cards: [
+        {
+          id: fallback.id,
+          title: t("agent.template.mostCommon"),
+          subtitle: fallback.name,
+          value: `${fallback.waitTimeNorthbound} ${t("common.min")}`,
+          status: getWaitStatus(fallback.waitTimeNorthbound),
+        },
+      ],
+      action: {
+        label: t("agent.template.viewCrossingDetails"),
+        href: `/crossing/${fallback.id}`,
+      },
+      suggestions: [
+        t("agent.suggest.waitTimes"),
         t("agent.suggest.whatsHappening"),
       ],
     };

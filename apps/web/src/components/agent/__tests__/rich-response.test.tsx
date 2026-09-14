@@ -47,4 +47,22 @@ describe("RichResponse suggestions", () => {
     // Suggestion chips use rounded-full; copy/share/save buttons do not.
     expect(container.querySelector("button.rounded-full")).toBeNull();
   });
+
+  it("links cards with a crossing id to crossing detail", () => {
+    const { container } = renderRich({
+      text: "Pick one:",
+      cards: [{ id: "san-ysidro", title: "San Ysidro", value: "30 min" }],
+    });
+    const link = container.querySelector('a[href="/crossing/san-ysidro"]');
+    expect(link).not.toBeNull();
+    expect(link!.textContent).toContain("San Ysidro");
+  });
+
+  it("renders id-less cards as plain divs", () => {
+    const { container } = renderRich({
+      text: "Note:",
+      cards: [{ title: "Most common", value: "San Ysidro" }],
+    });
+    expect(container.querySelector("a")).toBeNull();
+  });
 });

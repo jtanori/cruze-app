@@ -110,12 +110,36 @@ describe("generateResponse — direction", () => {
     expect(res.cards![0].status).toBe("closed");
   });
 
-  it("falls back to most-common crossing with no data", () => {
+  it("resolves a real fallback gate (tappable) when crossings known", () => {
     const res = generateResponse("direction", baseCtx());
     expect(res.text).toContain("agent.template.noCurrentCrossing");
-    expect(res.cards![0].value).toContain("agent.template.mostCommonCrossing");
-    expect(res.action?.href).toBe("/crossings");
+    expect(res.cards![0].id).toBe("san-ysidro");
+    expect(res.cards![0].subtitle).toContain("San Ysidro");
+    expect(res.action?.href).toBe("/crossing/san-ysidro");
     expect(res.suggestions).toHaveLength(2);
+  });
+
+  it("falls back to a dead label only with zero crossings", () => {
+    const res = generateResponse("direction", baseCtx({ allCrossings: [] }));
+    expect(res.text).toContain("agent.template.noCurrentCrossing");
+    expect(res.cards![0].value).toContain("agent.template.mostCommonCrossing");
+    expect(res.cards![0].id).toBeUndefined();
+    expect(res.action?.href).toBe("/crossings");
+  });
+
+  it("status without crossing lists fastest gates as tappable cards", () => {
+    const res = generateResponse("status", baseCtx());
+    expect(res.text).toContain("agent.template.allOperating");
+    expect(res.cards).toHaveLength(1);
+    expect(res.cards![0].id).toBe("san-ysidro");
+    expect(res.action?.href).toBe("/crossings");
+  });
+
+  it("lane and compare cards carry crossing ids", () => {
+    const wait = generateResponse("wait_times", baseCtx({ crossing: makeCrossing() }));
+    expect(wait.cards!.every((c) => c.id === "san-ysidro")).toBe(true);
+    const compare = generateResponse("compare", baseCtx());
+    expect(compare.cards!.every((c) => c.id === "san-ysidro")).toBe(true);
   });
 });
 

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { Send, Bot, User } from "lucide-react";
+import { Send, Bot, User, HelpCircle } from "lucide-react";
 import { useAgentStore, type AgentMessage } from "@/stores/agent";
 import { useAgent } from "./AgentProvider";
 import { RichResponse } from "./RichResponse";
@@ -52,8 +52,11 @@ function MessageBubble({
               : "bg-surface border border-border text-ink rounded-tl-sm"
           }`}
         >
-          {message.content}
-          {!isUser && message.richContent && (
+          {isUser || !message.richContent ? (
+            message.content
+          ) : (
+            // richContent.text already carries the body — rendering both
+            // message.content and RichResponse duplicated the answer.
             <RichResponse content={message.richContent} onSuggestion={onSuggestion} />
           )}
         </div>
@@ -73,6 +76,7 @@ export function AgentChat() {
   const [input, setInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [streamingContent, setStreamingContent] = useState<string | null>(null);
+  const [showGuide, setShowGuide] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -220,7 +224,36 @@ export function AgentChat() {
               {t("agent.queuedOffline", { count: outboxCount })}
             </p>
           )}
+          {showGuide && (
+            <div className="mb-2 p-4 bg-surface border border-border rounded-[var(--radius-md)] space-y-3">
+              <p className="text-ink text-sm font-semibold">{t("agent.guide.title")}</p>
+              <p className="text-faint text-xs leading-relaxed whitespace-pre-line">
+                {t("agent.guide.body")}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {SUGGESTED_PROMPTS.map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setShowGuide(false);
+                      handleSend(t(key));
+                    }}
+                    className="px-3 py-1.5 text-xs font-medium text-cruze-green bg-cruze-green/10 border border-cruze-green/30 rounded-full hover:bg-cruze-green/20 transition-colors"
+                  >
+                    {t(key)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowGuide((v) => !v)}
+              className="w-12 h-12 shrink-0 flex items-center justify-center rounded-[var(--radius-md)] border border-border text-faint hover:text-ink active:bg-surface-subtle transition-colors"
+              aria-label={t("agent.guide.title")}
+            >
+              <HelpCircle className="w-5 h-5" />
+            </button>
             <input
               ref={inputRef}
               type="text"
