@@ -36,4 +36,4 @@ jobs:
         if: always()
         uses: vercel/repository-dispatch/actions/status@v1
         with:
-          name: Vercel - cruze-app-web: vercel-pre-build
+          name: "Vercel - cruze-app-web: vercel-pre-build"
