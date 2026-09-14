@@ -54,7 +54,8 @@ export function TripNearbyCrossingRow({
         <span className="text-faint shrink-0">{direction === "MX_TO_US" ? t("common.northbound") : t("common.southbound")}</span>
         <span className="ml-auto flex items-center gap-1 text-faint truncate">
           <Clock className="w-3 h-3 shrink-0" />
-          <span className="truncate">{t("common.updated", { time: freshnessText })}</span>
+          {/* freshnessText already includes the Updated/Actualizado prefix — do not re-wrap. */}
+          <span className="truncate">{freshnessText}</span>
         </span>
       </div>
     </button>
