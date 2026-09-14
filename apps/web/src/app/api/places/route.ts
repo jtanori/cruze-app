@@ -64,14 +64,51 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     const features = Array.isArray(data.features) ? data.features : [];
 
+    // Country comes from Mapbox's own context chain — never a bare default.
+    // Order: context country short_code → properties.short_code → the
+    // requested single-country filter (actual request data, not inference).
+    const requestedSingle = (() => {
+      const c = countryParam(searchParams.get("country"));
+      return c === "mx" ? "MX" : c === "us" ? "US" : null;
+    })();
+
+    const NON_MAINLAND_US = new Set([
+      "US-AK",
+      "US-HI",
+      "US-PR",
+      "US-GU",
+      "US-VI",
+      "US-MP",
+      "US-AS",
+    ]);
+
     // Slimmed contract — clients never see raw Mapbox features.
-    const places = features.map((f: any) => {
+    const places = [];
+    for (const f of features) {
       const placeName: string = f.place_name || "";
       const parts = placeName.split(",").map((s: string) => s.trim());
-      const shortCode: string | undefined = f.properties?.short_code;
+      const context: Array<{ id?: string; short_code?: string }> = Array.isArray(
+        f.context
+      )
+        ? f.context
+        : [];
+      const countryCtx = context.find((c) => c.id?.startsWith("country."));
+      const regionCtx = context.find((c) => c.id?.startsWith("region."));
+      const regionCode = regionCtx?.short_code?.toUpperCase() ?? null;
+
+      // Non-mainland US regions (Alaska, Hawaii, territories) are out of
+      // scope for a border-crossing app — drop them server-side.
+      if (regionCode && NON_MAINLAND_US.has(regionCode)) continue;
+
+      const countryCode =
+        countryCtx?.short_code?.toUpperCase() ??
+        f.properties?.short_code?.toUpperCase() ??
+        null;
       const country =
-        shortCode?.toUpperCase() === "US" ? "US" : "MX";
-      return {
+        countryCode === "US" ? "US" : countryCode === "MX" ? "MX" : requestedSingle;
+      if (!country) continue;
+
+      places.push({
         id: String(f.id ?? placeName),
         name: parts[0] || placeName,
         formattedAddress: placeName,
@@ -81,8 +118,8 @@ export async function GET(request: NextRequest) {
         countryCode: country,
         city: parts[0] || undefined,
         region: parts[1] || undefined,
-      };
-    });
+      });
+    }
 
     return NextResponse.json(
       { places },

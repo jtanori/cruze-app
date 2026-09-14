@@ -131,10 +131,33 @@ export function DestinationSearch({
     ? t("trip.empty.searchPlaceholder", { country: targetCountryName })
     : t("trip.empty.searchPlaceholderGeneric");
 
+  // Blur hides the dropdown — unless focus moves into it (result tap),
+  // in which case the button's onMouseDown already prevented blur.
+  // A pending debounce is cancelled so stale results can't reopen it.
+  const handleBlur = (e: React.FocusEvent) => {
+    if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    setShowResults(false);
+  };
+
   return (
     <div className={`space-y-2 sm:space-y-3 ${className}`}>
+      {/* Results badge — visible when results exist but the dropdown is hidden */}
+      {!showResults && !loading && results.length > 0 && (
+        <button
+          onClick={() => {
+            setShowResults(true);
+            inputRef.current?.focus();
+          }}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-cruze-green bg-cruze-green/10 border border-cruze-green/30 rounded-full hover:bg-cruze-green/20 transition-colors"
+        >
+          {t("trip.empty.resultsBadge", { count: results.length })}
+        </button>
+      )}
       {/* Search Input */}
-      <div className="relative space-y-2 sm:space-y-3">
+      <div className="relative space-y-2 sm:space-y-3" onBlur={handleBlur}>
         <div className="flex items-center gap-3 h-[56px] bg-surface-elevated border border-border rounded-[var(--radius-md)] px-4 focus-within:border-cruze-mint transition-colors">
           <Search className="w-4 h-4 text-faint shrink-0" />
           <input
@@ -142,7 +165,7 @@ export function DestinationSearch({
             type="text"
             value={query}
             onChange={(e) => handleInputChange(e.target.value)}
-            onFocus={() => query.length >= 2 && setShowResults(true)}
+            onFocus={() => results.length > 0 && setShowResults(true)}
             placeholder={placeholder || defaultPlaceholder}
             className="flex-1 bg-transparent text-ink text-sm outline-none placeholder:text-faint"
             autoComplete="off"

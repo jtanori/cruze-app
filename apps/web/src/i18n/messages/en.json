@@ -295,7 +295,8 @@
       "selectToContinue": "Select a destination to continue",
       "bodyGeneric": "Search your destination to get crossing intelligence.",
       "searchPlaceholderGeneric": "Search for a destination",
-      "noResultsGeneric": "No results"
+      "noResultsGeneric": "No results",
+      "resultsBadge": "{count} result(s) — tap to view"
     },
     "title": "My Trip",
     "yourTrip": "YOUR TRIP",

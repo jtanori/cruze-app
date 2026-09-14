@@ -79,6 +79,65 @@ describe("GET /api/places", () => {
     const res = await placesGET(req("/api/places?query=tijuana"));
     expect(res.status).toBe(503);
   });
+
+  it("derives country from Mapbox context, never a bare default", async () => {
+    mockMapbox({
+      features: [
+        {
+          id: "place.us",
+          place_name: "San Diego, California, United States",
+          center: [-117.16, 32.71],
+          context: [{ id: "country.123", short_code: "us", text: "United States" }],
+        },
+      ],
+    });
+    const res = await placesGET(req("/api/places?query=san&country=mx%2Cus"));
+    const body = await res.json();
+    expect(body.places[0].country).toBe("US");
+  });
+
+  it("drops non-mainland US regions (Alaska, Hawaii, territories)", async () => {
+    mockMapbox({
+      features: [
+        {
+          id: "place.ak",
+          place_name: "Alaska, United States",
+          center: [-152, 64],
+          context: [
+            { id: "region.1", short_code: "US-AK", text: "Alaska" },
+            { id: "country.1", short_code: "us", text: "United States" },
+          ],
+        },
+        {
+          id: "place.sy",
+          place_name: "San Ysidro, California, United States",
+          center: [-117.03, 32.54],
+          context: [
+            { id: "region.2", short_code: "US-CA", text: "California" },
+            { id: "country.1", short_code: "us", text: "United States" },
+          ],
+        },
+      ],
+    });
+    const res = await placesGET(req("/api/places?query=al&country=us"));
+    const body = await res.json();
+    expect(body.places.map((p: { id: string }) => p.id)).toEqual(["place.sy"]);
+  });
+
+  it("drops country-indeterminable results instead of mislabeling", async () => {
+    mockMapbox({
+      features: [
+        {
+          id: "place.mystery",
+          place_name: "Somewhere",
+          center: [0, 0],
+          context: [],
+        },
+      ],
+    });
+    const res = await placesGET(req("/api/places?query=some&country=mx%2Cus"));
+    expect((await res.json()).places).toEqual([]);
+  });
 });
 
 describe("GET /api/reverse", () => {
