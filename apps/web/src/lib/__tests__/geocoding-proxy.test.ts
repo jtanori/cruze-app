@@ -87,6 +87,30 @@ describe("geocoding clients stay same-origin (S2)", () => {
     expect(String(fetchMock.mock.calls[0][0])).toContain("/api/reverse?");
   });
 
+  it("rethrows timeouts so the UI can offer retry (never fake-empty)", async () => {
+    const timeout = new DOMException("signal timed out", "TimeoutError");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        throw timeout;
+      })
+    );
+    await expect(searchPlaces("tijuana", 5)).rejects.toMatchObject({
+      name: "TimeoutError",
+    });
+  });
+
+  it("stays silent on user aborts", async () => {
+    const abort = new DOMException("aborted", "AbortError");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        throw abort;
+      })
+    );
+    expect(await searchPlaces("tijuana", 5)).toEqual([]);
+  });
+
   it("returns [] for short queries without fetching", async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);

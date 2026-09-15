@@ -297,7 +297,9 @@
       "searchPlaceholderGeneric": "Buscar un destino",
       "noResultsGeneric": "Sin resultados",
       "resultsBadge": "{count} resultado(s) — toca para ver",
-      "nearbyCrossing": "Cruce cercano · {name}"
+      "nearbyCrossing": "Cruce cercano · {name}",
+      "searchTimeout": "La búsqueda tardó demasiado. Revisa tu conexión e inténtalo de nuevo.",
+      "retrySearch": "Reintentar"
     },
     "title": "Mi Viaje",
     "yourTrip": "TU VIAJE",

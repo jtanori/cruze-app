@@ -224,6 +224,32 @@ describe("DestinationSearch abort + dedup", () => {
   });
 });
 
+describe("DestinationSearch timeout recovery", () => {
+  it("shows retry affordance instead of fake-empty on timeout", async () => {
+    const timeout = new DOMException("signal timed out", "TimeoutError");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        throw timeout;
+      })
+    );
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <DestinationSearch
+          userLat={32.5}
+          userLng={-117}
+          userCountry="MX"
+          onSelect={() => {}}
+        />
+      </NextIntlClientProvider>
+    );
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "tijuana" },
+    });
+    await waitFor(() => expect(screen.getByText("Retry search")).toBeTruthy());
+  });
+});
+
 describe("DestinationSearch dropdown visibility", () => {
   beforeEach(() => {
     mockPlacesFetch();

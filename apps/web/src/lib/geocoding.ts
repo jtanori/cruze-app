@@ -112,6 +112,9 @@ export async function searchPlaces(
   } catch (error) {
     // Aborts are routine (new keystroke supersedes); stay silent.
     if (error instanceof DOMException && error.name === "AbortError") return [];
+    // Timeouts are real failures the UI should surface as retryable —
+    // never disguise them as empty results.
+    if (error instanceof DOMException && error.name === "TimeoutError") throw error;
     console.error("Geocoding search failed:", error);
     return [];
   }

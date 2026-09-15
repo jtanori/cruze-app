@@ -35,6 +35,7 @@ export function DestinationSearch({
   const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [selected, setSelected] = useState<Place | null>(null);
+  const [searchError, setSearchError] = useState<"timeout" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -79,6 +80,7 @@ export function DestinationSearch({
     abortInflight();
     const controller = new AbortController();
     abortRef.current = controller;
+    setSearchError(null);
     // Hard 15s ceiling so a hung upstream can never spin the indicator forever.
     const timeout = AbortSignal.timeout(15000);
     const signal =
@@ -120,9 +122,18 @@ export function DestinationSearch({
       }
       setResults(filtered.slice(0, 5));
       setShowResults(true);
+      setSearchError(null);
     } catch (error) {
-      console.error("Search failed:", error);
-      setResults([]);
+      // Timeout is the only error that surfaces: it offers a retry instead
+      // of masquerading as an empty result set.
+      if (error instanceof DOMException && error.name === "TimeoutError") {
+        setSearchError("timeout");
+        setResults([]);
+        setShowResults(true);
+      } else {
+        console.error("Search failed:", error);
+        setResults([]);
+      }
     } finally {
       if (abortRef.current === controller) {
         abortRef.current = null;
@@ -285,6 +296,21 @@ export function DestinationSearch({
                   </button>
                 ))}
               </div>
+            ) : searchError === "timeout" ? (
+                <div className="px-4 py-6 text-center space-y-3">
+                  <p className="text-muted text-sm">
+                    {t("trip.empty.searchTimeout")}
+                  </p>
+                  <button
+                    onClick={() => {
+                      setSearchError(null);
+                      handleSearch(query);
+                    }}
+                    className="px-4 py-2 text-sm font-medium text-cruze-green bg-cruze-green/10 border border-cruze-green/30 rounded-full hover:bg-cruze-green/20 transition-colors"
+                  >
+                    {t("trip.empty.retrySearch")}
+                  </button>
+                </div>
             ) : (
                 <div className="px-4 py-6 text-center">
                   <p className="text-muted text-sm">

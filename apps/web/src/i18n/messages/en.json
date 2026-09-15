@@ -297,7 +297,9 @@
       "searchPlaceholderGeneric": "Search for a destination",
       "noResultsGeneric": "No results",
       "resultsBadge": "{count} result(s) — tap to view",
-      "nearbyCrossing": "Nearby crossing · {name}"
+      "nearbyCrossing": "Nearby crossing · {name}",
+      "searchTimeout": "Search timed out. Check your connection and try again.",
+      "retrySearch": "Retry search"
     },
     "title": "My Trip",
     "yourTrip": "YOUR TRIP",
