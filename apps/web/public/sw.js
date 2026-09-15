@@ -10,7 +10,7 @@
  *   name to invalidate: cruze-shell-v<N>.
  */
 
-const CACHE = "cruze-shell-v1";
+const CACHE = "cruze-shell-v2";
 const SHELL = ["/", "/es", "/en"];
 const OFFLINE_FALLBACK = "/es";
 
@@ -40,13 +40,18 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET") return;
-  let sameOrigin = true;
+  let url;
   try {
-    sameOrigin = new URL(request.url).origin === self.location.origin;
+    url = new URL(request.url);
   } catch {
     return;
   }
-  if (!sameOrigin) return;
+  if (url.origin !== self.location.origin) return;
+  // API responses are freshness-sensitive with server-driven TTLs — never
+  // serve them from the worker cache (stale places presented as fresh).
+  // Let the browser perform the request so offline rejects naturally and
+  // the app shows its proper empty/error states.
+  if (url.pathname.startsWith("/api/")) return;
 
   event.respondWith(
     fetch(request)
