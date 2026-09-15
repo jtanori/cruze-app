@@ -39,6 +39,71 @@ function renderSearch() {
   );
 }
 
+describe("DestinationSearch border-relevant rows", () => {
+  beforeEach(() => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => ({
+          places: [
+            {
+              id: "sonoyta",
+              name: "Sonoyta",
+              formattedAddress: "Sonoyta, Sonora, Mexico",
+              latitude: 31.861,
+              longitude: -112.85,
+              country: "MX",
+              countryCode: "MX",
+            },
+          ],
+        }),
+      }))
+    );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("shows same-country border-relevant places with a nearby-crossing line", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => ({
+          places: [
+            {
+              id: "sonoyta",
+              name: "Sonoyta",
+              formattedAddress: "Sonoyta, Sonora, Mexico",
+              latitude: 31.861,
+              longitude: -112.85,
+              country: "MX",
+              countryCode: "MX",
+            },
+          ],
+        }),
+      }))
+    );
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <DestinationSearch
+          userLat={32.5}
+          userLng={-117}
+          userCountry="MX"
+          onSelect={() => {}}
+        />
+      </NextIntlClientProvider>
+    );
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "sono" },
+    });
+    await waitFor(() => expect(screen.getByText("Sonoyta")).toBeTruthy());
+    expect(screen.getByText(/Nearby crossing/)).toBeTruthy();
+  });
+});
+
 describe("DestinationSearch dropdown visibility", () => {
   beforeEach(() => {
     mockPlacesFetch();

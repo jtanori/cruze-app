@@ -58,7 +58,11 @@ export default function TripPage() {
 
   const handleSearchNext = () => {
     if (selectedDestination) {
-      router.push(buildSetupUrl(locale, selectedDestination));
+      // A border-relevant pick carries its candidate gate (?crossing=);
+      // the destination itself travels untouched in ?dest=.
+      router.push(
+        buildSetupUrl(locale, selectedDestination, selectedDestination.crossingCandidateId ?? null)
+      );
     }
   };
 

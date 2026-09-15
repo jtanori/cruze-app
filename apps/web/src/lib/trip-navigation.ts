@@ -9,6 +9,8 @@ export interface TripDestinationSelection {
   lat: number;
   lng: number;
   country: "MX" | "US";
+  /** Border-relevant candidate gate — never rewrites the destination. */
+  crossingCandidateId?: string;
 }
 
 export function buildSetupUrl(

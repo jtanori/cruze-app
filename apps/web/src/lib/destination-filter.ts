@@ -1,7 +1,12 @@
 /**
- * Country detection and destination filtering logic
- * Simple rule: MX location → US destinations, US location → MX destinations
+ * Country detection and destination filtering logic.
+ *
+ * Opposite-country results always pass. Same-country places are admitted
+ * only when border-relevant (computed geography, never a hand list), with
+ * the nearest crossing attached as a candidate — the destination itself is
+ * never rewritten.
  */
+import { getBorderRelevance, type BorderRelevance } from "./border-relevance";
 
 export type Country = "MX" | "US";
 
@@ -73,6 +78,54 @@ export function filterDestinationsByCountry(
   const targetCountry = getTargetDestinationCountry(userCountry);
 
   return places.filter((place) => place.country === targetCountry);
+}
+
+export interface RelevantPlace extends Place {
+  borderRelevance?: BorderRelevance;
+  borderCrossingId?: string;
+  borderCrossingName?: string;
+}
+
+/**
+ * Admission filter with the border-relevance exception.
+ *
+ * - Opposite-country places: admitted untouched.
+ * - Same-country places: admitted only when border-relevant, carrying the
+ *   nearest crossing as a candidate (destination never rewritten).
+ * - Same-country places without finite coordinates or beyond access range:
+ *   excluded.
+ * - UNKNOWN user country: everything passes, no candidates attached.
+ */
+export function filterDestinations(
+  places: Place[],
+  userLat: number,
+  userLng: number,
+  knownCountry?: Country | "UNKNOWN" | null
+): RelevantPlace[] {
+  const userCountry = knownCountry ?? detectUserCountry(userLat, userLng);
+  if (userCountry === "UNKNOWN") return [...places];
+  const targetCountry = getTargetDestinationCountry(userCountry);
+
+  const out: RelevantPlace[] = [];
+  for (const place of places) {
+    if (place.country === targetCountry) {
+      out.push(place);
+      continue;
+    }
+    if (!Number.isFinite(place.latitude) || !Number.isFinite(place.longitude)) {
+      continue;
+    }
+    const relevance = getBorderRelevance(place.latitude, place.longitude);
+    if (!relevance.relevant) continue;
+    const nearest = relevance.crossings[0];
+    out.push({
+      ...place,
+      borderRelevance: relevance,
+      borderCrossingId: nearest.id,
+      borderCrossingName: nearest.name,
+    });
+  }
+  return out;
 }
 
 /**

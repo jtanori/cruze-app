@@ -5,7 +5,8 @@ import { Search, X, MapPin, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { searchPlaces } from "@/lib/geocoding";
 import type { Place } from "@/types";
-import { detectUserCountry, getTargetDestinationCountry, filterDestinationsByCountry } from "@/lib/destination-filter";
+import { detectUserCountry, getTargetDestinationCountry, filterDestinations } from "@/lib/destination-filter";
+import type { RelevantPlace } from "@/lib/destination-filter";
 import type { ResolvedCountry } from "@/lib/country-resolution";
 
 interface DestinationSearchProps {
@@ -30,7 +31,7 @@ export function DestinationSearch({
 }: DestinationSearchProps) {
   const t = useTranslations();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Place[]>([]);
+  const [results, setResults] = useState<RelevantPlace[]>([]);
   const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [selected, setSelected] = useState<Place | null>(null);
@@ -68,7 +69,9 @@ export function DestinationSearch({
       // Strict server-side country filter when the target side is known;
       // both sides when UNKNOWN (client filter below stays a safety net).
       const allPlaces = await searchPlaces(searchQuery, 10, targetCountry);
-      const filtered = filterDestinationsByCountry(
+      // Border-relevant same-country places pass with a candidate attached;
+      // the destination itself is never rewritten.
+      const filtered = filterDestinations(
         allPlaces,
         userLat,
         userLng,
@@ -220,6 +223,11 @@ export function DestinationSearch({
                       {place.formattedAddress && (
                         <p className="text-faint text-xs truncate">
                           {place.formattedAddress}
+                        </p>
+                      )}
+                      {place.borderCrossingName && (
+                        <p className="text-cruze-green text-xs truncate">
+                          {t("trip.empty.nearbyCrossing", { name: place.borderCrossingName })}
                         </p>
                       )}
                     </div>

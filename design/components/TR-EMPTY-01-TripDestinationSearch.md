@@ -36,8 +36,11 @@ Placeholder:
   UNKNOWN country → generic ("Busca un destino")
 
 Results dropdown:
-  Surface Elevated, filtered to target country (strict Mapbox
-  server filter + client safety net)
+  Surface Elevated, opposite country + border-relevant same-country rows
+  (strict Mapbox server filter + `filterDestinations` admission).
+  Relevant same-country rows carry a `Cruce cercano · X` subtitle and attach
+  the nearest gate as `crossingCandidateId` — destination never rewritten.
+  See `design/specs/BORDER-RELEVANCE.md`.
 ```
 
 ## States

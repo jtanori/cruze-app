@@ -296,7 +296,8 @@
       "bodyGeneric": "Search your destination to get crossing intelligence.",
       "searchPlaceholderGeneric": "Search for a destination",
       "noResultsGeneric": "No results",
-      "resultsBadge": "{count} result(s) — tap to view"
+      "resultsBadge": "{count} result(s) — tap to view",
+      "nearbyCrossing": "Nearby crossing · {name}"
     },
     "title": "My Trip",
     "yourTrip": "YOUR TRIP",

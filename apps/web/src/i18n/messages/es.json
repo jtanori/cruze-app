@@ -296,7 +296,8 @@
       "bodyGeneric": "Busca tu destino para recibir inteligencia para tu cruce.",
       "searchPlaceholderGeneric": "Buscar un destino",
       "noResultsGeneric": "Sin resultados",
-      "resultsBadge": "{count} resultado(s) — toca para ver"
+      "resultsBadge": "{count} resultado(s) — toca para ver",
+      "nearbyCrossing": "Cruce cercano · {name}"
     },
     "title": "Mi Viaje",
     "yourTrip": "TU VIAJE",

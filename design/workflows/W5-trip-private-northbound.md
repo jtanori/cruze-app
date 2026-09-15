@@ -249,7 +249,8 @@ APP-AV-01     CruzeNotificationButton
 APP-SET-01    CruzeSettingsButton
 LOC-STATUS-01 LocationStatusBanner
 TR-HERO-01    TripHero
-TR-EMPTY-01   TripDestinationSearch
+TR-EMPTY-01   TripDestinationSearch (opposite country + border-relevant
+              same-country rows per design/specs/BORDER-RELEVANCE.md)
 TR-NEAR-01    TripNearbyCrossingsSection
 TR-NEAR-02    TripNearbyCrossingRow
 APP-NAV-01    CruzeBottomNav
