@@ -385,6 +385,8 @@ searchLocations(query: string, limit=5): Promise<GeocodingResult[]>
 | W1.6 | GPS timeout (10s) | `acquiring` → `unavailable` → L03 |
 | W1.7 | Returning user, location persisted | `ready` immediately (no UI) → `/trip` (T01) |
 | W1.8 | Returning user, location stale (>5min) | `ready` → auto-refresh → `acquiring` → `ready` |
+| W1.15 | Manual refresh from established banner | T01 banner `Actualizar` action → `retry()` → fresh fix + country; spinner state while acquiring |
+| W1.16 | Periodic refresh during active trip | Active trip + visible tab → re-acquire every 5 min (staleness threshold); paused when hidden, stopped when trip completes/resets; no watchPosition, no background modes |
 | W1.9 | Offline + manual search attempted | L03 shows "Sin conexión", search disabled |
 | W1.10 | Permission revoked after ready | `ready` → `unavailable` → L03 on next navigation |
 | W1.11 | T01: Location acquired → shows LOC-STATUS-01 banner (non-dismissible) | `ready` → `/trip` shows banner with placeName |

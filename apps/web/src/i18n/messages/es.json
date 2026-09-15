@@ -137,7 +137,8 @@
         "blockedHintBody": "Si ignoraste el aviso de ubicación varias veces, el navegador lo bloquea. Haz clic en el icono junto a la URL, elige Ubicación, restablece el permiso e inténtalo de nuevo."
       },
       "banner": {
-        "established": "Ubicación establecida: {placeName}"
+        "established": "Ubicación establecida: {placeName}",
+        "refresh": "Actualizar ubicación"
       }
     }
   },

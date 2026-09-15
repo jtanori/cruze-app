@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/use-locale";
 import { useTripStore } from "@/stores/trip";
 import { useLocationContext } from "@/components/location/LocationProvider";
+import { useTripLocationRefresh } from "@/hooks/useTripLocationRefresh";
 import { useNearbyCrossings } from "@/hooks/useNearbyCrossings";
 import { useTripStaleness } from "@/hooks/useTripStaleness";
 import { useLiveCrossingSnapshot } from "@/hooks/useLiveCrossingSnapshot";
@@ -32,7 +33,8 @@ export default function TripPage() {
   const router = useRouter();
   const locale = useLocale();
   const { start, destination, completed, refreshActivity, reset, recommendedCrossing, direction } = useTripStore();
-  const { location } = useLocationContext();
+  const { location, retry: refreshLocation, isLoading: locationLoading } = useLocationContext();
+  useTripLocationRefresh();
   const { crossings: nearbyCrossings, loading: loadingNearby, empty: emptyNearby } = useNearbyCrossings(location);
   const { isStale, showStalePrompt, dismissStale } = useTripStaleness();
   const { snapshot: liveSnapshot, previousSnapshot: livePreviousSnapshot } = useLiveCrossingSnapshot(
@@ -90,6 +92,8 @@ export default function TripPage() {
               <LocationStatusBanner
                 placeName={location.placeName || `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`}
                 dismissible={false}
+                onRefresh={refreshLocation}
+                refreshing={locationLoading}
               />
             )}
 

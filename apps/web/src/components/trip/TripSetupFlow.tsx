@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/use-locale";
@@ -70,6 +70,16 @@ export function TripSetupFlow() {
   const [step, setStep] = useState<TripSetupStep>(() =>
     handoff.verdict.compatible && handoff.request.destination ? "origin" : "destination"
   );
+  // Entry step at mount: back from here exits the flow (history), deeper
+  // steps walk back within the wizard. Entering with a preselected
+  // destination must not trap the user into rewinding to a step they
+  // never visited.
+  const entryStepRef = useRef<TripSetupStep | null>(null);
+  if (entryStepRef.current === null) {
+    entryStepRef.current = handoff.verdict.compatible && handoff.request.destination
+      ? "origin"
+      : "destination";
+  }
   const handoffCandidate =
     handoff.verdict.compatible ? handoff.verdict.candidate : null;
   const handoffRejection =
@@ -144,6 +154,10 @@ export function TripSetupFlow() {
   };
 
   const goBack = () => {
+    if (step === entryStepRef.current) {
+      router.back();
+      return;
+    }
     const prev = getPreviousStep(state, step);
     if (prev) setStep(prev);
     else router.back();

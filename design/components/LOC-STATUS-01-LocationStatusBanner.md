@@ -1,5 +1,6 @@
 # LOC-STATUS-01 — LocationStatusBanner
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-15 — optional Actualizar action (manual refresh) wired to established banner.
+**Prior:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## Component ID
 LOC-STATUS-01
@@ -47,6 +48,7 @@ LOC-STATUS-01
 ├── MapPin icon (Cruze Mint, 20px)
 ├── Location text (Cruze Mint, 14px, 600)
 ├── "Ubicación establecida:" label (Text Primary, 12px)
+├── Refresh button (optional, RefreshCw icon, spins while acquiring)
 └── Dismiss button (optional, X icon)
 ```
 

@@ -137,7 +137,8 @@
         "blockedHintBody": "If you dismissed the location prompt a few times, the browser blocks it. Click the tune icon next to the URL, choose Location, reset the permission, then try again."
       },
       "banner": {
-        "established": "Location set: {placeName}"
+        "established": "Location set: {placeName}",
+        "refresh": "Refresh location"
       }
     }
   },

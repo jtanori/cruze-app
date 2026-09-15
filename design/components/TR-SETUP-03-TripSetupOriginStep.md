@@ -54,6 +54,13 @@ Padding:        16px
 Default origin is the established current location, but the user can
 override it.
 
+Preselection applies only when the location country is known (MX/US):
+the card renders selected with resolved place + country lines. UNKNOWN
+locations show the card unselected; tapping resolves via live
+reverse-geocode instead of guessing. Manual search offers real geocoded
+results only — fabricated coordinates/country are prohibited. Entry-step
+back exits the flow via history; deeper steps walk back within the wizard.
+
 ------------------------------------------------------------------------
 
 ---

@@ -1,12 +1,14 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { MapPin, X } from "lucide-react";
+import { MapPin, RefreshCw, X } from "lucide-react";
 
 interface LocationStatusBannerProps {
   placeName: string;
   dismissible?: boolean;
   onDismiss?: () => void;
+  onRefresh?: () => void;
+  refreshing?: boolean;
   className?: string;
 }
 
@@ -19,6 +21,8 @@ export function LocationStatusBanner({
   placeName,
   dismissible = false,
   onDismiss,
+  onRefresh,
+  refreshing = false,
   className = "",
 }: LocationStatusBannerProps) {
   const t = useTranslations();
@@ -34,15 +38,27 @@ export function LocationStatusBanner({
         </div>
       </div>
 
-      {dismissible && onDismiss && (
-        <button
-          onClick={onDismiss}
-          className="p-1 text-cruze-mint hover:text-cruze-mint/70 transition-colors"
-          aria-label="Dismiss"
-        >
-          <X className="w-3 h-3" />
-        </button>
-      )}
+      <div className="flex items-center gap-1">
+        {onRefresh && (
+          <button
+            onClick={onRefresh}
+            disabled={refreshing}
+            className="p-1 text-cruze-mint hover:text-cruze-mint/70 disabled:opacity-50 transition-colors"
+            aria-label={t("onboarding.location.banner.refresh")}
+          >
+            <RefreshCw className={`w-3 h-3 ${refreshing ? "animate-spin" : ""}`} />
+          </button>
+        )}
+        {dismissible && onDismiss && (
+          <button
+            onClick={onDismiss}
+            className="p-1 text-cruze-mint hover:text-cruze-mint/70 transition-colors"
+            aria-label="Dismiss"
+          >
+            <X className="w-3 h-3" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }
