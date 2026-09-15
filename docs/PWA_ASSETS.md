@@ -1,9 +1,9 @@
 # PWA Art Assets — preparation checklist
 
-> Shipped code references these files (`apps/web/public/icons/`, `apps/web/public/manifest.webmanifest`).
-> Current PNGs are **temporary geometric placeholders** — replace them with final art before
-> announcing installability. Everything else (manifest, metadata, service worker, install UX)
-> is implemented and only needs the real files dropped in.
+> ✅ Final art installed 2026-09-15 from `IconKitchen-Output/web/`
+> (apple-touch-icon 180, icon-192, icon-512, maskable-512 + favicon.ico).
+> Verify on-device (DevTools → Application → Manifest, Lighthouse PWA) before
+> announcing installability. Keep this file as the replacement procedure.
 
 ## Required files
 
