@@ -100,11 +100,13 @@ describe("GET /api/places", () => {
     mockMapbox({
       features: [
         {
+          // Real Mapbox shape for state features: region code lives in
+          // properties, and context carries country only.
           id: "place.ak",
           place_name: "Alaska, United States",
           center: [-152, 64],
+          properties: { short_code: "US-AK" },
           context: [
-            { id: "region.1", short_code: "US-AK", text: "Alaska" },
             { id: "country.1", short_code: "us", text: "United States" },
           ],
         },
