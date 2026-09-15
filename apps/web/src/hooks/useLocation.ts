@@ -130,11 +130,7 @@ export function useLocation(): UseLocationResult {
       const place = await reverseGeocode(result.lat, result.lng).catch(() => null);
       const data = createLocationData(result.lat, result.lng, result.accuracy);
       // Keep the full place — country upgrades to HIGH when geocoded.
-      const resolved = resolveUserCountry(
-        result.lat,
-        result.lng,
-        place?.country ?? null
-      );
+      const resolved = resolveUserCountry(place?.country ?? null);
       data.country = resolved.country;
       data.countryConfidence = resolved.confidence;
       data.placeName =
@@ -226,7 +222,7 @@ export function useLocation(): UseLocationResult {
     ) => {
       const data = createLocationData(lat, lng, 1000);
       // Manual picks carry their geocoded country when the caller has it.
-      const resolved = resolveUserCountry(lat, lng, country ?? null);
+      const resolved = resolveUserCountry(country ?? null);
       data.country = resolved.country;
       data.countryConfidence = resolved.confidence;
       if (placeName) {

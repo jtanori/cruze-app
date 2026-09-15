@@ -223,7 +223,8 @@ export function createLocationData(
   lng: number,
   accuracy: number,
 ): LocationData {
-  const resolved = resolveUserCountry(lat, lng, null);
+  // No geocoded country at construction — callers upgrade via reverse-geocode.
+  const resolved = resolveUserCountry(null);
   return {
     lat,
     lng,

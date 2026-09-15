@@ -5,7 +5,7 @@ import { Search, X, MapPin, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { searchPlaces } from "@/lib/geocoding";
 import type { Place } from "@/types";
-import { detectUserCountry, getTargetDestinationCountry, filterDestinations } from "@/lib/destination-filter";
+import { getTargetDestinationCountrySafe, filterDestinations } from "@/lib/destination-filter";
 import type { RelevantPlace } from "@/lib/destination-filter";
 import type { ResolvedCountry } from "@/lib/country-resolution";
 
@@ -38,16 +38,13 @@ export function DestinationSearch({
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Target country from the resolved location country.
+  // Target country from the resolved location country only.
   // UNKNOWN (or absent prop) never forces a side: unfiltered + generic copy.
-  // Legacy coordinate detection remains only for callers without a prop.
   const hasKnownCountry = !!userCountryProp && userCountryProp !== "UNKNOWN";
-  const userCountry = hasKnownCountry
-    ? userCountryProp
-    : detectUserCountry(userLat, userLng);
-  const targetCountry = hasKnownCountry
-    ? getTargetDestinationCountry(userCountry)
-    : null;
+  // Null when unknown — placeholders and filters go generic, never invented.
+  const targetCountry = getTargetDestinationCountrySafe(
+    hasKnownCountry ? userCountryProp : "UNKNOWN"
+  );
 
   // Get i18n country name (short form for inline copy: EE.UU. / the U.S.)
   const targetCountryName =
@@ -103,9 +100,7 @@ export function DestinationSearch({
       // the destination itself is never rewritten.
       const filtered = filterDestinations(
         allPlaces,
-        userLat,
-        userLng,
-        userCountryProp ?? null
+        userCountryProp ?? "UNKNOWN"
       );
       if (process.env.NEXT_PUBLIC_CRUZE_DEBUG_SEARCH === "1") {
         console.debug(

@@ -23,36 +23,9 @@ export interface Place {
 }
 
 /**
- * Detect user's country from latitude/longitude
- * Simple bounding box approach for MX/US
+ * Country comes from geocoding, never geometry. Callers pass the resolved
+ * user country (or UNKNOWN/null when the location has none).
  */
-export function detectUserCountry(lat: number, lng: number): Country {
-  // Mexico bounding box (approximate)
-  const mxBounds = {
-    north: 32.72,
-    south: 14.53,
-    east: -86.72,
-    west: -118.47,
-  };
-
-  // US bounding box (approximate, contiguous)
-  const usBounds = {
-    north: 49.38,
-    south: 24.39,
-    east: -66.95,
-    west: -125.0,
-  };
-
-  const inMX = lat >= mxBounds.south && lat <= mxBounds.north && lng >= mxBounds.west && lng <= mxBounds.east;
-  const inUS = lat >= usBounds.south && lat <= usBounds.north && lng >= usBounds.west && lng <= usBounds.east;
-
-  if (inMX && !inUS) return "MX";
-  if (inUS && !inMX) return "US";
-
-  // Default to US for border/overlap areas or unknown
-  // Could also check which is closer
-  return "US";
-}
 
 /**
  * Get target destination country based on user's country
@@ -69,11 +42,9 @@ export function getTargetDestinationCountry(userCountry: Country): Country {
  */
 export function filterDestinationsByCountry(
   places: Place[],
-  userLat: number,
-  userLng: number,
   knownCountry?: Country | "UNKNOWN" | null
 ): Place[] {
-  const userCountry = knownCountry ?? detectUserCountry(userLat, userLng);
+  const userCountry = knownCountry ?? "UNKNOWN";
   if (userCountry === "UNKNOWN") return places;
   const targetCountry = getTargetDestinationCountry(userCountry);
 
@@ -98,11 +69,9 @@ export interface RelevantPlace extends Place {
  */
 export function filterDestinations(
   places: Place[],
-  userLat: number,
-  userLng: number,
   knownCountry?: Country | "UNKNOWN" | null
 ): RelevantPlace[] {
-  const userCountry = knownCountry ?? detectUserCountry(userLat, userLng);
+  const userCountry = knownCountry ?? "UNKNOWN";
   if (userCountry === "UNKNOWN") return [...places];
   const targetCountry = getTargetDestinationCountry(userCountry);
 
@@ -133,9 +102,13 @@ export function filterDestinations(
 }
 
 /**
- * Get target country code for search placeholder (MX/US)
+ * Get target destination country for a KNOWN user country.
+ * UNKNOWN has no opposite side — callers must handle it explicitly
+ * (generic copy, unfiltered results) instead of inventing one here.
  */
-export function getTargetCountryCode(userLat: number, userLng: number): "MX" | "US" {
-  const userCountry = detectUserCountry(userLat, userLng);
+export function getTargetDestinationCountrySafe(
+  userCountry: Country | "UNKNOWN" | null | undefined
+): Country | null {
+  if (userCountry !== "MX" && userCountry !== "US") return null;
   return getTargetDestinationCountry(userCountry);
 }

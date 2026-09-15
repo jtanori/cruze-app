@@ -1,55 +1,42 @@
 import { describe, it, expect } from "vitest";
 import {
-  resolveCountryFromCoordinates,
   resolveUserCountry,
   contextualDirectionForCountry,
 } from "../country-resolution";
 
-describe("resolveCountryFromCoordinates", () => {
-  it("Mexico coordinate → MX", () => {
-    expect(resolveCountryFromCoordinates(19.43, -99.13)).toBe("MX");
-  });
-
-  it("US coordinate → US", () => {
-    expect(resolveCountryFromCoordinates(40.71, -74.0)).toBe("US");
-  });
-
-  it("border overlap → UNKNOWN (Mapbox is the authority there)", () => {
-    expect(resolveCountryFromCoordinates(32.5149, -117.0382)).toBe("UNKNOWN"); // Tijuana
-    expect(resolveCountryFromCoordinates(32.7157, -117.1611)).toBe("UNKNOWN"); // San Diego
-    expect(resolveCountryFromCoordinates(31.31, -113.95)).toBe("UNKNOWN"); // Puerto Peñasco
-    expect(resolveCountryFromCoordinates(27.5064, -99.5076)).toBe("UNKNOWN"); // Laredo, on the river
-  });
-
-  it("out-of-bounds (0,0) → UNKNOWN", () => {
-    expect(resolveCountryFromCoordinates(0, 0)).toBe("UNKNOWN");
-  });
-});
-
+/**
+ * Country comes from geocoding, never geometry. No bounding boxes:
+ * Tijuana and San Diego share the same strip of earth, so coordinates
+ * alone cannot tell them apart — anything but a geocoded answer is UNKNOWN.
+ */
 describe("resolveUserCountry", () => {
   it("valid Mapbox MX wins → HIGH", () => {
-    expect(resolveUserCountry(32.51, -117.03, "MX")).toEqual({
+    expect(resolveUserCountry("MX")).toEqual({
       country: "MX",
       confidence: "HIGH",
     });
   });
 
   it("valid Mapbox US wins → HIGH", () => {
-    expect(resolveUserCountry(19.43, -99.13, "US")).toEqual({
+    expect(resolveUserCountry("US")).toEqual({
       country: "US",
       confidence: "HIGH",
     });
   });
 
-  it("Mapbox unavailable → coordinate fallback → MEDIUM", () => {
-    expect(resolveUserCountry(19.43, -99.13, null)).toEqual({
-      country: "MX",
-      confidence: "MEDIUM",
+  it("missing geocode → UNKNOWN → LOW (never a default side)", () => {
+    expect(resolveUserCountry(null)).toEqual({
+      country: "UNKNOWN",
+      confidence: "LOW",
+    });
+    expect(resolveUserCountry(undefined)).toEqual({
+      country: "UNKNOWN",
+      confidence: "LOW",
     });
   });
 
-  it("ambiguous + no geocode → UNKNOWN → LOW", () => {
-    expect(resolveUserCountry(27.5064, -99.5076, null)).toEqual({
+  it("garbage geocode → UNKNOWN → LOW", () => {
+    expect(resolveUserCountry("XX" as never)).toEqual({
       country: "UNKNOWN",
       confidence: "LOW",
     });

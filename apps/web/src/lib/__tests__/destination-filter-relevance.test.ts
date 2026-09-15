@@ -18,14 +18,10 @@ function place(overrides: Partial<Place> = {}): Place {
   };
 }
 
-const TIJUANA = { lat: 32.51, lng: -117.03 };
-
 describe("filterDestinations — border-relevance exception", () => {
   it("admits opposite-country places untouched", () => {
     const out = filterDestinations(
       [place({ id: "sd", country: "US" })],
-      TIJUANA.lat,
-      TIJUANA.lng,
       "MX"
     );
     expect(out).toHaveLength(1);
@@ -43,8 +39,6 @@ describe("filterDestinations — border-relevance exception", () => {
           country: "MX",
         }),
       ],
-      TIJUANA.lat,
-      TIJUANA.lng,
       "MX"
     );
     expect(out).toHaveLength(1);
@@ -69,8 +63,6 @@ describe("filterDestinations — border-relevance exception", () => {
           country: "MX",
         }),
       ],
-      TIJUANA.lat,
-      TIJUANA.lng,
       "MX"
     );
     expect(out.map((p) => p.id)).toEqual(["sonoyta", "us1", "us2"]);
@@ -87,8 +79,6 @@ describe("filterDestinations — border-relevance exception", () => {
           country: "MX",
         }),
       ],
-      TIJUANA.lat,
-      TIJUANA.lng,
       "MX"
     );
     expect(out).toHaveLength(0);
@@ -97,8 +87,6 @@ describe("filterDestinations — border-relevance exception", () => {
   it("excludes same-country places without finite coordinates", () => {
     const out = filterDestinations(
       [place({ id: "x", country: "MX", latitude: NaN, longitude: NaN })],
-      TIJUANA.lat,
-      TIJUANA.lng,
       "MX"
     );
     expect(out).toHaveLength(0);
@@ -110,8 +98,6 @@ describe("filterDestinations — border-relevance exception", () => {
         place({ id: "cdmx", country: "MX", latitude: 19.4326, longitude: -99.1332 }),
         place({ id: "sd", country: "US" }),
       ],
-      TIJUANA.lat,
-      TIJUANA.lng,
       "UNKNOWN"
     );
     expect(out).toHaveLength(2);
