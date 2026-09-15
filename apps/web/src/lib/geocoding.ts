@@ -87,7 +87,8 @@ export async function searchLocations(
 export async function searchPlaces(
   query: string,
   limit: number = 5,
-  country?: "MX" | "US" | null
+  country?: "MX" | "US" | null,
+  signal?: AbortSignal
 ): Promise<Place[]> {
   if (!query || query.length < 2) {
     return [];
@@ -99,7 +100,7 @@ export async function searchPlaces(
       limit: String(limit),
     });
     if (country) params.set("country", country);
-    const response = await fetch(`/api/places?${params.toString()}`);
+    const response = await fetch(`/api/places?${params.toString()}`, { signal });
 
     if (!response.ok) {
       throw new Error(`Places API error: ${response.status}`);
@@ -109,6 +110,8 @@ export async function searchPlaces(
     const places: ProxyPlace[] = Array.isArray(data.places) ? data.places : [];
     return places.map(toPlace);
   } catch (error) {
+    // Aborts are routine (new keystroke supersedes); stay silent.
+    if (error instanceof DOMException && error.name === "AbortError") return [];
     console.error("Geocoding search failed:", error);
     return [];
   }

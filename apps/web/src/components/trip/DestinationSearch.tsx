@@ -57,18 +57,39 @@ export function DestinationSearch({
         ? t("common.unitedStatesShort")
         : null;
 
+  // In-flight request handle + last dispatched query (dedup + abort).
+  const abortRef = useRef<AbortController | null>(null);
+  const lastQueryRef = useRef<string>("");
+
+  const abortInflight = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+  }, []);
+
   const handleSearch = useCallback(async (searchQuery: string) => {
     if (!searchQuery || searchQuery.length < 2) {
+      lastQueryRef.current = searchQuery;
       setResults([]);
       setShowResults(false);
       return;
     }
+    // Tail-apply: an identical query with visible results needs no refetch.
+    if (searchQuery === lastQueryRef.current && results.length > 0) return;
+    lastQueryRef.current = searchQuery;
+
+    // New keystroke supersedes: abort the previous request so a slow
+    // response can never overwrite newer results.
+    abortInflight();
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     setLoading(true);
     try {
       // Strict server-side country filter when the target side is known;
       // both sides when UNKNOWN (client filter below stays a safety net).
-      const allPlaces = await searchPlaces(searchQuery, 10, targetCountry);
+      const allPlaces = await searchPlaces(searchQuery, 10, targetCountry, controller.signal);
+      // Superseded while awaiting: never touch newer state.
+      if (controller.signal.aborted) return;
       // Border-relevant same-country places pass with a candidate attached;
       // the destination itself is never rewritten.
       const filtered = filterDestinations(
@@ -83,9 +104,12 @@ export function DestinationSearch({
       console.error("Search failed:", error);
       setResults([]);
     } finally {
-      setLoading(false);
+      if (abortRef.current === controller) {
+        abortRef.current = null;
+        setLoading(false);
+      }
     }
-  }, [userLat, userLng, userCountryProp, targetCountry]);
+  }, [userLat, userLng, userCountryProp, targetCountry, results.length, abortInflight]);
 
   const handleInputChange = (value: string) => {
     setQuery(value);
@@ -101,6 +125,8 @@ export function DestinationSearch({
   };
 
   const handleClear = () => {
+    abortInflight();
+    lastQueryRef.current = "";
     setQuery("");
     setResults([]);
     setShowResults(false);
@@ -109,6 +135,8 @@ export function DestinationSearch({
   };
 
   const handleSelect = (place: Place) => {
+    abortInflight();
+    lastQueryRef.current = place.name;
     setSelected(place);
     setQuery(place.name);
     setResults([]);
@@ -127,6 +155,8 @@ export function DestinationSearch({
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
+      abortRef.current?.abort();
+      abortRef.current = null;
     };
   }, []);
 
@@ -142,6 +172,7 @@ export function DestinationSearch({
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
+    abortInflight();
     setShowResults(false);
   };
 
@@ -169,17 +200,16 @@ export function DestinationSearch({
             value={query}
             onChange={(e) => handleInputChange(e.target.value)}
             onFocus={() => results.length > 0 && setShowResults(true)}
-            placeholder={placeholder || defaultPlaceholder}
-            className="flex-1 bg-transparent text-ink text-sm outline-none placeholder:text-faint"
-            autoComplete="off"
-            disabled={loading}
-          />
+              placeholder={placeholder || defaultPlaceholder}
+              className="flex-1 bg-transparent text-ink text-sm outline-none placeholder:text-faint"
+              autoComplete="off"
+            />
           {loading && (
             <div className="flex items-center gap-2 text-faint text-sm">
               <div className="w-4 h-4 border-2 border-faint border-t-transparent rounded-full animate-spin" />
             </div>
           )}
-          {query && !loading && (
+          {query && (
             <button
               onClick={handleClear}
               className="text-faint hover:text-ink shrink-0"
