@@ -45,8 +45,10 @@ export function parseSetupParams(search: string): HandoffRequest {
 
   let destination: TripDestinationSelection | null = null;
   if (rawDest) {
+    // params.get() already URL-decoded once — parse directly. Anything else
+    // is malformed and correctly yields no destination.
     try {
-      const parsed: unknown = JSON.parse(decodeURIComponent(rawDest));
+      const parsed: unknown = JSON.parse(rawDest);
       if (isValidDestination(parsed)) destination = parsed;
     } catch {
       destination = null;

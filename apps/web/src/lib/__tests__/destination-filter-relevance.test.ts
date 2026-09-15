@@ -150,4 +150,34 @@ describe("candidate plumbing — destination never rewritten", () => {
     expect(url).toContain("dest=");
     expect(url).not.toContain("Lukeville");
   });
+
+  it("setup URLs are singly encoded and round-trip through the parser", async () => {
+    const { parseSetupParams } = await import("../trip-handoff");
+    const url = buildSetupUrl(
+      "es",
+      {
+        id: "place.35383455",
+        name: "Tijuana",
+        lat: 32.533157,
+        lng: -117.01911,
+        country: "MX",
+        crossingCandidateId: "san-ysidro",
+      },
+      "san-ysidro"
+    );
+    // No double-encoding: %25 must never appear in a generated URL.
+    expect(url).not.toContain("%25");
+    const query = url.slice(url.indexOf("?"));
+    expect(parseSetupParams(query)).toEqual({
+      destination: {
+        id: "place.35383455",
+        name: "Tijuana",
+        lat: 32.533157,
+        lng: -117.01911,
+        country: "MX",
+        crossingCandidateId: "san-ysidro",
+      },
+      crossingId: "san-ysidro",
+    });
+  });
 });
