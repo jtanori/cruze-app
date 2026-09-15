@@ -78,32 +78,34 @@ describe("map-route primitives", () => {
       vi.restoreAllMocks();
     });
 
-    it("returns route coordinates on success", async () => {
+    it("returns route coordinates on success via same-origin proxy", async () => {
       const coords = [
         [-115.5, 31.0],
         [-116.0, 31.5],
         [-117.0, 32.5],
       ];
-      vi.mocked(global.fetch).mockResolvedValue({
-        json: async () => ({ routes: [{ geometry: { coordinates: coords } }] }),
+      const fetchMock = vi.mocked(global.fetch).mockResolvedValue({
+        json: async () => ({ coordinates: coords }),
       } as Response);
 
       const result = await fetchDirectionsRoute(
         [-115.5, 31.0],
-        [-117.0, 32.5],
-        "test-token"
+        [-117.0, 32.5]
       );
       expect(result).toEqual(coords);
+      const url = String(fetchMock.mock.calls[0][0]);
+      expect(url.startsWith("/api/directions?")).toBe(true);
+      expect(url).not.toContain("access_token");
     });
 
-    it("returns fallback [start, end] when no routes", async () => {
+    it("returns fallback [start, end] when no coordinates", async () => {
       vi.mocked(global.fetch).mockResolvedValue({
-        json: async () => ({ routes: [] }),
+        json: async () => ({}),
       } as Response);
 
       const start: [number, number] = [-115.5, 31.0];
       const end: [number, number] = [-117.0, 32.5];
-      const result = await fetchDirectionsRoute(start, end, "test-token");
+      const result = await fetchDirectionsRoute(start, end);
       expect(result).toEqual([start, end]);
     });
   });
