@@ -30,6 +30,12 @@ export interface NearbyCrossing {
   direction: CrossingDirection;
   status: CrossingStatus;
   lastUpdated: number;
+  mexicanCity?: string;
+  usCity?: string;
+  lat?: number;
+  lng?: number;
+  /** Km from the user's set location, attached by useNearbyCrossings. */
+  distanceKm?: number;
 }
 
 interface CrossingsApiItem {
@@ -40,6 +46,21 @@ interface CrossingsApiItem {
   direction?: unknown;
   status?: unknown;
   lastUpdated?: unknown;
+  mexicanCity?: unknown;
+  usCity?: unknown;
+  coordinates?: unknown;
+}
+
+function toStringOrUndefined(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim().length > 0 ? value : undefined;
+}
+
+function toLatLng(value: unknown): { lat: number; lng: number } | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const { lat, lng } = value as { lat?: unknown; lng?: unknown };
+  if (typeof lat !== "number" || typeof lng !== "number") return undefined;
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return undefined;
+  return { lat, lng };
 }
 
 function toNumber(value: unknown, fallback: number): number {
@@ -56,6 +77,7 @@ export function normalizeCrossings(items: unknown): NearbyCrossing[] {
     if (!id || !name) continue;
     const direction = String(raw.direction || "MX_TO_US").toUpperCase();
     const status = String(raw.status || "open").toLowerCase();
+    const coords = toLatLng(raw.coordinates);
     out.push({
       id,
       name,
@@ -66,6 +88,10 @@ export function normalizeCrossings(items: unknown): NearbyCrossing[] {
         typeof raw.lastUpdated === "string" || typeof raw.lastUpdated === "number"
           ? new Date(raw.lastUpdated).getTime() || Date.now()
           : Date.now(),
+      mexicanCity: toStringOrUndefined(raw.mexicanCity),
+      usCity: toStringOrUndefined(raw.usCity),
+      lat: coords?.lat,
+      lng: coords?.lng,
     });
   }
   return out;

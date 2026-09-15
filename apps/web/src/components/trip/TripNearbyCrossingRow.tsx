@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Clock } from "lucide-react";
 import { formatFreshness } from "@/lib/format-freshness";
+import { formatDuration, formatDistance } from "@/lib/display";
 
 interface TripNearbyCrossingRowProps {
   name: string;
@@ -10,6 +11,9 @@ interface TripNearbyCrossingRowProps {
   direction: "MX_TO_US" | "US_TO_MX";
   status: "open" | "closed" | "limited";
   lastUpdated: number; // timestamp
+  mexicanCity?: string;
+  usCity?: string;
+  distanceKm?: number;
   onClick: () => void;
 }
 
@@ -19,8 +23,16 @@ export function TripNearbyCrossingRow({
   direction,
   status,
   lastUpdated,
+  mexicanCity,
+  usCity,
+  distanceKm,
   onClick,
 }: TripNearbyCrossingRowProps) {
+  const placeLine =
+    mexicanCity && usCity && mexicanCity !== name && usCity !== name
+      ? `${mexicanCity} ↔ ${usCity}`
+      : (mexicanCity && mexicanCity !== name ? mexicanCity : null) ??
+        (usCity && usCity !== name ? usCity : null);
   const t = useTranslations();
 
   const freshnessText = formatFreshness(lastUpdated, t);
@@ -43,8 +55,18 @@ export function TripNearbyCrossingRow({
       <div className="flex items-center gap-2">
         <span className="text-ink text-sm font-medium truncate">{name}</span>
         <span className="ml-auto text-ink text-sm font-semibold tabular-nums shrink-0">
-          {waitTime} {t("common.min")}
+          {distanceKm !== undefined ? formatDistance(distanceKm) : formatDuration(waitTime)}
         </span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-faint text-xs truncate">
+          {placeLine ?? (distanceKm !== undefined ? formatDuration(waitTime) : "")}
+        </span>
+        {distanceKm !== undefined && (
+          <span className="ml-auto text-ink text-sm font-semibold tabular-nums shrink-0">
+            {formatDuration(waitTime)}
+          </span>
+        )}
       </div>
       <div className="flex items-center gap-2 text-xs">
         <span className="flex items-center gap-1.5 shrink-0">

@@ -22,6 +22,19 @@ export function formatDuration(minutes: number): string {
 }
 
 /**
+ * Format a distance in km for tight rows (locale-neutral, no preposition).
+ * - Under 1 km: "500 m"
+ * - Under 10 km: "3.2 km"
+ * - Else: "12 km"
+ */
+export function formatDistance(km: number): string {
+  if (!Number.isFinite(km) || km < 0) return "—";
+  if (km < 1) return `${Math.max(1, Math.round(km * 1000))} m`;
+  if (km < 10) return `${(Math.round(km * 10) / 10).toFixed(1)} km`;
+  return `${Math.round(km)} km`;
+}
+
+/**
  * Get Tailwind background class for crossing status.
  * Consolidates status color mappings from 5+ files.
  */

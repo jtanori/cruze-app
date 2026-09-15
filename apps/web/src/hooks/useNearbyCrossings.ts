@@ -8,6 +8,7 @@ import {
   rankCrossings,
   type NearbyCrossing,
 } from "@/lib/crossings";
+import { haversineDistance } from "@/lib/border-data";
 
 const CANDIDATE_LIMIT = 10;
 const DISPLAY_LIMIT = 3;
@@ -67,6 +68,19 @@ export function useNearbyCrossings(
     };
   }, [location?.lat, location?.lng, location?.country]);
 
-  const crossings = rankCrossings(candidates).slice(0, displayLimit);
+  // Distance awareness: haversine from the user's set location. Rows with
+  // no coordinates simply carry no distance (layout falls back cleanly).
+  const withDistance: NearbyCrossing[] = candidates.map((c) =>
+    c.lat !== undefined && c.lng !== undefined
+      ? {
+          ...c,
+          distanceKm: haversineDistance(
+            { lat: location?.lat ?? 0, lng: location?.lng ?? 0 },
+            { lat: c.lat, lng: c.lng }
+          ),
+        }
+      : c
+  );
+  const crossings = rankCrossings(withDistance).slice(0, displayLimit);
   return { crossings, loading, empty: !loading && crossings.length === 0 };
 }

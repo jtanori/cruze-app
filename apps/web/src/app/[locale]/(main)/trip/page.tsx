@@ -126,6 +126,9 @@ export default function TripPage() {
                   direction={crossing.direction}
                   status={crossing.status}
                   lastUpdated={crossing.lastUpdated}
+                  mexicanCity={crossing.mexicanCity}
+                  usCity={crossing.usCity}
+                  distanceKm={crossing.distanceKm}
                   onClick={() => router.push(`/${locale}/crossing/${crossing.id}`)}
                 />
               ))}
