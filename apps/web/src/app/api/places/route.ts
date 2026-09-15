@@ -64,6 +64,15 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     const features = Array.isArray(data.features) ? data.features : [];
 
+    // Debug trail (token never logged): what Mapbox returned vs what we kept.
+    const debug = process.env.CRUZE_DEBUG_SEARCH === "1";
+    if (debug) {
+      console.log(
+        `[search-debug] q=${JSON.stringify(query)} country=${searchParams.get("country") ?? "mx,us"} ` +
+          `limit=${limit} mapbox_hits=${features.length}`
+      );
+    }
+
     // Country comes from Mapbox's own context chain — never a bare default.
     // Order: context country short_code → properties.short_code → the
     // requested single-country filter (actual request data, not inference).
@@ -98,7 +107,10 @@ export async function GET(request: NextRequest) {
 
       // Non-mainland US regions (Alaska, Hawaii, territories) are out of
       // scope for a border-crossing app — drop them server-side.
-      if (regionCode && NON_MAINLAND_US.has(regionCode)) continue;
+      if (regionCode && NON_MAINLAND_US.has(regionCode)) {
+        if (debug) console.log(`[search-debug] DROP non-mainland (${regionCode}): ${placeName}`);
+        continue;
+      }
 
       const countryCode =
         countryCtx?.short_code?.toUpperCase() ??
@@ -106,7 +118,13 @@ export async function GET(request: NextRequest) {
         null;
       const country =
         countryCode === "US" ? "US" : countryCode === "MX" ? "MX" : requestedSingle;
-      if (!country) continue;
+      if (!country) {
+        if (debug) console.log(`[search-debug] DROP no-country: ${placeName}`);
+        continue;
+      }
+      if (debug) {
+        console.log(`[search-debug] KEEP ${country}${regionCode ? `/${regionCode}` : ""}: ${placeName}`);
+      }
 
       places.push({
         id: String(f.id ?? placeName),
@@ -121,6 +139,9 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    if (debug) {
+      console.log(`[search-debug] responding places=${places.length}`);
+    }
     return NextResponse.json(
       { places },
       { headers: { "Cache-Control": "public, max-age=300" } }

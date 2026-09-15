@@ -56,6 +56,26 @@ describe("filterDestinations — border-relevance exception", () => {
     expect(out[0].country).toBe("MX");
   });
 
+  it("ranks border-relevant rows before opposite-country rows", () => {
+    const out = filterDestinations(
+      [
+        place({ id: "us1", name: "Sonoma", latitude: 38.29, longitude: -122.45, country: "US" }),
+        place({ id: "us2", name: "Ohio", latitude: 39.98, longitude: -81.9, country: "US" }),
+        place({
+          id: "sonoyta",
+          name: "Sonoyta",
+          latitude: 31.861,
+          longitude: -112.85,
+          country: "MX",
+        }),
+      ],
+      TIJUANA.lat,
+      TIJUANA.lng,
+      "MX"
+    );
+    expect(out.map((p) => p.id)).toEqual(["sonoyta", "us1", "us2"]);
+  });
+
   it("excludes same-country non-relevant places (CDMX)", () => {
     const out = filterDestinations(
       [

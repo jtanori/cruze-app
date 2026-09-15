@@ -90,6 +90,12 @@ export function DestinationSearch({
       const allPlaces = await searchPlaces(searchQuery, 10, targetCountry, controller.signal);
       // Superseded while awaiting: never touch newer state.
       if (controller.signal.aborted) return;
+      if (process.env.NEXT_PUBLIC_CRUZE_DEBUG_SEARCH === "1") {
+        console.debug(
+          `[search-debug] client q=${JSON.stringify(searchQuery)} target=${targetCountry ?? "both"} ` +
+            `received=${allPlaces.length}`
+        );
+      }
       // Border-relevant same-country places pass with a candidate attached;
       // the destination itself is never rewritten.
       const filtered = filterDestinations(
@@ -98,6 +104,12 @@ export function DestinationSearch({
         userLng,
         userCountryProp ?? null
       );
+      if (process.env.NEXT_PUBLIC_CRUZE_DEBUG_SEARCH === "1") {
+        console.debug(
+          `[search-debug] client filtered=${filtered.length} ` +
+            filtered.map((p) => `${p.name}(${p.country}${p.borderCrossingId ? `+${p.borderCrossingId}` : ""})`).join(", ")
+        );
+      }
       setResults(filtered.slice(0, 5));
       setShowResults(true);
     } catch (error) {

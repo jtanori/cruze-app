@@ -106,10 +106,11 @@ export function filterDestinations(
   if (userCountry === "UNKNOWN") return [...places];
   const targetCountry = getTargetDestinationCountry(userCountry);
 
-  const out: RelevantPlace[] = [];
+  const normal: RelevantPlace[] = [];
+  const relevant: RelevantPlace[] = [];
   for (const place of places) {
     if (place.country === targetCountry) {
-      out.push(place);
+      normal.push(place);
       continue;
     }
     if (!Number.isFinite(place.latitude) || !Number.isFinite(place.longitude)) {
@@ -118,14 +119,17 @@ export function filterDestinations(
     const relevance = getBorderRelevance(place.latitude, place.longitude);
     if (!relevance.relevant) continue;
     const nearest = relevance.crossings[0];
-    out.push({
+    relevant.push({
       ...place,
       borderRelevance: relevance,
       borderCrossingId: nearest.id,
       borderCrossingName: nearest.name,
     });
   }
-  return out;
+  // Border-relevant rows lead: without the boost, Mapbox ranking + the
+  // client's slice(0, 5) would cut them (e.g. Sonoita Sonora ranks #6 for
+  // "sono"). Within each group, Mapbox order is preserved (stable sort).
+  return [...relevant, ...normal];
 }
 
 /**
