@@ -87,7 +87,10 @@ export function DestinationSearch({
     try {
       // Strict server-side country filter when the target side is known;
       // both sides when UNKNOWN (client filter below stays a safety net).
-      const allPlaces = await searchPlaces(searchQuery, 10, targetCountry, controller.signal);
+      // Request both sides: same-country border-relevant rows (e.g. Sonoyta
+      // for MX users) only exist in mx,us results. filterDestinations below
+      // is the single discrimination point (opposite + relevant only).
+      const allPlaces = await searchPlaces(searchQuery, 10, null, controller.signal);
       // Superseded while awaiting: never touch newer state.
       if (controller.signal.aborted) return;
       if (process.env.NEXT_PUBLIC_CRUZE_DEBUG_SEARCH === "1") {

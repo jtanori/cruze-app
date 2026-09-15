@@ -89,6 +89,7 @@ export async function GET(request: NextRequest) {
       "US-VI",
       "US-MP",
       "US-AS",
+      "US-UM",
     ]);
 
     // Slimmed contract — clients never see raw Mapbox features.
@@ -103,12 +104,16 @@ export async function GET(request: NextRequest) {
         : [];
       const countryCtx = context.find((c) => c.id?.startsWith("country."));
       const regionCtx = context.find((c) => c.id?.startsWith("region."));
+      // State-level features (e.g. Alaska) carry the region code in
+      // properties instead of context — check both.
+      const propCode = f.properties?.short_code?.toUpperCase() ?? null;
       const regionCode = regionCtx?.short_code?.toUpperCase() ?? null;
+      const regionLike = regionCode ?? (propCode && propCode.includes("-") ? propCode : null);
 
       // Non-mainland US regions (Alaska, Hawaii, territories) are out of
       // scope for a border-crossing app — drop them server-side.
-      if (regionCode && NON_MAINLAND_US.has(regionCode)) {
-        if (debug) console.log(`[search-debug] DROP non-mainland (${regionCode}): ${placeName}`);
+      if (regionLike && NON_MAINLAND_US.has(regionLike)) {
+        if (debug) console.log(`[search-debug] DROP non-mainland (${regionLike}): ${placeName}`);
         continue;
       }
 
