@@ -79,6 +79,12 @@ export function DestinationSearch({
     abortInflight();
     const controller = new AbortController();
     abortRef.current = controller;
+    // Hard 15s ceiling so a hung upstream can never spin the indicator forever.
+    const timeout = AbortSignal.timeout(15000);
+    const signal =
+      typeof AbortSignal.any === "function"
+        ? AbortSignal.any([controller.signal, timeout])
+        : controller.signal;
 
     setLoading(true);
     try {
@@ -87,9 +93,13 @@ export function DestinationSearch({
       // Request both sides: same-country border-relevant rows (e.g. Sonoyta
       // for MX users) only exist in mx,us results. filterDestinations below
       // is the single discrimination point (opposite + relevant only).
-      const allPlaces = await searchPlaces(searchQuery, 10, null, controller.signal);
-      // Superseded while awaiting: never touch newer state.
-      if (controller.signal.aborted) return;
+      const allPlaces = await searchPlaces(searchQuery, 10, null, signal);
+      // Superseded while awaiting: never touch newer state — but if nothing
+      // superseded us (cleared/unmounted path nulled the ref), release loading.
+      if (signal.aborted) {
+        if (abortRef.current === null) setLoading(false);
+        return;
+      }
       if (process.env.NEXT_PUBLIC_CRUZE_DEBUG_SEARCH === "1") {
         console.debug(
           `[search-debug] client q=${JSON.stringify(searchQuery)} target=${targetCountry ?? "both"} ` +
@@ -141,6 +151,7 @@ export function DestinationSearch({
     setResults([]);
     setShowResults(false);
     setSelected(null);
+    setLoading(false);
     inputRef.current?.focus();
   };
 

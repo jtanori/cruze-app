@@ -60,7 +60,7 @@ export function TripNearbyCrossingRow({
       </div>
       <div className="flex items-center gap-2">
         <span className="text-faint text-xs truncate">
-          {placeLine ?? (distanceKm !== undefined ? formatDuration(waitTime) : "")}
+          {placeLine ?? ""}
         </span>
         {distanceKm !== undefined && (
           <span className="ml-auto text-ink text-sm font-semibold tabular-nums shrink-0">
