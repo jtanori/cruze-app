@@ -246,7 +246,7 @@ describe("DestinationSearch dropdown visibility", () => {
     );
   });
 
-  it("shows a badge on blur with results, dropdown returns on focus", async () => {
+  it("hides on blur with no badge; focus restores cached results", async () => {
     renderSearch();
     const input = screen.getByRole("textbox");
     fireEvent.change(input, { target: { value: "al" } });
@@ -257,27 +257,59 @@ describe("DestinationSearch dropdown visibility", () => {
     await waitFor(() =>
       expect(screen.queryByText("Alabama")).toBeNull()
     );
-    // Badge appears with the result count.
-    expect(screen.getByText(/1 result/)).toBeTruthy();
+    // No badge, no selected card — the input owns the state.
+    expect(document.body.textContent ?? "").not.toMatch(/result/);
 
-    // Focus restores the dropdown and hides the badge.
     fireEvent.focus(input);
     await waitFor(() => expect(screen.getByText("Alabama")).toBeTruthy());
-    expect(screen.queryByText(/1 result/)).toBeNull();
   });
 
-  it("badge tap reopens the dropdown", async () => {
+  it("does not reopen stale results after typing post-blur", async () => {
     renderSearch();
     const input = screen.getByRole("textbox");
     fireEvent.change(input, { target: { value: "al" } });
 
     await waitFor(() => expect(screen.getByText("Alabama")).toBeTruthy());
 
+    // Blur cancels the pending debounce; typing makes cached results stale.
+    fireEvent.blur(input);
+    fireEvent.change(input, { target: { value: "ala" } });
     fireEvent.blur(input);
     await waitFor(() =>
-      expect(screen.getByText(/1 result/)).toBeTruthy()
+      expect(screen.queryByText("Alabama")).toBeNull()
     );
-    fireEvent.click(screen.getByText(/1 result/));
+    // Refocus must NOT resurrect results for a different query.
+    fireEvent.focus(input);
+    await new Promise((r) => setTimeout(r, 150));
+    expect(screen.queryByText("Alabama")).toBeNull();
+  });
+
+  it("selecting fills the input and keeps results cached for focus", async () => {
+    const onSelect = vi.fn();
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <DestinationSearch
+          userLat={32.5}
+          userLng={-117}
+          userCountry="MX"
+          onSelect={onSelect}
+        />
+      </NextIntlClientProvider>
+    );
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "al" } });
+
+    await waitFor(() => expect(screen.getByText("Alabama")).toBeTruthy());
+
+    fireEvent.click(screen.getByText("Alabama"));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(input.value).toBe("Alabama");
+    // No separate selected card; dropdown closed.
+    await waitFor(() =>
+      expect(screen.queryByText("Alabama")).toBeNull()
+    );
+
+    fireEvent.focus(input);
     await waitFor(() => expect(screen.getByText("Alabama")).toBeTruthy());
   });
 

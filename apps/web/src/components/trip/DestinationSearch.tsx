@@ -157,10 +157,11 @@ export function DestinationSearch({
 
   const handleSelect = (place: Place) => {
     abortInflight();
+    // Input owns the selection: it holds the value, results stay cached so
+    // focus can reopen them, and the Next CTA arms off `selected`.
     lastQueryRef.current = place.name;
     setSelected(place);
     setQuery(place.name);
-    setResults([]);
     setShowResults(false);
     onSelect(place);
   };
@@ -197,20 +198,16 @@ export function DestinationSearch({
     setShowResults(false);
   };
 
+  // Reopen contract: cached results return on focus only when they belong
+  // to the current query (post-select, or untouched since searching).
+  const canReopen = results.length > 0 && query === lastQueryRef.current;
+
+  const handleFocus = () => {
+    if (canReopen) setShowResults(true);
+  };
+
   return (
     <div className={`space-y-2 sm:space-y-3 ${className}`}>
-      {/* Results badge — visible when results exist but the dropdown is hidden */}
-      {!showResults && !loading && results.length > 0 && (
-        <button
-          onClick={() => {
-            setShowResults(true);
-            inputRef.current?.focus();
-          }}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-cruze-green bg-cruze-green/10 border border-cruze-green/30 rounded-full hover:bg-cruze-green/20 transition-colors"
-        >
-          {t("trip.empty.resultsBadge", { count: results.length })}
-        </button>
-      )}
       {/* Search Input */}
       <div className="relative space-y-2 sm:space-y-3" onBlur={handleBlur}>
         <div className="flex items-center gap-3 h-[56px] bg-surface-elevated border border-border rounded-[var(--radius-md)] px-4 focus-within:border-cruze-mint transition-colors">
@@ -220,7 +217,7 @@ export function DestinationSearch({
             type="text"
             value={query}
             onChange={(e) => handleInputChange(e.target.value)}
-            onFocus={() => results.length > 0 && setShowResults(true)}
+            onFocus={handleFocus}
               placeholder={placeholder || defaultPlaceholder}
               className="flex-1 bg-transparent text-ink text-sm outline-none placeholder:text-faint"
               autoComplete="off"
@@ -244,10 +241,10 @@ export function DestinationSearch({
               onClick={handleNext}
               disabled={!selected}
               aria-label={t("common.next")}
-              className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-opacity ${
+              className={`h-10 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 shrink-0 text-sm font-semibold transition-colors ${
                 !selected
                   ? "bg-surface-elevated border border-border text-secondary opacity-40 cursor-not-allowed"
-                  : "bg-cruze-mint text-midnight hover:opacity-90"
+                  : "bg-cruze-green text-dark hover:bg-cruze-green/90"
               }`}
             >
               <ArrowRight className="w-4 h-4" />
@@ -297,23 +294,6 @@ export function DestinationSearch({
                   </p>
                 </div>
             )}
-          </div>
-        )}
-
-        {/* Selected Place Display */}
-        {selected && (
-          <div className="flex items-center gap-3 bg-surface border border-cruze-green/30 rounded-[var(--radius-md)] px-4 py-3">
-            <MapPin className="w-4 h-4 text-cruze-green shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-ink text-sm font-medium">{selected.name}</p>
-              <p className="text-faint text-xs">{selected.formattedAddress}</p>
-            </div>
-            <button
-              onClick={handleClear}
-              className="text-faint hover:text-ink"
-            >
-              <X className="w-4 h-4" />
-            </button>
           </div>
         )}
 
