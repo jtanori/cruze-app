@@ -11,7 +11,7 @@
 2. **Implement** using tokens in W5 §1-2; compose primitives per Design Foundation → hierarchy (Foundations → Primitives → Domain Components → Screen Compositions → Workflow).
 3. **Verify** via workflow doc ASCII + `docs/CRUZE — Product, UX & Design System Specification.v1.md` §36-38 (operational vs freshness), and `PAGES_WORKFLOWS_REPORT.md` matrix.
 
-## Inventory (91 IDs, 1 retired)
+## Inventory (98 IDs, 1 retired)
 
 ### APP — Application Shell (8)
 | ID | Name | Spec Doc |
@@ -120,6 +120,17 @@
 | AV-CHECK-01 | AvisoChecklistReminder | [AV-CHECK-01-AvisoChecklistReminder.md](AV-CHECK-01-AvisoChecklistReminder.md) |
 | AV-DATA-01 | AvisoDataWarning | [AV-DATA-01-AvisoDataWarning.md](AV-DATA-01-AvisoDataWarning.md) |
 | AV-EMPTY-01 | AvisosEmptyState | [AV-EMPTY-01-AvisosEmptyState.md](AV-EMPTY-01-AvisosEmptyState.md) |
+
+### SPLASH — Application Entry (7)
+| ID | Name | Spec Doc |
+|----|------|----------|
+| SPLASH-01 | Splash | [SPLASH-01-Splash.md](SPLASH-01-Splash.md) |
+| SPLASH-SCENE-01 | SplashScene | [SPLASH-SCENE-01-SplashScene.md](SPLASH-SCENE-01-SplashScene.md) |
+| SPLASH-BG-01 | SplashBackground | [SPLASH-BG-01-SplashBackground.md](SPLASH-BG-01-SplashBackground.md) |
+| SPLASH-BRAND-01 | SplashBrandLockup | [SPLASH-BRAND-01-SplashBrandLockup.md](SPLASH-BRAND-01-SplashBrandLockup.md) |
+| SPLASH-ROUTE-01 | BorderIntelligenceOverlay | [SPLASH-ROUTE-01-BorderIntelligenceOverlay.md](SPLASH-ROUTE-01-BorderIntelligenceOverlay.md) |
+| SPLASH-TAGLINE-01 | SplashPositioning | [SPLASH-TAGLINE-01-SplashPositioning.md](SPLASH-TAGLINE-01-SplashPositioning.md) |
+| SPLASH-PROGRESS-01 | SplashProgress | [SPLASH-PROGRESS-01-SplashProgress.md](SPLASH-PROGRESS-01-SplashProgress.md) |
 
 ### SET — Settings (7)
 | ID | Name | Spec Doc |
