@@ -22,7 +22,8 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
   - `src/components/avisos/AvisosView.tsx` — chrome-free master/detail (AvisosList groups + AvisoDetail + back)
   - `src/components/avisos/AvisosSheet.tsx` — BottomSheet wrapper, owns selection, mark-read-on-open, `initialAvisoId`
   - `src/hooks/useAvisoActions.ts` — Ask Agent (one-shot context → /agent) + View recommendation (/crossing/id or /trip)
-  - `src/app/[locale]/(main)/alerts/page.tsx` — hosts AvisosView, `?aviso=id` deep link, fixed row-select (was markAllRead)
+  - `src/app/[locale]/alerts/page.tsx` — hosts AvisosView, `?aviso=id` deep link, fixed row-select (was markAllRead)
+  - Chrome 2026-09: alerts lives outside `(main)` — `CruzeBackHeader`, no bottom tabs (settings-style); bottom nav carries no alerts tab so nothing breaks
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

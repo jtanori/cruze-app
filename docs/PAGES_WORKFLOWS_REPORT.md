@@ -31,7 +31,7 @@
 | 16 | C05 | Map | *via* CrossingDetailMap (C05) | CrossingDetailMap | Section, Stack |
 | 17 | A01 | Agent Welcome | `(main)/agent/page.tsx` → AgentChat → AgentWelcomeScreen | AgentWelcomeScreen (A01), AgentChat (A02) | Button, TextInput, Avatar, Spinner |
 | 18 | A02 | Agent Conversation | `(main)/agent/page.tsx` | AgentChat, AgentCrossingResult (AG-RESULT-01), AgentRecommendationResult (AG-RESULT-02), AgentTripAction (AG-RESULT-03), AgentChecklistResult (AG-RESULT-04) | Badge, DataMetric, Button |
-| 19 | N01 | Avisos List | `(main)/alerts/page.tsx` (AvisosList) | AvisosList (N01), AvisoRow (AV-ROW-01) | Badge, EmptyState, Section |
+| 19 | N01 | Avisos List | `[locale]/alerts/page.tsx` (AvisosList) | AvisosList (N01), AvisoRow (AV-ROW-01) | Badge, EmptyState, Section |
 | 20 | N02 | Aviso Detail | *via* AvisoDetail (N02) | AvisoDetail | Badge, Button |
 | 21 | S01 | Settings Root | `settings/page.tsx` | SettingsRoot (S01) | Section, Stack, Divider |
 | 22 | S02 | Profile | `settings/profile/page.tsx` | SettingsProfile (S02) | Select, Toggle, Section |

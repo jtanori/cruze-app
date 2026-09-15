@@ -42,5 +42,5 @@ flowchart TD
 ## Files Reference
 | File | Purpose |
 |------|---------|
-| src/app/[locale]/(main)/alerts/page.tsx | N01 |
+| src/app/[locale]/alerts/page.tsx | N01 |
 | src/components/avisos/AvisosList.tsx | N01 |

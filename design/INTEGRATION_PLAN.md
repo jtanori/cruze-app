@@ -419,7 +419,7 @@ These archived v1 documents represent the **complete target architecture** for v
 | Wire Profile persistence | Spec §11 | `settings/profile` → ensure `useTravelerStore` (persist) + optional `LocalProfileRepository` for typed access — verify hydration (currently `useState` local in `SettingsProfile.tsx:1` → swap to `useTravelerStore`) | 1 day |
 | Verify Favorites persistence | `stores/favorites.ts:1` | `settings/favorites` + `crossing/[id]` bookmark already `persist`; verify `LocalFavoritesRepository` parity, no new code | 0.5 day |
 | Wire My Trips persistence | `trip-lifecycle.ts:1` | `trip/completion` `complete()` already sets `status:completed` via `useTripStore` (persist); `settings/trips` reads `isEligibleForMyTrips` — add filter (currently `[]` mock in `settings/trips/page.tsx:1`) | 1 day |
-| Verify Avisos persistence | `stores/alerts.ts:1` | `alerts` already `persist cruze-alerts` with `unreadCount`; grouping today/yesterday/earlier already in `(main)/alerts/page.tsx:1` — verify survives reload, no new repo | 0.5 day |
+| Verify Avisos persistence | `stores/alerts.ts:1` | `alerts` already `persist cruze-alerts` with `unreadCount`; grouping today/yesterday/earlier already in `[locale]/alerts/page.tsx:1` — verify survives reload, no new repo | 0.5 day |
 
 **Exit Criteria**: `traveler`/`favorites`/`trip`/`alerts` survive reload via existing `persist`; `S04` shows only `completed` — wiring fixes, not new storage
 

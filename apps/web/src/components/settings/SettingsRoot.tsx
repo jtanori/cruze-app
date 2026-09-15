@@ -26,8 +26,8 @@ export function SettingsRoot({ onProfile, onFavorites, onMyTrips, onDataSharing,
   ];
 
   return (
+    // No h1 here: the hosting page's CruzeBackHeader already titles the screen.
     <div className="space-y-4 sm:space-y-6">
-      <h1 className="text-xl font-bold text-ink">CONFIGURACIÓN</h1>
       {sections.map((s) => (
         <div key={s.title} className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">{s.title}</p>
@@ -35,7 +35,7 @@ export function SettingsRoot({ onProfile, onFavorites, onMyTrips, onDataSharing,
             {s.items.map((item) => {
               const Icon = item.icon;
               return (
-                <button key={item.id} onClick={item.onClick} className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-surface-elevated transition-colors">
+                <button key={item.id} onClick={item.onClick} className="w-full flex items-center gap-3 px-4 py-4 text-left hover:bg-surface-elevated transition-colors">
                   <Icon className="w-5 h-5 text-muted" />
                   <span className="text-sm text-ink">{item.label}</span>
                 </button>

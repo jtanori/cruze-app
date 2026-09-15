@@ -6,6 +6,7 @@ import { BellRing, BellOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { CruzeBackHeader } from "@/components/layout/CruzeBackHeader";
 import { useAvisosStore } from "@/stores/avisos";
 import { AvisosView } from "@/components/avisos/AvisosView";
 import { useAvisoActions } from "@/hooks/useAvisoActions";
@@ -42,16 +43,15 @@ function AlertsInner() {
   }, []);
 
   return (
-    <div className="space-y-4 sm:space-y-6 px-4 sm:px-5 py-4 sm:py-6">
-      <div>
-        <p className="text-ink text-lg sm:text-xl font-semibold">{t("alerts.title")}</p>
-        <p className="text-faint text-xs mt-1 tabular">
+    <div className="min-h-dvh bg-background">
+      <CruzeBackHeader title={t("alerts.title")} />
+      <div className="space-y-4 sm:space-y-6 px-4 sm:px-5 py-4 sm:py-6">
+        <p className="text-faint text-xs tabular">
           {activeAvisos.length}{" "}
           {activeAvisos.length !== 1 ? t("alerts.alerts") : t("alerts.alert")}
         </p>
-      </div>
 
-      {permission === "default" && (
+        {permission === "default" && (
         <button
           onClick={() => requestPermission()}
           className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-surface border border-border rounded-[var(--radius-md)] text-ink text-sm font-medium active:bg-surface-subtle transition-colors"
@@ -84,6 +84,7 @@ function AlertsInner() {
         onAskAgent={askAgent}
         onViewRecommendation={viewRecommendation}
       />
+      </div>
     </div>
   );
 }

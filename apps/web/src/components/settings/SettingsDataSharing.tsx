@@ -32,7 +32,7 @@ export function SettingsDataSharing() {
       </div>
 
       <div className="bg-surface border border-border rounded-[var(--radius-lg)] divide-y divide-border">
-        <div className="px-4 py-3.5">
+        <div className="px-4 py-4">
           <Toggle
             label={t("privacy.contributionTitle")}
             description={t("privacy.contributionBody")}
@@ -40,7 +40,7 @@ export function SettingsDataSharing() {
             onChange={() => toggleContribution()}
           />
         </div>
-        <div className="px-4 py-3.5">
+        <div className="px-4 py-4">
           <Toggle
             label={t("privacy.adsTitle")}
             description={t("privacy.adsBody")}
@@ -50,7 +50,7 @@ export function SettingsDataSharing() {
             }
           />
         </div>
-        <div className="px-4 py-3.5">
+        <div className="px-4 py-4">
           <Toggle
             label={t("privacy.analyticsTitle")}
             description={t("privacy.analyticsBody")}

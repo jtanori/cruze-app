@@ -29,7 +29,7 @@ export function SettingsAbout() {
           <a
             key={link.label}
             href={link.href}
-            className="flex items-center justify-between px-4 py-3.5 text-left hover:bg-surface-elevated transition-colors"
+            className="flex items-center justify-between px-4 py-4 text-left hover:bg-surface-elevated transition-colors"
           >
             <span className="text-sm text-ink">{link.label}</span>
             <ChevronRight className="w-4 h-4 text-muted" />
