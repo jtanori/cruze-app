@@ -6,7 +6,7 @@ import { RefreshCw, Settings, MapPin, WifiOff } from "lucide-react";
 import { useLocationContext } from "./LocationProvider";
 import { useNetworkStatus } from "@/lib/network-status";
 import { LocationSearchInput } from "./LocationSearchInput";
-import type { GeocodingResult } from "@/lib/geocoding";
+import type { Place } from "@/types";
 
 interface LocationRecoveryPanelProps {
   reason: "permission_denied" | "services_disabled" | "low_confidence" | "stale" | "unavailable";
@@ -26,8 +26,10 @@ export function LocationRecoveryPanel({
     retry();
   };
 
-  const handleManualSelect = (result: GeocodingResult) => {
-    selectManual(result.center[1], result.center[0], result.placeName);
+  const handleManualSelect = (result: Place) => {
+    // Country travels with the place → HIGH-confidence resolution instead
+    // of the bounding-box fallback (which defaults border overlap to US).
+    selectManual(result.latitude, result.longitude, result.name, result.country);
   };
 
   const handleSettings = () => {

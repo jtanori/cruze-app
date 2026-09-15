@@ -2,11 +2,12 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Search, X, Loader2 } from "lucide-react";
-import { searchLocations, type GeocodingResult } from "@/lib/geocoding";
+import { searchPlaces } from "@/lib/geocoding";
+import type { Place } from "@/types";
 import { useNetworkStatus } from "@/lib/network-status";
 
 interface LocationSearchInputProps {
-  onSelect: (result: GeocodingResult) => void;
+  onSelect: (result: Place) => void;
   placeholder?: string;
   className?: string;
 }
@@ -17,7 +18,7 @@ export function LocationSearchInput({
   className = "",
 }: LocationSearchInputProps) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<GeocodingResult[]>([]);
+  const [results, setResults] = useState<Place[]>([]);
   const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const { isReachable } = useNetworkStatus();
@@ -39,7 +40,9 @@ export function LocationSearchInput({
 
     setLoading(true);
     try {
-      const searchResults = await searchLocations(searchQuery);
+      // searchPlaces carries country — required so manual locations resolve
+      // HIGH confidence instead of falling back to bounding boxes.
+      const searchResults = await searchPlaces(searchQuery, 5, null);
       setResults(searchResults);
       setShowResults(true);
     } catch (error) {
@@ -69,8 +72,8 @@ export function LocationSearchInput({
     inputRef.current?.focus();
   };
 
-  const handleSelect = (result: GeocodingResult) => {
-    setQuery(result.placeName);
+  const handleSelect = (result: Place) => {
+    setQuery(result.name);
     setShowResults(false);
     onSelect(result);
   };
@@ -127,10 +130,10 @@ export function LocationSearchInput({
                 >
                   <Search className="w-4 h-4 text-faint mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-sm text-ink">{result.placeName}</p>
-                    {result.context.length > 0 && (
+                    <p className="text-sm text-ink">{result.name}</p>
+                    {result.formattedAddress && (
                       <p className="text-xs text-faint mt-0.5">
-                        {result.context.join(", ")}
+                        {result.formattedAddress}
                       </p>
                     )}
                   </div>
