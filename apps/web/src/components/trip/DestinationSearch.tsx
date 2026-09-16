@@ -262,6 +262,7 @@ export function DestinationSearch({
             </button>
           )}
         </div>
+        <p className="text-faint text-xs px-1">{t("trip.empty.searchHint")}</p>
 
         {/* Results Dropdown */}
         {showResults && !loading && (

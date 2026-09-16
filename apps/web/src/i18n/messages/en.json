@@ -340,7 +340,8 @@
       "resultsBadge": "{count} result(s) — tap to view",
       "nearbyCrossing": "Nearby crossing · {name}",
       "searchTimeout": "Search timed out. Check your connection and try again.",
-      "retrySearch": "Retry search"
+      "retrySearch": "Retry search",
+      "searchHint": "Search by city or border crossing"
     },
     "title": "My Trip",
     "yourTrip": "YOUR TRIP",
