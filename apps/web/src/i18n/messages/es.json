@@ -67,6 +67,11 @@
     "iosGuide": "iPhone no permite instalación directa — fíjalo manualmente:",
     "iosSteps": "Compartir → Agregar a pantalla de inicio, luego ábrelo desde tu inicio."
   },
+  "splash": {
+    "tagline1": "Cruces más inteligentes.",
+    "tagline2": "Mejores viajes.",
+    "loading": "Cargando CRUZE"
+  },
   "onboarding": {
     "destination": {
       "title": "¿A dónde vas?",

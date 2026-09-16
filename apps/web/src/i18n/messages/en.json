@@ -67,6 +67,11 @@
     "iosGuide": "iPhone has no one-tap install — pin Cruze manually:",
     "iosSteps": "Share → Add to Home Screen, then open it from your home screen."
   },
+  "splash": {
+    "tagline1": "Smarter crossings.",
+    "tagline2": "Better journeys.",
+    "loading": "Loading CRUZE"
+  },
   "onboarding": {
     "destination": {
       "title": "Where are you going?",

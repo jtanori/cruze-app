@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { LangSetter } from "@/components/shared/LangSetter";
 import { LocationProvider } from "@/components/location/LocationProvider";
+import { SplashGate } from "@/components/splash/SplashGate";
 
 export default async function LocaleLayout({
   children,
@@ -23,7 +24,9 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages}>
       <LangSetter locale={locale} />
-      <LocationProvider>{children}</LocationProvider>
+      <LocationProvider>
+        <SplashGate>{children}</SplashGate>
+      </LocationProvider>
     </NextIntlClientProvider>
   );
 }
