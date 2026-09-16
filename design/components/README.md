@@ -11,7 +11,7 @@
 2. **Implement** using tokens in W5 §1-2; compose primitives per Design Foundation → hierarchy (Foundations → Primitives → Domain Components → Screen Compositions → Workflow).
 3. **Verify** via workflow doc ASCII + `docs/CRUZE — Product, UX & Design System Specification.v1.md` §36-38 (operational vs freshness), and `PAGES_WORKFLOWS_REPORT.md` matrix.
 
-## Inventory (98 IDs, 1 retired)
+## Inventory (100 IDs, 1 retired)
 
 ### APP — Application Shell (8)
 | ID | Name | Spec Doc |
@@ -92,6 +92,8 @@
 | CR-DET-09 | CrossingFavoriteButton | [CR-DET-09-CrossingFavoriteButton.md](CR-DET-09-CrossingFavoriteButton.md) |
 | CR-DET-10 | CrossingDetailActionBar | [CR-DET-10-CrossingDetailActionBar.md](CR-DET-10-CrossingDetailActionBar.md) |
 | CR-CMP-01 | CrossingsCompareTable | [CR-CMP-01-CrossingsCompareTable.md](CR-CMP-01-CrossingsCompareTable.md) |
+| CR-SUM-01 | CrossingSummary | [CR-SUM-01-CrossingSummary.md](CR-SUM-01-CrossingSummary.md) |
+| CR-SUM-01 | CrossingSummary | [CR-SUM-01-CrossingSummary.md](CR-SUM-01-CrossingSummary.md) |
 
 ### AG — Agent (11)
 | ID | Name | Spec Doc |
@@ -132,6 +134,11 @@
 | SPLASH-TAGLINE-01 | SplashPositioning | [SPLASH-TAGLINE-01-SplashPositioning.md](SPLASH-TAGLINE-01-SplashPositioning.md) |
 | SPLASH-PROGRESS-01 | SplashProgress | [SPLASH-PROGRESS-01-SplashProgress.md](SPLASH-PROGRESS-01-SplashProgress.md) |
 
+### PWA — Install Surface (1)
+| ID | Name | Spec Doc |
+|----|------|----------|
+| PWA-01 | Install Surface | [PWA-01-InstallSurface.md](PWA-01-InstallSurface.md) |
+
 ### SET — Settings (7)
 | ID | Name | Spec Doc |
 |----|------|----------|
@@ -140,7 +147,7 @@
 | SET-PROFILE-01 | ProfileSettings | [SET-PROFILE-01-ProfileSettings.md](SET-PROFILE-01-ProfileSettings.md) |
 | SET-FAV-01 | FavoriteCrossingsList | [SET-FAV-01-FavoriteCrossingsList.md](SET-FAV-01-FavoriteCrossingsList.md) |
 | SET-TRIP-01 | SavedTripsList | [SET-TRIP-01-SavedTripsList.md](SET-TRIP-01-SavedTripsList.md) |
-| SET-DATA-01 | DataSharingPlaceholder | [SET-DATA-01-DataSharingPlaceholder.md](SET-DATA-01-DataSharingPlaceholder.md) |
+| SET-DATA-01 | DataSharingControls | [SET-DATA-01-DataSharingControls.md](SET-DATA-01-DataSharingControls.md) |
 | SET-ABOUT-01 | AboutLinksList | [SET-ABOUT-01-AboutLinksList.md](SET-ABOUT-01-AboutLinksList.md) |
 
 ---

@@ -29,6 +29,7 @@
 | 14 | C04 | Compare | `(main)/crossings/compare/page.tsx` | CrossingsCompareTable (CR-CMP-01, §31 rows + Mejor opción + compat filter), useCrossingsCompare | Table, Button, Section |
 | 15 | C03 | Crossing Detail (canonical) | `crossing/[id]/page.tsx` | CrossingDetailHero (CR-DET-01, optional timestamp, both-direction mode), CrossingDetailMap (C05), CrossingDetailLaneSection (CR-DET-03, live-only), CrossingDetailHoursSection (CR-DET-05, sourced-only), CrossingDetailActionBar (CR-DET-10, candidate handoff + Comparar) + CruzeBackHeader. Unknown → Desconocido/—/hidden sections; direction hierarchy trip → contextual → both. (CR-DET-04/06/07/08 kept for sourced-data future use, not rendered.) | DataStatus, DataTimestamp, Button |
 | 16 | C05 | Map | *via* CrossingDetailMap (C05) | CrossingDetailMap | Section, Stack |
+| 16b | C03 exit | Crossing Summary | `crossing/[id]/summary/page.tsx` | CrossingSummary (CR-SUM-01: estimated/actual, contribution prompt, save-favorite/share/done) | Button, Section |
 | 17 | A01 | Agent Welcome | `(main)/agent/page.tsx` → AgentChat → AgentWelcomeScreen | AgentWelcomeScreen (A01), AgentChat (A02) | Button, TextInput, Avatar, Spinner |
 | 18 | A02 | Agent Conversation | `(main)/agent/page.tsx` | AgentChat, AgentCrossingResult (AG-RESULT-01), AgentRecommendationResult (AG-RESULT-02), AgentTripAction (AG-RESULT-03), AgentChecklistResult (AG-RESULT-04) | Badge, DataMetric, Button |
 | 19 | N01 | Avisos List | `[locale]/alerts/page.tsx` (AvisosList) | AvisosList (N01), AvisoRow (AV-ROW-01) | Badge, EmptyState, Section |
