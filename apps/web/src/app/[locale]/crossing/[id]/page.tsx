@@ -73,7 +73,7 @@ export default function CrossingPage({ params }: CrossingPageProps) {
         setLoading(true);
         const staticCrossing = BORDER_CROSSINGS.find((c) => c.id === id);
         if (!staticCrossing) {
-          setError("Cruce no encontrado");
+          setError(t("crossing.notFound"));
           setLoading(false);
           return;
         }
@@ -174,8 +174,8 @@ export default function CrossingPage({ params }: CrossingPageProps) {
   if (error || !crossing) {
     return (
       <div className="min-h-dvh bg-background">
-        <CruzeBackHeader title="CRUCES" onBack={() => router.push(`/${locale}/crossings`)} />
-        <div className="px-5 py-8 sm:py-12 text-center text-muted">{error || "Cruce no encontrado"}</div>
+        <CruzeBackHeader title={t("crossing.title")} onBack={() => router.push(`/${locale}/crossings`)} />
+        <div className="px-5 py-8 sm:py-12 text-center text-muted">{error || t("crossing.notFound")}</div>
       </div>
     );
   }
@@ -214,7 +214,7 @@ export default function CrossingPage({ params }: CrossingPageProps) {
   return (
     <div className="min-h-dvh bg-background">
       <CruzeBackHeader
-        title="CRUCES"
+        title={t("crossing.title")}
         onBack={() => router.push(`/${locale}/crossings`)}
         trailing={
           <div className="flex items-center">
@@ -271,7 +271,7 @@ export default function CrossingPage({ params }: CrossingPageProps) {
         {crossing.hours && (
           <CrossingDetailHoursSection
             hours={crossing.hours}
-            note="Horarios pueden variar en días festivos"
+            note={t("crossing.hoursNote")}
           />
         )}
 

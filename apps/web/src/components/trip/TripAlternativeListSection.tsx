@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Clock, TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { formatDuration } from "@/lib/display";
@@ -21,13 +22,14 @@ interface TripAlternativeListSectionProps {
 }
 
 export function TripAlternativeListSection({ alternatives, onSelect, className = "" }: TripAlternativeListSectionProps) {
+  const t = useTranslations();
   const [expanded, setExpanded] = useState<string | null>(null);
 
   if (alternatives.length === 0) return null;
 
   return (
     <div className={`space-y-3 ${className}`}>
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted">OTRAS OPCIONES</p>
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t("trip.recommendation.otherOptions")}</p>
       {alternatives.map((alt) => {
         const isExpanded = expanded === alt.crossingId;
         return (
@@ -41,7 +43,7 @@ export function TripAlternativeListSection({ alternatives, onSelect, className =
                 <p className="text-faint text-xs">{alt.mexicanCity} ↔ {alt.usCity}</p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-warning text-xs font-medium tabular">+{alt.deltaMinutes} min total</span>
+                <span className="text-warning text-xs font-medium tabular">{t("trip.recommendation.deltaTotal", { minutes: alt.deltaMinutes })}</span>
                 {isExpanded ? <ChevronUp className="w-4 h-4 text-faint" /> : <ChevronDown className="w-4 h-4 text-faint" />}
               </div>
             </button>
@@ -62,7 +64,7 @@ export function TripAlternativeListSection({ alternatives, onSelect, className =
                     onClick={() => onSelect(alt.crossingId)}
                     className="w-full h-[40px] rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-sm font-medium"
                   >
-                    Usar este cruce
+                    {t("trip.recommendation.card.useCrossing")}
                   </button>
                 )}
               </div>

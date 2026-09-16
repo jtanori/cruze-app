@@ -234,14 +234,14 @@ export default function TripRecommendationPage() {
       />
       <TripRecommendationReasonList
         reasons={[
-          primary.reason.code === "fastest_total_time" ? "Menor tiempo total" :
-          primary.reason.code === "shortest_wait" ? "Menor tiempo de espera" :
-          primary.reason.code === "best_access_match" ? `Mejor compatibilidad de acceso${primary.reason.data?.accessType ? ` (${primary.reason.data.accessType})` : ""}` :
-          primary.reason.code === "only_open_option" ? "Única opción abierta" :
-          primary.reason.code === "closest_to_route" ? "Más cercano a tu ruta" :
-          primary.reason.code === "candidate_preference" ? "Cruce seleccionado previamente" :
-          "Recomendado",
-          primary.isLive ? "Datos en vivo" : "Datos estimados",
+          primary.reason.code === "fastest_total_time" ? t("trip.recommendation.reasons.fastestTotalTime") :
+          primary.reason.code === "shortest_wait" ? t("trip.recommendation.reasons.shortestWait") :
+          primary.reason.code === "best_access_match" ? `${t("trip.recommendation.reasons.accessMatch")}${primary.reason.data?.accessType ? ` (${primary.reason.data.accessType})` : ""}` :
+          primary.reason.code === "only_open_option" ? t("trip.recommendation.reasons.onlyOpen") :
+          primary.reason.code === "closest_to_route" ? t("trip.recommendation.reasons.closestToRoute") :
+          primary.reason.code === "candidate_preference" ? t("trip.recommendation.reasons.candidatePreference") :
+          t("trip.recommendation.reasons.defaultRecommended"),
+          primary.isLive ? t("trip.recommendation.reasons.liveData") : t("trip.recommendation.reasons.estimatedData"),
         ]}
       />
       <TripAlternativeListSection

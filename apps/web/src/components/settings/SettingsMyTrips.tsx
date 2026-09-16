@@ -1,6 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { EmptyState } from "@/components/primitives/EmptyState";
+import { useLocale } from "@/hooks/use-locale";
 
 interface CompletedTrip {
   id: string;
@@ -16,18 +18,20 @@ interface SettingsMyTripsProps {
 }
 
 export function SettingsMyTrips({ trips, onSelect }: SettingsMyTripsProps) {
+  const t = useTranslations();
+  const locale = useLocale();
   if (trips.length === 0) {
-    return <EmptyState title="Sin viajes completados" description="Los viajes aparecerán aquí después de completarlos." />;
+    return <EmptyState title={t("settings.tripsPage.empty")} description={t("settings.tripsPage.emptyDescription")} />;
   }
 
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-bold text-ink">Mis viajes</h2>
+      <h2 className="text-lg font-bold text-ink">{t("settings.tripsPage.title")}</h2>
       <div className="space-y-2">
         {trips.map((t) => (
           <button key={t.id} onClick={() => onSelect?.(t.id)} className="w-full text-left px-4 py-3 bg-surface border border-border rounded-[var(--radius-lg)] hover:border-cruze-mint/30 transition-colors">
             <p className="text-sm text-ink font-medium">{t.originLabel} → {t.destinationLabel}</p>
-            <p className="text-xs text-muted">{t.crossingName} · {new Date(t.completedAt).toLocaleDateString()}</p>
+            <p className="text-xs text-muted">{t.crossingName} · {new Date(t.completedAt).toLocaleDateString(locale)}</p>
           </button>
         ))}
       </div>

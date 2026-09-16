@@ -28,14 +28,14 @@ import { TripSetupVehicleAccessStep } from "./TripSetupVehicleAccessStep";
 import { TripSetupDocumentProfileStep } from "./TripSetupDocumentProfileStep";
 import { trackEvent } from "@/lib/analytics";
 
-const STEP_TITLES: Record<TripSetupStep, string> = {
-  destination: "DESTINO",
-  origin: "ORIGEN",
-  travelMode: "¿CÓMO VIAJAS?",
-  direction: "DIRECCIÓN",
-  accessType: "ACCESO",
-  documentProfile: "PERFIL",
-  recommendation: "RECOMENDACIÓN",
+const STEP_TITLES: Record<TripSetupStep, "stepDestination" | "stepOrigin" | "stepTravelMode" | "stepDirection" | "stepAccessType" | "stepDocumentProfile" | "stepRecommendation"> = {
+  destination: "stepDestination",
+  origin: "stepOrigin",
+  travelMode: "stepTravelMode",
+  direction: "stepDirection",
+  accessType: "stepAccessType",
+  documentProfile: "stepDocumentProfile",
+  recommendation: "stepRecommendation",
 };
 
 export function TripSetupFlow() {
@@ -185,7 +185,7 @@ export function TripSetupFlow() {
 
   return (
     <div className="min-h-dvh bg-background flex flex-col">
-      <CruzeBackHeader title={STEP_TITLES[step]} onBack={goBack} />
+        <CruzeBackHeader title={t(`trip.setup.${STEP_TITLES[step]}`)} onBack={goBack} />
 
       <div className="sticky top-0 z-10 bg-background border-b border-border-subtle px-5 py-3">
         <TripSetupProgress current={progress.current} total={progress.total} />
@@ -306,7 +306,7 @@ export function TripSetupFlow() {
             disabled={!hasSelection}
             className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px] disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            Continuar
+            {t("trip.setup.continue")}
           </button>
         </div>
       )}
@@ -320,7 +320,7 @@ export function TripSetupFlow() {
             }}
             className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px]"
           >
-            Ver recomendación
+            {t("trip.setup.viewRecommendation")}
           </button>
         </div>
       )}

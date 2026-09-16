@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/use-locale";
 import { useLocationContext } from "@/components/location/LocationProvider";
 import { useTripStore } from "@/stores/trip";
@@ -15,6 +16,7 @@ import type { CompareTravelMode } from "@/lib/crossings-compare";
 
 function CompareContent() {
   const router = useRouter();
+  const t = useTranslations();
   const locale = useLocale();
   const searchParams = useSearchParams();
   const { location } = useLocationContext();
@@ -51,10 +53,10 @@ function CompareContent() {
       {/* Page identity */}
       <div className="space-y-2">
         <h1 className="font-sora text-lg font-bold text-ink tracking-tight">
-          Comparar
+          {t("crossings.compare.title")}
         </h1>
         <p className="text-sm text-secondary leading-relaxed text-balance">
-          Compara los cruces disponibles para tu viaje.
+          {t("crossings.compare.subtitle")}
         </p>
       </div>
 
@@ -77,14 +79,14 @@ function CompareContent() {
         </div>
       ) : compare.unavailable ? (
         <ErrorState
-          title="Comparación no disponible"
-          message="No se pudo cargar la información de cruces. Intenta nuevamente."
-          action={{ label: "Reintentar", onClick: compare.retry }}
+          title={t("crossings.compare.unavailableTitle")}
+          message={t("crossings.compare.unavailableBody")}
+          action={{ label: t("crossings.compare.retry"), onClick: compare.retry }}
         />
       ) : compare.rows.length === 0 ? (
         <EmptyState
-          title="Sin cruces para comparar"
-          description="Vuelve al detalle de un cruce para elegir cuáles comparar."
+          title={t("crossings.compare.emptyTitle")}
+          description={t("crossings.compare.emptyBody")}
         />
       ) : (
         <CrossingsCompareTable

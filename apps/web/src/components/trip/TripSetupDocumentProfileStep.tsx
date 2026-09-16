@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { DocumentType } from "@/lib/trip-setup-flow";
 
 interface TripSetupDocumentProfileStepProps {
@@ -9,12 +10,13 @@ interface TripSetupDocumentProfileStepProps {
 }
 
 export function TripSetupDocumentProfileStep({ value, onSelect, onSkip }: TripSetupDocumentProfileStepProps) {
-  const options: { doc: DocumentType; label: string }[] = [
-    { doc: "passport", label: "Pasaporte / documento de viaje" },
-    { doc: "visa", label: "Visa" },
-    { doc: "usCitizen", label: "Ciudadanía / residencia de EE. UU." },
-    { doc: "trustedTraveler", label: "Programa de viajero confiable" },
-    { doc: "unknown", label: "No estoy seguro" },
+  const t = useTranslations();
+  const options: { doc: DocumentType; labelKey: string }[] = [
+    { doc: "passport", labelKey: "trip.document.passport" },
+    { doc: "visa", labelKey: "trip.document.visa" },
+    { doc: "usCitizen", labelKey: "trip.document.usCitizen" },
+    { doc: "trustedTraveler", labelKey: "trip.trustedTraveler" },
+    { doc: "unknown", labelKey: "trip.document.unknown" },
   ];
 
   return (
@@ -41,7 +43,7 @@ export function TripSetupDocumentProfileStep({ value, onSelect, onSkip }: TripSe
                 selected ? "bg-cruze-mint/10 border-cruze-mint/50" : "bg-surface border-border hover:border-cruze-mint/30"
               }`}
             >
-              <span className="text-sm font-medium text-ink flex-1">{o.label}</span>
+              <span className="text-sm font-medium text-ink flex-1">{t(o.labelKey)}</span>
               <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${selected ? "border-cruze-mint bg-cruze-mint" : "border-border"}`}>
                 {selected && <span className="w-2 h-2 rounded-full bg-midnight" />}
               </div>
@@ -54,7 +56,7 @@ export function TripSetupDocumentProfileStep({ value, onSelect, onSkip }: TripSe
         onClick={onSkip}
         className="w-full text-center text-sm font-medium text-muted hover:text-ink transition-colors py-2"
       >
-        Omitir
+        {t("trip.setup.skip")}
       </button>
     </div>
   );

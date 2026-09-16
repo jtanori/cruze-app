@@ -115,7 +115,7 @@ export function AgentChat() {
       }
       setStreamingContent(null);
     } catch {
-      addMessage("assistant", "Sorry, I encountered an error. Please try again.");
+      addMessage("assistant", t("agent.errorState"));
     } finally {
       setIsProcessing(false);
     }

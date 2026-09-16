@@ -22,7 +22,7 @@ export function CrossingDetailActionBar({ onUseCrossing, onCompare, className = 
         onClick={onUseCrossing}
         className="w-full h-12 px-4 bg-cruze-mint text-midnight text-sm font-semibold rounded-[var(--radius-lg)] hover:opacity-90 transition-opacity"
       >
-        Usar este cruce
+        {t("crossing.useCrossing")}
       </button>
       {onCompare && (
         <button

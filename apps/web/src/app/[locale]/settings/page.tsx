@@ -1,4 +1,6 @@
 "use client";
+
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useLocale } from "@/hooks/use-locale";
 import { CruzeBackHeader } from "@/components/layout/CruzeBackHeader";
@@ -6,11 +8,12 @@ import { SettingsRoot } from "@/components/settings/SettingsRoot";
 import { PwaInstallRow } from "@/components/pwa/PwaInstallRow";
 
 export default function SettingsPage() {
+  const t = useTranslations();
   const router = useRouter();
   const locale = useLocale();
   return (
     <div className="min-h-dvh bg-background">
-      <CruzeBackHeader title="CONFIGURACIÓN" />
+      <CruzeBackHeader title={t("settings.title")} />
       <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-4">
         <PwaInstallRow />
         <SettingsRoot

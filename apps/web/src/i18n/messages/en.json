@@ -179,7 +179,23 @@
     "expandLanes": "Expand lanes",
     "collapseLanes": "Collapse lanes",
     "laneTimes": "Lane times",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "compare": {
+      "title": "Compare",
+      "subtitle": "Compare the available crossings for your trip.",
+      "unavailableTitle": "Comparison unavailable",
+      "unavailableBody": "Could not load crossing data. Try again.",
+      "retry": "Retry",
+      "emptyTitle": "No crossings to compare",
+      "emptyBody": "Go back to a crossing detail to pick which to compare.",
+      "bestOption": "Best option",
+      "status": "Status",
+      "distance": "Distance",
+      "data": "Data",
+      "incompatible": "Not compatible",
+      "useCrossing": "Use this crossing",
+      "noData": "No data"
+    }
   },
   "favorites": {
     "title": "Favorites",
@@ -279,7 +295,11 @@
     "lanesEmptyNoLive": "No live data for this crossing",
     "lanesEmptySouthbound": "Lane detail is only published northbound",
     "lanesEmptyNoDetail": "This crossing publishes no lane breakdown",
-    "southEstimated": "US → MX · est."
+    "southEstimated": "US → MX · est.",
+    "title": "Crossings",
+    "notFound": "Crossing not found",
+    "hoursNote": "Hours may vary on holidays",
+    "useCrossing": "Use this crossing"
   },
   "trip": {
     "empty": {
@@ -397,8 +417,38 @@
       "reasons": {
         "time": "Shorter total time",
         "compatible": "Compatible with your crossing type",
-        "recent": "Recent data"
-      }
+        "recent": "Recent data",
+        "fastestTotalTime": "Shorter total time",
+        "shortestWait": "Shorter wait",
+        "accessMatch": "Best access match",
+        "onlyOpen": "Only open option",
+        "closestToRoute": "Closest to your route",
+        "candidatePreference": "Previously selected crossing",
+        "defaultRecommended": "Recommended",
+        "liveData": "Live data",
+        "estimatedData": "Estimated data"
+      },
+      "card": {
+        "bestCrossing": "BEST CROSSING FOR YOUR TRIP",
+        "waitLabel": "Wait time",
+        "journeyLabel": "Total journey",
+        "updatedAgo": "Updated {minutes} min ago",
+        "useCrossing": "Use this crossing",
+        "whyThis": "WHY THIS CROSSING?"
+      },
+      "rank": {
+        "recommended": "Recommended",
+        "fastest": "Fastest",
+        "bestOverall": "Best option",
+        "alternative": "Alternative"
+      },
+      "status": {
+        "open": "Open",
+        "limited": "Limited",
+        "closed": "Closed"
+      },
+      "otherOptions": "OTHER OPTIONS",
+      "deltaTotal": "+{minutes} min total"
     },
     "actions": {
       "navigate": "Navigate",
@@ -419,7 +469,17 @@
     "setup": {
       "handoffCandidate": "Suggested crossing: {crossing}",
       "handoffConflict": "You already have an active trip",
-      "handoffUnknownCrossing": "Unrecognized crossing"
+      "handoffUnknownCrossing": "Unrecognized crossing",
+      "stepDestination": "DESTINATION",
+      "stepOrigin": "ORIGIN",
+      "stepTravelMode": "HOW ARE YOU CROSSING?",
+      "stepDirection": "DIRECTION",
+      "stepAccessType": "ACCESS",
+      "stepDocumentProfile": "PROFILE",
+      "stepRecommendation": "RECOMMENDATION",
+      "continue": "Continue",
+      "viewRecommendation": "View recommendation",
+      "skip": "Skip"
     },
     "status": {
       "active": "Active",
@@ -427,7 +487,42 @@
     }
   },
   "settings": {
-    "title": "Settings"
+    "title": "Settings",
+    "pages": {
+      "aboutTitle": "About",
+      "favoritesTitle": "Favorites",
+      "tripsTitle": "My Trips",
+      "profileTitle": "Profile",
+      "dataSharingTitle": "Data Sharing"
+    },
+    "about": {
+      "title": "About Cruze",
+      "tagline": "Cruze — Border Intelligence",
+      "version": "Version {v}",
+      "terms": "Terms of service",
+      "privacy": "Privacy",
+      "legal": "Legal information",
+      "sources": "Data sources"
+    },
+    "favoritesPage": {
+      "remove": "Remove"
+    },
+    "tripsPage": {
+      "title": "My trips",
+      "empty": "No completed trips",
+      "emptyDescription": "Trips will appear here after you complete them."
+    },
+    "root": {
+      "perfilSection": "PROFILE",
+      "perfilRow": "Profile",
+      "guardadosSection": "SAVED",
+      "favoritesRow": "Favorites",
+      "myTripsRow": "My trips",
+      "privacidadSection": "PRIVACY",
+      "dataSharingRow": "Data sharing",
+      "infoSection": "INFORMATION",
+      "aboutRow": "About Cruze"
+    }
   },
   "agent": {
     "title": "CRUZE Agent",
@@ -531,7 +626,8 @@
     },
     "queuedOffline": "Offline — {count} message(s) queued, will send on reconnect",
     "askAboutCrossing": "Ask about this crossing",
-    "askingAbout": "Asking about {name}…"
+    "askingAbout": "Asking about {name}…",
+    "errorState": "Sorry, I hit an error. Please try again."
   },
   "shared": {
     "offline": "You're offline — showing cached data",

@@ -34,7 +34,7 @@ export function CrossingsCompareTable({
 
   const freshness = (id: string) => {
     const ts = lastUpdatedById[id];
-    return ts ? formatFreshness(ts, t) : "Sin datos";
+    return ts ? formatFreshness(ts, t) : t("crossings.compare.noData");
   };
 
   return (
@@ -59,7 +59,7 @@ export function CrossingsCompareTable({
                   </span>
                   {r.isWinner && (
                     <span className="text-[11px] font-semibold text-cruze-mint mt-0.5 block">
-                      ★ Mejor opción
+                      ★ {t("crossings.compare.bestOption")}
                     </span>
                   )}
                 </th>
@@ -70,7 +70,7 @@ export function CrossingsCompareTable({
             {/* Estado */}
             <tr>
               <td className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
-                Estado
+                {t("crossings.compare.status")}
               </td>
               {rows.map((r) => (
                 <td
@@ -85,7 +85,7 @@ export function CrossingsCompareTable({
             {/* Norte */}
             <tr>
               <td className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
-                Norte
+                MX → US
               </td>
               {rows.map((r) => (
                 <td
@@ -103,7 +103,7 @@ export function CrossingsCompareTable({
             {bothDirections && (
               <tr>
                 <td className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
-                  Sur
+                  US → MX
                 </td>
                 {rows.map((r) => (
                   <td
@@ -121,7 +121,7 @@ export function CrossingsCompareTable({
             {/* Distancia */}
             <tr>
               <td className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
-                Distancia
+                {t("crossings.compare.distance")}
               </td>
               {rows.map((r) => (
                 <td
@@ -138,7 +138,7 @@ export function CrossingsCompareTable({
             {/* Datos */}
             <tr>
               <td className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-muted">
-                Datos
+                {t("crossings.compare.data")}
               </td>
               {rows.map((r) => (
                 <td
@@ -188,7 +188,7 @@ export function CrossingsCompareTable({
                 )}
                 {r.excluded && (
                   <span className="text-xs text-muted">
-                    No compatible
+                    {t("crossings.compare.incompatible")}
                   </span>
                 )}
               </div>
@@ -197,7 +197,7 @@ export function CrossingsCompareTable({
                   onClick={() => onSelect(r.id)}
                   className="ml-4 shrink-0 min-h-[44px] px-4 text-sm font-semibold text-cruze-mint hover:underline"
                 >
-                  Usar este cruce →
+                  {t("crossings.compare.useCrossing")} →
                 </button>
               )}
             </div>

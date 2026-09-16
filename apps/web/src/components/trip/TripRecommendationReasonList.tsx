@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 
 interface TripRecommendationReasonListProps {
@@ -8,11 +9,12 @@ interface TripRecommendationReasonListProps {
 }
 
 export function TripRecommendationReasonList({ reasons, className = "" }: TripRecommendationReasonListProps) {
+  const t = useTranslations();
   if (reasons.length === 0) return null;
 
   return (
     <div className={`space-y-3 ${className}`}>
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted">{"¿Por qué?"}</p>
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t("trip.recommendation.card.whyThis")}</p>
       <ul className="space-y-2">
         {reasons.map((r, i) => (
           <li key={i} className="flex items-start gap-2">
