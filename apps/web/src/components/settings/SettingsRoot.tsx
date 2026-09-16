@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { User, Star, Map, Share2, Info } from "lucide-react";
+import { User, Star, Map, Share2, Info, Mail } from "lucide-react";
 
 interface SettingsItem {
   id: string;
@@ -16,15 +16,16 @@ interface SettingsRootProps {
   onMyTrips?: () => void;
   onDataSharing?: () => void;
   onAbout?: () => void;
+  onContact?: () => void;
 }
 
-export function SettingsRoot({ onProfile, onFavorites, onMyTrips, onDataSharing, onAbout }: SettingsRootProps) {
+export function SettingsRoot({ onProfile, onFavorites, onMyTrips, onDataSharing, onAbout, onContact }: SettingsRootProps) {
   const t = useTranslations();
   const sections: { titleKey: string; items: SettingsItem[] }[] = [
     { titleKey: "settings.root.perfilSection", items: [{ id: "profile", labelKey: "settings.root.perfilRow", icon: User, onClick: onProfile }] },
     { titleKey: "settings.root.guardadosSection", items: [{ id: "favorites", labelKey: "settings.root.favoritesRow", icon: Star, onClick: onFavorites }, { id: "myTrips", labelKey: "settings.root.myTripsRow", icon: Map, onClick: onMyTrips }] },
     { titleKey: "settings.root.privacidadSection", items: [{ id: "dataSharing", labelKey: "settings.root.dataSharingRow", icon: Share2, onClick: onDataSharing }] },
-    { titleKey: "settings.root.infoSection", items: [{ id: "about", labelKey: "settings.root.aboutRow", icon: Info, onClick: onAbout }] },
+    { titleKey: "settings.root.infoSection", items: [{ id: "about", labelKey: "settings.root.aboutRow", icon: Info, onClick: onAbout }, { id: "contact", labelKey: "settings.root.contactRow", icon: Mail, onClick: onContact }] },
   ];
 
   return (

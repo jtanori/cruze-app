@@ -58,7 +58,22 @@
     "analyticsTitle": "Usage analytics",
     "analyticsBody": "Help us understand which screens work. No precise location leaves your device.",
     "revocationNote": "You can revoke any of these anytime; the change applies immediately and ads return to default. We never sell personal trails.",
-    "policyVersion": "Consent policy v{version}"
+    "policyVersion": "Consent policy v{version}",
+    "sheet": {
+      "eyebrow": "PRIVACY",
+      "title": "Your privacy matters",
+      "body": "Cruze uses your location and trip data to show crossings and plan routes.",
+      "fullNotice": "Read the full Privacy Notice",
+      "continue": "Continue",
+      "continueWithout": "Continue without optionals",
+      "configure": "Configure privacy"
+    },
+    "cookies": {
+      "title": "We store data on your device",
+      "body": "Cruze keeps your trip, favorites, and preferences on this device to work.",
+      "link": "Cookie policy",
+      "accept": "Got it"
+    }
   },
   "pwa": {
     "installTitle": "Install Cruze",
@@ -506,8 +521,8 @@
       "version": "Version {v}",
       "terms": "Terms of service",
       "privacy": "Privacy",
-      "legal": "Legal information",
-      "sources": "Data sources"
+      "cookies": "Cookies",
+      "contact": "Contact"
     },
     "favoritesPage": {
       "remove": "Remove"
@@ -526,7 +541,8 @@
       "privacidadSection": "PRIVACY",
       "dataSharingRow": "Data sharing",
       "infoSection": "INFORMATION",
-      "aboutRow": "About Cruze"
+      "aboutRow": "About Cruze",
+      "contactRow": "Contact"
     }
   },
   "agent": {

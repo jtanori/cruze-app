@@ -58,7 +58,22 @@
     "analyticsTitle": "Analítica de uso",
     "analyticsBody": "Ayúdanos a entender qué pantallas funcionan. Ninguna ubicación precisa sale de tu dispositivo.",
     "revocationNote": "Puedes revocar cualquiera en cualquier momento; aplica de inmediato y los anuncios vuelven a lo normal. Nunca vendemos tus datos personales.",
-    "policyVersion": "Política de consentimiento v{version}"
+    "policyVersion": "Política de consentimiento v{version}",
+    "sheet": {
+      "eyebrow": "PRIVACIDAD",
+      "title": "Tu privacidad importa",
+      "body": "Cruze usa tu ubicación y datos de viaje para mostrar cruces y planear rutas.",
+      "fullNotice": "Leer el Aviso de Privacidad completo",
+      "continue": "Continuar",
+      "continueWithout": "Continuar sin opcionales",
+      "configure": "Configurar privacidad"
+    },
+    "cookies": {
+      "title": "Guardamos datos en tu dispositivo",
+      "body": "Cruze guarda tu viaje, favoritos y preferencias en este dispositivo para funcionar.",
+      "link": "Política de cookies",
+      "accept": "Entendido"
+    }
   },
   "pwa": {
     "installTitle": "Instalar Cruze",
@@ -506,8 +521,8 @@
       "version": "Versión {v}",
       "terms": "Términos de servicio",
       "privacy": "Privacidad",
-      "legal": "Información legal",
-      "sources": "Fuentes de datos"
+      "cookies": "Cookies",
+      "contact": "Contacto"
     },
     "favoritesPage": {
       "remove": "Quitar"
@@ -526,7 +541,8 @@
       "privacidadSection": "PRIVACIDAD",
       "dataSharingRow": "Compartir datos",
       "infoSection": "INFORMACIÓN",
-      "aboutRow": "Acerca de Cruze"
+      "aboutRow": "Acerca de Cruze",
+      "contactRow": "Contacto"
     }
   },
   "agent": {

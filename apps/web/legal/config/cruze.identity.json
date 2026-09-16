@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "app": {
+    "name": "Cruze",
+    "website": "https://cruze.com.mx",
+    "version": "1.0.0"
+  },
+  "company": {
+    "legalName": "Cruze Technologies, S. de R.L. de C.V. (placeholder — replace with registered name)",
+    "country": "MX"
+  },
+  "contact": {
+    "supportEmail": "soporte@cruze.com.mx",
+    "legalEmail": "legal@cruze.com.mx",
+    "privacyEmail": "privacidad@cruze.com.mx"
+  },
+  "legal": {
+    "privacy": { "version": "1.0", "effectiveDate": "2026-09-15", "locale": "es-MX" },
+    "terms": { "version": "1.0", "effectiveDate": "2026-09-15", "locale": "es-MX" },
+    "cookies": { "version": "1.0", "effectiveDate": "2026-09-15", "locale": "es-MX" }
+  },
+  "sources": {
+    "borderData": ["U.S. Customs and Border Protection (CBP) Border Wait Times"]
+  },
+  "updatedAt": "2026-09-15"
+}

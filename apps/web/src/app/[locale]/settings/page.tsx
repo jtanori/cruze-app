@@ -22,6 +22,7 @@ export default function SettingsPage() {
           onMyTrips={() => router.push(`/${locale}/settings/trips`)}
           onDataSharing={() => router.push(`/${locale}/settings/data-sharing`)}
           onAbout={() => router.push(`/${locale}/settings/about`)}
+          onContact={() => router.push(`/${locale}/contact`)}
         />
       </div>
     </div>

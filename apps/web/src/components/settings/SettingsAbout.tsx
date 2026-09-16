@@ -2,21 +2,23 @@
 
 import { useTranslations } from "next-intl";
 import { ChevronRight } from "lucide-react";
+import { useLocale } from "@/hooks/use-locale";
 
 interface AboutLink {
   labelKey: string;
   href?: string;
 }
 
-const LINKS: AboutLink[] = [
-  { labelKey: "settings.about.terms", href: "#" },
-  { labelKey: "settings.about.privacy", href: "#" },
-  { labelKey: "settings.about.legal", href: "#" },
-  { labelKey: "settings.about.sources", href: "#" },
+const LINKS: { labelKey: string; href: string }[] = [
+  { labelKey: "settings.about.terms", href: "legal/terms" },
+  { labelKey: "settings.about.privacy", href: "legal/privacy" },
+  { labelKey: "settings.about.cookies", href: "legal/cookies" },
+  { labelKey: "settings.about.contact", href: "contact" },
 ];
 
 export function SettingsAbout() {
   const t = useTranslations();
+  const locale = useLocale();
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-bold text-ink">{t("settings.about.title")}</h2>
@@ -28,9 +30,9 @@ export function SettingsAbout() {
 
       <div className="bg-surface border border-border rounded-[var(--radius-lg)] divide-y divide-border">
         {LINKS.map((link) => (
-          <a
-            key={link.labelKey}
-            href={link.href}
+            <a
+              key={link.labelKey}
+              href={`/${locale}/${link.href}`}
             className="flex items-center justify-between px-4 py-4 text-left hover:bg-surface-elevated transition-colors"
           >
             <span className="text-sm text-ink">{t(link.labelKey)}</span>

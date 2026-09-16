@@ -5,6 +5,8 @@ import { routing } from "@/i18n/routing";
 import { LangSetter } from "@/components/shared/LangSetter";
 import { LocationProvider } from "@/components/location/LocationProvider";
 import { SplashGate } from "@/components/splash/SplashGate";
+import { PrivacySheet } from "@/components/privacy/PrivacySheet";
+import { CookieNotice } from "@/components/privacy/CookieNotice";
 
 export default async function LocaleLayout({
   children,
@@ -26,6 +28,8 @@ export default async function LocaleLayout({
       <LangSetter locale={locale} />
       <LocationProvider>
         <SplashGate>{children}</SplashGate>
+        <PrivacySheet />
+        <CookieNotice />
       </LocationProvider>
     </NextIntlClientProvider>
   );
