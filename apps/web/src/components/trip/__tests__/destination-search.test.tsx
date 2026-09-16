@@ -310,6 +310,36 @@ describe("DestinationSearch dropdown visibility", () => {
     expect(screen.queryByText("Alabama")).toBeNull();
   });
 
+  it("result tap survives iOS blur: mousedown preventDefault keeps click alive", async () => {
+    const onSelect = vi.fn();
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <DestinationSearch
+          userLat={32.5}
+          userLng={-117}
+          userCountry="MX"
+          onSelect={onSelect}
+        />
+      </NextIntlClientProvider>
+    );
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "al" } });
+    await waitFor(() => expect(screen.getByText("Alabama")).toBeTruthy());
+
+    // iOS Safari taps buttons without focusing: mousedown must cancel the
+    // default so blur never hides the dropdown before click lands.
+    const option = screen.getByText("Alabama");
+    const mouseDown = new MouseEvent("mousedown", {
+      bubbles: true,
+      cancelable: true,
+    });
+    fireEvent(option, mouseDown);
+    expect(mouseDown.defaultPrevented).toBe(true);
+    fireEvent.click(option);
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(input.value).toBe("Alabama");
+  });
+
   it("selecting fills the input and keeps results cached for focus", async () => {
     const onSelect = vi.fn();
     render(
