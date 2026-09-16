@@ -14,5 +14,8 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
     globals: true,
+    // Integration-style component tests (next-intl + router mocks under
+    // jsdom) need headroom on loaded machines; unit tests finish in ms.
+    testTimeout: 15000,
   },
 });
