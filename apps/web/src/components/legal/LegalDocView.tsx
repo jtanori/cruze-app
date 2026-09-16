@@ -12,7 +12,7 @@ interface LegalDocViewProps {
  */
 export function LegalDocView({ doc }: LegalDocViewProps) {
   return (
-    <article className="space-y-4">
+    <article className="bg-surface border border-border rounded-[var(--radius-lg)] p-5 space-y-4">
       <div className="space-y-1">
         <p className="text-faint text-xs tabular">
           v{doc.meta.version} · {doc.meta.effectiveDate}

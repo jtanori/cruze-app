@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Search, X, MapPin, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/primitives/Button";
 import { searchPlaces } from "@/lib/geocoding";
 import type { Place } from "@/types";
 import { getTargetDestinationCountrySafe, filterDestinations } from "@/lib/destination-filter";
@@ -248,18 +249,16 @@ export function DestinationSearch({
             </button>
           )}
           {onNext && (
-            <button
+            <Button
+              variant="primary"
+              size="sm"
               onClick={handleNext}
               disabled={!selected}
               aria-label={t("common.next")}
-              className={`h-10 px-4 rounded-[var(--radius-md)] flex items-center justify-center gap-2 shrink-0 text-sm font-semibold transition-colors ${
-                !selected
-                  ? "bg-surface-elevated border border-border text-secondary opacity-40 cursor-not-allowed"
-                  : "bg-cruze-green text-dark hover:bg-cruze-green/90"
-              }`}
+              className="shrink-0"
             >
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Button>
           )}
         </div>
         <p className="text-faint text-xs px-1">{t("trip.empty.searchHint")}</p>

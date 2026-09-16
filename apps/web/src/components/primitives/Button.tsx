@@ -31,15 +31,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const t = useTranslations();
 
+    // Disabled treatment is per-variant, never bare opacity: a filled button
+    // at 40% reads as decoration on surfaced backgrounds. Primary goes
+    // hollow (solid, clearly inert); hollow variants keep dimming.
     const baseStyles =
-      "inline-flex items-center justify-center font-semibold rounded-[var(--radius-md)] transition-all duration-[var(--transition-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint focus-visible:ring-offset-2 focus-visible:ring-offset-midnight disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]";
+      "inline-flex items-center justify-center font-semibold rounded-[var(--radius-md)] transition-all duration-[var(--transition-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint focus-visible:ring-offset-2 focus-visible:ring-offset-midnight disabled:cursor-not-allowed active:scale-[0.98]";
 
     const variants = {
-      primary: "bg-cruze-mint text-midnight hover:bg-cruze-mint/90 active:bg-cruze-mint active:shadow-mint",
-      secondary: "bg-surface border border-border text-ink hover:bg-surface-elevated active:bg-surface-raised",
-      ghost: "text-ink hover:bg-surface-elevated active:bg-surface-raised",
-      destructive: "bg-alert-red text-white hover:bg-alert-red/90 active:bg-alert-red active:shadow-red",
-      outline: "border border-border bg-transparent text-ink hover:bg-surface-elevated active:bg-surface-raised",
+      primary: "bg-cruze-mint text-midnight hover:bg-cruze-mint/90 active:bg-cruze-mint active:shadow-mint disabled:bg-surface-elevated disabled:text-faint disabled:border disabled:border-border disabled:shadow-none",
+      secondary: "bg-surface border border-border text-ink hover:bg-surface-elevated active:bg-surface-raised disabled:opacity-50",
+      ghost: "text-ink hover:bg-surface-elevated active:bg-surface-raised disabled:opacity-50",
+      destructive: "bg-alert-red text-white hover:bg-alert-red/90 active:bg-alert-red active:shadow-red disabled:opacity-50",
+      outline: "border border-border bg-transparent text-ink hover:bg-surface-elevated active:bg-surface-raised disabled:opacity-50",
     };
 
     const sizes = {
