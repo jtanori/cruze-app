@@ -1,5 +1,5 @@
 # TR-SETUP-06 — 06
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
 
@@ -14,16 +14,12 @@
 │ 5 DE 5                                       │
 │ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━            │
 │                                              │
-│ DOCUMENTO DE VIAJE                           │
-│ ¿Qué documento utilizas para viajar?         │
+│ {"¿Qué documentación tienes?"} hardcoded title (TripSetupDocumentProfileStep.tsx:25) — known deviation │
 │                                              │
 │ Esto ayuda a filtrar opciones de acceso.     │
 │ No necesitamos números de documentos.        │
 │                                              │
-│ ○  Pasaporte / documento de viaje             │
-│ ○  Visa                                       │
-│ ○  Ciudadano / residente de EE.UU.            │
-│ ○  No estoy seguro                            │
+│ 5 options via t(): trip.document.passport / visa / usCitizen / trip.trustedTraveler / trip.document.unknown (TripSetupDocumentProfileStep.tsx:14-20,46); skip via t("trip.setup.skip") (TripSetupDocumentProfileStep.tsx:59) │
 │                                              │
 │                    Omitir                    │
 │                                              │

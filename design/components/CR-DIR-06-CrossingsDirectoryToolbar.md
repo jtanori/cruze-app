@@ -1,5 +1,5 @@
 # CR-DIR-06 — CrossingsDirectoryToolbar
-**Version:** 1.2 — 2026-09-07 — new; replaces permanent filter bar as C01 control surface. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.3 — 2026-09-16 — implementation sync; new; replaces permanent filter bar as C01 control surface.If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## Component ID
 CR-DIR-06
@@ -8,7 +8,7 @@ CR-DIR-06
 CrossingsDirectoryToolbar
 
 ## Purpose
-Compact utility row: search entry + filter trigger. Renders in `APP-COMPANION-01` (fixed under header), not in page content.
+Compact utility row: search entry + filter trigger. Uses SearchInput primitive (impl CrossingsDirectoryToolbar.tsx:4,28-33); placement is caller-owned flex row (`flex items-center gap-2` + className passthrough, CrossingsDirectoryToolbar.tsx:26) — NOT an APP-COMPANION-01 portal. Deviation: placeholder/aria hardcoded "Buscar cruces" (CrossingsDirectoryToolbar.tsx:31-32) — must become t() key in alignment pass.
 
 ## ASCII
 ```text
@@ -54,7 +54,7 @@ CR-DIR-06 (CrossingsDirectoryToolbar)
 ```
 
 ## Integration
-Used in: C01 via `headerCompanion` portal (fixed, +64px content offset).
+Used in: C01 as caller-placed row (no portal, no +64px offset); opens CR-DIR-05A sheet.
 Opens: CR-DIR-05A sheet.
 
 ## File Reference

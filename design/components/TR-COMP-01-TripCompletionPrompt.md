@@ -1,5 +1,5 @@
 # TR-COMP-01 — 01
-**Version:** 1.2 — 2026-09-08 — W6 audit; completion page reads from trip store (no hardcoded data); `store.complete()` called on save; labels hardcoded → should use `useTranslations()`. If version differs, revisit.
+**Version:** 1.3 — 2026-09-16 — implementation sync; W6 audit; completion page reads from trip store (no hardcoded data); `store.complete()` called on save; labels hardcoded → should use `useTranslations()`. If version differs, revisit. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W6-active-trip.md` — source of truth for completion lifecycle. See `design/components/README.md`.
 
@@ -30,8 +30,8 @@ interface TripCompletionPromptProps {
   originLabel: string;
   destinationLabel: string;
   crossingName: string;
-  onSave?: () => void;
-  onDone?: () => void;
+  onSave: () => void;
+  onDone: () => void; // required (TripCompletionPrompt.tsx:9-10)
   className?: string;
 }
 ```
@@ -75,15 +75,13 @@ Primary CTA:
   rounded-lg
 
 Secondary:
-  Inter 14px
-  Text Secondary
-  No background
+  h-[44px] bg-surface-elevated border border-border rounded-lg (TripCompletionPrompt.tsx:29)
 ```
 
 ### Rule
 
 - `store.complete()` MUST be called before navigation — this is the ACTIVE → COMPLETED transition
-- Labels should use `useTranslations()` (currently hardcoded Spanish)
+- Labels already via t("trip.completion.*") — title/crossingLabel/save/done (TripCompletionPrompt.tsx:19,22,27,30)
 - Fallback labels for missing data should use i18n (currently hardcoded "Origen", "Destino", "Cruce")
 
 ------------------------------------------------------------------------

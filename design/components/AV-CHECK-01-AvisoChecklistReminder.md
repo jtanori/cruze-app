@@ -1,5 +1,7 @@
+> RETIRED — superseded by AV-DET-01. No per-type implementation exists; the single generic `src/components/avisos/AvisoDetail.tsx` serves ALL `AvisoType` values (`apps/web/src/lib/avisos.ts:9-18`). This doc is retained for catalog history only — do not implement against it. Checklist-reminder renders through AV-DET-01; no `AvisoChecklistReminder.tsx` exists.
+
 # AV-CHECK-01 — AvisoChecklistReminder
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `AV-CHECK-01`

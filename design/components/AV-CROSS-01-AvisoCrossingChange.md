@@ -1,5 +1,7 @@
+> RETIRED — superseded by AV-DET-01. No per-type implementation exists; the single generic `src/components/avisos/AvisoDetail.tsx` serves ALL `AvisoType` values (`apps/web/src/lib/avisos.ts:9-18`). This doc is retained for catalog history only — do not implement against it. Crossing/wait-change WHAT/WHY/ACTION renders through AV-DET-01 generic Badge+date+title+desc+handoffs; no `AvisoCrossingChange.tsx` exists.
+
 # AV-CROSS-01 — AvisoCrossingChange
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `AV-CROSS-01`

@@ -1,5 +1,5 @@
 # TR-SETUP-03 — 03
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
 
@@ -44,14 +44,14 @@ TripSetupOriginStep
 ``` text
 Selection:      Cruze Mint
 Surface:        Surface
-Selected border: Cruze Mint
+Selected: unselected bg-cruze-mint/10 border-cruze-mint/30; isSelected bg-cruze-mint/15 border-cruze-mint/40 (TripSetupOriginStep.tsx:133-137); manual-selected border-cruze-mint/40 bg-cruze-mint/5 (TripSetupOriginStep.tsx:203-207)
 Radius:          8px
 Padding:        16px
 ```
 
 ### Rule
 
-Default origin is the established current location, but the user can
+Title {"¿Desde dónde sales?"} (TripSetupOriginStep.tsx:125), card "Mi ubicación actual" (TripSetupOriginStep.tsx:49,65,83,147), toggle "Ingresar punto de partida" (TripSetupOriginStep.tsx:173) all hardcoded — known deviation. Default origin is the established current location, but the user can
 override it.
 
 Preselection applies only when the location country is known (MX/US):

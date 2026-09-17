@@ -1,5 +1,5 @@
 # TR-SETUP-05 — 05
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
 
@@ -46,7 +46,7 @@ TripSetupVehicleAccessStep
 ### Tokens
 
 ``` text
-Selected:       Cruze Mint
+Selected:       bg-cruze-mint/10 border-cruze-mint/50 (TripSetupVehicleAccessStep.tsx:33); title {"¿Cómo cruzas normalmente?"} hardcoded (TripSetupVehicleAccessStep.tsx:21) — known deviation
 Option surface: Surface
 Border:         #1F3A54
 Selected border: Cruze Mint
@@ -57,9 +57,7 @@ Padding:        16px
 ### Values
 
 ``` text
-STANDARD
-READY_LANE
-SENTRI
+standard / readyLane / sentri / unknown (TripSetupVehicleAccessStep.tsx:11-16); labels "Cruce estándar" / "Ready Lane" / "SENTRI / Global Entry" / "No estoy seguro" hardcoded (TripSetupVehicleAccessStep.tsx:12-15) — known deviation
 ```
 
 ------------------------------------------------------------------------

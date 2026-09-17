@@ -1,5 +1,5 @@
 # CR-STATUS-02 — 02
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
 
@@ -15,9 +15,10 @@ Norte
 or
 
 ``` text
-Norte     11 min
-Sur       4 min
+MX → US   11 min
+US → MX   4 min
 ```
+Bare Norte/Sur is a violation. DEVIATION TO FIX: impl CrossingDirectionTimes.tsx:9,12 still renders bare "Norte"/"Sur" — must become MX → US / US → MX in alignment pass.
 
 ### Tokens
 

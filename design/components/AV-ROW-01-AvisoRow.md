@@ -1,5 +1,5 @@
 # AV-ROW-01 — AvisoRow
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — verified against AvisoRow.tsx; absolute HH:MM, no relative time. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `AV-ROW-01`
@@ -11,14 +11,14 @@ AvisoRow
 Generic row title snippet recency
 
 ## Details
-Tu recomendación cambió Hace 8 min.
+Severity Badge (critical→new, warning→count, else neutral at `AvisoRow.tsx:13,19`) + absolute time HH:MM via `toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})` (`AvisoRow.tsx:12`) + title truncate (`AvisoRow.tsx:22`) + description line-clamp-2 (`AvisoRow.tsx:23`) + optional crossingName (`AvisoRow.tsx:24`). No relative time ("Hace 8 min") is implemented — stub text only. Row is a full-width button with hover border state (`AvisoRow.tsx:16`); onClick optional (`AvisoRow.tsx:8,16`).
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §AV for canonical definition.
 
 ## Status
-- Spec: defined
-- Implementation: see `src/components/` (domain: av)
+- Spec: defined (v1.2 verified)
+- Implementation: `src/components/avisos/AvisoRow.tsx` — severity Badge + HH:MM + truncate/line-clamp-2 + crossingName; key props: `aviso: Aviso`, `onClick?: () => void`
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)
@@ -29,5 +29,5 @@ Used via Trip/Crossings/Agent/Avisos/Settings surfaces per PAGES_WORKFLOWS_REPOR
 
 ## File Reference
 - Spec doc: `design/components/AV-ROW-01-AvisoRow.md` (this file)
-- Implementation: `src/components/av/` or domain folder
+- Implementation: `src/components/avisos/AvisoRow.tsx`
 - Catalog index: `design/components/README.md`

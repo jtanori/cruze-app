@@ -1,5 +1,5 @@
 # LOC-NET-01 — LocationNetworkStatus
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `LOC-NET-01`
@@ -18,7 +18,7 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: loc)
+- Implementation: no `NetworkStatus.tsx` exists (location dir has 9 files, none network); hook `src/lib/network-status.ts:37-73` (`useNetworkStatus()` → `{ online, reachability, isReachable }`, `HEAD /api/health` probe `:17-32`) consumed inline by `LocationRecoveryPanel.tsx:7,22`, `LocationSearchInput.tsx:7,24`, `AgentChat.tsx:10,75`; presentational banner `src/components/shared/ConnectivityBanner.tsx:11` (`{ isOnline, onRetry? }`, null when online `:17`, offline bar + retry `:20-35`).
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

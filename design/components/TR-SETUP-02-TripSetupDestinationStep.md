@@ -1,5 +1,5 @@
 # TR-SETUP-02 — 02
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
 
@@ -14,17 +14,15 @@
 │ 1 DE 5                                       │
 │ ━━━━━━━━━                                    │
 │                                              │
-│ ¿A dónde vas?                                │
+│ {"¿Adónde vas?"} hardcoded (TripSetupDestinationStep.tsx:18) + {"Busca tu destino"} hardcoded (TripSetupDestinationStep.tsx:19) — known deviation │
 │                                              │
-│ ┌──────────────────────────────────────────┐ │
-│ │ ⌕  Buscar en EE.UU...                    │ │
-│ └──────────────────────────────────────────┘ │
+│ <DestinationSearch userLat/userLng/userCountry onSelect={mapPlaceToDestination} /> (TripSetupDestinationStep.tsx:22-29) — no onNext passed │
 │                                              │
 │ San Diego, CA                         🇺🇸    │
 │ Los Angeles, CA                       🇺🇸    │
 │ Phoenix, AZ                           🇺🇸    │
 │                                              │
-│                 Siguiente →                  │
+│ (no CTA / no onNext — advance is auto onSelect → setStep("origin") in Flow (TripSetupFlow.tsx:213-219)) │
 └──────────────────────────────────────────────┘
 ```
 

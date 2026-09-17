@@ -1,5 +1,5 @@
 # CR-DIR-05A — CrossingsDirectoryFilterSheet
-**Version:** 1.2 — 2026-09-07 — new; progressive disclosure replacing CR-DIR-05. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.3 — 2026-09-16 — implementation sync; new; progressive disclosure replacing CR-DIR-05.If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## Component ID
 CR-DIR-05A
@@ -46,7 +46,7 @@ Groups:
 
 Footer (fixed, sticky):
   border-t #1F3A54, px-5 py-4
-  Aplicar: mint, min-h-48px, disabled:opacity-40 until draft differs
+  Aplicar: Button-mirror hollow-disabled — base border-transparent + bg-cruze-mint text-midnight; disabled:bg-surface-elevated/text-faint/border-border (NOT opacity-40). Impl CrossingsDirectoryFilterSheet.tsx:65.
 ```
 
 ## Props
@@ -61,7 +61,7 @@ nearbyAvailable: boolean  // NEARBY disabled with explanation when false
 ## Rules
 - Estado follows W7 exactly: Todos / Abiertos / Limitados (no Cerrados option).
 - NEARBY requires resolved country; disabled + "Requiere ubicación con país resuelto" otherwise. Never manufacture "Cerca de ti".
-- Aplicar disabled until draft differs from applied filters.
+- Aplicar disabled until draft differs from applied filters (hasChanges = scope/mode/status diff, CrossingsDirectoryFilterSheet.tsx:48-51). Sheet fully i18n via crossings.filter.* keys (title/apply/scopeLabel/nearby/nearbyNeedsCountry/mx/us/allBorder/modeLabel/allModes/vehicle/walk/commercial/statusLabel/open/limited). KNOWN ISSUE (minor bug): status ALL row reuses crossings.filter.allModes (CrossingsDirectoryFilterSheet.tsx:110) — should be a dedicated status-all key; record, fix in alignment pass.
 - Vocabulary: Vehículo (never "Auto").
 
 ## Composition

@@ -1,5 +1,5 @@
 # AV-BADGE-01 — AvisosBadge
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `AV-BADGE-01`
@@ -17,8 +17,8 @@ Mint dot.
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §AV for canonical definition.
 
 ## Status
-- Spec: defined
-- Implementation: see `src/components/` (domain: av)
+- Spec: specified, not implemented (2026-09-16 — no `AvisosBadge` file exists; severity `Badge` usage inside `AvisoRow.tsx:19` / `AvisoDetail.tsx:20` is the generic primitive, not the specified bell badge)
+- Implementation: none (bell badge missing — decide implement-or-drop in alignment pass)
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

@@ -1,5 +1,5 @@
 # SPLASH-SCENE-01 — SplashScene
-**Version:** 1.0 — 2026-09-15 — adopted from S00 v1.2 brief. Radii/tokens per W5 §1-2.
+**Version:** 1.1 — 2026-09-16 — implementation sync; adopted from S00 v1.2 brief. Radii/tokens per W5 §1-2. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `SPLASH-SCENE-01`
@@ -21,7 +21,7 @@ W0 S00 brief v1.2 (full-bleed, no chrome, quiet progress).
 
 ## Status
 - Spec: defined
-- Implementation: pending (`src/components/splash/`)
+- Implementation: shipped — `src/components/splash/SplashScene.tsx:13-80` (fixed full-bleed `bg-midnight`, `data-testid="splash-scene"`); gate `SplashGate.tsx:22` renders scene until `ready`
 - Workflow usage: W0
 
 ## Tokens

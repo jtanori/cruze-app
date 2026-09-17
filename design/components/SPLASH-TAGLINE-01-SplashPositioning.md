@@ -1,5 +1,5 @@
 # SPLASH-TAGLINE-01 — SplashPositioning
-**Version:** 1.0 — 2026-09-15 — adopted from S00 v1.2 brief. Radii/tokens per W5 §1-2.
+**Version:** 1.1 — 2026-09-16 — implementation sync; adopted from S00 v1.2 brief. Radii/tokens per W5 §1-2. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `SPLASH-TAGLINE-01`
@@ -21,7 +21,7 @@ W0 S00 brief v1.2 (full-bleed, no chrome, quiet progress).
 
 ## Status
 - Spec: defined
-- Implementation: pending (`src/components/splash/`)
+- Implementation: shipped inline lower-left (`SplashScene.tsx:55-61`) via `t("splash.tagline1/tagline2")` — en `Smarter crossings. / Better journeys.` matches spec; es `Cruces más inteligentes. / Mejores viajes.` (i18n, not a deviation).
 - Workflow usage: W0
 
 ## Tokens

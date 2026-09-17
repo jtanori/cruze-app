@@ -1,5 +1,5 @@
 # TR-ACT-01 — 01
-**Version:** 1.2 — 2026-09-11 — W6 locked; full rewrite: added status badge, crossing status, freshness, props, data source, states, live refresh contract, composition rules. If version differs, revisit.
+**Version:** 1.3 — 2026-09-16 — implementation sync; W6 locked; full rewrite: added status badge, crossing status, freshness, props, data source, states, live refresh contract, composition rules. If version differs, revisit. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W6-active-trip.md` — source of truth for active trip state. See `design/components/README.md`.
 
@@ -41,8 +41,8 @@ interface TripStatusHeaderProps {
 | `originLabel` | `TripState.start` → `getDisplayName()` | Always set when `hasTrip` |
 | `destinationLabel` | `TripState.destination` → `getDisplayName()` | Always set when `hasTrip` |
 | `status` | Derived from `useTripStaleness()` | `"stale"` when `isStale && showStalePrompt` |
-| `crossingStatus` | `LiveCrossingSnapshot.status` (primary) / `SelectedCrossing.status` (fallback) | Updated by live refresh via `useLiveCrossingSnapshot` |
-| `lastUpdated` | `LiveCrossingSnapshot.generatedAt` (primary) / `SelectedCrossing.generatedAt` (fallback) | ISO string, displayed as relative time |
+| `crossingStatus` | Prop-driven parent-supplied `CrossingStatus`; component has no store/snapshot import (TripStatusHeader.tsx:8-15,39-46) | Parent resolves live vs fallback; header only renders |
+| `lastUpdated` | Prop-driven ISO string or null (TripStatusHeader.tsx:12,44); displayed via getRelativeTime() (TripStatusHeader.tsx:17-23,74-77) | Null hides freshness line |
 
 ### Tokens
 
@@ -94,7 +94,7 @@ The header provides the **frame**. TR-ACT-02 provides the **data detail**. They 
 
 - Always rendered when `hasTrip` is true
 - `status` prop derives from staleness hook, not from the store directly
-- `crossingStatus` comes from `recommendedCrossing.status` in the store
+- `crossingStatus` is prop-driven; component never reads the store (TripStatusHeader.tsx:39-46,68-69) — resolves Data-source vs Rules contradiction toward prop-driven truth
 - `lastUpdated` is displayed as relative time: "Updated X min ago" / "Updated X h ago"
 - When `lastUpdated` is null, freshness line is hidden (only status dot shown)
 - All labels use `useTranslations()` — no hardcoded Spanish

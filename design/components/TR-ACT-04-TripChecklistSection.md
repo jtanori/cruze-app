@@ -33,7 +33,7 @@ interface TripChecklistItem {
 }
 
 interface TripChecklistSectionProps {
-  title: string;
+  title?: string; // optional — falls back to t("trip.checklist.title") (TripChecklistSection.tsx:17,21)
   items: TripChecklistItem[];
   className?: string;
 }

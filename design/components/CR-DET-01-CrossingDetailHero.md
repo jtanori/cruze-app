@@ -1,5 +1,5 @@
 # CR-DET-01 — CrossingDetailHero
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `CR-DET-01`
@@ -11,7 +11,7 @@ CrossingDetailHero
 Canonical header SAN LUIS
 
 ## Details
-Name + ☆ favorite + status + wait + freshness (timestamp optional — omitted when unknown, never fabricated). `direction: northbound | southbound | both`; `both` renders NORTE + SUR side-by-side per W7 C03 ASCII (driven by `resolveDisplayDirection`: trip → contextual → both). Null waits render "—". Variations trip vs directory.
+Name + ☆ favorite + status + wait + freshness (timestamp optional — omitted when unknown, never fabricated). `direction: northbound | southbound | both`; travel-pair labels are `MX → US` (`CrossingDetailHero.tsx:49,66`) with secondary slot `secondaryEstimatedLabel="US → MX · est."` + `secondaryEstimated` (`CrossingDetailHero.tsx:14,28`) — bare NORTE/SUR is a violation. Null waits render "—". Variations trip vs directory.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

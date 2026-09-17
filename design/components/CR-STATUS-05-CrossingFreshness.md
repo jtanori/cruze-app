@@ -20,7 +20,7 @@ STALE       → Datos desactualizados    (label only)
 UNAVAILABLE → Sin datos                (label only)
 ```
 
-No "en vivo" anywhere — freshness never implies liveness.
+No "en vivo" anywhere — freshness never implies liveness. Canonical = lib/format-freshness.ts (formatFreshness: common.justNow/minutesAgo/hoursAgo wrapped in common.updated — format-freshness.ts:16-28). DEVIATIONS: (1) CrossingFreshness.tsx:7-9 hardcodes "Hace X min · desactualizado / Hace X min / Datos no disponibles" (no t(), STALE appends relative instead of label-only); (2) shared.updatedMinAgo calculators in CrossingOptionCard.tsx:180-184,374-379 + BestCrossingCard.tsx:164-169,215-220 (own Date.now()-generatedAt math, not formatFreshness); (3) common.live "EN VIVO/LIVE" badge violators: CrossingOptionCard.tsx:177, BestCrossingCard.tsx:98,160 — must be removed per no-liveness rule; use canonical vocabulary only.
 
 ### Freshness states
 

@@ -1,5 +1,5 @@
 # TR-EMPTY-01 — TripDestinationSearch
-**Version:** 1.2 — 2026-09-07 — compound input canon: icon-only CTA, no eyebrow/hero/button/helper in this component (hero lives in TR-HERO-01). If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.3 — 2026-09-16 — implementation sync; compound input canon: icon-only CTA, no eyebrow/hero/button/helper in this component (hero lives in TR-HERO-01). If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## Component ID
 TR-EMPTY-01
@@ -26,9 +26,9 @@ Search:
   Height 56px
 
 CTA (icon-only ArrowRight):
-  w-10 h-10 rounded-full, floating inside input right
+  Button primitive variant="primary" size="sm" with ArrowRight icon, inline inside input right (DestinationSearch.tsx:252-261)
   Cruze Mint bg + Midnight icon when selected
-  dimmed/disabled (opacity-40, not-allowed) until selection
+  hollow-disabled primary via Button primitive disabled={!selected} (DestinationSearch.tsx:256); not opacity-40
   No text label — the arrow appears once
 
 Placeholder:
@@ -37,7 +37,7 @@ Placeholder:
 
 Results dropdown:
   Surface Elevated, opposite country + border-relevant same-country rows
-  (strict Mapbox server filter + `filterDestinations` admission).
+  (server requests both sides via searchPlaces(q, 10, null) (DestinationSearch.tsx:99); `filterDestinations` below is the single discrimination point).
   Relevant same-country rows carry a `Cruce cercano · X` subtitle and attach
   the nearest gate as `crossingCandidateId` — destination never rewritten.
   See `design/specs/BORDER-RELEVANCE.md`.
@@ -62,8 +62,9 @@ Country comes from the resolved location (`userCountry` prop: MX/US/UNKNOWN). UN
 TR-EMPTY-01 (DestinationSearch)
 ├── Search icon + input (filtered to target country)
 ├── Clear button (custom, far right)
-├── Floating icon-only CTA (→)
-├── Results dropdown
+├── Button size=sm CTA (→) (DestinationSearch.tsx:252-261)
+├── Helper paragraph t("trip.empty.searchHint") (DestinationSearch.tsx:264)
+├── Results dropdown with blur guard contains(relatedTarget) (DestinationSearch.tsx:204-211) + onMouseDown preventDefault (DestinationSearch.tsx:277)
 └── Selected destination display (when selected)
 ```
 

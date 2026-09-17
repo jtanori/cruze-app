@@ -48,10 +48,9 @@ Data fields (e.g. `accessType`, `deltaMinutes`) are interpolated into the locali
 Heading:     Inter 12px / 700 uppercase
              Text Secondary
 
-Reason:      Inter 14px
-             Text Primary
+Reason:      text-sm text-muted (TripRecommendationReasonList.tsx:24)
 
-Check:       16px Cruze Mint
+Check:       w-5 h-5 rounded-full bg-success/15 circled + Check w-3 h-3 text-success (TripRecommendationReasonList.tsx:21-22)
 
 Gap:         12px between reasons
 ```

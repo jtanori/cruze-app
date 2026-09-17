@@ -1,5 +1,5 @@
 # SET-SEC-01 — SettingsSection
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.2 — 2026-09-16 — implementation sync; supersedes 1.1 stub-era tokens. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `SET-SEC-01`
@@ -8,17 +8,23 @@
 SettingsSection
 
 ## Responsibility
-Section header divider
+Eyebrow + card section shell for settings groups (inline pattern, no standalone file)
 
 ## Details
-PERFIL GUARDADOS PRIVACIDAD INFORMACIÓN.
+Implemented inline in `SettingsRoot.tsx:35-37`: per-section `space-y-2`
+wrapper (`:35`), eyebrow `text-xs font-semibold uppercase tracking-wider
+text-muted` (`:36`), card `bg-surface border border-border
+rounded-[var(--radius-lg)] divide-y divide-border` (`:37`). There is NO
+`src/components/settings/SettingsSection.tsx` (settings dir holds
+`SettingsAbout/SettingsDataSharing/SettingsFavorites/SettingsMyTrips/SettingsProfile/SettingsRoot`
+only). Same eyebrow+card grammar as `PwaInstallRow.tsx:19-21`.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §SET for canonical definition.
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: set)
+- Implementation: inline pattern in `src/components/settings/SettingsRoot.tsx:35-37` (no standalone file)
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)
@@ -29,5 +35,5 @@ Used via Trip/Crossings/Agent/Avisos/Settings surfaces per PAGES_WORKFLOWS_REPOR
 
 ## File Reference
 - Spec doc: `design/components/SET-SEC-01-SettingsSection.md` (this file)
-- Implementation: `src/components/set/` or domain folder
+- Implementation: `src/components/settings/SettingsRoot.tsx` inline (note: `settings/`, not `set/`)
 - Catalog index: `design/components/README.md`

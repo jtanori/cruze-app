@@ -1,5 +1,5 @@
 # TR-ACT-02 — 02
-**Version:** 1.3 — 2026-09-11 — LIVE-01 consumer alignment; `waitTime` primary source is `LiveCrossingSnapshot`; `totalTime` remains frozen from `SelectedCrossing`; live refresh contract added. If version differs, revisit.
+**Version:** 1.4 — 2026-09-16 — implementation sync; LIVE-01 consumer alignment; `waitTime` primary source is `LiveCrossingSnapshot`; `totalTime` remains frozen from `SelectedCrossing`; live refresh contract added. If version differs, revisit. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/W6-active-trip.md` — source of truth for active trip state. See `design/components/README.md`.
 
@@ -49,9 +49,7 @@ Crossing name:
   Text Primary
 
 Metrics:
-  Sora 16px / 700 tabular
-  Text Primary
-  Separator: "·" Text Secondary
+  text-sm text-muted with Clock + Navigation w-4 h-4 icons (TripRouteSummary.tsx:22-27); total renders hardcoded "{duration} total" (TripRouteSummary.tsx:26) — known deviation
 ```
 
 ### Rule

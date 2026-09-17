@@ -1,5 +1,5 @@
 # SPLASH-ROUTE-01 — BorderIntelligenceOverlay
-**Version:** 1.0 — 2026-09-15 — adopted from S00 v1.2 brief. Radii/tokens per W5 §1-2.
+**Version:** 1.1 — 2026-09-16 — implementation sync; adopted from S00 v1.2 brief. Radii/tokens per W5 §1-2. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `SPLASH-ROUTE-01`
@@ -21,7 +21,7 @@ W0 S00 brief v1.2 (full-bleed, no chrome, quiet progress).
 
 ## Status
 - Spec: defined
-- Implementation: pending (`src/components/splash/`)
+- Implementation: folded, not a separate layer — code comment states "no separate route layer, never recreated in CSS" (`SplashScene.tsx:6-12`); intelligence lives in the precomposed scene art; no network/waits/status/location in splash.
 - Workflow usage: W0
 
 ## Tokens
