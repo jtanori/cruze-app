@@ -77,6 +77,7 @@
   },
   "pwa": {
     "installTitle": "Install Cruze",
+    "section": "INSTALL",
     "installBody": "Add to your home screen for fullscreen, offline shell, and faster launches.",
     "installAction": "Install",
     "iosGuide": "iPhone has no one-tap install — pin Cruze manually:",
@@ -215,6 +216,30 @@
       "incompatible": "Not compatible",
       "useCrossing": "Use this crossing",
       "noData": "No data"
+    },
+    "filter": {
+      "title": "Filters",
+      "apply": "Apply",
+      "scopeLabel": "LOCATION",
+      "nearby": "Near you",
+      "nearbyNeedsCountry": "Requires location with resolved country",
+      "mx": "Mexico",
+      "us": "United States",
+      "allBorder": "Entire border",
+      "modeLabel": "MODE",
+      "allModes": "All",
+      "vehicle": "Vehicle",
+      "walk": "Walking",
+      "commercial": "Commercial",
+      "statusLabel": "STATUS",
+      "open": "Open",
+      "limited": "Limited"
+    },
+    "expanded": {
+      "lanes": "Lanes",
+      "access": "Access",
+      "hours": "Hours",
+      "services": "Services"
     }
   },
   "favorites": {
@@ -649,7 +674,15 @@
     "queuedOffline": "Offline — {count} message(s) queued, will send on reconnect",
     "askAboutCrossing": "Ask about this crossing",
     "askingAbout": "Asking about {name}…",
-    "errorState": "Sorry, I hit an error. Please try again."
+    "errorState": "Sorry, I hit an error. Please try again.",
+    "result": {
+      "viewCrossing": "View crossing",
+      "navigate": "Navigate",
+      "recommended": "Recommended",
+      "useCrossing": "Use this crossing",
+      "compare": "Compare",
+      "totalJourney": "{duration} total"
+    }
   },
   "shared": {
     "offline": "You're offline — showing cached data",

@@ -77,6 +77,7 @@
   },
   "pwa": {
     "installTitle": "Instalar Cruze",
+    "section": "INSTALAR",
     "installBody": "Agrega a tu pantalla de inicio para pantalla completa, modo sin conexión y apertura más rápida.",
     "installAction": "Instalar",
     "iosGuide": "iPhone no permite instalación directa — fíjalo manualmente:",
@@ -215,6 +216,30 @@
       "incompatible": "No compatible",
       "useCrossing": "Usar este cruce",
       "noData": "Sin datos"
+    },
+    "filter": {
+      "title": "Filtros",
+      "apply": "Aplicar",
+      "scopeLabel": "UBICACIÓN",
+      "nearby": "Cerca de ti",
+      "nearbyNeedsCountry": "Requiere ubicación con país resuelto",
+      "mx": "México",
+      "us": "Estados Unidos",
+      "allBorder": "Toda la frontera",
+      "modeLabel": "MODO",
+      "allModes": "Todos",
+      "vehicle": "Vehículo",
+      "walk": "A pie",
+      "commercial": "Comercial",
+      "statusLabel": "ESTADO",
+      "open": "Abiertos",
+      "limited": "Limitados"
+    },
+    "expanded": {
+      "lanes": "Carriles",
+      "access": "Acceso",
+      "hours": "Horarios",
+      "services": "Servicios"
     }
   },
   "favorites": {
@@ -649,7 +674,15 @@
     "queuedOffline": "Sin conexión — {count} mensaje(s) en cola, se enviarán al reconectar",
     "askAboutCrossing": "Preguntar sobre este cruce",
     "askingAbout": "Preguntando sobre {name}…",
-    "errorState": "Perdón, hubo un error. Inténtalo de nuevo."
+    "errorState": "Perdón, hubo un error. Inténtalo de nuevo.",
+    "result": {
+      "viewCrossing": "Ver cruce",
+      "navigate": "Navegar",
+      "recommended": "Recomendado",
+      "useCrossing": "Usar este cruce",
+      "compare": "Comparar",
+      "totalJourney": "{duration} en total"
+    }
   },
   "shared": {
     "offline": "Estás sin conexión — mostrando datos en caché",

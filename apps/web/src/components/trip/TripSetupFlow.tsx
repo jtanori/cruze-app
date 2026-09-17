@@ -304,7 +304,7 @@ export function TripSetupFlow() {
               }
             }}
             disabled={!hasSelection}
-            className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px] disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full py-3.5 rounded-[var(--radius-lg)] bg-cruze-mint text-midnight font-semibold text-sm hover:opacity-90 transition-opacity min-h-[48px] border border-transparent disabled:bg-surface-elevated disabled:text-faint disabled:border-border disabled:shadow-none disabled:cursor-not-allowed disabled:hover:opacity-100"
           >
             {t("trip.setup.continue")}
           </button>
