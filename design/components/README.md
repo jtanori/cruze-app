@@ -11,7 +11,7 @@
 2. **Implement** using tokens in W5 §1-2; compose primitives per Design Foundation → hierarchy (Foundations → Primitives → Domain Components → Screen Compositions → Workflow).
 3. **Verify** via workflow doc ASCII + `docs/CRUZE — Product, UX & Design System Specification.v1.md` §36-38 (operational vs freshness), and `PAGES_WORKFLOWS_REPORT.md` matrix.
 
-## Inventory (116 IDs, 9 retired)
+## Inventory (116 IDs, 10 retired)
 
 ### APP — Application Shell (9)
 | ID | Name | Spec Doc |
@@ -100,11 +100,11 @@
 | CR-DET-11 | CrossingDetailsModal — RETIRED | [CR-DET-11-CrossingDetailsModal.md](CR-DET-11-CrossingDetailsModal.md) |
 | CR-SUM-01 | CrossingSummary | [CR-SUM-01-CrossingSummary.md](CR-SUM-01-CrossingSummary.md) |
 
-### AG — Agent (15)
+### AG — Agent (15 files, 14 live, 1 retired)
 | ID | Name | Spec Doc |
 |----|------|----------|
 | AG-HEAD-01 | AgentHeader | [AG-HEAD-01-AgentHeader.md](AG-HEAD-01-AgentHeader.md) |
-| AG-WEL-01 | AgentWelcome | [AG-WEL-01-AgentWelcome.md](AG-WEL-01-AgentWelcome.md) |
+| AG-WEL-01 | AgentWelcome — RETIRED (inline welcome in AgentChat is live) | [AG-WEL-01-AgentWelcome.md](AG-WEL-01-AgentWelcome.md) |
 | AG-PROMPT-01 | AgentPromptList | [AG-PROMPT-01-AgentPromptList.md](AG-PROMPT-01-AgentPromptList.md) |
 | AG-PROMPT-02 | AgentPromptChip | [AG-PROMPT-02-AgentPromptChip.md](AG-PROMPT-02-AgentPromptChip.md) |
 | AG-MSG-01 | AgentMessageList | [AG-MSG-01-AgentMessageList.md](AG-MSG-01-AgentMessageList.md) |
@@ -174,4 +174,4 @@
 | PRIV-02 | CookieNotice | [PRIV-02-CookieNotice.md](PRIV-02-CookieNotice.md) |
 
 ---
-*Total: 116 component spec files (107 live, 9 retired: CR-DIR-05, CR-DET-11, CR-CARD-01, AV-CROSS-01, AV-REC-01, AV-TRIP-01, AV-CHECK-01, AV-DATA-01, TR-REC-04). All files in this directory are source of truth for implementation. See `design/workflows/W*.md` for workflow bindings + `docs/TESTING_TOOLS.md` P0-P5 for testing.*
+*Total: 116 component spec files (106 live, 10 retired: CR-DIR-05, CR-DET-11, CR-CARD-01, AV-CROSS-01, AV-REC-01, AV-TRIP-01, AV-CHECK-01, AV-DATA-01, TR-REC-04, AG-WEL-01). All files in this directory are source of truth for implementation. See `design/workflows/W*.md` for workflow bindings + `docs/TESTING_TOOLS.md` P0-P5 for testing.*

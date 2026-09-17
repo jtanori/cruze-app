@@ -24,8 +24,8 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
   - `src/hooks/useAvisoActions.ts` — Ask Agent (one-shot context → /agent) + View recommendation (/crossing/id or /trip)
   - `src/app/[locale]/alerts/page.tsx` — hosts AvisosView, `?aviso=id` deep link, fixed row-select (was markAllRead)
    - Chrome 2026-09: alerts lives outside `(main)` — `CruzeBackHeader`, no bottom tabs (settings-style); bottom nav carries no alerts tab so nothing breaks
-   - `src/components/avisos/AvisoBanner.tsx` — STUB placeholder (hardcoded "2 new avisos" at `AvisoBanner.tsx:11`), placed on trip page active-trip block (`trip/page.tsx:158`); specified-but-stub per AV-BAN-01, slated for alignment pass (live count + i18n + handoff)
-- i18n DEVIATIONS (recorded, not blessed): `AvisoBanner` hardcodes English "2 new avisos" (`AvisoBanner.tsx:11`) with no `t()`; `AvisoDetail` hardcodes Spanish "Ver recomendación" / "Preguntar al Agente" (`AvisoDetail.tsx:27-28`)
+   - `src/components/avisos/AvisoBanner.tsx` — live unread banner → alerts (see AV-BAN-01), placed on trip page active-trip block (`trip/page.tsx:158`)
+- i18n: banner + detail fully via t() (see AV-BAN-01, AV-DET-01); no hardcoded strings remain in the avisos surface
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

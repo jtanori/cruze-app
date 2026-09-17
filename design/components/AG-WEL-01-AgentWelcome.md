@@ -1,5 +1,7 @@
-# AG-WEL-01 — AgentWelcome
-**Version:** 1.2 — 2026-09-16 — full rewrite from v1.1 stub; dead-code + i18n deviation record. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+> RETIRED — file deleted 2026-09-16; zero importers. Live welcome is the inline empty state in `AgentChat.tsx:174-195`. Restorable via git.
+
+# AG-WEL-01 — AgentWelcome (RETIRED)
+**Version:** retired — 2026-09-16 — file deleted; zero importers, live welcome is inline in AgentChat. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `AG-WEL-01`
@@ -17,9 +19,9 @@ Welcome state for the agent surface (DEAD CODE — live welcome is inline in Age
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §AG for canonical definition.
 
 ## Status
-- Spec: defined (v1.2 dead-code record)
+- Spec: retired (do not implement)
 - Implementation:
-  - `src/components/agent/AgentWelcomeScreen.tsx` — DEAD, unreferenced; key props: `onPrompt: (prompt: string) => void`, `contextPrompts?: string[]`
+  - `src/components/agent/AgentWelcomeScreen.tsx` — DELETED 2026-09-16 (was dead + deviating; restorable via git); live welcome is the inline empty state in `AgentChat.tsx:174-195`
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

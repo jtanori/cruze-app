@@ -77,11 +77,11 @@ describe("AvisosView", () => {
     const handlers = renderView({ selectedId: "a1" });
     // Detail view replaces the list
     expect(screen.queryByText("Surge a2")).toBeNull();
-    fireEvent.click(screen.getByText("Preguntar al Agente"));
+    fireEvent.click(screen.getByText("Ask Agent"));
     expect(handlers.onAskAgent).toHaveBeenCalledWith(
       expect.objectContaining({ id: "a1" })
     );
-    fireEvent.click(screen.getByText("Ver recomendación"));
+    fireEvent.click(screen.getByText("View recommendation"));
     expect(handlers.onViewRecommendation).toHaveBeenCalledWith(
       expect.objectContaining({ id: "a1" })
     );

@@ -333,7 +333,7 @@ All interactive elements must meet WCAG 2.5.8 minimum:
 
 ## 5. Catalog Index (Generated)
 
-All 116 component spec files live in `design/components/` (107 live, 9 retired: CR-DIR-05, CR-DET-11, CR-CARD-01, AV-CROSS-01, AV-REC-01, AV-TRIP-01, AV-CHECK-01, AV-DATA-01, TR-REC-04) — see [`design/components/README.md`](components/README.md) for the full indexed table (APP 9 / LOC 10 / TR 22 files · 21 live / CR 30 files · 27 live / AG 15 / AV 12 files · 7 live / SET 7 / SPLASH 7 / PWA 1 / LEGAL 1 / PRIV 2).
+All 116 component spec files live in `design/components/` (106 live, 10 retired: CR-DIR-05, CR-DET-11, CR-CARD-01, AV-CROSS-01, AV-REC-01, AV-TRIP-01, AV-CHECK-01, AV-DATA-01, TR-REC-04, AG-WEL-01) — see [`design/components/README.md`](components/README.md) for the full indexed table (APP 9 / LOC 10 / TR 22 files · 21 live / CR 30 files · 27 live / AG 15 files · 14 live / AV 12 files · 7 live / SET 7 / SPLASH 7 / PWA 1 / LEGAL 1 / PRIV 2).
 
 Each entry in `README.md` links to its `design/components/<ID>-<Name>.md`.
 

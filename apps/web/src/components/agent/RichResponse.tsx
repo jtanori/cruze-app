@@ -88,6 +88,7 @@ function formatChecklist(items: ResponseChecklistItem[]): string {
 }
 
 function SectionActions({ content }: { content: string }) {
+  const t = useTranslations();
   const [copied, setCopied] = useState(false);
   
   const handleCopy = async () => {
@@ -122,19 +123,19 @@ function SectionActions({ content }: { content: string }) {
 
   return (
     <div className="flex items-center gap-1 mt-2 pt-2 border-t border-border-subtle">
-      <button onClick={handleCopy} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label="Copy">
+      <button onClick={handleCopy} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label={t("agent.actions.copy")}>
         <Copy className="w-4 h-4" />
       </button>
-      <button onClick={handleShare} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label="Share">
+      <button onClick={handleShare} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label={t("agent.actions.share")}>
         <Share2 className="w-4 h-4" />
       </button>
-      <button onClick={handleSave} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label="Save">
+      <button onClick={handleSave} className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors" aria-label={t("agent.actions.save")}>
         <Download className="w-4 h-4" />
       </button>
-      <button className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors ml-auto" aria-label="Bookmark">
+      <button className="p-1.5 rounded text-faint hover:text-ink hover:bg-surface-elevated transition-colors ml-auto" aria-label={t("agent.actions.bookmark")}>
         <Bookmark className="w-4 h-4" />
       </button>
-      {copied && <span className="text-xs text-cruze-green ml-2">Copied!</span>}
+      {copied && <span className="text-xs text-cruze-green ml-2">{t("agent.actions.copied")}</span>}
     </div>
   );
 }

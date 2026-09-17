@@ -239,7 +239,44 @@
       "lanes": "Lanes",
       "access": "Access",
       "hours": "Hours",
-      "services": "Services"
+      "services": "Services",
+      "requirements": "Requirements",
+      "requirementsEmpty": "No additional requirements",
+      "restrictions": "Restrictions",
+      "restrictionsEmpty": "No reported restrictions"
+    },
+    "directory": {
+      "loading": "Loading crossings...",
+      "unavailableTitle": "Crossings unavailable",
+      "unavailableMessage": "Couldn't load crossing information. Try again.",
+      "clearFilters": "Clear filters",
+      "loadMore": "Load more",
+      "foundSingular": "{count} crossing found",
+      "foundPlural": "{count} crossings found",
+      "scopedSingular": "{count} crossing · {scope}",
+      "scopedPlural": "{count} crossings · {scope}",
+      "sortBy": "Sort by",
+      "sortNearest": "Nearest",
+      "sortRelevance": "Relevance",
+      "sortFastest": "Fastest",
+      "sortName": "Name",
+      "filtersActive": "Filters, {count} active"
+    },
+    "freshness": {
+      "unavailable": "No data available",
+      "stale": "{minutes} min ago · stale",
+      "live": "{minutes} min ago",
+      "recent": "{minutes} min ago"
+    },
+    "favorite": {
+      "add": "Add to favorites",
+      "remove": "Remove from favorites"
+    },
+    "map": {
+      "unavailable": "Map unavailable",
+      "loadFailed": "Couldn't load the map.",
+      "altWithName": "Map of {name}",
+      "altDefault": "Crossing map"
     }
   },
   "favorites": {
@@ -260,7 +297,21 @@
     "alerts": "alerts",
     "enableAlerts": "Enable notifications",
     "notificationsEnabled": "Notifications on — we’ll alert you about critical changes",
-    "notificationsBlocked": "Notifications blocked — enable them in your browser settings for critical alerts"
+    "notificationsBlocked": "Notifications blocked — enable them in your browser settings for critical alerts",
+    "bannerSingular": "{count} new alert",
+    "bannerPlural": "{count} new alerts",
+    "viewRecommendation": "View recommendation",
+    "askAgent": "Ask Agent",
+    "type": {
+      "crossingChanged": "Crossing change",
+      "waitSurge": "Wait surge",
+      "waitDrop": "Wait drop",
+      "recommendationChanged": "Recommendation change",
+      "tripReminder": "Trip reminder",
+      "checklistReminder": "Checklist reminder",
+      "dataWarning": "Data warning",
+      "unusualCondition": "Unusual condition"
+    }
   },
   "crossing": {
     "laneTimes": "Lane times",
@@ -525,7 +576,54 @@
       "stepRecommendation": "RECOMMENDATION",
       "continue": "Continue",
       "viewRecommendation": "View recommendation",
-      "skip": "Skip"
+      "skip": "Skip",
+      "destinationStep": {
+        "title": "Where to?",
+        "subtitle": "Search your destination"
+      },
+      "originStep": {
+        "title": "Where are you leaving from?",
+        "subtitle": "Your origin for comparing crossings on your route",
+        "currentLocation": "My current location",
+        "resolving": "Determining location…",
+        "resolveError": "We couldn't determine your location's country. Search your starting point below.",
+        "manualToggle": "Enter starting point",
+        "searchPlaceholder": "Search city, address...",
+        "backToOptions": "← Back to options"
+      },
+      "travelModeStep": {
+        "title": "How are you crossing?",
+        "subtitle": "Select your crossing mode",
+        "walking": "On foot",
+        "walkingDesc": "Pedestrian crossing",
+        "privateVehicle": "Private vehicle",
+        "privateVehicleDesc": "Car, SUV, motorcycle",
+        "commercial": "Commercial",
+        "commercialDesc": "Truck"
+      },
+      "directionStep": {
+        "title": "Which way are you going?",
+        "subtitle": "Select your crossing direction",
+        "northboundSub": "Northbound",
+        "southboundSub": "Southbound"
+      },
+      "accessStep": {
+        "title": "How do you usually cross?",
+        "subtitle": "Filter recommendations by access type",
+        "standard": "Standard crossing",
+        "standardDesc": "General lanes",
+        "readyLane": "Ready Lane",
+        "readyLaneDesc": "RFID documents",
+        "sentri": "SENTRI / Global Entry",
+        "sentriDesc": "Express lanes",
+        "unknown": "Not sure",
+        "unknownDesc": "Show all options"
+      },
+      "documentStep": {
+        "title": "What documentation do you have?",
+        "subtitle": "Optional — helps filter recommendations",
+        "disclaimer": "This information helps filter recommendations. It does not determine your legal eligibility to enter the country."
+      }
     },
     "status": {
       "active": "Active",
@@ -682,6 +780,13 @@
       "useCrossing": "Use this crossing",
       "compare": "Compare",
       "totalJourney": "{duration} total"
+    },
+    "actions": {
+      "copy": "Copy",
+      "share": "Share",
+      "save": "Save",
+      "bookmark": "Bookmark",
+      "copied": "Copied!"
     }
   },
   "shared": {

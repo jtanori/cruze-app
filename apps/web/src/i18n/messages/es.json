@@ -239,7 +239,44 @@
       "lanes": "Carriles",
       "access": "Acceso",
       "hours": "Horarios",
-      "services": "Servicios"
+      "services": "Servicios",
+      "requirements": "Requisitos",
+      "requirementsEmpty": "No hay requisitos adicionales",
+      "restrictions": "Restricciones",
+      "restrictionsEmpty": "Sin restricciones reportadas"
+    },
+    "directory": {
+      "loading": "Cargando cruces...",
+      "unavailableTitle": "Cruces no disponibles",
+      "unavailableMessage": "No se pudo cargar la información de cruces. Intenta nuevamente.",
+      "clearFilters": "Limpiar filtros",
+      "loadMore": "Cargar más",
+      "foundSingular": "{count} cruce encontrado",
+      "foundPlural": "{count} cruces encontrados",
+      "scopedSingular": "{count} cruce · {scope}",
+      "scopedPlural": "{count} cruces · {scope}",
+      "sortBy": "Ordenar por",
+      "sortNearest": "Más cercanos",
+      "sortRelevance": "Relevancia",
+      "sortFastest": "Más rápidos",
+      "sortName": "Nombre",
+      "filtersActive": "Filtros, {count} activos"
+    },
+    "freshness": {
+      "unavailable": "Datos no disponibles",
+      "stale": "Hace {minutes} min · desactualizado",
+      "live": "Hace {minutes} min",
+      "recent": "Hace {minutes} min"
+    },
+    "favorite": {
+      "add": "Agregar a favoritos",
+      "remove": "Quitar de favoritos"
+    },
+    "map": {
+      "unavailable": "Mapa no disponible",
+      "loadFailed": "No se pudo cargar el mapa.",
+      "altWithName": "Mapa de {name}",
+      "altDefault": "Mapa del cruce"
     }
   },
   "favorites": {
@@ -260,7 +297,21 @@
     "alerts": "alertas",
     "enableAlerts": "Activar notificaciones",
     "notificationsEnabled": "Notificaciones activadas — te avisaremos de cambios críticos",
-    "notificationsBlocked": "Notificaciones bloqueadas — actívalas en tu navegador para alertas críticas"
+    "notificationsBlocked": "Notificaciones bloqueadas — actívalas en tu navegador para alertas críticas",
+    "bannerSingular": "{count} nueva alerta",
+    "bannerPlural": "{count} nuevas alertas",
+    "viewRecommendation": "Ver recomendación",
+    "askAgent": "Preguntar al Agente",
+    "type": {
+      "crossingChanged": "Cambio de cruce",
+      "waitSurge": "Aumento de espera",
+      "waitDrop": "Baja de espera",
+      "recommendationChanged": "Cambio de recomendación",
+      "tripReminder": "Recordatorio de viaje",
+      "checklistReminder": "Recordatorio de lista",
+      "dataWarning": "Aviso de datos",
+      "unusualCondition": "Condición inusual"
+    }
   },
   "crossing": {
     "laneTimes": "Tiempos por carril",
@@ -525,7 +576,54 @@
       "stepRecommendation": "RECOMENDACIÓN",
       "continue": "Continuar",
       "viewRecommendation": "Ver recomendación",
-      "skip": "Omitir"
+      "skip": "Omitir",
+      "destinationStep": {
+        "title": "¿Adónde vas?",
+        "subtitle": "Busca tu destino"
+      },
+      "originStep": {
+        "title": "¿Desde dónde sales?",
+        "subtitle": "Tu origen para comparar cruces en tu ruta",
+        "currentLocation": "Mi ubicación actual",
+        "resolving": "Determinando ubicación…",
+        "resolveError": "No pudimos determinar el país de tu ubicación. Busca tu punto de partida abajo.",
+        "manualToggle": "Ingresar punto de partida",
+        "searchPlaceholder": "Buscar ciudad, dirección...",
+        "backToOptions": "← Volver a opciones"
+      },
+      "travelModeStep": {
+        "title": "¿Cómo cruzas?",
+        "subtitle": "Selecciona tu modo de cruce",
+        "walking": "A pie",
+        "walkingDesc": "Cruce peatonal",
+        "privateVehicle": "Vehículo privado",
+        "privateVehicleDesc": "Auto, SUV, moto",
+        "commercial": "Comercial",
+        "commercialDesc": "Camión / Truck"
+      },
+      "directionStep": {
+        "title": "¿Hacia dónde vas?",
+        "subtitle": "Selecciona la dirección de tu cruce",
+        "northboundSub": "Hacia el norte",
+        "southboundSub": "Hacia el sur"
+      },
+      "accessStep": {
+        "title": "¿Cómo cruzas normalmente?",
+        "subtitle": "Filtra recomendaciones por tipo de acceso",
+        "standard": "Cruce estándar",
+        "standardDesc": "Carriles generales",
+        "readyLane": "Ready Lane",
+        "readyLaneDesc": "Documentos RFID",
+        "sentri": "SENTRI / Global Entry",
+        "sentriDesc": "Carriles exprés",
+        "unknown": "No estoy seguro",
+        "unknownDesc": "Mostrar todas las opciones"
+      },
+      "documentStep": {
+        "title": "¿Qué documentación tienes?",
+        "subtitle": "Opcional — ayuda a filtrar recomendaciones",
+        "disclaimer": "Esta información ayuda a filtrar recomendaciones. No determina tu elegibilidad legal para ingresar al país."
+      }
     },
     "status": {
       "active": "Activo",
@@ -682,6 +780,13 @@
       "useCrossing": "Usar este cruce",
       "compare": "Comparar",
       "totalJourney": "{duration} en total"
+    },
+    "actions": {
+      "copy": "Copiar",
+      "share": "Compartir",
+      "save": "Guardar",
+      "bookmark": "Marcador",
+      "copied": "¡Copiado!"
     }
   },
   "shared": {

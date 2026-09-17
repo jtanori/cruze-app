@@ -1,5 +1,5 @@
 # AV-BAN-01 — AvisoBanner
-**Version:** 1.0 — 2026-09-16 — new; specified-but-stub, slated for alignment pass. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+**Version:** 1.1 — 2026-09-16 — stub bound: live unread count + alerts handoff. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 ## ID
 `AV-BAN-01`
@@ -11,13 +11,13 @@ AvisoBanner
 Compact aviso summary strip on the trip surface (STUB placeholder).
 
 ## Details
-Current impl is a static card `bg-surface border-border rounded-lg p-4 sm:p-6 mt-4 sm:mt-6` with hardcoded `2 new avisos` (`AvisoBanner.tsx:9-12`); accepts only `className` (`AvisoBanner.tsx:3-7`) — no count prop, no store read, no navigation, no dismiss. Placed on the trip page active-trip block (`trip/page.tsx:158`). STUB (do not treat as complete): hardcoded English count string with no `t()`; static `2` disconnected from `useAvisosStore`; slated for alignment pass to bind live count/i18n/handoff (see AV-HEAD-01).
+Live banner bound to `useAvisosStore.unreadCount()` (`AvisoBanner.tsx:17`); renders null at zero; otherwise full-width button → `/{locale}/alerts` with count via t("alerts.bannerSingular/bannerPlural", { count }) + chevron (`AvisoBanner.tsx:19-31`). Placed on the trip page active-trip block (`trip/page.tsx:158`). Fully i18n.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §AV for canonical definition.
 
 ## Status
-- Spec: defined (v1.0 specified-but-stub)
+- Spec: defined (v1.1 bound + verified)
 - Implementation:
   - `src/components/avisos/AvisoBanner.tsx` — static placeholder; key props: `className?`
 - Workflow usage: see `design/workflows/W*.md`
