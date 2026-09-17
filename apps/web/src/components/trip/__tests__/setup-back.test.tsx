@@ -36,7 +36,7 @@ describe("TripSetupFlow back behavior", () => {
   it("back at the entry step exits via history instead of rewinding", () => {
     renderFlow();
     // No handoff: entry step is destination.
-    fireEvent.click(screen.getByLabelText("Back"));
+    fireEvent.click(screen.getByLabelText("← Back"));
     expect(backMock).toHaveBeenCalledTimes(1);
     expect(pushMock).not.toHaveBeenCalled();
   });
