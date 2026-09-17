@@ -1,6 +1,7 @@
 "use client";
 
-import { MapPin, Navigation, Search } from "lucide-react";
+import { Check, MapPin, Navigation, Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { useLocationContext } from "@/components/location/LocationProvider";
 import { searchPlaces } from "@/lib/geocoding";
@@ -24,7 +25,9 @@ function toOriginSelection(
 }
 
 export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProps) {
+  const t = useTranslations();
   const { location } = useLocationContext();
+  const currentLocationLabel = t("trip.setup.originStep.currentLocation");
   const [query, setQuery] = useState("");
   const [manual, setManual] = useState(false);
   const [manualResults, setManualResults] = useState<Place[]>([]);
@@ -46,7 +49,7 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
     onSelect(
       toOriginSelection(
         "current-location",
-        "Mi ubicación actual",
+        currentLocationLabel,
         location.lat,
         location.lng,
         locationCountry
@@ -62,7 +65,7 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
       onSelect(
         toOriginSelection(
           "current-location",
-          "Mi ubicación actual",
+          currentLocationLabel,
           location.lat,
           location.lng,
           locationCountry
@@ -79,7 +82,7 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
         onSelect(
           toOriginSelection(
             "current-location",
-            "Mi ubicación actual",
+            currentLocationLabel,
             location.lat,
             location.lng,
             place.country
@@ -114,16 +117,16 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
     location?.city && location?.region
       ? `${location.city}, ${location.region}`
       : locationCountry === "MX"
-        ? "México"
+        ? t("common.mexico")
         : locationCountry === "US"
-          ? "Estados Unidos"
+          ? t("common.unitedStates")
           : null;
 
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"¿Desde dónde sales?"}</h2>
-        <p className="text-sm text-muted mt-1">Tu origen para comparar cruces en tu ruta</p>
+        <h2 className="text-xl font-bold text-ink">{t("trip.setup.originStep.title")}</h2>
+        <p className="text-sm text-muted mt-1">{t("trip.setup.originStep.subtitle")}</p>
       </div>
 
       {location && !manual && (
@@ -138,15 +141,15 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
         >
           <div className="w-10 h-10 rounded-full bg-cruze-mint flex items-center justify-center shrink-0">
             {isSelected ? (
-              <span className="text-midnight text-lg font-bold" aria-hidden="true">✓</span>
+              <Check className="w-5 h-5 text-midnight" aria-hidden="true" />
             ) : (
               <Navigation className="w-5 h-5 text-midnight" />
             )}
           </div>
           <div>
-            <p className="text-sm font-semibold text-ink">Mi ubicación actual</p>
+            <p className="text-sm font-semibold text-ink">{currentLocationLabel}</p>
             {resolving && (
-              <p className="text-xs text-muted">Determinando ubicación…</p>
+              <p className="text-xs text-muted">{t("trip.setup.originStep.resolving")}</p>
             )}
           </div>
         </button>
@@ -161,7 +164,7 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
 
       {resolveError && !manual && (
         <p className="text-xs text-muted px-1">
-          No pudimos determinar el país de tu ubicación. Busca tu punto de partida abajo.
+          {t("trip.setup.originStep.resolveError")}
         </p>
       )}
 
@@ -170,7 +173,7 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
           onClick={() => setManual(true)}
           className="w-full text-center text-sm font-medium text-muted hover:text-ink transition-colors py-2"
         >
-          Ingresar punto de partida
+          {t("trip.setup.originStep.manualToggle")}
         </button>
       ) : (
         <div className="space-y-3">
@@ -180,8 +183,8 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
               type="text"
               value={query}
               onChange={(e) => handleManualSearch(e.target.value)}
-              placeholder="Buscar ciudad, dirección..."
-              className="w-full h-[48px] pl-10 pr-4 bg-surface border border-border rounded-[var(--radius-lg)] text-ink text-sm placeholder:text-faint focus:outline-none focus:border-cruze-mint transition-colors"
+              placeholder={t("trip.setup.originStep.searchPlaceholder")}
+              className="w-full h-12 pl-10 pr-4 bg-surface border border-border rounded-[var(--radius-lg)] text-ink text-sm placeholder:text-faint focus:outline-none focus:border-cruze-mint transition-colors"
             />
           </div>
           {manualResults.map((place) => (
@@ -214,7 +217,7 @@ export function TripSetupOriginStep({ value, onSelect }: TripSetupOriginStepProp
             onClick={() => setManual(false)}
             className="w-full text-center text-sm font-medium text-muted hover:text-ink transition-colors"
           >
-            {"← Volver a opciones"}
+            {t("trip.setup.originStep.backToOptions")}
           </button>
         </div>
       )}

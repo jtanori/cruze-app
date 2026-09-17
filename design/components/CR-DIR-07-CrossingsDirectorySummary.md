@@ -46,7 +46,7 @@ className?: string
 
 ## Rules
 - Count = `total` from query response, never `items.length`.
-- Singular "cruce" at total === 1. isSearching (impl CrossingsDirectorySummary.tsx:11,37,44): true → "N cruces encontrados" (search result), false → "N cruces · scope" (scope copy).
+- Singular/plural branch at total === 1 (no ICU): isSearching → t("crossings.directory.foundSingular/foundPlural", { count }), else t("crossings.directory.scopedSingular/scopedPlural", { count, scope }) with scope label reused from t("crossings.filter.nearby/mx/us/allBorder") (CrossingsDirectorySummary.tsx:15-27,40-49). Sort options via labelKey t("crossings.directory.sortNearest/sortRelevance/sortFastest/sortName"); sort label t("crossings.directory.sortBy") (CrossingsDirectorySummary.tsx:29-35,56-69). Fully i18n.
 
 ## Composition
 ```text

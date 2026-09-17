@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Footprints, Car, Truck } from "lucide-react";
 import type { TravelMode } from "@/lib/trip-setup-flow";
 
@@ -9,17 +10,18 @@ interface TripSetupTravelModeStepProps {
 }
 
 export function TripSetupTravelModeStep({ value, onSelect }: TripSetupTravelModeStepProps) {
-  const modes: { mode: TravelMode; label: string; icon: typeof Footprints; desc: string }[] = [
-    { mode: "walking", label: "A pie", icon: Footprints, desc: "Cruce peatonal" },
-    { mode: "privateVehicle", label: "Vehículo privado", icon: Car, desc: "Auto, SUV, moto" },
-    { mode: "commercial", label: "Comercial", icon: Truck, desc: "Camión / Truck" },
+  const t = useTranslations();
+  const modes: { mode: TravelMode; labelKey: string; icon: typeof Footprints; descKey: string }[] = [
+    { mode: "walking", labelKey: "trip.setup.travelModeStep.walking", icon: Footprints, descKey: "trip.setup.travelModeStep.walkingDesc" },
+    { mode: "privateVehicle", labelKey: "trip.setup.travelModeStep.privateVehicle", icon: Car, descKey: "trip.setup.travelModeStep.privateVehicleDesc" },
+    { mode: "commercial", labelKey: "trip.setup.travelModeStep.commercial", icon: Truck, descKey: "trip.setup.travelModeStep.commercialDesc" },
   ];
 
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"¿Cómo cruzas?"}</h2>
-        <p className="text-sm text-muted mt-1">Selecciona tu modo de cruce</p>
+        <h2 className="text-xl font-bold text-ink">{t("trip.setup.travelModeStep.title")}</h2>
+        <p className="text-sm text-muted mt-1">{t("trip.setup.travelModeStep.subtitle")}</p>
       </div>
 
       <div className="space-y-3">
@@ -40,8 +42,8 @@ export function TripSetupTravelModeStep({ value, onSelect }: TripSetupTravelMode
                 <Icon className={`w-5 h-5 ${selected ? "text-midnight" : "text-muted"}`} />
               </div>
               <div>
-                <p className={`text-sm font-semibold ${selected ? "text-ink" : "text-ink"}`}>{m.label}</p>
-                <p className="text-xs text-muted">{m.desc}</p>
+                <p className="text-sm font-semibold text-ink">{t(m.labelKey)}</p>
+                <p className="text-xs text-muted">{t(m.descKey)}</p>
               </div>
               <div className={`ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${selected ? "border-cruze-mint bg-cruze-mint" : "border-border"}`}>
                 {selected && <span className="w-2 h-2 rounded-full bg-midnight" />}

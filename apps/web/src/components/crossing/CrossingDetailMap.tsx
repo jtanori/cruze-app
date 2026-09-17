@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -39,6 +40,7 @@ export function CrossingDetailMap({
   destination = null,
   className = "",
 }: CrossingDetailMapProps) {
+  const t = useTranslations();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [mapError, setMapError] = useState<string | null>(null);
@@ -157,7 +159,7 @@ export function CrossingDetailMap({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
-          alt={crossingName ? `Map of ${crossingName}` : "Crossing map"}
+          alt={crossingName ? t("crossings.map.altWithName", { name: crossingName }) : t("crossings.map.altDefault")}
           className="w-full h-full object-cover"
           onError={() => setStaticFailed(true)}
         />
@@ -166,11 +168,11 @@ export function CrossingDetailMap({
   }
 
   if (mapError) {
-    const reason =
-      mapError === "static" ? "No se pudo cargar el mapa." : mapError;
+    // Internal error codes ("static", token state) never reach the UI verbatim.
+    const reason = t("crossings.map.loadFailed");
     return (
       <div className={`w-full rounded-[var(--radius-lg)] bg-surface border border-border-subtle px-4 py-6 text-center ${className}`}>
-        <p className="text-ink text-sm font-medium">Mapa no disponible</p>
+        <p className="text-ink text-sm font-medium">{t("crossings.map.unavailable")}</p>
         <p className="text-faint text-xs mt-1">{reason}</p>
       </div>
     );

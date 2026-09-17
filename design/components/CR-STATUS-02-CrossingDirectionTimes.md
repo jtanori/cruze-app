@@ -18,7 +18,7 @@ or
 MX → US   11 min
 US → MX   4 min
 ```
-Bare Norte/Sur is a violation. DEVIATION TO FIX: impl CrossingDirectionTimes.tsx:9,12 still renders bare "Norte"/"Sur" — must become MX → US / US → MX in alignment pass.
+Locale-invariant ISO pairs MX → US / US → MX (CrossingDirectionTimes.tsx:11-14); unit via t("common.min") (CrossingDirectionTimes.tsx:8). Aligned — no bare Norte/Sur remains.
 
 ### Tokens
 

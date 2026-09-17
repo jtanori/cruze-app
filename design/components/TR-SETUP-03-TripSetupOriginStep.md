@@ -51,7 +51,7 @@ Padding:        16px
 
 ### Rule
 
-Title {"¿Desde dónde sales?"} (TripSetupOriginStep.tsx:125), card "Mi ubicación actual" (TripSetupOriginStep.tsx:49,65,83,147), toggle "Ingresar punto de partida" (TripSetupOriginStep.tsx:173) all hardcoded — known deviation. Default origin is the established current location, but the user can
+Title/subtitle t("trip.setup.originStep.title/subtitle") (TripSetupOriginStep.tsx:126-127); card label t("trip.setup.originStep.currentLocation") at all 3 creation sites; resolving/error/toggle/placeholder/back via t("trip.setup.originStep.*"); country line via t("common.mexico/unitedStates"); selected glyph is lucide Check (TripSetupOriginStep.tsx:141); manual input h-12 (TripSetupOriginStep.tsx:185). Fully i18n. Default origin is the established current location, but the user can
 override it.
 
 Preselection applies only when the location country is known (MX/US):

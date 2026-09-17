@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { EmptyState } from "@/components/primitives/EmptyState";
 import { ErrorState } from "@/components/primitives/ErrorState";
 import { LoadingSkeleton } from "@/components/primitives/LoadingSkeleton";
@@ -50,11 +51,12 @@ export function CrossingsDirectoryList({
   onViewDetail,
   className = "",
 }: CrossingsDirectoryListProps) {
+  const t = useTranslations();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   if (loading) {
     return (
-      <div className={`space-y-3 ${className}`} role="status" aria-label="Cargando cruces">
+      <div className={`space-y-3 ${className}`} role="status" aria-label={t("crossings.directory.loading")}>
         {Array.from({ length: 5 }, (_, i) => (
           <LoadingSkeleton key={i} variant="card" height="5rem" />
         ))}
@@ -65,9 +67,9 @@ export function CrossingsDirectoryList({
   if (unavailable) {
     return (
       <ErrorState
-        title="Cruces no disponibles"
-        message="No se pudo cargar la información de cruces. Intenta nuevamente."
-        action={{ label: "Reintentar", onClick: onRetry }}
+        title={t("crossings.directory.unavailableTitle")}
+        message={t("crossings.directory.unavailableMessage")}
+        action={{ label: t("common.retry"), onClick: onRetry }}
         className={className}
       />
     );
@@ -76,15 +78,15 @@ export function CrossingsDirectoryList({
   if (items.length === 0) {
     return (
       <EmptyState
-        title="No encontramos cruces"
-        description="Prueba con otro término o filtro."
+        title={t("crossings.noResults")}
+        description={t("crossings.noResultsDescription")}
         action={
           hasActiveFilters ? (
             <button
               onClick={onClearFilters}
               className="text-cruze-mint text-sm font-medium hover:underline min-h-[44px] px-4"
             >
-              Limpiar filtros
+              {t("crossings.directory.clearFilters")}
             </button>
           ) : undefined
         }

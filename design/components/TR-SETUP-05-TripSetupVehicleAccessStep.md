@@ -46,7 +46,7 @@ TripSetupVehicleAccessStep
 ### Tokens
 
 ``` text
-Selected:       bg-cruze-mint/10 border-cruze-mint/50 (TripSetupVehicleAccessStep.tsx:33); title {"¿Cómo cruzas normalmente?"} hardcoded (TripSetupVehicleAccessStep.tsx:21) — known deviation
+Selected:       bg-cruze-mint/10 border-cruze-mint/50 (TripSetupVehicleAccessStep.tsx:34); title t("trip.setup.accessStep.title") + subtitle t("trip.setup.accessStep.subtitle") (TripSetupVehicleAccessStep.tsx:23-24) — fully i18n
 Option surface: Surface
 Border:         #1F3A54
 Selected border: Cruze Mint
@@ -57,7 +57,7 @@ Padding:        16px
 ### Values
 
 ``` text
-standard / readyLane / sentri / unknown (TripSetupVehicleAccessStep.tsx:11-16); labels "Cruce estándar" / "Ready Lane" / "SENTRI / Global Entry" / "No estoy seguro" hardcoded (TripSetupVehicleAccessStep.tsx:12-15) — known deviation
+standard / readyLane / sentri / unknown (TripSetupVehicleAccessStep.tsx:12-17); labels+descs via labelKey/descKey t("trip.setup.accessStep.*") (TripSetupVehicleAccessStep.tsx:12-17) — fully i18n
 ```
 
 ------------------------------------------------------------------------

@@ -18,7 +18,7 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: cr)
+- Implementation: `src/components/crossing/CrossingFavoriteButton.tsx` — toggle with aria-pressed + aria-label t("crossings.favorite.add/remove") (CrossingFavoriteButton.tsx:27-29); 44px touch target; Star fill-cruze-mint when active
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

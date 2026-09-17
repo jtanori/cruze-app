@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { SlidersHorizontal } from "lucide-react";
 import { SearchInput } from "@/components/primitives/SearchInput";
 
@@ -22,22 +23,23 @@ export function CrossingsDirectoryToolbar({
   onOpenFilters,
   className = "",
 }: CrossingsDirectoryToolbarProps) {
+  const t = useTranslations();
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <div className="flex-1 min-w-0">
         <SearchInput
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
-          placeholder="Buscar cruces..."
-          aria-label="Buscar cruces"
+          placeholder={t("crossings.searchPlaceholder")}
+          aria-label={t("crossings.searchPlaceholder")}
         />
       </div>
       <button
         onClick={onOpenFilters}
         aria-label={
           activeFilterCount > 0
-            ? `Filtros, ${activeFilterCount} activos`
-            : "Filtros"
+            ? t("crossings.directory.filtersActive", { count: activeFilterCount })
+            : t("crossings.filter.title")
         }
         className="relative w-11 h-11 shrink-0 flex items-center justify-center bg-surface border border-border rounded-[var(--radius-md)] text-ink hover:bg-surface-elevated transition-colors"
       >

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { AccessType } from "@/lib/trip-setup-flow";
 
 interface TripSetupVehicleAccessStepProps {
@@ -8,18 +9,19 @@ interface TripSetupVehicleAccessStepProps {
 }
 
 export function TripSetupVehicleAccessStep({ value, onSelect }: TripSetupVehicleAccessStepProps) {
-  const options: { access: AccessType; label: string; desc: string }[] = [
-    { access: "standard", label: "Cruce estándar", desc: "Carriles generales" },
-    { access: "readyLane", label: "Ready Lane", desc: "Documentos RFID" },
-    { access: "sentri", label: "SENTRI / Global Entry", desc: "Carriles exprés" },
-    { access: "unknown", label: "No estoy seguro", desc: "Mostrar todas las opciones" },
+  const t = useTranslations();
+  const options: { access: AccessType; labelKey: string; descKey: string }[] = [
+    { access: "standard", labelKey: "trip.setup.accessStep.standard", descKey: "trip.setup.accessStep.standardDesc" },
+    { access: "readyLane", labelKey: "trip.setup.accessStep.readyLane", descKey: "trip.setup.accessStep.readyLaneDesc" },
+    { access: "sentri", labelKey: "trip.setup.accessStep.sentri", descKey: "trip.setup.accessStep.sentriDesc" },
+    { access: "unknown", labelKey: "trip.setup.accessStep.unknown", descKey: "trip.setup.accessStep.unknownDesc" },
   ];
 
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"¿Cómo cruzas normalmente?"}</h2>
-        <p className="text-sm text-muted mt-1">Filtra recomendaciones por tipo de acceso</p>
+        <h2 className="text-xl font-bold text-ink">{t("trip.setup.accessStep.title")}</h2>
+        <p className="text-sm text-muted mt-1">{t("trip.setup.accessStep.subtitle")}</p>
       </div>
 
       <div className="space-y-3">
@@ -34,8 +36,8 @@ export function TripSetupVehicleAccessStep({ value, onSelect }: TripSetupVehicle
               }`}
             >
               <div className="flex-1">
-                <p className="text-sm font-semibold text-ink">{o.label}</p>
-                <p className="text-xs text-muted">{o.desc}</p>
+                <p className="text-sm font-semibold text-ink">{t(o.labelKey)}</p>
+                <p className="text-xs text-muted">{t(o.descKey)}</p>
               </div>
               <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${selected ? "border-cruze-mint bg-cruze-mint" : "border-border"}`}>
                 {selected && <span className="w-2 h-2 rounded-full bg-midnight" />}

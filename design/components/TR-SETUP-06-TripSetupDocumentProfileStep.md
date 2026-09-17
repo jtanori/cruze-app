@@ -14,7 +14,7 @@
 │ 5 DE 5                                       │
 │ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━            │
 │                                              │
-│ {"¿Qué documentación tienes?"} hardcoded title (TripSetupDocumentProfileStep.tsx:25) — known deviation │
+│ Title t("trip.setup.documentStep.title") + subtitle t("trip.setup.documentStep.subtitle") + disclaimer t("trip.setup.documentStep.disclaimer") (TripSetupDocumentProfileStep.tsx:25-33) — fully i18n │
 │                                              │
 │ Esto ayuda a filtrar opciones de acceso.     │
 │ No necesitamos números de documentos.        │

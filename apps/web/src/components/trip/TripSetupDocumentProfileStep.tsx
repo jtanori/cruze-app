@@ -22,13 +22,13 @@ export function TripSetupDocumentProfileStep({ value, onSelect, onSkip }: TripSe
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"¿Qué documentación tienes?"}</h2>
-        <p className="text-sm text-muted mt-1">Opcional — ayuda a filtrar recomendaciones</p>
+        <h2 className="text-xl font-bold text-ink">{t("trip.setup.documentStep.title")}</h2>
+        <p className="text-sm text-muted mt-1">{t("trip.setup.documentStep.subtitle")}</p>
       </div>
 
       <div className="p-3 rounded-[var(--radius-lg)] bg-info/10 border border-info/20">
         <p className="text-xs text-info leading-relaxed">
-          Esta información ayuda a filtrar recomendaciones. No determina tu elegibilidad legal para ingresar al país.
+          {t("trip.setup.documentStep.disclaimer")}
         </p>
       </div>
 

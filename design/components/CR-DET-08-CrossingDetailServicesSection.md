@@ -18,7 +18,7 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: cr)
+- Implementation: `src/components/crossing/CrossingDetailServicesSection.tsx` — eyebrow via t("crossings.expanded.services") (reused); pills are caller data; empty renders "—". Fully i18n.
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

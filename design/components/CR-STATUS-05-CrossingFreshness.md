@@ -58,6 +58,10 @@ Invalid:
 EN VIVO · Actualizado hace 2 h
 ```
 
+### Implementation (aligned 2026-09-16)
+
+All four states via t("crossings.freshness.unavailable/stale/live/recent", { minutes }) (`CrossingFreshness.tsx:8-11`) — i18n-clean with identical logic. Deeper unification onto `formatFreshness` vocabulary remains a UX decision, not a violation fix.
+
 ------------------------------------------------------------------------
 
 ---

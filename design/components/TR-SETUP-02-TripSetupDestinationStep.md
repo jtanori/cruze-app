@@ -14,7 +14,7 @@
 │ 1 DE 5                                       │
 │ ━━━━━━━━━                                    │
 │                                              │
-│ {"¿Adónde vas?"} hardcoded (TripSetupDestinationStep.tsx:18) + {"Busca tu destino"} hardcoded (TripSetupDestinationStep.tsx:19) — known deviation │
+│ Title t("trip.setup.destinationStep.title") + subtitle t("trip.setup.destinationStep.subtitle") (TripSetupDestinationStep.tsx:18-19) — fully i18n │
 │                                              │
 │ <DestinationSearch userLat/userLng/userCountry onSelect={mapPlaceToDestination} /> (TripSetupDestinationStep.tsx:22-29) — no onNext passed │
 │                                              │

@@ -13,6 +13,7 @@ Presentational directory list. Data, filtering, ranking, pagination live server-
 ## Details
 Denser info-oriented list, not duplicate of nearby preview.
 States: loading skeletons → unavailable (retry) → empty (clear-filters when filters active) → rows + CR-DIR-09 load-more. Empty ≠ unavailable, always distinct.
+Fully i18n (CrossingsDirectoryList.tsx:53-94): loading aria t("crossings.directory.loading"); unavailable via t("crossings.directory.unavailableTitle/unavailableMessage") + t("common.retry"); empty reuses canonical t("crossings.noResults/noResultsDescription") + t("crossings.directory.clearFilters") when filters active.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

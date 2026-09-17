@@ -18,7 +18,7 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: cr)
+- Implementation: `src/components/crossing/CrossingDetailRequirementsSection.tsx` — eyebrow t("crossings.expanded.requirements"), empty t("crossings.expanded.requirementsEmpty"); category toggles carry aria-expanded (RequirementsSection.tsx:31); labels/items are caller data. Fully i18n.
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

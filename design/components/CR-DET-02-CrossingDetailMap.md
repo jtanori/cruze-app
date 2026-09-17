@@ -52,8 +52,8 @@ C03 wires origin/destination via `useTripMapContext()` which derives valid conte
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.
 
 ## Status
-- Spec: defined
-- Implementation: `src/components/crossing/CrossingDetailMap.tsx`
+- Spec: defined (aligned 2026-09-16)
+- Implementation: `src/components/crossing/CrossingDetailMap.tsx` — error UI via t("crossings.map.unavailable/loadFailed"), static alt via t("crossings.map.altWithName/altDefault") (CrossingDetailMap.tsx:160,169-174); internal codes never leak to UI. Fully i18n.
 - Route primitives: `src/lib/map-route.ts`
 - Context hook: `src/hooks/useTripMapContext.ts`
 - Workflow usage: see `design/workflows/W7-crossings.md`

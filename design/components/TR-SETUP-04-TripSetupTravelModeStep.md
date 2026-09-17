@@ -14,7 +14,7 @@
 │ 3 DE 5                                       │
 │ ━━━━━━━━━━━━━━━━━━━━━                        │
 │                                              │
-│ {"¿Cómo cruzas?"} hardcoded (TripSetupTravelModeStep.tsx:21) + "Selecciona tu modo de cruce" hardcoded (TripSetupTravelModeStep.tsx:22) — known deviation │
+│ Title t("trip.setup.travelModeStep.title") + subtitle t("trip.setup.travelModeStep.subtitle") (TripSetupTravelModeStep.tsx:23-24) — fully i18n │
 │                                              │
 │ ┌──────────────────────────────────────────┐ │
 │ │  👟  A pie                               │ │
@@ -22,7 +22,7 @@
 │ └──────────────────────────────────────────┘ │
 │                                              │
 │ ┌──────────────────────────────────────────┐ │
-│ │ Vehículo privado / Comercial (+ A pie) hardcoded (TripSetupTravelModeStep.tsx:12-16); icons Footprints/Car/Truck (TripSetupTravelModeStep.tsx:3,12-16) │
+│ │ Options via labelKey/descKey t("trip.setup.travelModeStep.walking/privateVehicle/commercial + Desc") (TripSetupTravelModeStep.tsx:12-16); icons Footprints/Car/Truck (TripSetupTravelModeStep.tsx:3,12-16) │
 │ └──────────────────────────────────────────┘ │
 │                                              │
 │ ┌──────────────────────────────────────────┐ │

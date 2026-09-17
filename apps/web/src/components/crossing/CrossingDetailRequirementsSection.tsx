@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface RequirementCategory {
@@ -28,6 +29,7 @@ function RequirementCategoryItem({
     <div className="border-b border-border last:border-b-0">
       <button
         onClick={() => setExpanded(!expanded)}
+        aria-expanded={expanded}
         className="w-full flex items-center justify-between py-3 min-h-[44px]"
       >
         <span className="text-sm font-medium text-ink">{category.label}</span>
@@ -54,11 +56,12 @@ export function CrossingDetailRequirementsSection({
   requirements,
   className = "",
 }: CrossingDetailRequirementsSectionProps) {
+  const t = useTranslations();
   const hasAnyItems = requirements.some((c) => c.items.length > 0);
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted">REQUISITOS</p>
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t("crossings.expanded.requirements")}</p>
       {hasAnyItems ? (
         <div className="bg-surface border border-border rounded-[var(--radius-lg)] divide-y divide-border">
           {requirements.map((category) => (
@@ -66,7 +69,7 @@ export function CrossingDetailRequirementsSection({
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted">No hay requisitos adicionales</p>
+        <p className="text-sm text-muted">{t("crossings.expanded.requirementsEmpty")}</p>
       )}
     </div>
   );

@@ -8,7 +8,7 @@ CR-DIR-06
 CrossingsDirectoryToolbar
 
 ## Purpose
-Compact utility row: search entry + filter trigger. Uses SearchInput primitive (impl CrossingsDirectoryToolbar.tsx:4,28-33); placement is caller-owned flex row (`flex items-center gap-2` + className passthrough, CrossingsDirectoryToolbar.tsx:26) — NOT an APP-COMPANION-01 portal. Deviation: placeholder/aria hardcoded "Buscar cruces" (CrossingsDirectoryToolbar.tsx:31-32) — must become t() key in alignment pass.
+Compact utility row: search entry + filter trigger. Uses SearchInput primitive (impl CrossingsDirectoryToolbar.tsx:4,28-33); placement is caller-owned flex row (`flex items-center gap-2` + className passthrough, CrossingsDirectoryToolbar.tsx:26) — NOT an APP-COMPANION-01 portal. Fully i18n: placeholder/aria reuse t("crossings.searchPlaceholder") (CrossingsDirectoryToolbar.tsx:31-32); filter aria t("crossings.filter.title") or t("crossings.directory.filtersActive", { count }) (CrossingsDirectoryToolbar.tsx:37-42).
 
 ## ASCII
 ```text

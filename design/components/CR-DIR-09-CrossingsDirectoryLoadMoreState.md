@@ -12,7 +12,7 @@ Progressive loading control. Rendered only when `hasMore`; spinner while appendi
 
 ## ASCII
 ```text
-Cargar más
+t("crossings.directory.loadMore")
 ```
 
 ```text

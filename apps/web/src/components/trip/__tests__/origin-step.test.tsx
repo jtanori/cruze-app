@@ -78,8 +78,8 @@ describe("TripSetupOriginStep", () => {
     const onSelect = renderStep();
     onSelect.mockClear();
 
-    fireEvent.click(screen.getByText("Ingresar punto de partida"));
-    fireEvent.change(screen.getByPlaceholderText("Buscar ciudad, dirección..."), {
+    fireEvent.click(screen.getByText("Enter starting point"));
+    fireEvent.change(screen.getByPlaceholderText("Search city, address..."), {
       target: { value: "sono" },
     });
     await waitFor(() => expect(screen.getByText("Sonoita")).toBeTruthy());

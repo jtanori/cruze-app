@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useLocationContext } from "@/components/location/LocationProvider";
 import { DestinationSearch } from "./DestinationSearch";
 import { mapPlaceToDestination } from "@/lib/trip-destination";
@@ -10,13 +11,14 @@ interface TripSetupDestinationStepProps {
 }
 
 export function TripSetupDestinationStep({ onSelect }: TripSetupDestinationStepProps) {
+  const t = useTranslations();
   const { location } = useLocationContext();
 
   return (
     <div className="space-y-4 sm:space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink">{"¿Adónde vas?"}</h2>
-        <p className="text-sm text-muted mt-1">{"Busca tu destino"}</p>
+        <h2 className="text-xl font-bold text-ink">{t("trip.setup.destinationStep.title")}</h2>
+        <p className="text-sm text-muted mt-1">{t("trip.setup.destinationStep.subtitle")}</p>
       </div>
 
       <DestinationSearch

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/primitives/Spinner";
 
 interface CrossingsDirectoryLoadMoreStateProps {
@@ -16,6 +17,7 @@ export function CrossingsDirectoryLoadMoreState({
   onLoadMore,
   className = "",
 }: CrossingsDirectoryLoadMoreStateProps) {
+  const t = useTranslations();
   return (
     <div className={`flex justify-center py-2 ${className}`} role="status">
       {loadingMore ? (
@@ -25,7 +27,7 @@ export function CrossingsDirectoryLoadMoreState({
           onClick={onLoadMore}
           className="text-cruze-mint text-sm font-medium hover:underline min-h-[44px] px-4"
         >
-          Cargar más
+          {t("crossings.directory.loadMore")}
         </button>
       )}
     </div>
