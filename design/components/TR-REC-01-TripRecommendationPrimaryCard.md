@@ -60,7 +60,7 @@ Props come from `TripRecommendation.primary`:
 ### Tokens
 
 ``` text
-Surface:          Surface Elevated
+Surface:          bg-surface (TripRecommendationPrimaryCard.tsx:44)
 Border:           1px Cruze Mint/30
 Radius:           12px (var(--radius-lg))
 Padding:          20px
@@ -88,23 +88,20 @@ Rank badge:
   bg-cruze-mint/15 text-cruze-mint
 
 Primary metric (wait):
-  Sora 20px / 700 tabular
-  Text Primary
+  text-xl / 700 tabular + Clock w-5 h-5 text-faint (TripRecommendationPrimaryCard.tsx:59-61)
 
 Secondary metric (total):
-  Sora 20px / 700 tabular
-  Text Primary
+  text-xl / 700 tabular + TrendingUp w-5 h-5 text-faint (TripRecommendationPrimaryCard.tsx:65-68)
 
 Metric labels:
   Inter 11px
   Text Secondary
 
 Freshness:
-  Inter 11px
-  Text Secondary
+  minutes-only mins = max(0, floor((Date.now() - generatedAt)/60000)) via t("trip.recommendation.card.updatedAgo", { minutes }) (TripRecommendationPrimaryCard.tsx:35,74)
 
 CTA:
-  h-48px w-full
+  h-12 w-full with CheckCircle2 w-4 h-4 (TripRecommendationPrimaryCard.tsx:77-82)
   bg-cruze-mint text-midnight
   Inter 14px / 600
   rounded-lg

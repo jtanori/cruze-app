@@ -50,7 +50,7 @@ export function TripNearbyCrossingRow({
   return (
     <button
       onClick={onClick}
-      className="w-full flex flex-col space-y-1 p-3 bg-surface border border-border-subtle rounded-xl hover:bg-surface-elevated transition-colors text-left"
+      className="w-full flex flex-col space-y-1 p-3 bg-surface border border-border-subtle rounded-[var(--radius-lg)] hover:bg-surface-elevated transition-colors text-left"
     >
       <div className="flex items-center gap-2">
         <span className="text-ink text-sm font-medium truncate">{name}</span>

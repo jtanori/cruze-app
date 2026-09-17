@@ -1,5 +1,5 @@
 # TR-REC-03 — 03
-**Version:** 1.2 — 2026-09-08 — T07 locked; alternatives use `RecommendationAlternative[]` with coordinates; "Usar este cruce" calls `setSelectedCrossing` (commitment). If version differs, revisit.
+**Version:** 1.3 — 2026-09-16 — implementation sync; T07 locked; alternatives use `RecommendationAlternative[]` with coordinates; "Usar este cruce" calls `setSelectedCrossing` (commitment). If version differs, revisit. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
 > **Canonical:** `design/workflows/T07-recommendation.md` — source of truth for alternative data. See `design/components/README.md`.
 
@@ -27,8 +27,9 @@ Shows alternative crossings ranked by the engine. Each alternative can be expand
 ### Props
 
 ```typescript
+interface Alternative { crossingId/crossingName/mexicanCity/usCity/waitTime/totalJourneyTime/deltaMinutes } — no status field (TripAlternativeListSection.tsx:8-16);
 interface TripAlternativeListSectionProps {
-  alternatives: RecommendationAlternative[];
+  alternatives: Alternative[];
   onSelect?: (crossingId: string) => void;
   className?: string;
 }
@@ -44,7 +45,7 @@ Props come from `TripRecommendation.alternatives`:
 - `waitTime` ← `alt.waitTime`
 - `totalJourneyTime` ← `alt.totalJourneyTime`
 - `deltaMinutes` ← `alt.deltaMinutes`
-- `status` ← `alt.status`
+- (no `status` — impl Alternative has no status field (TripAlternativeListSection.tsx:8-16))
 
 ### Commitment boundary
 
@@ -78,8 +79,9 @@ Delta:
   Warning color
 
 Expanded:
-  Wait/Total: Sora 18px / 700 tabular
-  CTA: h-40px, Surface Elevated, border, rounded-md
+  Wait/Total: text-lg / 700 tabular (TripAlternativeListSection.tsx:55,59)
+  CTA: h-10, Surface Elevated, border, rounded-md (TripAlternativeListSection.tsx:65)
+  Toggle: aria-expanded mirrors state (TripAlternativeListSection.tsx:40)
 ```
 
 ### Rule

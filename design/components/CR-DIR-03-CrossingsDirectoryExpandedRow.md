@@ -12,8 +12,11 @@ Expanded row exposing lane info
 
 ## Details
 Lane, access, hours, services on expansion — each section renders only with
-sourced data (empty sections hidden, never invented). "Ver detalle" action
-navigates to C03.
+sourced data (empty sections hidden, never invented). Section eyebrows via
+t("crossings.expanded.lanes/access/hours/services") (CrossingsDirectoryExpandedRow.tsx:56,69,75,81);
+CTA via t("crossings.viewDetails"), h-10 secondary (CrossingsDirectoryExpandedRow.tsx:86-88).
+Lane type/access/services/hours values are caller-supplied data passthrough (not t()).
+Action navigates to C03.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.

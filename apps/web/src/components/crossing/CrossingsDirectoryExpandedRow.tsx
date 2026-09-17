@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { formatDuration } from "@/lib/display";
 import { CrossingsDirectoryRow, type CrossingOperationalStatus } from "./CrossingsDirectoryRow";
 
@@ -37,6 +38,7 @@ export function CrossingsDirectoryExpandedRow({
   onViewDetail,
   className = "",
 }: CrossingsDirectoryExpandedRowProps) {
+  const t = useTranslations();
   return (
     <div className={className}>
       <CrossingsDirectoryRow
@@ -51,7 +53,7 @@ export function CrossingsDirectoryExpandedRow({
         <div className="bg-surface border-x border-b border-border rounded-b-[var(--radius-lg)] -mt-1 pt-1 px-4 pb-4 space-y-3">
           {lanes.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">Carriles</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">{t("crossings.expanded.lanes")}</p>
               <div className="space-y-1">
                 {lanes.map((l, i) => (
                   <div key={`${l.type}-${i}`} className="flex justify-between text-sm">
@@ -64,25 +66,25 @@ export function CrossingsDirectoryExpandedRow({
           )}
           {accessTypes.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">Acceso</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">{t("crossings.expanded.access")}</p>
               <p className="text-sm text-ink">{accessTypes.join(" · ")}</p>
             </div>
           )}
           {hours && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">Horarios</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">{t("crossings.expanded.hours")}</p>
               <p className="text-sm text-ink">{hours}</p>
             </div>
           )}
           {services.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">Servicios</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-1">{t("crossings.expanded.services")}</p>
               <p className="text-sm text-ink">{services.join(" · ")}</p>
             </div>
           )}
           {onViewDetail && (
-            <button onClick={onViewDetail} className="w-full h-[40px] rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-sm font-medium">
-              Ver detalle
+            <button onClick={onViewDetail} className="w-full h-10 rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-sm font-medium">
+              {t("crossings.viewDetails")}
             </button>
           )}
         </div>

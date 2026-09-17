@@ -36,6 +36,7 @@ export function TripAlternativeListSection({ alternatives, onSelect, className =
           <div key={alt.crossingId} className="bg-surface border border-border rounded-[var(--radius-lg)] overflow-hidden">
             <button
               onClick={() => setExpanded(isExpanded ? null : alt.crossingId)}
+              aria-expanded={isExpanded}
               className="w-full flex items-center justify-between px-4 py-3 text-left"
             >
               <div>
@@ -62,7 +63,7 @@ export function TripAlternativeListSection({ alternatives, onSelect, className =
                 {onSelect && (
                   <button
                     onClick={() => onSelect(alt.crossingId)}
-                    className="w-full h-[40px] rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-sm font-medium"
+                    className="w-full h-10 rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-sm font-medium"
                   >
                     {t("trip.recommendation.card.useCrossing")}
                   </button>

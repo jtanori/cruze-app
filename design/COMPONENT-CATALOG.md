@@ -36,14 +36,45 @@ Domain + Surface + Responsibility
 
 ## 2. UI Primitive Variations
 
-### Button
+### Button (`src/components/primitives/Button.tsx:7-14` — 5 variants, sizes sm/md/lg/xl per `:48-53`)
 
 | Variant | States |
 |---------|--------|
-| Primary | Default, Pressed, Disabled, Loading |
-| Secondary | Default, Pressed, Disabled |
-| Ghost | Default, Pressed, Disabled |
-| Destructive | Default, Pressed, Disabled, Loading |
+| Primary (hollow-disabled: `disabled:bg-surface-elevated disabled:text-faint disabled:border disabled:border-border disabled:shadow-none` — never bare opacity, `Button.tsx:34-41`) | Default, Pressed, Disabled (hollow), Loading (spinner + sr-only `t("common.loading")`, `Button.tsx:64-88`) |
+| Secondary | Default, Pressed, Disabled (`disabled:opacity-50`, `Button.tsx:42`) |
+| Ghost | Default, Pressed, Disabled (`disabled:opacity-50`, `Button.tsx:43`) |
+| Destructive | Default, Pressed, Disabled (`disabled:opacity-50`), Loading (`Button.tsx:44,64-88`) |
+| Outline (5th variant: `border border-border bg-transparent`, `Button.tsx:45`) | Default, Pressed, Disabled (`disabled:opacity-50`) |
+
+### Select (`src/components/primitives/Select.tsx` — native select, no variant prop; `label/error/hint/placeholder/options` per `Select.tsx:13-19`)
+
+| Variant | States |
+|---------|--------|
+| Standard (h-12, custom chevron bg, `Select.tsx:44-45`) | Default, Focused (`focus:border-cruze-mint` + ring, `:45`), Error (`aria-invalid` + `role="alert"` text, `:59,75-79`), Disabled (`disabled:opacity-50`, `:45,57,61`), With hint (`:80-84`), With placeholder (disabled empty option, `:64-68`), Option-disabled (`:70`) |
+
+### Avatar (`src/components/primitives/Avatar.tsx`)
+
+| Variant | States |
+|---------|--------|
+| Circle / Square (`shape`, `Avatar.tsx:12,54-57`) × xs / sm / md / lg / xl (`Avatar.tsx:11,31-37`) with status dot online / offline / busy / away (`Avatar.tsx:13,47-52,81-86`) | Image, Initial-fallback (`name` char or `?`, `Avatar.tsx:73-79`), Status-dotted |
+
+### Inline (`src/components/primitives/Inline.tsx` — layout only, no interactive states)
+
+| Variant | States |
+|---------|--------|
+| gap none / xs / sm / md / lg / xl (`Inline.tsx:8,23-30`); align start / center / end (`:9,32-36`); wrap bool (`:10,41`) | Layout only (DEVIATION flagged: `items-${align}` template literal at `Inline.tsx:41` cannot resolve to a Tailwind class) |
+
+### Stack (`src/components/primitives/Stack.tsx` — layout only, no interactive states)
+
+| Variant | States |
+|---------|--------|
+| direction vertical / horizontal (`Stack.tsx:8,56`); gap none / xs / sm / md / lg / xl / 2xl / 3xl (`:9,27-36`); align start / center / end / stretch (`:10,38-43`); justify start / center / end / between / around (`:11,45-51`); wrap bool (`:12,56`) | Layout only |
+
+### Section (`src/components/primitives/Section.tsx` — layout only, no interactive states)
+
+| Variant | States |
+|---------|--------|
+| default (`bg-transparent`) / card (`bg-surface border border-border rounded-lg`) / elevated (`bg-surface-elevated`) / outlined (`bg-surface border border-border`) — `Section.tsx:8,22-27` | padding none / sm / md / lg / xl (`Section.tsx:9,29-35`) |
 
 ### IconButton
 
@@ -302,7 +333,7 @@ All interactive elements must meet WCAG 2.5.8 minimum:
 
 ## 5. Catalog Index (Generated)
 
-All 83 component specs live in `design/components/` — see [`design/components/README.md`](components/README.md) for the full indexed table (APP 7 / LOC 10 / TR 18 / CR 21 / AG 11 / AV 9 / SET 7).
+All 116 component spec files live in `design/components/` (107 live, 9 retired: CR-DIR-05, CR-DET-11, CR-CARD-01, AV-CROSS-01, AV-REC-01, AV-TRIP-01, AV-CHECK-01, AV-DATA-01, TR-REC-04) — see [`design/components/README.md`](components/README.md) for the full indexed table (APP 9 / LOC 10 / TR 22 files · 21 live / CR 30 files · 27 live / AG 15 / AV 12 files · 7 live / SET 7 / SPLASH 7 / PWA 1 / LEGAL 1 / PRIV 2).
 
 Each entry in `README.md` links to its `design/components/<ID>-<Name>.md`.
 

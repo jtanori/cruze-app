@@ -4,6 +4,8 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { DataStatus } from "@/components/primitives/DataStatus";
 import { formatDuration } from "@/lib/display";
 
+// Direction codes are locale-invariant (ISO pairs, not words) — intentionally literal, not t().
+
 export type CrossingOperationalStatus = "operational" | "limited" | "closed" | "unknown";
 
 interface CrossingsDirectoryRowProps {
@@ -31,6 +33,7 @@ export function CrossingsDirectoryRow({
     <div className={`bg-surface border border-border rounded-[var(--radius-lg)] overflow-hidden ${className}`}>
       <button
         onClick={onToggle ?? onSelect}
+        aria-expanded={onToggle ? expanded : undefined}
         className="w-full px-4 py-2.5 flex items-center justify-between text-left"
       >
         <div className="min-w-0 flex-1">

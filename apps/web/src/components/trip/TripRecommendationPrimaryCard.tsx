@@ -32,7 +32,7 @@ export function TripRecommendationPrimaryCard({
   className = "",
 }: TripRecommendationPrimaryCardProps) {
   const t = useTranslations();
-  const mins = Math.floor((Date.now() - new Date(generatedAt).getTime()) / 60000);
+  const mins = Math.max(0, Math.floor((Date.now() - new Date(generatedAt).getTime()) / 60000));
   const rankLabels: Record<RecommendationRank, string> = {
     recommended: t("trip.recommendation.rank.recommended"),
     fastest: t("trip.recommendation.rank.fastest"),
@@ -76,7 +76,7 @@ export function TripRecommendationPrimaryCard({
         {onUseCrossing && (
           <button
             onClick={onUseCrossing}
-            className="w-full h-[48px] flex items-center justify-center gap-2 bg-cruze-mint text-midnight text-sm font-semibold rounded-[var(--radius-lg)] hover:opacity-90 transition-opacity"
+            className="w-full h-12 flex items-center justify-center gap-2 bg-cruze-mint text-midnight text-sm font-semibold rounded-[var(--radius-lg)] hover:opacity-90 transition-opacity"
           >
             <CheckCircle2 className="w-4 h-4" />
             {t("trip.recommendation.card.useCrossing")}

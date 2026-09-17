@@ -1,8 +1,8 @@
 # Component Catalog — Index
 
-**Version:** 1.4 — 2026-09-11 — LIVE-01 locked; TR-ACT-01 updated for LiveCrossingSnapshot; TR-ACT-02/04 updated for live data consumer mapping. If version differs from `design/workflows/W*.md` or `apps/web/src/app/globals.css:94`, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11`.
+**Version:** 1.5 — 2026-09-16 — full coverage sync: 16 new specs (TR-SETUP-07/08, CR-CARD-01, CR-CONF-01, AG-CHAT/PROV/TYPE/RICH-01, AV-LIST/DET/BAN-01, LEGAL-01, PRIV-01/02, APP-SHELL-01), 11 AG stub rewrites, 5 AV per-type retirements (→ AV-DET-01), CR-DET-11 retired, drift corrections across TR/CR/PWA/SET/SPLASH/LOC. If version differs from `design/workflows/W*.md` or `apps/web/src/app/globals.css:94`, revisit testing per `design/TESTING_INTEGRATION_PLAN.md:11`.
 
-> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` — this directory is canonical per component (92). Tokens: `design/workflows/W5_component_level_design_spec.md` §1-2. Workflows: `design/workflows/W*.md` (W1-W10) + `design/workflows/T07-recommendation.md`. Matrix: `docs/PAGES_WORKFLOWS_REPORT.md`. Testing: `docs/TESTING_TOOLS.md` P0-P5 → `design/TESTING_INTEGRATION_PLAN.md`. Integration order: `design/INTEGRATION_PLAN.md` Addendum.
+> **Source of truth for implementation:** `design/components/<ID>-<Name>.md` — this directory is canonical per component (116 files: 109 live, 7 retired). Tokens: `design/workflows/W5_component_level_design_spec.md` §1-2. Workflows: `design/workflows/W*.md` (W1-W10) + `design/workflows/T07-recommendation.md`. Matrix: `docs/PAGES_WORKFLOWS_REPORT.md`. Testing: `docs/TESTING_TOOLS.md` P0-P5 → `design/TESTING_INTEGRATION_PLAN.md`. Integration order: `design/INTEGRATION_PLAN.md` Addendum.
 > Original catalogs `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` §5-10 are rationale only.
 
 ## How to use
@@ -11,9 +11,9 @@
 2. **Implement** using tokens in W5 §1-2; compose primitives per Design Foundation → hierarchy (Foundations → Primitives → Domain Components → Screen Compositions → Workflow).
 3. **Verify** via workflow doc ASCII + `docs/CRUZE — Product, UX & Design System Specification.v1.md` §36-38 (operational vs freshness), and `PAGES_WORKFLOWS_REPORT.md` matrix.
 
-## Inventory (100 IDs, 1 retired)
+## Inventory (116 IDs, 9 retired)
 
-### APP — Application Shell (8)
+### APP — Application Shell (9)
 | ID | Name | Spec Doc |
 |----|------|----------|
 | APP-HEAD-01 | CruzeAppHeader | [APP-HEAD-01-CruzeAppHeader.md](APP-HEAD-01-CruzeAppHeader.md) |
@@ -24,6 +24,7 @@
 | APP-LIVE-01 | CruzeLiveIndicator | [APP-LIVE-01-CruzeLiveIndicator.md](APP-LIVE-01-CruzeLiveIndicator.md) |
 | APP-PAGE-01 | CruzePageHeader | [APP-PAGE-01-CruzePageHeader.md](APP-PAGE-01-CruzePageHeader.md) |
 | APP-COMPANION-01 | HeaderCompanionContext | [APP-COMPANION-01-HeaderCompanionContext.md](APP-COMPANION-01-HeaderCompanionContext.md) |
+| APP-SHELL-01 | AppShell | [APP-SHELL-01-AppShell.md](APP-SHELL-01-AppShell.md) |
 
 ### LOC — Location (10)
 | ID | Name | Spec Doc |
@@ -39,7 +40,7 @@
 | LOC-STATUS-01 | LocationStatusBanner | [LOC-STATUS-01-LocationStatusBanner.md](LOC-STATUS-01-LocationStatusBanner.md) |
 | LOC-NET-01 | LocationNetworkStatus | [LOC-NET-01-LocationNetworkStatus.md](LOC-NET-01-LocationNetworkStatus.md) |
 
-### TR — Trip (19)
+### TR — Trip (22 files, 21 live, 1 retired)
 | ID | Name | Spec Doc |
 |----|------|----------|
 | TR-HERO-01 | TripHero | [TR-HERO-01-TripHero.md](TR-HERO-01-TripHero.md) |
@@ -52,10 +53,12 @@
 | TR-SETUP-04 | TripSetupTravelModeStep | [TR-SETUP-04-TripSetupTravelModeStep.md](TR-SETUP-04-TripSetupTravelModeStep.md) |
 | TR-SETUP-05 | TripSetupVehicleAccessStep | [TR-SETUP-05-TripSetupVehicleAccessStep.md](TR-SETUP-05-TripSetupVehicleAccessStep.md) |
 | TR-SETUP-06 | TripSetupDocumentProfileStep | [TR-SETUP-06-TripSetupDocumentProfileStep.md](TR-SETUP-06-TripSetupDocumentProfileStep.md) |
+| TR-SETUP-07 | TripSetupDirectionStep | [TR-SETUP-07-TripSetupDirectionStep.md](TR-SETUP-07-TripSetupDirectionStep.md) |
+| TR-SETUP-08 | TripSetupFlow | [TR-SETUP-08-TripSetupFlow.md](TR-SETUP-08-TripSetupFlow.md) |
 | TR-REC-01 | TripRecommendationPrimaryCard | [TR-REC-01-TripRecommendationPrimaryCard.md](TR-REC-01-TripRecommendationPrimaryCard.md) |
 | TR-REC-02 | TripRecommendationReasonList | [TR-REC-02-TripRecommendationReasonList.md](TR-REC-02-TripRecommendationReasonList.md) |
 | TR-REC-03 | TripAlternativeListSection | [TR-REC-03-TripAlternativeListSection.md](TR-REC-03-TripAlternativeListSection.md) |
-| TR-REC-04 | TripAlternativeListRow | [TR-REC-04-TripAlternativeListRow.md](TR-REC-04-TripAlternativeListRow.md) |
+| TR-REC-04 | TripAlternativeListRow — RETIRED (see TR-REC-03) | [TR-REC-04-TripAlternativeListRow.md](TR-REC-04-TripAlternativeListRow.md) |
 | TR-ACT-01 | TripStatusHeader | [TR-ACT-01-TripStatusHeader.md](TR-ACT-01-TripStatusHeader.md) |
 | TR-ACT-02 | TripRouteSummary | [TR-ACT-02-TripRouteSummary.md](TR-ACT-02-TripRouteSummary.md) |
 | TR-ACT-03 | TripActionBar | [TR-ACT-03-TripActionBar.md](TR-ACT-03-TripActionBar.md) |
@@ -63,7 +66,7 @@
 | TR-ACT-05 | TripStalePrompt | [TR-ACT-05-TripStalePrompt.md](TR-ACT-05-TripStalePrompt.md) |
 | TR-COMP-01 | TripCompletionPrompt | [TR-COMP-01-TripCompletionPrompt.md](TR-COMP-01-TripCompletionPrompt.md) |
 
-### CR — Crossings (26, 1 retired)
+### CR — Crossings (30 files, 27 live, 3 retired)
 | ID | Name | Spec Doc |
 |----|------|----------|
 | CR-DIR-01 | CrossingsDirectoryList | [CR-DIR-01-CrossingsDirectoryList.md](CR-DIR-01-CrossingsDirectoryList.md) |
@@ -92,10 +95,12 @@
 | CR-DET-09 | CrossingFavoriteButton | [CR-DET-09-CrossingFavoriteButton.md](CR-DET-09-CrossingFavoriteButton.md) |
 | CR-DET-10 | CrossingDetailActionBar | [CR-DET-10-CrossingDetailActionBar.md](CR-DET-10-CrossingDetailActionBar.md) |
 | CR-CMP-01 | CrossingsCompareTable | [CR-CMP-01-CrossingsCompareTable.md](CR-CMP-01-CrossingsCompareTable.md) |
-| CR-SUM-01 | CrossingSummary | [CR-SUM-01-CrossingSummary.md](CR-SUM-01-CrossingSummary.md) |
+| CR-CARD-01 | CrossingCardFamily — RETIRED (see CR-DIR-02/03, TR-NEAR-02, TR-REC-01/03) | [CR-CARD-01-CrossingCardFamily.md](CR-CARD-01-CrossingCardFamily.md) |
+| CR-CONF-01 | CrossingConfirmGate | [CR-CONF-01-CrossingConfirmGate.md](CR-CONF-01-CrossingConfirmGate.md) |
+| CR-DET-11 | CrossingDetailsModal — RETIRED | [CR-DET-11-CrossingDetailsModal.md](CR-DET-11-CrossingDetailsModal.md) |
 | CR-SUM-01 | CrossingSummary | [CR-SUM-01-CrossingSummary.md](CR-SUM-01-CrossingSummary.md) |
 
-### AG — Agent (11)
+### AG — Agent (15)
 | ID | Name | Spec Doc |
 |----|------|----------|
 | AG-HEAD-01 | AgentHeader | [AG-HEAD-01-AgentHeader.md](AG-HEAD-01-AgentHeader.md) |
@@ -109,18 +114,25 @@
 | AG-RESULT-02 | AgentRecommendationResult | [AG-RESULT-02-AgentRecommendationResult.md](AG-RESULT-02-AgentRecommendationResult.md) |
 | AG-RESULT-03 | AgentTripAction | [AG-RESULT-03-AgentTripAction.md](AG-RESULT-03-AgentTripAction.md) |
 | AG-RESULT-04 | AgentChecklistResult | [AG-RESULT-04-AgentChecklistResult.md](AG-RESULT-04-AgentChecklistResult.md) |
+| AG-CHAT-01 | AgentChat | [AG-CHAT-01-AgentChat.md](AG-CHAT-01-AgentChat.md) |
+| AG-PROV-01 | AgentProvider | [AG-PROV-01-AgentProvider.md](AG-PROV-01-AgentProvider.md) |
+| AG-TYPE-01 | TypingIndicator | [AG-TYPE-01-TypingIndicator.md](AG-TYPE-01-TypingIndicator.md) |
+| AG-RICH-01 | RichResponse | [AG-RICH-01-RichResponse.md](AG-RICH-01-RichResponse.md) |
 
-### AV — Avisos (9)
+### AV — Avisos (12 files, 7 live, 5 retired)
 | ID | Name | Spec Doc |
 |----|------|----------|
 | AV-HEAD-01 | AvisosSheet | [AV-HEAD-01-AvisosSheet.md](AV-HEAD-01-AvisosSheet.md) |
-| AV-BADGE-01 | AvisosBadge | [AV-BADGE-01-AvisosBadge.md](AV-BADGE-01-AvisosBadge.md) |
+| AV-BADGE-01 | AvisosBadge (specified, not implemented) | [AV-BADGE-01-AvisosBadge.md](AV-BADGE-01-AvisosBadge.md) |
 | AV-ROW-01 | AvisoRow | [AV-ROW-01-AvisoRow.md](AV-ROW-01-AvisoRow.md) |
-| AV-CROSS-01 | AvisoCrossingChange | [AV-CROSS-01-AvisoCrossingChange.md](AV-CROSS-01-AvisoCrossingChange.md) |
-| AV-REC-01 | AvisoRecommendationChange | [AV-REC-01-AvisoRecommendationChange.md](AV-REC-01-AvisoRecommendationChange.md) |
-| AV-TRIP-01 | AvisoTripReminder | [AV-TRIP-01-AvisoTripReminder.md](AV-TRIP-01-AvisoTripReminder.md) |
-| AV-CHECK-01 | AvisoChecklistReminder | [AV-CHECK-01-AvisoChecklistReminder.md](AV-CHECK-01-AvisoChecklistReminder.md) |
-| AV-DATA-01 | AvisoDataWarning | [AV-DATA-01-AvisoDataWarning.md](AV-DATA-01-AvisoDataWarning.md) |
+| AV-LIST-01 | AvisosList | [AV-LIST-01-AvisosList.md](AV-LIST-01-AvisosList.md) |
+| AV-DET-01 | AvisoDetail | [AV-DET-01-AvisoDetail.md](AV-DET-01-AvisoDetail.md) |
+| AV-BAN-01 | AvisoBanner | [AV-BAN-01-AvisoBanner.md](AV-BAN-01-AvisoBanner.md) |
+| AV-CROSS-01 | AvisoCrossingChange — RETIRED (see AV-DET-01) | [AV-CROSS-01-AvisoCrossingChange.md](AV-CROSS-01-AvisoCrossingChange.md) |
+| AV-REC-01 | AvisoRecommendationChange — RETIRED (see AV-DET-01) | [AV-REC-01-AvisoRecommendationChange.md](AV-REC-01-AvisoRecommendationChange.md) |
+| AV-TRIP-01 | AvisoTripReminder — RETIRED (see AV-DET-01) | [AV-TRIP-01-AvisoTripReminder.md](AV-TRIP-01-AvisoTripReminder.md) |
+| AV-CHECK-01 | AvisoChecklistReminder — RETIRED (see AV-DET-01) | [AV-CHECK-01-AvisoChecklistReminder.md](AV-CHECK-01-AvisoChecklistReminder.md) |
+| AV-DATA-01 | AvisoDataWarning — RETIRED (see AV-DET-01) | [AV-DATA-01-AvisoDataWarning.md](AV-DATA-01-AvisoDataWarning.md) |
 | AV-EMPTY-01 | AvisosEmptyState | [AV-EMPTY-01-AvisosEmptyState.md](AV-EMPTY-01-AvisosEmptyState.md) |
 
 ### SPLASH — Application Entry (7)
@@ -150,5 +162,16 @@
 | SET-DATA-01 | DataSharingControls | [SET-DATA-01-DataSharingControls.md](SET-DATA-01-DataSharingControls.md) |
 | SET-ABOUT-01 | AboutLinksList | [SET-ABOUT-01-AboutLinksList.md](SET-ABOUT-01-AboutLinksList.md) |
 
+### LEGAL — Legal (1)
+| ID | Name | Spec Doc |
+|----|------|----------|
+| LEGAL-01 | LegalDocView | [LEGAL-01-LegalDocView.md](LEGAL-01-LegalDocView.md) |
+
+### PRIV — Privacy (2)
+| ID | Name | Spec Doc |
+|----|------|----------|
+| PRIV-01 | PrivacySheet | [PRIV-01-PrivacySheet.md](PRIV-01-PrivacySheet.md) |
+| PRIV-02 | CookieNotice | [PRIV-02-CookieNotice.md](PRIV-02-CookieNotice.md) |
+
 ---
-*Total: 91 component specs (1 retired: CR-DIR-05). All files in this directory are source of truth for implementation. See `design/workflows/W*.md` for workflow bindings + `docs/TESTING_TOOLS.md` P0-P5 for testing.*
+*Total: 116 component spec files (107 live, 9 retired: CR-DIR-05, CR-DET-11, CR-CARD-01, AV-CROSS-01, AV-REC-01, AV-TRIP-01, AV-CHECK-01, AV-DATA-01, TR-REC-04). All files in this directory are source of truth for implementation. See `design/workflows/W*.md` for workflow bindings + `docs/TESTING_TOOLS.md` P0-P5 for testing.*

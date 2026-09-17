@@ -1,35 +1,35 @@
-# TR-REC-04 — 04
-**Version:** 1.1 — 2026-09-04 — radii 4/8/12/16/20, W5 1.1. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
+# TR-REC-04 — TripAlternativeListRow (RETIRED)
+**Version:** retired — 2026-09-16 — file deleted; zero live importers, superseded by TR-REC-03. If mismatch with `apps/web/src/app/globals.css:94`, revisit.
 
-> **Canonical:** `design/workflows/W5_component_level_design_spec.md` — auto-enriched. Source of truth for tokens/ASCII. See `design/components/README.md`.
+> RETIRED — do not implement. `TripAlternativeListRow.tsx` (props `name/accessLabel/waitMinutes/status/direction/freshnessMinutes/onClick`) had no importers in `apps/web` (grep 2026-09-16: only self-hit). Canonical alternatives surface is TR-REC-03 `TripAlternativeListSection` (inline expandable rows, fully i18n). Known deviations frozen for record: hardcoded `Abierto/Limitado/Cerrado`, default `direction = "Norte"`, hardcoded `` `Actualizado ${freshnessMinutes} min` `` and `min` unit (no `t()`). File deleted 2026-09-16 (restorable via git).
 
-# 26. `TR-REC-04` --- TripAlternativeListRow
+## ID
+`TR-REC-04`
 
-### ASCII
+## Name
+TripAlternativeListRow
 
-``` text
-┌──────────────────────────────────────────────┐
-│ Otay Mesa Ready                     18 min → │
-│ Norte · Abierto · Actualizado 3 min         │
-└──────────────────────────────────────────────┘
-```
+## Responsibility
+Legacy standalone alternative row (retired).
 
-### Tokens
+## Details
+Single-button row (`min-h-[56px]`, `rounded-[var(--radius-md)]`) with name + direction · status · freshness subline and wait + chevron. Superseded by the Section's inline rows.
 
-``` text
-Minimum height: 56–64px
-Padding:        12–16px
-Name:           Text Primary
-Metadata:       Text Secondary
-Wait:           Sora
-Chevron:        Text Secondary
-```
+## Source
+Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §TR for canonical definition.
 
-------------------------------------------------------------------------
+## Status
+- Spec: retired (do not implement)
+- Implementation: none (file deleted 2026-09-16)
+- Workflow usage: none
 
----
+## Tokens (when defined in W5 spec)
+N/A — retired.
+
+## Integration
+None — retired.
 
 ## File Reference
-- Spec doc: `design/components/{f.name}` (this file) — canonical
-- Workflow: `design/workflows/W5-trip-private-northbound.md` + `design/workflows/W*.md`
+- Spec doc: `design/components/TR-REC-04-TripAlternativeListRow.md` (this file)
+- Implementation: none (deleted `src/components/trip/TripAlternativeListRow.tsx`)
 - Catalog index: `design/components/README.md`

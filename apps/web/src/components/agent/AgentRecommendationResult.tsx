@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Clock, TrendingUp, Check } from "lucide-react";
 import { formatDuration } from "@/lib/display";
 import type { AgentRecommendationResult } from "@/lib/agent-structured-results";
@@ -11,9 +12,10 @@ interface Props {
 }
 
 export function AgentRecommendationResult({ result, onUse, onCompare }: Props) {
+  const t = useTranslations();
   return (
     <div className="bg-surface border border-cruze-mint/30 rounded-[var(--radius-lg)] p-4 space-y-3">
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted">Recomendado</p>
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t("agent.result.recommended")}</p>
       <h4 className="text-ink font-bold">{result.crossingName}</h4>
       <div className="flex items-center gap-4 sm:gap-6">
         <span className="flex items-center gap-1 text-sm text-ink font-bold tabular"><Clock className="w-4 h-4 text-faint" /> {formatDuration(result.waitTime)}</span>
@@ -27,8 +29,8 @@ export function AgentRecommendationResult({ result, onUse, onCompare }: Props) {
         </ul>
       )}
       <div className="flex gap-2">
-        {onUse && <button onClick={onUse} className="flex-1 h-[36px] rounded-[var(--radius-md)] bg-cruze-mint text-midnight text-xs font-semibold">Usar este cruce</button>}
-        {onCompare && <button onClick={onCompare} className="flex-1 h-[36px] rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-xs font-medium">Comparar</button>}
+        {onUse && <button onClick={onUse} className="flex-1 h-9 rounded-[var(--radius-md)] bg-cruze-mint text-midnight text-xs font-semibold">{t("agent.result.useCrossing")}</button>}
+        {onCompare && <button onClick={onCompare} className="flex-1 h-9 rounded-[var(--radius-md)] bg-surface-elevated border border-border text-ink text-xs font-medium">{t("agent.result.compare")}</button>}
       </div>
     </div>
   );
