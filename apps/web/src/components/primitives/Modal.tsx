@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 
 interface ModalProps {
@@ -21,6 +22,7 @@ export function Modal({
   variant = "standard",
   className = "",
 }: ModalProps) {
+  const t = useTranslations();
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export function Modal({
           <button
             onClick={onClose}
             className="p-2 rounded-[var(--radius-md)] hover:bg-surface-elevated transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint/50"
-            aria-label="Close"
+            aria-label={t("common.close")}
           >
             <X className="w-5 h-5 text-muted" />
           </button>

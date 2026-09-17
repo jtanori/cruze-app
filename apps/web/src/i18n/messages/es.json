@@ -39,14 +39,19 @@
     "unitedStatesShort": "EE. UU.",
     "unknownStatus": "Estado desconocido",
     "viewInCruze": "Ver en CRUZE",
-    "backToHome": "Volver al inicio"
+    "backToHome": "Volver al inicio",
+    "clearSearch": "Limpiar búsqueda",
+    "dismiss": "Descartar",
+    "clear": "Borrar",
+    "search": "Buscar"
   },
   "nav": {
     "trip": "Viaje",
     "crossings": "Cruces",
     "agent": "Agente",
     "favorites": "Favoritos",
-    "alerts": "Alertas"
+    "alerts": "Alertas",
+    "main": "Navegación principal"
   },
   "privacy": {
     "title": "Privacidad y datos",

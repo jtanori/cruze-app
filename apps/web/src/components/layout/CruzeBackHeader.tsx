@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -16,6 +17,7 @@ export function CruzeBackHeader({
   trailing,
   className = "",
 }: CruzeBackHeaderProps) {
+  const t = useTranslations();
   const router = useRouter();
 
   const handleBack = () => {
@@ -35,7 +37,7 @@ export function CruzeBackHeader({
           <button
             onClick={handleBack}
             className="w-[44px] h-[44px] flex items-center justify-center -ml-2 rounded-[var(--radius-md)] active:bg-surface-elevated transition-colors"
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             <ArrowLeft className="w-5 h-5 text-ink" />
           </button>

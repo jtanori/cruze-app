@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from "lucide-react";
 
 interface ToastProps {
@@ -25,6 +26,7 @@ export function Toast({
   action,
   className = "",
 }: ToastProps) {
+  const t = useTranslations();
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -84,7 +86,7 @@ export function Toast({
             onDismiss?.();
           }}
           className="shrink-0 p-1 rounded-[var(--radius-md)] hover:bg-white/10 transition-colors"
-          aria-label="Dismiss"
+          aria-label={t("common.dismiss")}
         >
           <X className="w-4 h-4 text-muted" />
         </button>

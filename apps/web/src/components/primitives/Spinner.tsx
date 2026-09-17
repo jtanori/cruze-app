@@ -1,6 +1,7 @@
 "use client";
 
 import type { HTMLAttributes } from "react";
+import { useTranslations } from "next-intl";
 
 export interface SpinnerProps extends HTMLAttributes<HTMLDivElement> {
   size?: "sm" | "md" | "lg";
@@ -13,6 +14,7 @@ export function Spinner({
   className = "",
   ...props
 }: SpinnerProps) {
+  const t = useTranslations();
   const sizes = {
     sm: "w-4 h-4 border-2",
     md: "w-6 h-6 border-2",
@@ -29,7 +31,7 @@ export function Spinner({
     <div
       className={`${sizes[size]} ${variants[variant]} rounded-full animate-spin ${className}`}
       role="status"
-      aria-label="Loading"
+      aria-label={t("common.loading")}
     />
   );
 }

@@ -2,6 +2,7 @@
 
 import type { InputHTMLAttributes, ForwardedRef } from "react";
 import { forwardRef, useId } from "react";
+import { useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
 
 export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -14,7 +15,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
   (
     {
       label,
-      placeholder = "Search...",
+      placeholder: placeholderProp,
       onClear,
       className = "",
       id: providedId,
@@ -25,13 +26,15 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     },
     ref
   ) => {
+    const t = useTranslations();
+    const placeholder = placeholderProp ?? t("common.search");
     const generatedId = useId();
     const id = providedId || generatedId;
 
     return (
       <div className={`w-full relative ${className}`}>
         <label htmlFor={id} className="sr-only">
-          Search
+          {label ?? t("common.search")}
         </label>
         <div className="relative">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-faint" aria-hidden="true">
@@ -56,7 +59,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
                 onChange?.(clearEvent);
               }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-faint hover:text-cruze-mint transition-colors"
-              aria-label="Clear search"
+              aria-label={t("common.clearSearch")}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12" />

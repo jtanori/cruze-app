@@ -17,8 +17,8 @@ Header variant with back arrow + title + optional actions. Used on T02-T06, C03,
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §APP for canonical definition.
 
 ## Status
-- Spec: defined
-- Implementation: see `src/components/` (domain: app)
+- Spec: defined (aligned 2026-09-16)
+- Implementation: `src/components/layout/CruzeBackHeader.tsx` — back button aria-label t("common.back") (CruzeBackHeader.tsx:38); title prop passthrough; 44px touch target. Fully i18n.
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)
@@ -29,5 +29,5 @@ Used via Trip/Crossings/Agent/Avisos/Settings surfaces per PAGES_WORKFLOWS_REPOR
 
 ## File Reference
 - Spec doc: `design/components/APP-BACK-01-CruzeBackHeader.md` (this file)
-- Implementation: `src/components/app/` or domain folder
+- Implementation: `src/components/layout/CruzeBackHeader.tsx` (note: `layout/`, not `app/`)
 - Catalog index: `design/components/README.md`

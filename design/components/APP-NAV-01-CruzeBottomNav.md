@@ -90,6 +90,7 @@ APP-NAV-01
 ## Integration
 Used in: `APP-NAV-01` (CruzeAppShell) as bottom navigation.
 Routes: `/trip`, `/crossings`, `/agent`
+i18n (aligned 2026-09-16): destinations via t("nav.trip/crossings/agent"), tablist aria via t("nav.main") (BottomNavigation.tsx:23-25,33).
 
 ## File Reference
 - Implementation: `src/components/layout/BottomNavigation.tsx`

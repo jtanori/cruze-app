@@ -2,6 +2,7 @@
 
 import type { InputHTMLAttributes, ForwardedRef } from "react";
 import { forwardRef, useId } from "react";
+import { useTranslations } from "next-intl";
 
 export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -31,6 +32,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     },
     ref
   ) => {
+    const t = useTranslations();
     const generatedId = useId();
     const id = providedId || generatedId;
     const errorId = `${id}-error`;
@@ -82,7 +84,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 onChange?.({ target: { value: "" } } as React.ChangeEvent<HTMLInputElement>);
               }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-faint hover:text-cruze-mint transition-colors"
-              aria-label="Clear"
+              aria-label={t("common.clear")}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
@@ -27,6 +28,7 @@ export function BottomSheet({
   showHandle = true,
   className = "",
 }: BottomSheetProps) {
+  const t = useTranslations();
   const ref = useRef<HTMLDialogElement>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -88,7 +90,7 @@ export function BottomSheet({
           <button
             onClick={onClose}
             className="p-2 rounded-[var(--radius-md)] hover:bg-surface-elevated transition-colors"
-            aria-label="Close"
+            aria-label={t("common.close")}
           >
             <X className="w-5 h-5 text-muted" />
           </button>

@@ -30,7 +30,7 @@ export function BottomNavigation({ active, onSelect }: BottomNavigationProps) {
       className="fixed bottom-0 left-0 right-0 z-[var(--z-bottom)] bg-surface-elevated border-t border-border"
       style={{ height: "var(--nav-bottom-height)" }}
       role="tablist"
-      aria-label="Main navigation"
+      aria-label={t("nav.main")}
     >
       <div className="h-full flex items-stretch">
         {DESTINATIONS.map((dest) => {

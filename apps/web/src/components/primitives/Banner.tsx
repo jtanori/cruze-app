@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 
 interface BannerProps {
@@ -24,6 +25,7 @@ export function Banner({
   action,
   className = "",
 }: BannerProps) {
+  const t = useTranslations();
   const variantStyles = {
     info: "bg-info/10 border-info/30 text-info",
     warning: "bg-warning/10 border-warning/30 text-warning",
@@ -70,7 +72,7 @@ export function Banner({
         <button
           onClick={onDismiss}
           className="shrink-0 p-1 rounded-[var(--radius-md)] hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cruze-mint/50"
-          aria-label="Dismiss"
+          aria-label={t("common.dismiss")}
         >
           <X className="w-4 h-4" />
         </button>
