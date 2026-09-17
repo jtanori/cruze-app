@@ -155,11 +155,30 @@
         "unavailableDesc": "Could not determine your location. Please try again.",
         "retry": "Try again",
         "blockedHintTitle": "Still blocked? Reset it in Page Info",
-        "blockedHintBody": "If you dismissed the location prompt a few times, the browser blocks it. Click the tune icon next to the URL, choose Location, reset the permission, then try again."
+        "blockedHintBody": "If you dismissed the location prompt a few times, the browser blocks it. Click the tune icon next to the URL, choose Location, reset the permission, then try again.",
+        "searchToggle": "Search location",
+        "offline": "Offline",
+        "searchPlaceholder": "Search city or crossing...",
+        "backToSearch": "← Back"
       },
       "banner": {
         "established": "Location set: {placeName}",
         "refresh": "Refresh location"
+      },
+      "confidence": {
+        "unavailable": "Location unavailable",
+        "determining": "Location being determined",
+        "needsConfirmation": "Location needs confirmation",
+        "ready": "Location ready",
+        "needsRefreshing": "Location needs refreshing"
+      },
+      "search": {
+        "defaultPlaceholder": "Search location...",
+        "offlineTitle": "No internet connection",
+        "offlineBody": "Search requires connection",
+        "noResults": "No results found",
+        "clear": "Clear search",
+        "suggestionsHeader": "Nearby locations"
       }
     }
   },

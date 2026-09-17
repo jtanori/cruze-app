@@ -18,7 +18,7 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: loc)
+- Implementation: `src/components/location/LocationSearchInput.tsx` — placeholder prop with t("onboarding.location.search.defaultPlaceholder") fallback; offline/empty via t("onboarding.location.search.offlineTitle/offlineBody/noResults"); clear-button aria t("onboarding.location.search.clear"); input h-12 (SearchInput.tsx:15-19,99-110,119-146). Fully i18n.
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)
@@ -29,5 +29,5 @@ Used via Trip/Crossings/Agent/Avisos/Settings surfaces per PAGES_WORKFLOWS_REPOR
 
 ## File Reference
 - Spec doc: `design/components/LOC-SEARCH-01-LocationSearchInput.md` (this file)
-- Implementation: `src/components/loc/` or domain folder
+- Implementation: `src/components/location/LocationSearchInput.tsx` (note: `location/`, not `loc/`)
 - Catalog index: `design/components/README.md`

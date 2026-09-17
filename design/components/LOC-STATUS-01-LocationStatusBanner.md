@@ -52,13 +52,12 @@ LOC-STATUS-01
 └── Dismiss button (optional, X icon)
 ```
 
-## States Detail
+## States Detail (corrected to implementation 2026-09-16 — component implements ONLY the established strip; low-confidence/refreshing/unavailable live in LOC-REC-01 + LOC-CONF-01)
 | State | Visual |
 |-------|--------|
-| Established | Green badge, location name, dismissible |
-| Low confidence | Amber badge, "Baja precisión" |
-| Refreshing | Spinner, "Actualizando..." |
-| Unavailable | Red badge, "No disponible" |
+| Established | Inline strip, MapPin + t("onboarding.location.banner.established", { placeName }) (StatusBanner.tsx:35-37) |
+| Refresh action | Optional button, spinning RefreshCw while refreshing, aria t("onboarding.location.banner.refresh") (StatusBanner.tsx:42-51) |
+| Dismiss action | Optional button, aria t("common.close") (StatusBanner.tsx:52-60) |
 
 ## Rules
 - Non-dismissible on T01 (Viaje)

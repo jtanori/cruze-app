@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Search, X, Loader2 } from "lucide-react";
 import { searchPlaces } from "@/lib/geocoding";
 import type { Place } from "@/types";
@@ -14,9 +15,11 @@ interface LocationSearchInputProps {
 
 export function LocationSearchInput({
   onSelect,
-  placeholder = "Buscar ubicación...",
+  placeholder,
   className = "",
 }: LocationSearchInputProps) {
+  const t = useTranslations();
+  const effectivePlaceholder = placeholder ?? t("onboarding.location.search.defaultPlaceholder");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Place[]>([]);
   const [loading, setLoading] = useState(false);
@@ -96,13 +99,14 @@ export function LocationSearchInput({
           value={query}
           onChange={(e) => handleInputChange(e.target.value)}
           onFocus={() => query.length >= 2 && setShowResults(true)}
-          placeholder={placeholder}
-          className="w-full h-[48px] pl-10 pr-10 bg-surface border border-border rounded-[var(--radius-lg)] text-ink text-sm placeholder:text-faint focus:outline-none focus:border-cruze-green transition-colors"
+          placeholder={effectivePlaceholder}
+          className="w-full h-12 pl-10 pr-10 bg-surface border border-border rounded-[var(--radius-lg)] text-ink text-sm placeholder:text-faint focus:outline-none focus:border-cruze-green transition-colors"
           autoComplete="off"
         />
         {query && (
           <button
             onClick={handleClear}
+            aria-label={t("onboarding.location.search.clear")}
             className="absolute right-3 top-1/2 -translate-y-1/2"
           >
             <X className="w-4 h-4 text-faint" />
@@ -117,8 +121,8 @@ export function LocationSearchInput({
         <div className="absolute top-full left-0 right-0 mt-2 bg-surface border border-border rounded-[var(--radius-lg)] shadow-lg overflow-hidden z-50">
           {!isReachable ? (
             <div className="px-4 py-6 text-center">
-              <p className="text-muted text-sm">Sin conexión a internet</p>
-              <p className="text-faint text-xs mt-1">La búsqueda requiere conexión</p>
+              <p className="text-muted text-sm">{t("onboarding.location.search.offlineTitle")}</p>
+              <p className="text-faint text-xs mt-1">{t("onboarding.location.search.offlineBody")}</p>
             </div>
           ) : results.length > 0 ? (
             <div className="divide-y divide-border">
@@ -142,7 +146,7 @@ export function LocationSearchInput({
             </div>
           ) : query.length >= 2 ? (
             <div className="px-4 py-6 text-center">
-              <p className="text-muted text-sm">No se encontraron resultados</p>
+              <p className="text-muted text-sm">{t("onboarding.location.search.noResults")}</p>
             </div>
           ) : null}
         </div>

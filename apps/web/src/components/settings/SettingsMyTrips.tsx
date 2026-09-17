@@ -28,10 +28,10 @@ export function SettingsMyTrips({ trips, onSelect }: SettingsMyTripsProps) {
     <div className="space-y-3">
       <h2 className="text-lg font-bold text-ink">{t("settings.tripsPage.title")}</h2>
       <div className="space-y-2">
-        {trips.map((t) => (
-          <button key={t.id} onClick={() => onSelect?.(t.id)} className="w-full text-left px-4 py-3 bg-surface border border-border rounded-[var(--radius-lg)] hover:border-cruze-mint/30 transition-colors">
-            <p className="text-sm text-ink font-medium">{t.originLabel} → {t.destinationLabel}</p>
-            <p className="text-xs text-muted">{t.crossingName} · {new Date(t.completedAt).toLocaleDateString(locale)}</p>
+        {trips.map((trip) => (
+          <button key={trip.id} onClick={() => onSelect?.(trip.id)} className="w-full text-left px-4 py-3 bg-surface border border-border rounded-[var(--radius-lg)] hover:border-cruze-mint/30 transition-colors">
+            <p className="text-sm text-ink font-medium">{trip.originLabel} → {trip.destinationLabel}</p>
+            <p className="text-xs text-muted">{trip.crossingName} · {new Date(trip.completedAt).toLocaleDateString(locale)}</p>
           </button>
         ))}
       </div>

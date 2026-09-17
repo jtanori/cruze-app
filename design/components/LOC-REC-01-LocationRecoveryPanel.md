@@ -18,7 +18,7 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: loc)
+- Implementation: `src/components/location/LocationRecoveryPanel.tsx` — reasonConfig via t("onboarding.location.recovery.*"); search toggle/offline/placeholder/back via t("onboarding.location.recovery.searchToggle/offline/searchPlaceholder/backToSearch") (RecoveryPanel.tsx:100-140). Fully i18n.
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)
@@ -29,5 +29,5 @@ Used via Trip/Crossings/Agent/Avisos/Settings surfaces per PAGES_WORKFLOWS_REPOR
 
 ## File Reference
 - Spec doc: `design/components/LOC-REC-01-LocationRecoveryPanel.md` (this file)
-- Implementation: `src/components/loc/` or domain folder
+- Implementation: `src/components/location/LocationRecoveryPanel.tsx` (note: `location/`, not `loc/`)
 - Catalog index: `design/components/README.md`

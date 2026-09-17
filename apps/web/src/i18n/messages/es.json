@@ -155,11 +155,30 @@
         "unavailableDesc": "No se pudo determinar tu ubicación. Intenta de nuevo.",
         "retry": "Reintentar",
         "blockedHintTitle": "¿Sigue bloqueado? Restablécelo en la página",
-        "blockedHintBody": "Si ignoraste el aviso de ubicación varias veces, el navegador lo bloquea. Haz clic en el icono junto a la URL, elige Ubicación, restablece el permiso e inténtalo de nuevo."
+        "blockedHintBody": "Si ignoraste el aviso de ubicación varias veces, el navegador lo bloquea. Haz clic en el icono junto a la URL, elige Ubicación, restablece el permiso e inténtalo de nuevo.",
+        "searchToggle": "Buscar ubicación",
+        "offline": "Sin conexión",
+        "searchPlaceholder": "Buscar ciudad o cruce...",
+        "backToSearch": "← Volver"
       },
       "banner": {
         "established": "Ubicación establecida: {placeName}",
         "refresh": "Actualizar ubicación"
+      },
+      "confidence": {
+        "unavailable": "Ubicación no disponible",
+        "determining": "Determinando ubicación",
+        "needsConfirmation": "La ubicación necesita confirmación",
+        "ready": "Ubicación lista",
+        "needsRefreshing": "La ubicación necesita actualización"
+      },
+      "search": {
+        "defaultPlaceholder": "Buscar ubicación...",
+        "offlineTitle": "Sin conexión a internet",
+        "offlineBody": "La búsqueda requiere conexión",
+        "noResults": "No se encontraron resultados",
+        "clear": "Limpiar búsqueda",
+        "suggestionsHeader": "Ubicaciones cercanas"
       }
     }
   },

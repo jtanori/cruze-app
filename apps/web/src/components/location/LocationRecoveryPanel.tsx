@@ -103,14 +103,14 @@ export function LocationRecoveryPanel({
                 className="w-full py-3 rounded-[var(--radius-lg)] border border-border text-muted font-semibold text-sm hover:bg-surface-elevated transition-colors min-h-[48px] inline-flex items-center justify-center gap-2"
               >
                 <MapPin className="w-4 h-4" />
-                Buscar ubicación
+                {t("onboarding.location.recovery.searchToggle")}
               </button>
             )}
 
             {!isReachable && (
               <div className="flex items-center justify-center gap-2 text-faint text-sm">
                 <WifiOff className="w-4 h-4" />
-                Sin conexión
+                {t("onboarding.location.recovery.offline")}
               </div>
             )}
 
@@ -129,13 +129,13 @@ export function LocationRecoveryPanel({
         <div className="w-full max-w-sm">
           <LocationSearchInput
             onSelect={handleManualSelect}
-            placeholder="Buscar ciudad o cruce..."
+            placeholder={t("onboarding.location.recovery.searchPlaceholder")}
           />
           <button
             onClick={() => setShowSearch(false)}
             className="mt-3 w-full py-2 text-sm text-faint hover:text-muted transition-colors"
           >
-            ← Volver
+            {t("onboarding.location.recovery.backToSearch")}
           </button>
         </div>
       )}

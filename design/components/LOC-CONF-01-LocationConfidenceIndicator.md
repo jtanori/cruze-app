@@ -18,7 +18,7 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: loc)
+- Implementation: `src/components/location/LocationConfidenceIndicator.tsx` — labels via labelKey t("onboarding.location.confidence.*") (ConfidenceIndicator.tsx:20-30); accuracy ±Nm is locale-invariant units. Fully i18n.
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)
@@ -29,5 +29,5 @@ Used via Trip/Crossings/Agent/Avisos/Settings surfaces per PAGES_WORKFLOWS_REPOR
 
 ## File Reference
 - Spec doc: `design/components/LOC-CONF-01-LocationConfidenceIndicator.md` (this file)
-- Implementation: `src/components/loc/` or domain folder
+- Implementation: `src/components/location/LocationConfidenceIndicator.tsx` (note: `location/`, not `loc/`)
 - Catalog index: `design/components/README.md`

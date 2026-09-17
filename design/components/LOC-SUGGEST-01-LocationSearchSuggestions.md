@@ -18,7 +18,7 @@ Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.m
 
 ## Status
 - Spec: defined
-- Implementation: see `src/components/` (domain: loc)
+- Implementation: `src/components/location/LocationSearchSuggestions.tsx` — header via t("onboarding.location.search.suggestionsHeader"); names/context are geocoding data. Fully i18n.
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)
@@ -29,5 +29,5 @@ Used via Trip/Crossings/Agent/Avisos/Settings surfaces per PAGES_WORKFLOWS_REPOR
 
 ## File Reference
 - Spec doc: `design/components/LOC-SUGGEST-01-LocationSearchSuggestions.md` (this file)
-- Implementation: `src/components/loc/` or domain folder
+- Implementation: `src/components/location/LocationSearchSuggestions.tsx` (note: `location/`, not `loc/`)
 - Catalog index: `design/components/README.md`

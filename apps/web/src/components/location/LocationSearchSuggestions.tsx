@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { MapPin, Loader2 } from "lucide-react";
 import type { GeocodingResult } from "@/lib/geocoding";
 
@@ -24,13 +25,15 @@ export function LocationSearchSuggestions({
     );
   }
 
+  const t = useTranslations();
+
   if (suggestions.length === 0) {
     return null;
   }
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <p className="text-xs text-faint px-1 mb-2">Ubicaciones cercanas</p>
+      <p className="text-xs text-faint px-1 mb-2">{t("onboarding.location.search.suggestionsHeader")}</p>
       {suggestions.map((suggestion) => (
         <button
           key={suggestion.id}

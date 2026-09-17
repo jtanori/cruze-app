@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { MapPin, AlertTriangle, CheckCircle, Clock, HelpCircle } from "lucide-react";
 import type { LocationConfidence } from "@/lib/location-state-machine";
 
@@ -16,15 +17,17 @@ export function LocationConfidenceIndicator({
   className = "",
   compact = false,
 }: LocationConfidenceIndicatorProps) {
-  const config: Record<LocationConfidence, { icon: typeof MapPin; color: string; label: string }> = {
-    unavailable: { icon: HelpCircle, color: "text-muted", label: "Location unavailable" },
-    determining: { icon: MapPin, color: "text-info", label: "Location being determined" },
-    needs_confirmation: { icon: AlertTriangle, color: "text-warning", label: "Location needs confirmation" },
-    ready: { icon: CheckCircle, color: "text-success", label: "Location ready" },
-    needs_refreshing: { icon: Clock, color: "text-warning", label: "Location needs refreshing" },
+  const t = useTranslations();
+  const config: Record<LocationConfidence, { icon: typeof MapPin; color: string; labelKey: string }> = {
+    unavailable: { icon: HelpCircle, color: "text-muted", labelKey: "onboarding.location.confidence.unavailable" },
+    determining: { icon: MapPin, color: "text-info", labelKey: "onboarding.location.confidence.determining" },
+    needs_confirmation: { icon: AlertTriangle, color: "text-warning", labelKey: "onboarding.location.confidence.needsConfirmation" },
+    ready: { icon: CheckCircle, color: "text-success", labelKey: "onboarding.location.confidence.ready" },
+    needs_refreshing: { icon: Clock, color: "text-warning", labelKey: "onboarding.location.confidence.needsRefreshing" },
   };
 
-  const { icon: Icon, color, label } = config[confidence];
+  const { icon: Icon, color, labelKey } = config[confidence];
+  const label = t(labelKey);
 
   if (compact) {
     return (

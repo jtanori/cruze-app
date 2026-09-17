@@ -53,7 +53,7 @@ export function LocationStatusBanner({
           <button
             onClick={onDismiss}
             className="p-1 text-cruze-mint hover:text-cruze-mint/70 transition-colors"
-            aria-label="Dismiss"
+            aria-label={t("common.close")}
           >
             <X className="w-3 h-3" />
           </button>
