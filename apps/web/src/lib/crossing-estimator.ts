@@ -105,11 +105,8 @@ export function formatCrossingTime(minutes: number): string {
 export function getCrossingTimeComparison(
   estimated: number,
   actual: number
-): { diff: number; faster: boolean; label: string } {
+): { diff: number; faster: boolean } {
   const diff = Math.abs(estimated - actual);
   const faster = actual < estimated;
-  const label = faster
-    ? `${diff} min faster than expected`
-    : `${diff} min slower than expected`;
-  return { diff, faster, label };
+  return { diff, faster };
 }

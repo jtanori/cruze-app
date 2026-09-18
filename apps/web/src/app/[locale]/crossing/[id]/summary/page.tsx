@@ -6,6 +6,7 @@ import { useLocale } from "@/hooks/use-locale";
 import { Star, Share2, ArrowRight, CheckCircle } from "lucide-react";
 import { useCrossingDetectionStore } from "@/stores/crossing-detection";
 import { useFavoritesStore } from "@/stores/favorites";
+import { useShare } from "@/hooks/use-share";
 import { formatCrossingTime, getCrossingTimeComparison } from "@/lib/crossing-estimator";
 
 export default function CrossingSummaryPage() {
@@ -25,23 +26,18 @@ export default function CrossingSummaryPage() {
   } = useCrossingDetectionStore();
 
   const { addFavorite, isFavorite } = useFavoritesStore();
+  const { share } = useShare();
 
   const comparison = actualCrossingTime
     ? getCrossingTimeComparison(estimatedCrossingTime, actualCrossingTime)
     : null;
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `CRUZE Crossing: ${crossingName}`,
-          text: `Crossed at ${crossingName} in ${formatCrossingTime(actualCrossingTime || 0)}. Check wait times at crossings with CRUZE!`,
-          url: window.location.origin,
-        });
-      } catch {
-        // User cancelled or error
-      }
-    }
+  const handleShare = () => {
+    share({
+      title: t("crossing.summary.shareTitle", { name: crossingName ?? "" }),
+      text: t("crossing.summary.shareText", { name: crossingName ?? "", time: formatCrossingTime(actualCrossingTime || 0) }),
+      url: window.location.origin,
+    });
   };
 
   const handleContribute = () => {
@@ -102,8 +98,9 @@ export default function CrossingSummaryPage() {
 
           {comparison && (
             <div className="pt-3 border-t border-border text-center">
-              <p className={`text-sm font-medium ${comparison.faster ? "text-cruze-green" : "text-caution"}`}>
-                {comparison.faster ? "🟢" : "🟡"} {comparison.label}
+              <p className={`inline-flex items-center gap-2 text-sm font-medium ${comparison.faster ? "text-cruze-green" : "text-caution"}`}>
+                <span aria-hidden="true" className={`w-2 h-2 rounded-full shrink-0 ${comparison.faster ? "bg-cruze-green" : "bg-caution"}`} />
+                {t(comparison.faster ? "crossing.confirm.fasterThanExpected" : "crossing.confirm.slowerThanExpected", { minutes: comparison.diff })}
               </p>
             </div>
           )}
@@ -111,7 +108,7 @@ export default function CrossingSummaryPage() {
           {confirmedAt && (
             <div className="pt-3 border-t border-border">
               <p className="text-faint text-xs text-center">
-                {t("crossing.summary.completedAt")}: {new Date(confirmedAt).toLocaleTimeString()}
+                {t("crossing.summary.completedAt")}: {new Date(confirmedAt).toLocaleTimeString(locale)}
               </p>
             </div>
           )}

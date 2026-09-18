@@ -65,8 +65,9 @@ export function CrossingConfirmGate() {
 
             {comparison && (
               <div className="pt-2 border-t border-border">
-                <p className={`text-sm font-medium ${comparison.faster ? "text-cruze-green" : "text-caution"}`}>
-                  {comparison.faster ? "🟢" : "🟡"} {comparison.label}
+                <p className={`flex items-center gap-2 text-sm font-medium ${comparison.faster ? "text-cruze-green" : "text-caution"}`}>
+                  <span aria-hidden="true" className={`w-2 h-2 rounded-full shrink-0 ${comparison.faster ? "bg-cruze-green" : "bg-caution"}`} />
+                  {t(comparison.faster ? "crossing.confirm.fasterThanExpected" : "crossing.confirm.slowerThanExpected", { minutes: comparison.diff })}
                 </p>
               </div>
             )}

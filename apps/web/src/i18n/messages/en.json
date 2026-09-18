@@ -260,6 +260,11 @@
       "checklistReminder": "Checklist reminder",
       "dataWarning": "Data warning",
       "unusualCondition": "Unusual condition"
+    },
+    "severity": {
+      "critical": "Critical",
+      "warning": "Warning",
+      "info": "Info"
     }
   },
   "crossing": {
@@ -298,7 +303,9 @@
       "estimated": "Estimated time",
       "actual": "Actual time",
       "yes": "Yes, that's right",
-      "no": "No, go back"
+      "no": "No, go back",
+      "fasterThanExpected": "{minutes} min faster than expected",
+      "slowerThanExpected": "{minutes} min slower than expected"
     },
     "summary": {
       "title": "Crossing complete!",
@@ -311,7 +318,9 @@
       "thanks": "Thanks for contributing!",
       "saveFavorite": "Save to favorites",
       "share": "Share",
-      "done": "Done"
+      "done": "Done",
+      "shareTitle": "CRUZE Crossing: {name}",
+      "shareText": "Crossed at {name} in {time}. Check wait times at crossings with CRUZE!"
     },
     "lanesEmpty": "No lane data",
     "lanesEmptyNoLive": "No live data for this crossing",
@@ -437,7 +446,8 @@
       "done": "Done"
     },
     "routeSummary": {
-      "title": "ROUTE SUMMARY"
+      "title": "ROUTE SUMMARY",
+      "totalJourney": "{duration} total"
     },
     "setup": {
       "handoffCandidate": "Suggested crossing: {crossing}",

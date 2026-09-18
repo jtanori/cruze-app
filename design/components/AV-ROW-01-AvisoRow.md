@@ -11,7 +11,7 @@ AvisoRow
 Generic row title snippet recency
 
 ## Details
-Severity Badge (critical→new, warning→count, else neutral at `AvisoRow.tsx:13,19`) + absolute time HH:MM via `toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})` (`AvisoRow.tsx:12`) + title truncate (`AvisoRow.tsx:22`) + description line-clamp-2 (`AvisoRow.tsx:23`) + optional crossingName (`AvisoRow.tsx:24`). No relative time ("Hace 8 min") is implemented — stub text only. Row is a full-width button with hover border state (`AvisoRow.tsx:16`); onClick optional (`AvisoRow.tsx:8,16`).
+Severity Badge (critical→new, warning→count, else neutral) showing t(SEVERITY_KEYS[severity]) from t("alerts.severity.*") — never raw codes (`AvisoRow.tsx:9-13,30`) + absolute time HH:MM via `toLocaleTimeString(locale, {hour:"2-digit",minute:"2-digit"})` with next-intl locale (`AvisoRow.tsx:24-25`) + title truncate (`AvisoRow.tsx:33`) + description line-clamp-2 (`AvisoRow.tsx:34`) + optional crossingName (`AvisoRow.tsx:35`). No relative time ("Hace 8 min") is implemented — stub text only. Row is a full-width button with hover border state (`AvisoRow.tsx:27`); onClick optional (`AvisoRow.tsx:8,27`). Fully i18n.
 
 ## Source
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §AV for canonical definition.

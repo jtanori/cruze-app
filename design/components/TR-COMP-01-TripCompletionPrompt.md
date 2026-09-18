@@ -74,8 +74,7 @@ Primary CTA:
   Inter 14px / 600
   rounded-lg
 
-Secondary:
-  h-[44px] bg-surface-elevated border border-border rounded-lg (TripCompletionPrompt.tsx:29)
+Primary h-12 mint (TripCompletionPrompt.tsx:26); secondary h-11 bg-surface-elevated border border-border rounded-lg (TripCompletionPrompt.tsx:29)
 ```
 
 ### Rule

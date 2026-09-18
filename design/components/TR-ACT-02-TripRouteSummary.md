@@ -49,7 +49,7 @@ Crossing name:
   Text Primary
 
 Metrics:
-  text-sm text-muted with Clock + Navigation w-4 h-4 icons (TripRouteSummary.tsx:22-27); total renders hardcoded "{duration} total" (TripRouteSummary.tsx:26) — known deviation
+  text-sm text-muted with Clock + Navigation w-4 h-4 icons (TripRouteSummary.tsx:22-27); total via t("trip.routeSummary.totalJourney", { duration }) (TripRouteSummary.tsx:26). Fully i18n.
 ```
 
 ### Rule

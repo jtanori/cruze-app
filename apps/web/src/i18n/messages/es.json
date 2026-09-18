@@ -260,6 +260,11 @@
       "checklistReminder": "Recordatorio de lista",
       "dataWarning": "Aviso de datos",
       "unusualCondition": "Condición inusual"
+    },
+    "severity": {
+      "critical": "Crítica",
+      "warning": "Advertencia",
+      "info": "Informativa"
     }
   },
   "crossing": {
@@ -298,7 +303,9 @@
       "estimated": "Tiempo estimado",
       "actual": "Tiempo real",
       "yes": "Sí, es correcto",
-      "no": "No, volver"
+      "no": "No, volver",
+      "fasterThanExpected": "{minutes} min más rápido de lo esperado",
+      "slowerThanExpected": "{minutes} min más lento de lo esperado"
     },
     "summary": {
       "title": "¡Cruce completado!",
@@ -311,7 +318,9 @@
       "thanks": "¡Gracias por contribuir!",
       "saveFavorite": "Guardar en favoritos",
       "share": "Compartir",
-      "done": "Listo"
+      "done": "Listo",
+      "shareTitle": "Cruce CRUZE: {name}",
+      "shareText": "Crucé en {name} en {time}. ¡Revisa los tiempos de espera con CRUZE!"
     },
     "lanesEmpty": "No hay datos de carriles",
     "lanesEmptyNoLive": "Sin datos en vivo para este cruce",
@@ -437,7 +446,8 @@
       "done": "Listo"
     },
     "routeSummary": {
-      "title": "RESUMEN DE RUTA"
+      "title": "RESUMEN DE RUTA",
+      "totalJourney": "{duration} en total"
     },
     "setup": {
       "handoffCandidate": "Cruce sugerido: {crossing}",

@@ -46,7 +46,7 @@ interface TripActionBarProps {
 Container:
   flex gap-2
 
-Layout two-row: row1 h-[48px] rounded-lg (TripActionBar.tsx:21-32) + row2 h-[40px] rounded-md (TripActionBar.tsx:33-49)
+Layout two-row: row1 h-12 rounded-lg (TripActionBar.tsx:21-32) + row2 h-10 rounded-md (TripActionBar.tsx:33-49)
 
 Primary (Navegar):
   bg-cruze-mint text-midnight

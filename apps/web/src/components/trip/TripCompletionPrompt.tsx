@@ -23,10 +23,10 @@ export function TripCompletionPrompt({ originLabel, destinationLabel, crossingNa
         <p className="text-ink font-bold text-lg">{crossingName}</p>
       </div>
       <div className="space-y-3">
-        <button onClick={onSave} className="w-full h-[48px] bg-cruze-mint text-midnight text-sm font-semibold rounded-[var(--radius-lg)]">
+        <button onClick={onSave} className="w-full h-12 bg-cruze-mint text-midnight text-sm font-semibold rounded-[var(--radius-lg)]">
           {t("trip.completion.save")}
         </button>
-        <button onClick={onDone} className="w-full h-[44px] bg-surface-elevated border border-border text-ink text-sm font-medium rounded-[var(--radius-lg)]">
+        <button onClick={onDone} className="w-full h-11 bg-surface-elevated border border-border text-ink text-sm font-medium rounded-[var(--radius-lg)]">
           {t("trip.completion.done")}
         </button>
       </div>

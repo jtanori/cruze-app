@@ -23,7 +23,7 @@ export function TripRouteSummary({ crossingName, waitTime, totalTime, className 
           <Clock className="w-4 h-4" /> {formatDuration(waitTime)}
         </span>
         <span className="flex items-center gap-1.5 text-sm text-muted">
-          <Navigation className="w-4 h-4" /> {formatDuration(totalTime)} total
+          <Navigation className="w-4 h-4" /> {t("trip.routeSummary.totalJourney", { duration: formatDuration(totalTime) })}
         </span>
       </div>
     </div>

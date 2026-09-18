@@ -27,9 +27,8 @@ Success header (crossing name) → stats card (estimated/actual/comparison/compl
 Backfilled from implementation, D2 decision.
 
 ## Status
-- Spec: defined
-- Implementation: `src/app/[locale]/crossing/[id]/summary/page.tsx` (needs
-  Rules-compliance pass: share fallback, emoji, locale time)
+- Spec: defined (aligned 2026-09-16)
+- Implementation: `src/app/[locale]/crossing/[id]/summary/page.tsx` — Rules-compliant: useShare with clipboard fallback, dot + faster/slower keys (no emoji), share title/text keys, locale time. Fully i18n.
 - Workflow usage: C03 exit → summary
 
 ## Tokens

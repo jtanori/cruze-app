@@ -222,7 +222,7 @@ export function DestinationSearch({
     <div className={`space-y-2 sm:space-y-3 ${className}`}>
       {/* Search Input */}
       <div className="relative space-y-2 sm:space-y-3" onBlur={handleBlur}>
-        <div className="flex items-center gap-3 h-[56px] bg-surface-elevated border border-border rounded-[var(--radius-md)] px-4 focus-within:border-cruze-mint transition-colors">
+        <div className="flex items-center gap-3 h-14 bg-surface-elevated border border-border rounded-[var(--radius-md)] px-4 focus-within:border-cruze-mint transition-colors">
           <Search className="w-4 h-4 text-faint shrink-0" />
           <input
             ref={inputRef}
