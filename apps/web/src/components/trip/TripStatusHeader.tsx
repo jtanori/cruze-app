@@ -58,9 +58,9 @@ export function TripStatusHeader({
 
       {/* Trip identity */}
       <div className="flex items-center gap-2">
-        <span className="text-ink font-sora font-bold text-base">{originLabel}</span>
+        <span className="text-ink font-display font-bold text-base">{originLabel}</span>
         <span className="text-faint text-sm">→</span>
-        <span className="text-ink font-sora font-bold text-base">{destinationLabel}</span>
+        <span className="text-ink font-display font-bold text-base">{destinationLabel}</span>
       </div>
 
       {/* Operational context */}

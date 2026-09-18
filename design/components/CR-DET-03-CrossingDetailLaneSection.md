@@ -17,8 +17,8 @@ Rows always carry a category qualifier (`· Vehículo / A pie / Comercial`); lan
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.
 
 ## Status
-- Spec: defined
-- Implementation: see `src/components/` (domain: cr)
+- Spec: defined (aligned 2026-09-16)
+- Implementation: `src/components/crossing/CrossingDetailLaneSection.tsx` — eyebrow t("crossings.lanes.title"), categories via CATEGORY_KEYS t("crossings.lanes.passenger/commercial/pedestrian") (LaneSection.tsx:8-12,32,39); types/emptyNote are caller data. Fully i18n.
 - Workflow usage: see `design/workflows/W*.md`
 
 ## Tokens (when defined in W5 spec)

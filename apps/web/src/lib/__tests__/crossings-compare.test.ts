@@ -121,8 +121,8 @@ describe("compareCrossings", () => {
     );
     const a = rows.find((r) => r.id === "a")!;
     const b = rows.find((r) => r.id === "b")!;
-    expect(a.winnerLabel).toBe("Mejor opción");
-    expect(b.winnerLabel).toBe("Más rápido");
+    expect(a.winnerLabel).toBe("crossings.compare.bestOption");
+    expect(b.winnerLabel).toBe("crossings.compare.fastestOption");
   });
 
   it("all eligible non-winners get Alternativa", () => {
@@ -135,7 +135,7 @@ describe("compareCrossings", () => {
       { direction: "MX_TO_US" }
     );
     const labels = rows.map((r) => r.winnerLabel);
-    expect(labels).toEqual(["Mejor opción", "Alternativa", "Alternativa"]);
+    expect(labels).toEqual(["crossings.compare.bestOption", "crossings.compare.alternativeOption", "crossings.compare.alternativeOption"]);
   });
 
   it("direction null shows both waits in input, domain does not default to MX_TO_US", () => {

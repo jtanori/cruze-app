@@ -39,8 +39,8 @@ Absence renders as "—". Fabricated data (status, wait, timestamps) forbidden.
 Architecture spec §5-10. See `design/workflows/W5_component_level_design_spec.md` for tokens where applicable, and `docs/CRUZE — UI Architecture & Implementation Reference.v1.md` catalog §CR for canonical definition.
 
 ## Status
-- Spec: defined
-- Implementation: `src/components/crossing/CrossingsCompareTable.tsx`
+- Spec: defined (aligned 2026-09-16)
+- Implementation: `src/components/crossing/CrossingsCompareTable.tsx` — winnerLabel carries i18n KEYS (`crossings.compare.bestOption/fastestOption/alternativeOption`, lib `crossings-compare.ts:28-32,171-179`), rendered via t() (CompareTable.tsx:186); distances via formatDistance (CompareTable.tsx:133); headers font-display (Sora utility — `font-sora` does not exist, fixed 2026-09-16); matrix + action cards rounded-[var(--radius-lg)] (CompareTable.tsx:43,164). Fully i18n.
 - Workflow usage: see `design/workflows/W7-crossings.md`
 
 ## Tokens (when defined in W5 spec)

@@ -5,10 +5,10 @@ import { formatDuration } from "@/lib/display";
 
 type LaneCategory = "passenger" | "commercial" | "pedestrian";
 
-const CATEGORY_LABEL: Record<LaneCategory, string> = {
-  passenger: "Vehículo",
-  commercial: "Comercial",
-  pedestrian: "A pie",
+const CATEGORY_KEYS: Record<LaneCategory, string> = {
+  passenger: "crossings.lanes.passenger",
+  commercial: "crossings.lanes.commercial",
+  pedestrian: "crossings.lanes.pedestrian",
 };
 
 interface LaneRow {
@@ -29,14 +29,14 @@ export function CrossingDetailLaneSection({ lanes, emptyNote, className = "" }: 
   const t = useTranslations();
   return (
     <div className={`space-y-3 ${className}`}>
-      <p className="text-xs font-semibold uppercase tracking-wider text-muted">TIEMPOS POR CARRIL</p>
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t("crossings.lanes.title")}</p>
       <div className="bg-surface border border-border rounded-[var(--radius-lg)] divide-y divide-border">
         {lanes.map((l, i) => (
           <div key={`${l.type}-${l.category ?? "na"}-${i}`} className="flex items-center justify-between px-4 py-3">
             <span className="text-sm text-ink">
               {l.type}
               {l.category && (
-                <span className="text-faint text-xs"> · {CATEGORY_LABEL[l.category]}</span>
+                <span className="text-faint text-xs"> · {t(CATEGORY_KEYS[l.category])}</span>
               )}
             </span>
             <span className="text-sm font-bold tabular text-ink">{l.waitTime !== null ? formatDuration(l.waitTime) : "—"}</span>

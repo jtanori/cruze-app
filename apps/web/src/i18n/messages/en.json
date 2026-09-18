@@ -155,7 +155,9 @@
       "data": "Data",
       "incompatible": "Not compatible",
       "useCrossing": "Use this crossing",
-      "noData": "No data"
+      "noData": "No data",
+      "fastestOption": "Fastest",
+      "alternativeOption": "Alternative"
     },
     "filter": {
       "title": "Filters",
@@ -217,6 +219,12 @@
       "loadFailed": "Couldn't load the map.",
       "altWithName": "Map of {name}",
       "altDefault": "Crossing map"
+    },
+    "lanes": {
+      "title": "Lane times",
+      "passenger": "Vehicle",
+      "commercial": "Commercial",
+      "pedestrian": "On foot"
     }
   },
   "favorites": {

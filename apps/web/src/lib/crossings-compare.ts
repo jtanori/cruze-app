@@ -26,9 +26,9 @@ export interface CompareInput {
 export type CompareTravelMode = "VEHICLE" | "WALK" | "COMMERCIAL" | null;
 
 export type CompareWinnerLabel =
-  | "Mejor opción"
-  | "Más rápido"
-  | "Alternativa"
+  | "crossings.compare.bestOption"
+  | "crossings.compare.fastestOption"
+  | "crossings.compare.alternativeOption"
   | null;
 
 export interface CompareRow extends CompareInput {
@@ -169,12 +169,12 @@ export function compareCrossings(
     if (r.excluded) {
       r.winnerLabel = null;
     } else if (r.isWinner) {
-      r.winnerLabel = "Mejor opción";
+      r.winnerLabel = "crossings.compare.bestOption";
     } else if (r.isFastest) {
-      r.winnerLabel = "Más rápido";
+      r.winnerLabel = "crossings.compare.fastestOption";
     } else {
       r.isAlternative = true;
-      r.winnerLabel = "Alternativa";
+      r.winnerLabel = "crossings.compare.alternativeOption";
     }
   }
 

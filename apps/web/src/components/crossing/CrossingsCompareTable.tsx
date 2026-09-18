@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { formatDuration } from "@/lib/display";
+import { formatDistance, formatDuration } from "@/lib/display";
 import { formatFreshness } from "@/lib/format-freshness";
 import { CrossingStatusBadge } from "@/components/crossing/CrossingStatusBadge";
 import type { CompareRow } from "@/lib/crossings-compare";
@@ -40,7 +40,7 @@ export function CrossingsCompareTable({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Comparison matrix — horizontal scroll contained */}
-      <div className="overflow-x-auto rounded-xl border border-border">
+      <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-border">
         <table className="w-full text-sm border-collapse min-w-[480px]">
           <thead>
             <tr>
@@ -54,7 +54,7 @@ export function CrossingsCompareTable({
                     r.isWinner ? "bg-cruze-mint/[0.04]" : ""
                   }`}
                 >
-                  <span className="font-sora text-sm font-bold text-ink block">
+                  <span className="font-display text-sm font-bold text-ink block">
                     {r.crossingName}
                   </span>
                   {r.isWinner && (
@@ -90,7 +90,7 @@ export function CrossingsCompareTable({
               {rows.map((r) => (
                 <td
                   key={r.id}
-                  className={`py-3 px-4 font-sora text-sm font-bold tabular-nums ${
+                  className={`py-3 px-4 font-display text-sm font-bold tabular-nums ${
                     r.isWinner ? "bg-cruze-mint/[0.04]" : ""
                   } ${r.excluded ? "opacity-40" : "text-ink"}`}
                 >
@@ -108,7 +108,7 @@ export function CrossingsCompareTable({
                 {rows.map((r) => (
                   <td
                     key={r.id}
-                    className={`py-3 px-4 font-sora text-sm font-bold tabular-nums ${
+                    className={`py-3 px-4 font-display text-sm font-bold tabular-nums ${
                       r.isWinner ? "bg-cruze-mint/[0.04]" : ""
                     } ${r.excluded ? "opacity-40" : "text-ink"}`}
                   >
@@ -126,11 +126,11 @@ export function CrossingsCompareTable({
               {rows.map((r) => (
                 <td
                   key={r.id}
-                  className={`py-3 px-4 font-sora text-sm font-bold tabular-nums ${
+                  className={`py-3 px-4 font-display text-sm font-bold tabular-nums ${
                     r.isWinner ? "bg-cruze-mint/[0.04]" : ""
                   } ${r.excluded ? "opacity-40" : "text-ink"}`}
                 >
-                  {r.distanceKm !== null ? `${r.distanceKm} km` : "—"}
+                  {r.distanceKm !== null ? formatDistance(r.distanceKm) : "—"}
                 </td>
               ))}
             </tr>
@@ -161,7 +161,7 @@ export function CrossingsCompareTable({
           {rows.map((r) => (
             <div
               key={r.id}
-              className={`flex items-center justify-between py-3 px-4 rounded-xl border ${
+              className={`flex items-center justify-between py-3 px-4 rounded-[var(--radius-lg)] border ${
                 r.excluded
                   ? "border-border opacity-40"
                   : r.isWinner
@@ -170,7 +170,7 @@ export function CrossingsCompareTable({
               }`}
             >
               <div className="min-w-0">
-                <span className="font-sora text-sm font-bold text-ink block truncate">
+                <span className="font-display text-sm font-bold text-ink block truncate">
                   {r.crossingName}
                 </span>
                 {r.winnerLabel && (
@@ -183,7 +183,7 @@ export function CrossingsCompareTable({
                           : "text-muted"
                     }`}
                   >
-                    {r.winnerLabel}
+                    {t(r.winnerLabel)}
                   </span>
                 )}
                 {r.excluded && (

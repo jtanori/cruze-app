@@ -19,7 +19,7 @@
 
 ### Purpose
 
-Top-level frame for the active trip. Establishes trip identity (origin → destination) and live operational context (crossing status + data freshness). Receives live data during active-trip intelligence updates without duplicating information from TR-ACT-02.
+Top-level frame for the active trip. Establishes trip identity (origin → destination, font-display Sora utility — `font-sora` does not exist, fixed 2026-09-16) and live operational context (crossing status + data freshness). Receives live data during active-trip intelligence updates without duplicating information from TR-ACT-02.
 
 ### Props
 

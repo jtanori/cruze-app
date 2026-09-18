@@ -52,7 +52,7 @@ function CompareContent() {
     <div className="px-4 sm:px-5 py-4 sm:py-6 space-y-6">
       {/* Page identity */}
       <div className="space-y-2">
-        <h1 className="font-sora text-lg font-bold text-ink tracking-tight">
+        <h1 className="font-display text-lg font-bold text-ink tracking-tight">
           {t("crossings.compare.title")}
         </h1>
         <p className="text-sm text-secondary leading-relaxed text-balance">

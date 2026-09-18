@@ -155,7 +155,9 @@
       "data": "Datos",
       "incompatible": "No compatible",
       "useCrossing": "Usar este cruce",
-      "noData": "Sin datos"
+      "noData": "Sin datos",
+      "fastestOption": "Más rápido",
+      "alternativeOption": "Alternativa"
     },
     "filter": {
       "title": "Filtros",
@@ -217,6 +219,12 @@
       "loadFailed": "No se pudo cargar el mapa.",
       "altWithName": "Mapa de {name}",
       "altDefault": "Mapa del cruce"
+    },
+    "lanes": {
+      "title": "Tiempos por carril",
+      "passenger": "Vehículo",
+      "commercial": "Comercial",
+      "pedestrian": "A pie"
     }
   },
   "favorites": {
