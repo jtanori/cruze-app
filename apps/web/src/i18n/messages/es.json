@@ -157,7 +157,8 @@
       "useCrossing": "Usar este cruce",
       "noData": "Sin datos",
       "fastestOption": "Más rápido",
-      "alternativeOption": "Alternativa"
+      "alternativeOption": "Alternativa",
+      "loading": "Cargando comparación..."
     },
     "filter": {
       "title": "Filtros",
@@ -419,7 +420,8 @@
         "closed": "Cerrado"
       },
       "otherOptions": "OTRAS OPCIONES",
-      "deltaTotal": "+{minutes} min total"
+      "deltaTotal": "+{minutes} min total",
+      "loadError": "No se pudo cargar la recomendación. Intenta de nuevo."
     },
     "actions": {
       "navigate": "Navegar",
@@ -666,5 +668,14 @@
     "updatedOneMinAgo": "Actualizado hace 1 min",
     "updatedMinAgo": "Actualizado hace {minutes} min",
     "dataDelayed": "DATOS RETRASADOS · Última actualización hace {minutes} min"
+  },
+  "legal": {
+    "headers": {
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "cookies": "Cookies",
+      "about": "Acerca de",
+      "contact": "Contacto"
+    }
   }
 }

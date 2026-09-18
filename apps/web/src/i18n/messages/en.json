@@ -157,7 +157,8 @@
       "useCrossing": "Use this crossing",
       "noData": "No data",
       "fastestOption": "Fastest",
-      "alternativeOption": "Alternative"
+      "alternativeOption": "Alternative",
+      "loading": "Loading comparison..."
     },
     "filter": {
       "title": "Filters",
@@ -419,7 +420,8 @@
         "closed": "Closed"
       },
       "otherOptions": "OTHER OPTIONS",
-      "deltaTotal": "+{minutes} min total"
+      "deltaTotal": "+{minutes} min total",
+      "loadError": "Couldn't load the recommendation. Try again."
     },
     "actions": {
       "navigate": "Navigate",
@@ -666,5 +668,14 @@
     "updatedOneMinAgo": "Updated 1 min ago",
     "updatedMinAgo": "Updated {minutes} min ago",
     "dataDelayed": "DATA DELAYED · Last updated {minutes} min ago"
+  },
+  "legal": {
+    "headers": {
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "cookies": "Cookies",
+      "about": "About",
+      "contact": "Contact"
+    }
   }
 }

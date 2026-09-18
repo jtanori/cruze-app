@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { AppShell } from "@/components/layout/AppShell";
 import { LocationPermissionPrompt } from "@/components/location/LocationPermissionPrompt";
 import { LocationAcquisitionState } from "@/components/location/LocationAcquisitionState";
@@ -19,17 +20,18 @@ function getHeaderVariant(pathname: string): "root" | "search" | "filter" {
   return "root";
 }
 
-function getHeaderTitle(pathname: string): string | undefined {
+function getHeaderTitleKey(pathname: string): string | undefined {
   const path = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
-  if (path.startsWith("/crossings")) return "CRUCES";
-  if (path.startsWith("/trip")) return "VIAJE";
-  if (path.startsWith("/agent")) return "AGENTE";
-  if (path.startsWith("/favorites")) return "FAVORITOS";
-  if (path.startsWith("/alerts")) return "AVISOS";
+  if (path.startsWith("/crossings")) return "nav.crossings";
+  if (path.startsWith("/trip")) return "nav.trip";
+  if (path.startsWith("/agent")) return "nav.agent";
+  if (path.startsWith("/favorites")) return "nav.favorites";
+  if (path.startsWith("/alerts")) return "nav.alerts";
   return undefined;
 }
 
 function MainLayoutInner({ children }: { children: React.ReactNode }) {
+  const t = useTranslations();
   const pathname = usePathname();
   const locale = useLocale();
   const { start, destination } = useTripStore();
@@ -37,8 +39,8 @@ function MainLayoutInner({ children }: { children: React.ReactNode }) {
   const { headerCompanion, headerTitle: companionTitle } = useHeaderCompanion();
 
   const headerVariant = getHeaderVariant(pathname ?? "");
-  const routeTitle = getHeaderTitle(pathname ?? "");
-  const headerTitle = companionTitle ?? routeTitle;
+  const routeTitleKey = getHeaderTitleKey(pathname ?? "");
+  const headerTitle = companionTitle ?? (routeTitleKey ? t(routeTitleKey) : undefined);
   const hasTrip = start !== null && destination !== null;
 
   const tripActions = hasTrip ? {

@@ -161,8 +161,9 @@ export default function TripRecommendationPage() {
           };
           setRecommendation(rec);
         }
-      } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load");
+      } catch {
+        // Never surface raw fetch errors — UI shows the generic key below.
+        if (!cancelled) setError("load-failed");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -209,7 +210,7 @@ export default function TripRecommendationPage() {
     return (
       <div className="min-h-[40vh] flex flex-col items-center justify-center gap-3 px-5 text-center">
         <p className="text-ink text-sm font-medium">{t("common.errorTitle")}</p>
-        <p className="text-faint text-xs">{error ?? t("common.errorMessage")}</p>
+        <p className="text-faint text-xs">{t("trip.recommendation.loadError")}</p>
         <button onClick={() => router.push(`/${locale}/trip`)} className="mt-2 h-9 px-4 bg-surface border border-border rounded-[var(--radius-md)] text-ink text-sm">
           {t("common.retry")}
         </button>

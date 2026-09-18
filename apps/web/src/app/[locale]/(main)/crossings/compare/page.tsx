@@ -72,7 +72,7 @@ function CompareContent() {
 
       {/* Content states */}
       {compare.loading ? (
-        <div className="space-y-3" role="status" aria-label="Cargando comparación">
+        <div className="space-y-3" role="status" aria-label={t("crossings.compare.loading")}>
           {[1, 2, 3].map((i) => (
             <LoadingSkeleton key={i} variant="card" height="4rem" />
           ))}

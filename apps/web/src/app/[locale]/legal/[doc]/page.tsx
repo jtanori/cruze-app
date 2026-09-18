@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { CruzeBackHeader } from "@/components/layout/CruzeBackHeader";
 import { LegalDocView } from "@/components/legal/LegalDocView";
 import { getLegalDoc, legalLocaleFor, type LegalDocKey } from "@/lib/legal";
@@ -17,10 +18,11 @@ export default async function LegalDocPage({
     notFound();
   }
   const document = getLegalDoc(key, legalLocaleFor(locale));
+  const t = await getTranslations("legal");
   const titles: Record<"privacy" | "terms" | "cookies", string> = {
-    privacy: locale === "en" ? "PRIVACY" : "PRIVACIDAD",
-    terms: locale === "en" ? "TERMS" : "TÉRMINOS",
-    cookies: locale === "en" ? "COOKIES" : "COOKIES",
+    privacy: t("headers.privacy"),
+    terms: t("headers.terms"),
+    cookies: t("headers.cookies"),
   };
 
   return (
